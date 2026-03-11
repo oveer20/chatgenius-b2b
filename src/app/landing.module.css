@@ -302,18 +302,19 @@
   align-items: center;
   text-align: center;
   gap: var(--space-6);
-  background: #0f172a; /* Deep Navy B2B */
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
   border-radius: var(--radius-3xl);
   transition: all var(--transition-base);
   position: relative;
   overflow: hidden;
+  box-shadow: var(--shadow-md);
 }
 
 .featureCard:hover {
-  transform: translateY(-10px);
+  transform: translateY(-8px);
   border-color: var(--accent-blue);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-xl);
 }
 
 .featureIcon {
@@ -322,38 +323,36 @@
   justify-content: center;
   width: 72px;
   height: 72px;
-  background: rgba(37, 99, 235, 0.1);
-  border: 1px solid rgba(37, 99, 235, 0.2);
+  background: #f1f5f9; /* Soft gray for icon background */
   border-radius: var(--radius-2xl);
   font-size: var(--text-3xl);
-  color: #60a5fa; /* Brighter blue for contrast */
+  color: var(--accent-blue);
   transition: all var(--transition-base);
 }
 
 .featureCard:hover .featureIcon {
-  transform: scale(1.1) rotate(8deg);
-  background: var(--accent-blue);
-  color: white;
+  transform: scale(1.1) rotate(5deg);
+  background: var(--accent-gradient-subtle);
 }
 
 .featureContent h3 {
-  font-size: var(--text-2xl);
+  font-size: var(--text-xl);
   font-weight: 800;
   margin-bottom: var(--space-3);
-  color: white;
+  color: var(--text-primary);
   letter-spacing: -0.01em;
 }
 
 .featureContent p {
   font-size: var(--text-base);
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary);
   line-height: 1.6;
 }
 
 .featuresGrid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-8);
+  gap: var(--space-10);
 }
 
 /* Templates / Use Cases */
