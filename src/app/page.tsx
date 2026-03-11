@@ -270,8 +270,10 @@ function Features() {
               custom={i}
             >
               <div className={styles.featureIcon}>{f.icon}</div>
-              <h3>{f.title}</h3>
-              <p>{f.desc}</p>
+              <div className={styles.featureContent}>
+                <h3>{f.title}</h3>
+                <p>{f.desc}</p>
+              </div>
             </motion.div>
           ))}
         </motion.div>
@@ -337,28 +339,39 @@ function UseCases() {
               >
                 <div
                   className={styles.templateMockup}
-                  style={{ "--template-color": usecases[selected].color, height: "350px", aspectRatio: "1/1" } as React.CSSProperties}
+                  style={{ "--template-color": usecases[selected].color } as React.CSSProperties}
                 >
                   <div className={styles.mockupHeader}>
                     <div className={styles.mockupAvatar} />
                     <div className={styles.mockupLines}>
-                      <div className={styles.mockupLine} style={{ width: "60%" }} />
-                      <div className={styles.mockupLine} style={{ width: "40%", height: "4px" }} />
+                      <span style={{ fontWeight: 800, fontSize: '0.8rem' }}>AI Assistant</span>
+                      <div className={styles.mockupStatus} style={{ fontSize: '0.6rem', color: 'var(--success)', fontWeight: 700 }}>● Online</div>
                     </div>
                   </div>
                   <div className={styles.mockupBody}>
-                     <div className={styles.mockupSection} style={{ alignItems: "flex-end" }}>
-                        <div className={styles.mockupLine} style={{ width: "60%", background: usecases[selected].color, opacity: 0.8 }} />
-                        <div className={styles.mockupLine} style={{ width: "40%", background: usecases[selected].color, opacity: 0.8 }} />
-                     </div>
-                     <div className={styles.mockupSection} style={{ alignItems: "flex-start" }}>
-                        <div className={styles.mockupLine} style={{ width: "80%" }} />
-                        <div className={styles.mockupLine} style={{ width: "75%" }} />
-                        <div className={styles.mockupLine} style={{ width: "50%" }} />
-                     </div>
-                     <div className={styles.mockupSection} style={{ alignItems: "flex-end" }}>
-                        <div className={styles.mockupLine} style={{ width: "40%", background: usecases[selected].color, opacity: 0.8 }} />
-                     </div>
+                      {/* User message */}
+                      <div className={styles.mockupSection} style={{ alignItems: "flex-end" }}>
+                        <div style={{ background: usecases[selected].color, color: 'white', padding: '8px 12px', borderRadius: '12px 12px 0 12px', fontSize: '0.7rem', maxWidth: '80%' }}>
+                           {selected === 0 && "¿Tienen envíos a Ciudad de México?"}
+                           {selected === 1 && "¿Cómo conecto mi base de datos?"}
+                           {selected === 2 && "¿Qué departamentos hay disponibles?"}
+                           {selected === 3 && "¿Me podrías dar un presupuesto?"}
+                        </div>
+                      </div>
+                      {/* AI response */}
+                      <div className={styles.mockupSection} style={{ alignItems: "flex-start" }}>
+                        <div style={{ background: '#f1f5f9', color: 'var(--text-primary)', padding: '8px 12px', borderRadius: '12px 12px 12px 0', fontSize: '0.7rem', maxWidth: '85%', border: '1px solid var(--border)' }}>
+                           {selected === 0 && "¡Claro! Enviamos a todo México. El tiempo de entrega es de 3 a 5 días hábiles."}
+                           {selected === 1 && "Es muy sencillo. Solo ve a Configuración > API y sigue nuestra guía paso a paso."}
+                           {selected === 2 && "Actualmente tenemos 3 lofts en el centro y una casa familiar en zona norte."}
+                           {selected === 3 && "¡Por supuesto! Para darte una cifra exacta, ¿cuántos agentes necesitas?"}
+                        </div>
+                      </div>
+                      {/* Interactive pill */}
+                      <div style={{ marginTop: 'auto', display: 'flex', gap: '5px' }}>
+                        <div style={{ height: '6px', width: '20px', borderRadius: '10px', background: 'var(--border)' }}></div>
+                        <div style={{ height: '6px', width: '40px', borderRadius: '10px', background: 'var(--border)' }}></div>
+                      </div>
                   </div>
                 </div>
                 <div className={styles.templateInfo}>
