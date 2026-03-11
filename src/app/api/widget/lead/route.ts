@@ -9,6 +9,18 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "botId is required" }, { status: 400 });
     }
 
+    const { data, error } = await supabase
+      .from("leads")
+      .insert([
+        { 
+          bot_id: botId, 
+          name, 
+          email, 
+          whatsapp 
+        }
+      ])
+      .select();
+
     if (error) throw error;
 
     // Send email notification via Resend
@@ -34,13 +46,12 @@ export async function POST(request: NextRequest) {
             <p><strong>📱 WhatsApp:</strong> ${whatsapp || 'No proporcionado'}</p>
             <p><strong>🤖 Agente:</strong> ${bot?.name || 'ChatGenius'}</p>
             <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;" />
-            <a href="${process.env.NEXT_PUBLIC_APP_URL}/dashboard" style="background: #3b82f6; color: white; padding: 10px 20px; text-decoration: none; borderRadius: 8px; fontWeight: bold;">Ver en el Dashboard</a>
+            <a href="${process.env.NEXT_PUBLIC_APP_URL}/dashboard" style="background: #3b82f6; color: white; padding: 10px 20px; text-decoration: none; border-radius: 8px; font-weight: bold;">Ver en el Dashboard</a>
           </div>
         `
       });
     } catch (e) {
       console.error("/// NOTIFICATION EMAIL ERROR ///", e);
-      // Don't fail the request if email fails
     }
 
     return NextResponse.json({ success: true, lead: data[0] });
