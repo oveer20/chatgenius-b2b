@@ -63,6 +63,35 @@
             gap: 10px;
             background: #f9f9f9;
         }
+        #chatgenius-lead-form {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background: white;
+            height: 100%;
+            justify-content: center;
+        }
+        .cg-input {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+        }
+        .cg-input:focus { border-color: ${CONFIG.primaryColor}; }
+        .cg-btn {
+            background: ${CONFIG.primaryColor};
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .cg-btn:hover { opacity: 0.9; }
+        
         .cg-msg {
             max-width: 80%;
             padding: 8px 12px;
@@ -106,10 +135,21 @@
                 <span>ChatGenius Support</span>
                 <span id="chatgenius-close" style="cursor:pointer">&times;</span>
             </div>
-            <div id="chatgenius-messages">
+            
+            <div id="chatgenius-messages" style="display:none">
                 <div class="cg-msg cg-msg-bot">¡Hola! ¿En qué puedo ayudarte hoy?</div>
             </div>
-            <form id="chatgenius-input-area">
+
+            <form id="chatgenius-lead-form">
+                <div style="font-weight:bold; font-size:18px; color:#333; margin-bottom:5px">Bienvenido 👋</div>
+                <div style="font-size:13px; color:#666; margin-bottom:15px">Déjanos tus datos para brindarte una mejor atención.</div>
+                <input type="text" id="cg-name" class="cg-input" placeholder="Nombre completo" required>
+                <input type="email" id="cg-email" class="cg-input" placeholder="Correo electrónico" required>
+                <input type="tel" id="cg-tel" class="cg-input" placeholder="WhatsApp (opcional)">
+                <button type="submit" class="cg-btn">Empezar Chat</button>
+            </form>
+
+            <form id="chatgenius-input-area" style="display:none">
                 <input type="text" id="chatgenius-input" placeholder="Escribe tu duda..." autocomplete="off">
                 <button type="submit" id="chatgenius-send">Ir</button>
             </form>
@@ -123,14 +163,40 @@
     const btn = document.getElementById('chatgenius-button');
     const win = document.getElementById('chatgenius-window');
     const close = document.getElementById('chatgenius-close');
+    const leadForm = document.getElementById('chatgenius-lead-form');
+    const chatMessages = document.getElementById('chatgenius-messages');
+    const chatInputArea = document.getElementById('chatgenius-input-area');
     const form = document.getElementById('chatgenius-input-area');
     const input = document.getElementById('chatgenius-input');
     const msgContainer = document.getElementById('chatgenius-messages');
 
     let chatHistory = [];
+    let leadCaptured = false;
 
     btn.onclick = () => win.style.display = win.style.display === 'flex' ? 'none' : 'flex';
     close.onclick = () => win.style.display = 'none';
+
+    leadForm.onsubmit = async (e) => {
+        e.preventDefault();
+        const name = document.getElementById('cg-name').value;
+        const email = document.getElementById('cg-email').value;
+        const whatsapp = document.getElementById('cg-tel').value;
+
+        // Transition to chat UI
+        leadForm.style.display = 'none';
+        chatMessages.style.display = 'flex';
+        chatInputArea.style.display = 'flex';
+        leadCaptured = true;
+
+        // Save lead asynchronously
+        try {
+            fetch('http://localhost:3000/api/widget/lead', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ botId: CONFIG.botId, name, email, whatsapp })
+            });
+        } catch(e) {}
+    };
 
     form.onsubmit = async (e) => {
         e.preventDefault();

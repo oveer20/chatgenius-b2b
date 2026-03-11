@@ -17,7 +17,8 @@ import {
   FiCopy,
   FiCheck,
   FiBox,
-  FiTrendingUp
+  FiTrendingUp,
+  FiUsers
 } from "react-icons/fi";
 import styles from "./dashboard.module.css";
 import { supabase } from "@/lib/supabase";
@@ -42,8 +43,9 @@ interface Bot {
 }
 
 export default function DashboardPage() {
-  const [activeTab, setActiveTab] = useState<"agents" | "settings">("agents");
+  const [activeTab, setActiveTab] = useState<"agents" | "leads" | "settings">("agents");
   const [bots, setBots] = useState<Bot[]>([]);
+  const [leads, setLeads] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
@@ -58,8 +60,16 @@ export default function DashboardPage() {
       if (data) setBots(data);
       if (error) console.error("Error loading bots:", error);
       setLoading(false);
+    async function fetchLeads() {
+      const { data, error } = await supabase
+        .from("leads")
+        .select("*, bots(name)")
+        .order("created_at", { ascending: false });
+      if (data) setLeads(data);
+      if (error) console.error("Error loading leads:", error);
     }
     fetchBots();
+    fetchLeads();
   }, []);
 
   const handleCopySnippet = (botId: string) => {
@@ -105,6 +115,12 @@ export default function DashboardPage() {
             onClick={() => setActiveTab("agents")}
           >
             <FiMessageSquare /> Mis Agentes de IA
+          </button>
+          <button
+            className={`${styles.navItem} ${activeTab === "leads" ? styles.navItemActive : ""}`}
+            onClick={() => setActiveTab("leads")}
+          >
+            <FiUsers /> Leads Capturados
           </button>
           <button
             className={`${styles.navItem} ${activeTab === "settings" ? styles.navItemActive : ""}`}

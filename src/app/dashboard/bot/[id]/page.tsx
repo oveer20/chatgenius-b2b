@@ -14,7 +14,8 @@ import {
   FiRefreshCw,
   FiSend,
   FiZap,
-  FiCode
+  FiCode,
+  FiGlobe
 } from "react-icons/fi";
 import styles from "../../dashboard.module.css";
 import { supabase } from "@/lib/supabase";
@@ -106,14 +107,40 @@ export default function BotEditor() {
     }
   };
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
+    if (!file) return;
+
+    if (file.type === "application/pdf") {
+      try {
+        const { getDocument, GlobalWorkerOptions } = await import("pdfjs-dist");
+        // Set worker from a CDN for simplicity in Next.js
+        GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.worker.min.mjs`;
+        
+        const arrayBuffer = await file.arrayBuffer();
+        const loadingTask = getDocument({ data: arrayBuffer });
+        const pdf = await loadingTask.promise;
+        
+        let fullText = "";
+        for (let i = 1; i <= pdf.numPages; i++) {
+          const page = await pdf.getPage(i);
+          const textContent = await page.getTextContent();
+          const pageText = textContent.items.map((item: any) => item.str).join(" ");
+          fullText += pageText + "\n";
+        }
+        
+        setKnowledgeBase(prev => prev + "\n" + fullText);
+        alert("¡PDF procesado y texto extraído con éxito!");
+      } catch (err) {
+        console.error("PDF Error:", err);
+        alert("Error al procesar el PDF. Asegúrate de que no esté protegido.");
+      }
+    } else {
       const reader = new FileReader();
       reader.onload = (event) => {
         const text = event.target?.result as string;
         setKnowledgeBase(prev => prev + "\n" + text);
-        alert("¡Documento procesado y añadido a la base del conocimiento!");
+        alert("¡Archivo de texto procesado!");
       };
       reader.readAsText(file);
     }
@@ -289,18 +316,62 @@ export default function BotEditor() {
                     placeholder="Escribe o sube documentos con la información de tu empresa (precios, horarios, envíos...)"
                   />
                </div>
-               <div style={{ textAlign: "center" }}>
-                  <input 
-                    type="file" 
-                    id="file-upload" 
-                    style={{ display: "none" }} 
-                    onChange={handleFileUpload}
-                    accept=".txt,.md"
-                  />
-                  <label htmlFor="file-upload" className="btn-secondary" style={{ cursor: "pointer", width: "100%", display: "flex", justifyContent: "center" }}>
-                    <FiDatabase /> Subir Archivo (.txt, .md)
-                  </label>
-               </div>
+                <div style={{ textAlign: "center", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                  <div>
+                    <input 
+                      type="file" 
+                      id="file-upload" 
+                      style={{ display: "none" }} 
+                      onChange={handleFileUpload}
+                      accept=".txt,.md,.pdf"
+                    />
+                    <label htmlFor="file-upload" className="btn-secondary" style={{ cursor: "pointer", width: "100%", display: "flex", justifyContent: "center", fontSize: "0.85rem" }}>
+                      <FiDatabase /> Subir TXT / PDF
+                    </label>
+                  </div>
+                  <div style={{ display: "flex", gap: "0.5rem" }}>
+                    <input 
+                      type="text" 
+                      placeholder="https://tu-web.com"
+                      className="input"
+                      style={{ fontSize: "0.8rem", padding: "0.5rem 0.75rem" }}
+                      id="crawl-url"
+                    />
+                    <button 
+                      className="btn-primary" 
+                      style={{ padding: "0 1rem", fontSize: "0.8rem" }}
+                      onClick={async () => {
+                        const urlInput = (document.getElementById('crawl-url') as HTMLInputElement).value;
+                        if (!urlInput) return alert("Ingresa una URL");
+                        
+                        const btn = document.activeElement as HTMLButtonElement;
+                        btn.disabled = true;
+                        btn.innerText = "...";
+                        
+                        try {
+                          const res = await fetch("/api/crawl", {
+                            method: "POST",
+                            body: JSON.stringify({ url: urlInput })
+                          });
+                          const data = await res.json();
+                          if (data.text) {
+                            setKnowledgeBase(prev => prev + "\n" + data.text);
+                            alert("¡Contenido extraído con éxito!");
+                          } else {
+                            alert("No se pudo extraer texto de esa URL.");
+                          }
+                        } catch(e) {
+                          alert("Error al conectar con el servidor de crawling.");
+                        } finally {
+                          btn.disabled = false;
+                          btn.innerText = "Entrenar";
+                        }
+                      }}
+                    >
+                      Entrenar
+                    </button>
+                  </div>
+                </div>
             </section>
 
             {/* Installation Section */}
