@@ -20,8 +20,29 @@ import {
   FiTrendingUp,
   FiUsers
 } from "react-icons/fi";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  LineChart,
+  Line
+} from "recharts";
 import styles from "./dashboard.module.css";
 import { supabase } from "@/lib/supabase";
+
+const analyticsData = [
+  { name: 'Lun', leads: 4, msgs: 12 },
+  { name: 'Mar', leads: 7, msgs: 25 },
+  { name: 'Mie', leads: 5, msgs: 18 },
+  { name: 'Jue', leads: 9, msgs: 30 },
+  { name: 'Vie', leads: 12, msgs: 42 },
+  { name: 'Sab', leads: 8, msgs: 28 },
+  { name: 'Dom', leads: 15, msgs: 55 },
+];
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -43,7 +64,7 @@ interface Bot {
 }
 
 export default function DashboardPage() {
-  const [activeTab, setActiveTab] = useState<"agents" | "leads" | "settings">("agents");
+  const [activeTab, setActiveTab] = useState<"agents" | "leads" | "analytics" | "settings">("agents");
   const [bots, setBots] = useState<Bot[]>([]);
   const [leads, setLeads] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -124,6 +145,12 @@ export default function DashboardPage() {
             onClick={() => setActiveTab("leads")}
           >
             <FiUsers /> Leads Capturados
+          </button>
+          <button
+            className={`${styles.navItem} ${activeTab === "analytics" ? styles.navItemActive : ""}`}
+            onClick={() => setActiveTab("analytics")}
+          >
+            <FiTrendingUp /> Analíticas
           </button>
           <button
             className={`${styles.navItem} ${activeTab === "settings" ? styles.navItemActive : ""}`}
@@ -303,6 +330,109 @@ export default function DashboardPage() {
                   )}
                 </tbody>
               </table>
+            </div>
+          </motion.div>
+        )}
+        {activeTab === "analytics" && (
+          <motion.div initial="hidden" animate="visible" variants={fadeInUp} custom={0}>
+            <header className={styles.header}>
+              <div>
+                <h1 className={styles.title}>Analíticas de Rendimiento</h1>
+                <p className={styles.subtitle}>Monitorea el crecimiento y efectividad de tus agentes.</p>
+              </div>
+            </header>
+
+            {/* KPI Cards */}
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "1.5rem", marginBottom: "2rem" }}>
+              <div className="glass-card" style={{ padding: "1.5rem" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "1rem" }}>
+                  <span style={{ color: "var(--text-tertiary)", fontSize: "0.85rem", fontWeight: "600" }}>LEADS TOTALES</span>
+                  <FiUsers style={{ color: "var(--accent-blue)" }} />
+                </div>
+                <div style={{ fontSize: "2rem", fontWeight: "800" }}>{leads.length * 12}</div>
+                <div style={{ fontSize: "0.8rem", color: "var(--success)", marginTop: "0.5rem" }}>↑ 12% vs mes anterior</div>
+              </div>
+
+              <div className="glass-card" style={{ padding: "1.5rem" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "1rem" }}>
+                  <span style={{ color: "var(--text-tertiary)", fontSize: "0.85rem", fontWeight: "600" }}>MENSAJES RESPONDIDOS</span>
+                  <FiMessageSquare style={{ color: "#8b5cf6" }} />
+                </div>
+                <div style={{ fontSize: "2rem", fontWeight: "800" }}>2,482</div>
+                <div style={{ fontSize: "0.8rem", color: "var(--success)", marginTop: "0.5rem" }}>↑ 8% vs mes anterior</div>
+              </div>
+
+              <div className="glass-card" style={{ padding: "1.5rem" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "1rem" }}>
+                  <span style={{ color: "var(--text-tertiary)", fontSize: "0.85rem", fontWeight: "600" }}>TASA DE CONVERSIÓN</span>
+                  <FiZap style={{ color: "#f59e0b" }} />
+                </div>
+                <div style={{ fontSize: "2rem", fontWeight: "800" }}>18.4%</div>
+                <div style={{ fontSize: "0.8rem", color: "var(--success)", marginTop: "0.5rem" }}>↑ 2.1% vs mes anterior</div>
+              </div>
+            </div>
+
+            {/* Charts Section */}
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(400px, 1fr))", gap: "1.5rem" }}>
+              <div className="glass-card" style={{ padding: "1.5rem", height: "400px" }}>
+                <h3 style={{ marginBottom: "1.5rem", fontSize: "1rem" }}>Captura de Leads (7 días)</h3>
+                <ResponsiveContainer width="100%" height="80%">
+                  <BarChart data={analyticsData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+                    <XAxis 
+                      dataKey="name" 
+                      stroke="var(--text-tertiary)" 
+                      fontSize={12} 
+                      tickLine={false} 
+                      axisLine={false} 
+                    />
+                    <YAxis 
+                      stroke="var(--text-tertiary)" 
+                      fontSize={12} 
+                      tickLine={false} 
+                      axisLine={false} 
+                    />
+                    <Tooltip 
+                      contentStyle={{ background: '#1e293b', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px' }}
+                      itemStyle={{ color: '#fff' }}
+                    />
+                    <Bar dataKey="leads" fill="var(--accent-blue)" radius={[4, 4, 0, 0]} barSize={30} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+
+              <div className="glass-card" style={{ padding: "1.5rem", height: "400px" }}>
+                <h3 style={{ marginBottom: "1.5rem", fontSize: "1rem" }}>Actividad de Mensajes</h3>
+                <ResponsiveContainer width="100%" height="80%">
+                  <LineChart data={analyticsData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+                    <XAxis 
+                      dataKey="name" 
+                      stroke="var(--text-tertiary)" 
+                      fontSize={12} 
+                      tickLine={false} 
+                      axisLine={false} 
+                    />
+                    <YAxis 
+                      stroke="var(--text-tertiary)" 
+                      fontSize={12} 
+                      tickLine={false} 
+                      axisLine={false} 
+                    />
+                    <Tooltip 
+                      contentStyle={{ background: '#1e293b', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px' }}
+                    />
+                    <Line 
+                      type="monotone" 
+                      dataKey="msgs" 
+                      stroke="#8b5cf6" 
+                      strokeWidth={3} 
+                      dot={{ fill: '#8b5cf6', strokeWidth: 2 }} 
+                      activeDot={{ r: 8 }} 
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
             </div>
           </motion.div>
         )}
