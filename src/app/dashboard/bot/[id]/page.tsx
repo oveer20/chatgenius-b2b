@@ -142,16 +142,19 @@ export default function BotEditor() {
       });
 
       const data = await response.json();
-      if (data.message) {
+      if (data.error) {
+        setChatMessages(prev => [...prev, { 
+          role: "assistant", 
+          content: "🤖 " + (data.message?.content || data.error)
+        }]);
+      } else if (data.message) {
         setChatMessages(prev => [...prev, data.message]);
-      } else {
-        throw new Error(data.error || "Error desconocido");
       }
-    } catch (error) {
-      console.error(error);
+    } catch (err: any) {
+      console.error(err);
       setChatMessages(prev => [...prev, { 
         role: "assistant", 
-        content: "Error al conectar con el motor de IA."
+        content: "🤖 Lo siento, estoy procesando mucha información. Dame un momento y vuelve a intentarlo." 
       }]);
     } finally {
       setIsTyping(false);

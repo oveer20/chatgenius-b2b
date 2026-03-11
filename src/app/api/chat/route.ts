@@ -44,11 +44,19 @@ export async function POST(request: NextRequest) {
     console.error("/// CHAT API ERROR (GEMINI) ///");
     console.error(error);
     
+    const isQuotaExceeded = error.message?.includes("429") || error.message?.includes("quota") || error.toString().includes("429");
+
+    if (isQuotaExceeded) {
+      return NextResponse.json({ 
+        message: {
+          role: "assistant",
+          content: "🤖 Estoy recibiendo muchas consultas en este momento. Por favor, dame unos 10 segundos para procesar todo y vuelve a preguntarme. ¡Gracias por tu paciencia!"
+        }
+      });
+    }
+
     return NextResponse.json(
-      { 
-        error: `Error de motor: ${error.message || "Desconocido"}`,
-        details: error.toString() 
-      },
+      { error: "Lo siento, el motor de IA está ocupado. Intenta de nuevo en un momento." },
       { status: 500 }
     );
   }
