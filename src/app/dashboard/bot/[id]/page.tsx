@@ -14,7 +14,8 @@ import {
   FiChevronRight,
   FiCpu,
   FiRefreshCw,
-  FiSend
+  FiSend,
+  FiZap
 } from "react-icons/fi";
 import styles from "../../dashboard.module.css";
 
