@@ -45,7 +45,10 @@ export async function POST(request: NextRequest) {
     console.error(error);
     
     return NextResponse.json(
-      { error: `Error de conexión con Gemini: ${error.message || "Desconocido"}` },
+      { 
+        error: `Error de motor: ${error.message || "Desconocido"}`,
+        details: error.toString() 
+      },
       { status: 500 }
     );
   }
