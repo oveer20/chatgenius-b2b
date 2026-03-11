@@ -5,7 +5,7 @@ const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY || "AIzaS
 
 export async function getGeminiResponse(messages: any[], systemPrompt: string) {
   // Using the aliased model name for maximum key compatibility (verified)
-  const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
+  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
   // Gemini requires history to start with 'user'. 
   // If the first message is from the assistant/model, we skip it.
