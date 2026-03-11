@@ -148,7 +148,7 @@ export default function DashboardPage() {
 
       {/* Main */}
       <main className={styles.main}>
-        {activeTab === "agents" ? (
+        {activeTab === "agents" && (
           <motion.div
             initial="hidden"
             animate="visible"
@@ -170,7 +170,6 @@ export default function DashboardPage() {
                 <p style={{ marginTop: "1rem" }}>Cargando tus agentes...</p>
               </div>
             ) : bots.length === 0 ? (
-              /* Empty State - Premium */
               <motion.div 
                 variants={fadeInUp} 
                 custom={1}
@@ -207,7 +206,6 @@ export default function DashboardPage() {
                 </Link>
               </motion.div>
             ) : (
-              /* Bot Cards Grid */
               <div className={styles.resumeGrid}>
                 {bots.map((bot, i) => (
                   <motion.div
@@ -249,8 +247,6 @@ export default function DashboardPage() {
                     </div>
                   </motion.div>
                 ))}
-
-                {/* Add new card */}
                 <motion.div variants={fadeInUp} custom={bots.length + 1}>
                   <Link href="/dashboard/bot/new" className={styles.addCard}>
                     <FiPlus size={32} />
@@ -260,18 +256,65 @@ export default function DashboardPage() {
               </div>
             )}
           </motion.div>
-        ) : (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-          >
+        )}
+
+        {activeTab === "leads" && (
+          <motion.div initial="hidden" animate="visible" variants={fadeInUp} custom={0}>
+            <header className={styles.header}>
+              <div>
+                <h1 className={styles.title}>Leads Capturados</h1>
+                <p className={styles.subtitle}>Personas que han dejado sus datos en tus bots.</p>
+              </div>
+            </header>
+
+            <div className="glass-card" style={{ padding: "0", overflow: "hidden" }}>
+              <table style={{ width: "100%", borderCollapse: "collapse", color: "var(--text-primary)" }}>
+                <thead style={{ background: "rgba(255,255,255,0.03)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+                  <tr>
+                    <th style={{ textAlign: "left", padding: "1.25rem", fontSize: "0.85rem", opacity: 0.7 }}>Nombre</th>
+                    <th style={{ textAlign: "left", padding: "1.25rem", fontSize: "0.85rem", opacity: 0.7 }}>Email</th>
+                    <th style={{ textAlign: "left", padding: "1.25rem", fontSize: "0.85rem", opacity: 0.7 }}>WhatsApp</th>
+                    <th style={{ textAlign: "left", padding: "1.25rem", fontSize: "0.85rem", opacity: 0.7 }}>Agente</th>
+                    <th style={{ textAlign: "left", padding: "1.25rem", fontSize: "0.85rem", opacity: 0.7 }}>Fecha</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {leads.length > 0 ? leads.map((lead) => (
+                    <tr key={lead.id} style={{ borderBottom: "1px solid rgba(255,255,255,0.03)" }}>
+                      <td style={{ padding: "1.25rem", fontSize: "0.9rem", fontWeight: "600" }}>{lead.name}</td>
+                      <td style={{ padding: "1.25rem", fontSize: "0.9rem", color: "var(--text-secondary)" }}>{lead.email}</td>
+                      <td style={{ padding: "1.25rem", fontSize: "0.9rem", color: "var(--text-secondary)" }}>{lead.whatsapp || "No provisto"}</td>
+                      <td style={{ padding: "1.25rem", fontSize: "0.85rem" }}>
+                        <span style={{ padding: "0.25rem 0.6rem", background: "rgba(79,125,245,0.1)", color: "var(--accent-blue)", borderRadius: "20px" }}>
+                          {lead.bots?.name || "Bot"}
+                        </span>
+                      </td>
+                      <td style={{ padding: "1.25rem", fontSize: "0.85rem", color: "var(--text-tertiary)" }}>
+                        {new Date(lead.created_at).toLocaleDateString()}
+                      </td>
+                    </tr>
+                  )) : (
+                    <tr>
+                      <td colSpan={5} style={{ padding: "4rem", textAlign: "center", color: "var(--text-tertiary)" }}>
+                        <FiUsers style={{ fontSize: "2rem", marginBottom: "1rem" }} />
+                        <p>No se han capturado leads todavía.</p>
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </motion.div>
+        )}
+
+        {activeTab === "settings" && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <div className={styles.header}>
               <div>
                 <h1>Configuración</h1>
                 <p>Administra tu cuenta empresarial y preferencias</p>
               </div>
             </div>
-
             <div className={`glass-card ${styles.settingsCard}`}>
               <h3>🔗 Instalación del Widget</h3>
               <p style={{ fontSize: "0.9rem", color: "var(--text-secondary)", marginBottom: "1rem" }}>
@@ -290,11 +333,8 @@ export default function DashboardPage() {
                    <FiCopy /> Copiar
                  </button>
               </div>
-              <p style={{ fontSize: "0.75rem", color: "var(--text-tertiary)", marginTop: "0.75rem" }}>
-                💡 Reemplaza <code>TU-BOT-ID</code> con el ID de tu agente. Puedes encontrarlo en la sección "Entrenar" de cada bot.
-              </p>
             </div>
-
+            {/* Account Settings */}
             <div className={`glass-card ${styles.settingsCard}`}>
               <h3>👤 Información de la Cuenta</h3>
               <div className={styles.settingsForm}>
@@ -311,7 +351,7 @@ export default function DashboardPage() {
                 </button>
               </div>
             </div>
-
+            {/* Plan Info */}
             <div className={`glass-card ${styles.settingsCard}`}>
               <h3>💎 Plan Actual</h3>
               <div className={styles.planInfo}>
