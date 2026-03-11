@@ -295,31 +295,65 @@
   }
 }
 
+.featureCard {
+  padding: var(--space-10);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-6);
+  background: #0f172a; /* Deep Navy B2B */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-3xl);
+  transition: all var(--transition-base);
+  position: relative;
+  overflow: hidden;
+}
+
+.featureCard:hover {
+  transform: translateY(-10px);
+  border-color: var(--accent-blue);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
 .featureIcon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 56px;
-  height: 56px;
-  flex-shrink: 0;
-  background: var(--bg-primary);
-  border-radius: var(--radius-xl);
-  font-size: var(--text-2xl);
-  color: var(--accent-blue);
-  box-shadow: var(--shadow-sm);
+  width: 72px;
+  height: 72px;
+  background: rgba(37, 99, 235, 0.1);
+  border: 1px solid rgba(37, 99, 235, 0.2);
+  border-radius: var(--radius-2xl);
+  font-size: var(--text-3xl);
+  color: #60a5fa; /* Brighter blue for contrast */
+  transition: all var(--transition-base);
+}
+
+.featureCard:hover .featureIcon {
+  transform: scale(1.1) rotate(8deg);
+  background: var(--accent-blue);
+  color: white;
 }
 
 .featureContent h3 {
-  font-size: var(--text-xl);
-  font-weight: 700;
-  margin-bottom: var(--space-2);
-  color: var(--text-primary);
+  font-size: var(--text-2xl);
+  font-weight: 800;
+  margin-bottom: var(--space-3);
+  color: white;
+  letter-spacing: -0.01em;
 }
 
 .featureContent p {
   font-size: var(--text-base);
-  color: var(--text-secondary);
+  color: rgba(255, 255, 255, 0.7);
   line-height: 1.6;
+}
+
+.featuresGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-8);
 }
 
 /* Templates / Use Cases */
