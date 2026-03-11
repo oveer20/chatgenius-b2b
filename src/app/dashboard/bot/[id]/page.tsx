@@ -1,10 +1,20 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { FiArrowLeft, FiSave, FiPlay, FiDatabase, FiMessageSquare, FiSettings, FiChevronRight, FiCpu, FiRefreshCw, FiSend, FiZap } from "react-icons/fi";
+import {
+  FiArrowLeft,
+  FiSave,
+  FiPlay,
+  FiDatabase,
+  FiSettings,
+  FiCpu,
+  FiRefreshCw,
+  FiSend,
+  FiZap
+} from "react-icons/fi";
 import styles from "../../dashboard.module.css";
 import { supabase } from "@/lib/supabase";
 
@@ -28,6 +38,15 @@ export default function BotEditor() {
   const [isTyping, setIsTyping] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [knowledgeBase, setKnowledgeBase] = useState(isNew ? "" : "Nuestros envíos tardan 3-5 días hábiles. El costo de envío es de $5.");
+  
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scroll to bottom of chat
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [chatMessages, isTyping]);
 
   useEffect(() => {
     async function loadBot() {
@@ -89,7 +108,6 @@ export default function BotEditor() {
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      // Simple text reading for MVP RAG
       const reader = new FileReader();
       reader.onload = (event) => {
         const text = event.target?.result as string;
@@ -116,7 +134,7 @@ export default function BotEditor() {
         body: JSON.stringify({
           messages: [...chatMessages, userMsg].map(m => ({ role: m.role, content: m.content })),
           systemPrompt: botData.systemPrompt,
-          knowledgeBase: knowledgeBase, // Critical: Injecting context
+          knowledgeBase: knowledgeBase,
           temperature: botData.temperature,
           model: botData.model
         })
@@ -140,7 +158,13 @@ export default function BotEditor() {
   };
 
   return (
-    <div className={styles.dashboard} style={{ height: "100vh", overflow: "hidden" }}>
+    <div className={styles.dashboard} style={{ 
+      height: "100vh", 
+      maxHeight: "100vh", 
+      overflow: "hidden", 
+      flexDirection: "column",
+      minHeight: "0" // Override module CSS min-height: 100vh
+    }}>
       {/* Header Editor */}
       <header className={styles.header} style={{ 
         padding: "1rem 2rem", 
@@ -149,7 +173,9 @@ export default function BotEditor() {
         justifyContent: "space-between", 
         alignItems: "center", 
         background: "var(--bg-primary)",
-        margin: 0
+        margin: 0,
+        height: "70px",
+        flexShrink: 0
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
           <button onClick={() => router.back()} className="btn-secondary" style={{ padding: "0.5rem", borderRadius: "var(--radius-md)" }}>
@@ -167,7 +193,7 @@ export default function BotEditor() {
       </header>
 
       {/* Editor Content */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 450px", height: "calc(100vh - 70px)", overflow: "hidden" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 450px", flex: 1, minHeight: 0, overflow: "hidden" }}>
         {/* Settings Panel */}
         <div style={{ padding: "2.5rem", overflowY: "auto", borderRight: "1px solid var(--border)", background: "var(--bg-secondary)" }}>
           <div style={{ maxWidth: "800px", margin: "0 auto" }}>
@@ -206,7 +232,6 @@ export default function BotEditor() {
                 <div>
                   <label className="label" style={{ display: "flex", justifyContent: "space-between" }}>
                     <span>System Prompt (Instrucciones Maestras)</span>
-                    <span style={{ color: "var(--accent-blue)", cursor: "pointer", fontSize: "0.8rem", fontWeight: "600" }}>Ver Plantillas</span>
                   </label>
                   <textarea 
                     className="input" 
@@ -276,16 +301,43 @@ export default function BotEditor() {
           </div>
         </div>
 
-        {/* Playground Area */}
-        <div style={{ display: "flex", flexDirection: "column", background: "var(--bg-primary)" }}>
-          <div style={{ padding: "1.25rem", borderBottom: "1px solid var(--border)", display: "flex", justifyContent: "space-between", alignItems: "center", background: "var(--bg-secondary)" }}>
+        {/* Playground Area - FIXED and SCROLLABLE */}
+        <div style={{ 
+          display: "flex", 
+          flexDirection: "column", 
+          background: "var(--bg-primary)",
+          height: "100%",
+          minHeight: 0, // Critical: allows flex children to shrink within CSS grid
+          overflow: "hidden",
+          position: "relative"
+        }}>
+          <div style={{ 
+            padding: "1.25rem", 
+            borderBottom: "1px solid var(--border)", 
+            display: "flex", 
+            justifyContent: "space-between", 
+            alignItems: "center", 
+            background: "var(--bg-secondary)",
+            flexShrink: 0 // Prevent header from shrinking
+          }}>
              <span style={{ fontSize: "0.85rem", fontWeight: "800", color: "var(--text-primary)", textTransform: "uppercase", letterSpacing: "0.05em" }}>Playground / Vista Previa</span>
              <button onClick={() => setChatMessages([{ role: "assistant", content: "Chat reiniciado. ¿En qué puedo ayudarte?" }])} style={{ color: "var(--text-tertiary)", fontSize: "0.8rem", display: "flex", alignItems: "center", gap: "0.25rem", fontWeight: "600" }}>
                <FiRefreshCw /> Reiniciar
              </button>
           </div>
           
-          <div style={{ flex: 1, padding: "1.5rem", overflowY: "auto", display: "flex", flexDirection: "column", gap: "1rem" }}>
+          <div 
+            ref={scrollRef}
+            style={{ 
+              flex: 1, 
+              padding: "1.5rem", 
+              overflowY: "auto", 
+              display: "flex", 
+              flexDirection: "column", 
+              gap: "1rem",
+              background: "var(--bg-primary)" 
+            }}
+          >
             {chatMessages.map((msg, i) => (
               <div key={i} style={{ 
                 alignSelf: msg.role === "user" ? "flex-end" : "flex-start",
@@ -310,18 +362,25 @@ export default function BotEditor() {
             )}
           </div>
 
-          <form onSubmit={handleSendMessage} style={{ padding: "1.5rem", borderTop: "1px solid var(--border)", display: "flex", gap: "0.75rem", background: "var(--bg-secondary)" }}>
-            <input 
-              className="input" 
-              placeholder="Escribe un mensaje de prueba..." 
-              value={inputMessage}
-              onChange={e => setInputMessage(e.target.value)}
-              style={{ borderRadius: "var(--radius-full)", background: "var(--bg-primary)", boxShadow: "var(--shadow-sm)" }}
-            />
-            <button type="submit" className="btn-primary" style={{ padding: "0", borderRadius: "var(--radius-full)", width: "48px", height: "48px", minWidth: "48px" }}>
-              <FiSend />
-            </button>
-          </form>
+          <div style={{ 
+            padding: "1.5rem", 
+            borderTop: "1px solid var(--border)", 
+            background: "var(--bg-secondary)",
+            flexShrink: 0 // Ensure input section doesn't collapse
+          }}>
+            <form onSubmit={handleSendMessage} style={{ display: "flex", gap: "0.75rem" }}>
+              <input 
+                className="input" 
+                placeholder="Escribe un mensaje de prueba..." 
+                value={inputMessage}
+                onChange={e => setInputMessage(e.target.value)}
+                style={{ borderRadius: "var(--radius-full)", background: "var(--bg-primary)", boxShadow: "var(--shadow-sm)" }}
+              />
+              <button type="submit" className="btn-primary" style={{ padding: "0", borderRadius: "var(--radius-full)", width: "48px", height: "48px", minWidth: "48px" }}>
+                <FiSend />
+              </button>
+            </form>
+          </div>
         </div>
       </div>
     </div>
