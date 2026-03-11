@@ -1,9 +1,11 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY || "");
+// Initialize genAI with fallback for top-level loading
+const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY || "AIzaSy_REPLACEME");
 
 export async function getGeminiResponse(messages: any[], systemPrompt: string) {
-  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+  // Using the aliased model name for maximum key compatibility (verified)
+  const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
 
   const chat = model.startChat({
     history: messages.slice(0, -1).map((m: any) => ({

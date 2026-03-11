@@ -4,20 +4,9 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import {
-  FiArrowLeft,
-  FiSave,
-  FiPlay,
-  FiDatabase,
-  FiMessageSquare,
-  FiSettings,
-  FiChevronRight,
-  FiCpu,
-  FiRefreshCw,
-  FiSend,
-  FiZap
-} from "react-icons/fi";
+import { FiArrowLeft, FiSave, FiPlay, FiDatabase, FiMessageSquare, FiSettings, FiChevronRight, FiCpu, FiRefreshCw, FiSend, FiZap } from "react-icons/fi";
 import styles from "../../dashboard.module.css";
+import { supabase } from "@/lib/supabase";
 
 export default function BotEditor() {
   const { id } = useParams();
@@ -41,20 +30,57 @@ export default function BotEditor() {
   const [knowledgeBase, setKnowledgeBase] = useState(isNew ? "" : "Nuestros envíos tardan 3-5 días hábiles. El costo de envío es de $5.");
 
   useEffect(() => {
-    if (!isNew) {
-      // In a real app, fetch from /api/bots/[id]
-      console.log("Cargando bot:", id);
+    async function loadBot() {
+      if (isNew) return;
+      
+      const { data, error } = await supabase
+        .from("bots")
+        .select("*")
+        .eq("id", id)
+        .single();
+
+      if (data) {
+        setBotData({
+          name: data.name,
+          description: data.description || "",
+          systemPrompt: data.system_prompt || "",
+          temperature: data.temperature || 0.7,
+          model: data.model || "gemini-1.5-flash",
+        });
+        setKnowledgeBase(data.knowledge_base || "");
+      }
     }
+    loadBot();
   }, [id, isNew]);
 
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      // Simulate real save to /api/bots
-      await new Promise(r => setTimeout(r, 1000));
-      alert("Configuración y Base de Conocimientos guardadas correctamente");
-    } catch (err) {
-      alert("Error al guardar");
+      const payload = {
+        name: botData.name,
+        description: botData.description,
+        system_prompt: botData.systemPrompt,
+        knowledge_base: knowledgeBase,
+        temperature: botData.temperature,
+        model: botData.model,
+        updated_at: new Date().toISOString(),
+      };
+
+      let error;
+      if (isNew) {
+        const { error: err } = await supabase.from("bots").insert([{ ...payload, user_id: (await supabase.auth.getUser()).data.user?.id }]);
+        error = err;
+      } else {
+        const { error: err } = await supabase.from("bots").update(payload).eq("id", id);
+        error = err;
+      }
+
+      if (error) throw error;
+      alert("¡Bot actualizado y entrenado con éxito!");
+      if (isNew) router.push("/dashboard");
+    } catch (err: any) {
+      console.error(err);
+      alert("Error al guardar: " + err.message);
     } finally {
       setIsSaving(false);
     }
