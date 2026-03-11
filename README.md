@@ -20,6 +20,23 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+### 🚀 Despliegue en Vercel (Producción)
+
+1. Sube este código a un repositorio privado en **GitHub**.
+2. Conecta el repositorio en [Vercel](https://vercel.com).
+3. Configura las siguientes variables de entorno:
+   - `OPENAI_API_KEY`: Tu llave de producción de OpenAI.
+   - `STRIPE_SECRET_KEY`: Tu llave de Stripe (modo Live).
+   - `NEXT_PUBLIC_SUPABASE_URL`: URL de tu proyecto Supabase.
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`: API Key anon de Supabase.
+   - `NEXT_PUBLIC_APP_URL`: La URL final de tu dominio (ej: `https://chatgenius.ai`).
+4. ¡Listo! Tu SaaS estará vivo.
+
+## 🛠️ Estructura del Proyecto
+- `/src/app`: Rutas del Dashboard y Landing.
+- `/public/widget.js`: El motor del chat para los clientes.
+- `/src/api/widget/chat`: El endpoint que procesa los mensajes del widget.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
