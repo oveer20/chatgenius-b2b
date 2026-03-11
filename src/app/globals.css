@@ -6,49 +6,50 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 :root {
-  /* Colors */
-  --bg-primary: #0a0a0f;
-  --bg-secondary: #12121a;
-  --bg-tertiary: #1a1a2e;
-  --bg-card: rgba(255, 255, 255, 0.03);
-  --bg-card-hover: rgba(255, 255, 255, 0.06);
-  --bg-glass: rgba(255, 255, 255, 0.05);
-  --bg-glass-strong: rgba(255, 255, 255, 0.08);
+  /* Colors - Premium B2B Light Theme */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-tertiary: #f1f5f9;
+  --bg-card: #ffffff;
+  --bg-card-hover: #fdfdfd;
+  --bg-glass: rgba(255, 255, 255, 0.7);
+  --bg-glass-strong: rgba(255, 255, 255, 0.9);
 
-  --text-primary: #f0f0f5;
-  --text-secondary: #a0a0b8;
-  --text-tertiary: #6b6b80;
-  --text-muted: #4a4a5e;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-tertiary: #64748b;
+  --text-muted: #94a3b8;
 
-  --accent-blue: #4f7df5;
-  --accent-purple: #9b59f5;
-  --accent-gradient: linear-gradient(135deg, #4f7df5 0%, #9b59f5 50%, #e84df5 100%);
-  --accent-gradient-subtle: linear-gradient(135deg, rgba(79, 125, 245, 0.15) 0%, rgba(155, 89, 245, 0.15) 100%);
-  --accent-glow: 0 0 40px rgba(79, 125, 245, 0.15);
+  --accent-blue: #2563eb;
+  --accent-purple: #7c3aed;
+  --accent-gradient: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+  --accent-gradient-subtle: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(124, 58, 237, 0.05) 100%);
+  --accent-glow: 0 0 40px rgba(37, 99, 235, 0.1);
 
-  --success: #34d399;
-  --warning: #fbbf24;
-  --error: #f87171;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --error: #ef4444;
 
-  --border: rgba(255, 255, 255, 0.06);
-  --border-hover: rgba(255, 255, 255, 0.12);
-  --border-accent: rgba(79, 125, 245, 0.3);
+  --border: #e2e8f0;
+  --border-hover: #cbd5e1;
+  --border-accent: rgba(37, 99, 235, 0.2);
 
   /* Typography */
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
-
+  
+  /* ... rest of the typography tokens remain same ... */
   --text-xs: 0.75rem;
   --text-sm: 0.875rem;
-  --text-base: 1rem;
+  --text-base: 1.05rem; /* Slightly larger for better readability */
   --text-lg: 1.125rem;
   --text-xl: 1.25rem;
   --text-2xl: 1.5rem;
   --text-3xl: 1.875rem;
-  --text-4xl: 2.25rem;
-  --text-5xl: 3rem;
-  --text-6xl: 3.75rem;
-  --text-7xl: 4.5rem;
+  --text-4xl: 2.5rem;
+  --text-5xl: 3.5rem;
+  --text-6xl: 4rem;
+  --text-7xl: 5rem;
 
   /* Spacing */
   --space-1: 0.25rem;
@@ -74,11 +75,11 @@
   --radius-full: 9999px;
 
   /* Shadows */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
-  --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.6);
-  --shadow-glow: 0 0 60px rgba(79, 125, 245, 0.1);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-glow: 0 0 60px rgba(37, 99, 235, 0.05);
 
   /* Transitions */
   --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);

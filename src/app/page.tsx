@@ -15,7 +15,9 @@ import {
   FiShield,
   FiMessageSquare,
   FiDatabase,
-  FiCode
+  FiCode,
+  FiMenu,
+  FiX
 } from "react-icons/fi";
 import styles from "./landing.module.css";
 
@@ -37,6 +39,7 @@ const stagger = {
    ============================================ */
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
@@ -51,20 +54,53 @@ function Navbar() {
           <span className={styles.logoIcon}>✦</span>
           <span>Chat<span className="gradient-text">Genius</span></span>
         </Link>
+        
+        {/* Desktop Links */}
         <div className={styles.navLinks}>
           <a href="#features">Cómo Funciona</a>
           <a href="#usecases">Casos de Uso</a>
           <a href="#pricing">Precios</a>
         </div>
+        
         <div className={styles.navActions}>
-          <Link href="/login" className={styles.navLogin}>
-            Iniciar Sesión
-          </Link>
+          <div className={styles.desktopOnly}>
+            <Link href="/login" className={styles.navLogin}>
+              Iniciar Sesión
+            </Link>
+          </div>
           <Link href="/dashboard" className="btn-primary">
-            Empezar Gratis <FiArrowRight />
+            Empezar <span className={styles.desktopOnly}>Gratis</span> <FiArrowRight />
           </Link>
+          
+          {/* Mobile Toggle */}
+          <button 
+            className={styles.mobileMenuToggle} 
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Menu"
+          >
+            {mobileMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+          </button>
         </div>
       </div>
+
+      {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div 
+            className={styles.mobileMenu}
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+          >
+            <div className={styles.mobileMenuContent}>
+              <a href="#features" onClick={() => setMobileMenuOpen(false)}>Cómo Funciona</a>
+              <a href="#usecases" onClick={() => setMobileMenuOpen(false)}>Casos de Uso</a>
+              <a href="#pricing" onClick={() => setMobileMenuOpen(false)}>Precios</a>
+              <Link href="/login" onClick={() => setMobileMenuOpen(false)}>Iniciar Sesión</Link>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 }
@@ -95,10 +131,10 @@ function Hero() {
             Sube tus documentos, conecta tu tienda y nuestro asistente virtual responderá automáticamente a tus clientes, aumentando ventas y reduciendo tickets de soporte 24/7.
           </motion.p>
           <motion.div className={styles.heroCtas} variants={fadeInUp} custom={3}>
-            <Link href="/dashboard" className="btn-primary" style={{ padding: "1rem 2.5rem", fontSize: "1.1rem" }}>
+            <Link href="/dashboard" className="btn-primary">
               Crear Mi Chatbot Ahora <FiArrowRight />
             </Link>
-            <a href="#features" className="btn-secondary" style={{ padding: "1rem 2.5rem", fontSize: "1.1rem" }}>
+            <a href="#features" className="btn-secondary">
               Ver Demo
             </a>
           </motion.div>
@@ -206,7 +242,7 @@ const features = [
   {
     icon: <FiCpu />,
     title: "IA Avanzada (RAG)",
-    desc: "Impulsado por GPT-4 y recuperación de documentos. Sin alucinaciones: responde estrictamente en base a tus manuales.",
+    desc: "Impulsado por Google Gemini y recuperación de documentos (RAG). Sin alucinaciones: responde estrictamente en base a tus manuales.",
   },
   {
     icon: <FiShield />,
@@ -248,10 +284,10 @@ function Features() {
    Use Cases (Templates Equivalent)
    ============================================ */
 const usecases = [
-  { name: "E-Commerce", desc: "Resuelve dudas de envío, políticas de devolución y recomienda productos", color: "#4f7df5" },
-  { name: "SaaS", desc: "Atiende dudas complejas y reduce la carga del equipo humano", color: "#34d399" },
-  { name: "Bienes Raíces", desc: "Captura leads 24/7 y reserva citas según inventario disponible", color: "#e84df5" },
-  { name: "Agencias", desc: "Califica a los prospectos en frío antes de pasarlos a un asesor comercial", color: "#fbbf24" },
+  { name: "E-Commerce", desc: "Resuelve dudas de envío, políticas de devolución y recomienda productos", color: "#2563eb" },
+  { name: "SaaS", desc: "Atiende dudas complejas y reduce la carga del equipo humano", color: "#10b981" },
+  { name: "Bienes Raíces", desc: "Captura leads 24/7 y reserva citas según inventario disponible", color: "#7c3aed" },
+  { name: "Agencias", desc: "Califica a los prospectos en frío antes de pasarlos a un asesor comercial", color: "#f59e0b" },
 ];
 
 function UseCases() {
@@ -545,7 +581,7 @@ const faqs = [
   },
   {
     q: "¿Qué modelo de Inteligencia Artificial usan?",
-    a: "Dependiendo del requerimiento y la velocidad, usamos modelos avanzados de OpenAI como GPT-4o por debajo de nuestra tecnología RAG patentada.",
+    a: "Dependiendo del requerimiento y la velocidad, usamos modelos avanzados de Google como Gemini 1.5 Pro por debajo de nuestra tecnología RAG patentada.",
   },
   {
     q: "¿Pueden las respuestas sonar amables o estrictamente corporativas?",
@@ -636,7 +672,7 @@ function CTA() {
             Únete a cientos de empresas que ya mejoraron su atención 24/7 y redujeron sus costos operativos.
           </motion.p>
           <motion.div variants={fadeInUp} custom={2}>
-            <Link href="/dashboard" className="btn-primary" style={{ padding: "1rem 3rem", fontSize: "1.1rem" }}>
+            <Link href="/dashboard" className="btn-primary">
               Crea tu Agente Gratis <FiArrowRight />
             </Link>
           </motion.div>

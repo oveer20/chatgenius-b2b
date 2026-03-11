@@ -34,7 +34,7 @@ export default function DashboardPage() {
     {
       id: "1",
       name: "Soporte E-commerce",
-      model: "GPT-4o",
+      model: "Gemini 1.5 Pro",
       updatedAt: "2026-03-10",
       conversations: 1250,
       status: "Activo"
@@ -42,7 +42,8 @@ export default function DashboardPage() {
     {
       id: "2",
       name: "Agente Captación Leads Real Estate",
-      model: "GPT-4o-mini",
+      model: "Gemini 1.5 Flash",
+      desc: "Impulsado por Google Gemini y recuperación de documentos (RAG). Sin alucinaciones: responde estrictamente en base a tus manuales.",
       updatedAt: "2026-03-08",
       conversations: 340,
       status: "Entrenando..."
@@ -111,8 +112,8 @@ export default function DashboardPage() {
           >
             <motion.div className={styles.header} variants={fadeInUp} custom={0}>
               <div>
-                <h1>Mis Agentes de IA</h1>
-                <p>Gestiona y entrena los asistentes virtuales de tu negocio</p>
+                <h1>Gestión de Agentes</h1>
+                <p>Configura, entrena y monitorea tus asistentes inteligentes impulsados por Google Gemini.</p>
               </div>
               <Link href="/dashboard/bot/new" className="btn-primary">
                 <FiPlus /> Crear Nuevo Agente
@@ -136,7 +137,15 @@ export default function DashboardPage() {
                       <span><FiClock /> {agent.updatedAt}</span>
                       <span><FiDatabase /> {agent.conversations} chats</span>
                     </div>
-                    <span className={styles.templateBadge} style={{backgroundColor: agent.status === "Activo" ? "rgba(52, 211, 153, 0.2)" : "rgba(251, 191, 36, 0.2)", color: agent.status === "Activo" ? "#34d399" : "#fbbf24"}}>{agent.status}</span>
+                    <span 
+                      className={styles.templateBadge} 
+                      style={{
+                        backgroundColor: agent.status === "Activo" ? "rgba(16, 185, 129, 0.1)" : "rgba(245, 158, 11, 0.1)", 
+                        color: agent.status === "Activo" ? "var(--success)" : "var(--warning)"
+                      }}
+                    >
+                      {agent.status}
+                    </span>
                   </div>
                   <div className={styles.resumeActions}>
                     <Link href={`/dashboard/bot/${agent.id}`} className="btn-secondary" style={{ fontSize: "0.8rem", padding: "0.5rem 1rem" }}>
