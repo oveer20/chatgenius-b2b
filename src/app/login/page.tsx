@@ -3,10 +3,13 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { FiMail, FiLock, FiUser, FiArrowRight } from "react-icons/fi";
+import { supabase } from "@/lib/supabase";
 import styles from "./auth.module.css";
 
 export default function AuthPage() {
+  const router = useRouter();
   const [mode, setMode] = useState<"login" | "signup">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -20,12 +23,28 @@ export default function AuthPage() {
     setMessage("");
 
     try {
-      // Demo mode: show message that Supabase needs to be configured
-      setMessage(
-        "⚙️ Para habilitar la autenticación, configura tus credenciales de Supabase en .env.local"
-      );
-    } catch {
-      setMessage("Error. Inténtalo de nuevo.");
+      if (mode === "signup") {
+        const { error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            data: {
+              full_name: name,
+            },
+          },
+        });
+        if (error) throw error;
+        setMessage("✅ Revisa tu correo para verificar tu cuenta.");
+      } else {
+        const { error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+        if (error) throw error;
+        router.push("/dashboard");
+      }
+    } catch (error: any) {
+      setMessage(`❌ Error: ${error.message || "Inténtalo de nuevo."}`);
     } finally {
       setLoading(false);
     }
