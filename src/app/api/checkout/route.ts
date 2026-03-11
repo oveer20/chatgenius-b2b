@@ -1,16 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import Stripe from "stripe";
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
-  apiVersion: "2026-02-25.clover",
-});
+import { Preference } from "mercadopago";
+import { client } from "@/lib/mercadopago";
 
 export async function POST(request: NextRequest) {
   try {
-    // Check if Stripe is configured
-    if (!process.env.STRIPE_SECRET_KEY || process.env.STRIPE_SECRET_KEY === "sk_test_your-key-here") {
+    // Check if Mercado Pago is configured
+    if (!process.env.MP_ACCESS_TOKEN || process.env.MP_ACCESS_TOKEN === "APP_USR-placeholder") {
       return NextResponse.json(
-        { error: "Stripe is not configured. Add your STRIPE_SECRET_KEY to .env.local" },
+        { error: "Mercado Pago is not configured. Add your MP_ACCESS_TOKEN to .env.local" },
         { status: 503 }
       );
     }
@@ -18,42 +15,48 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { plan, email } = body;
 
-    const prices: Record<string, { amount: number; name: string; mode: "payment" | "subscription" }> = {
-      pro: { amount: 4900, name: "ChatGenius Growth — Mensual", mode: "subscription" },
-      enterprise: { amount: 19900, name: "ChatGenius Enterprise — Mensual", mode: "subscription" },
+    // Plans in COP (Approximate conversion from USD)
+    const prices: Record<string, { amount: number; name: string }> = {
+      pro: { amount: 195000, name: "ChatGenius Growth — Acceso Mensual" },
+      enterprise: { amount: 795000, name: "ChatGenius Enterprise — Acceso Mensual" },
     };
 
     const selected = prices[plan];
     if (!selected) {
-      return NextResponse.json({ error: "Invalid plan" }, { status: 400 });
+      return NextResponse.json({ error: "Plan inválido" }, { status: 400 });
     }
 
-    const sessionConfig: Stripe.Checkout.SessionCreateParams = {
-      payment_method_types: ["card"],
-      line_items: [
-        {
-          price_data: {
-            currency: "usd",
-            product_data: { name: selected.name },
-            unit_amount: selected.amount,
-            ...(selected.mode === "subscription" ? { recurring: { interval: "month" } } : {}),
+    const preference = new Preference(client);
+    
+    const result = await preference.create({
+      body: {
+        items: [
+          {
+            id: plan,
+            title: selected.name,
+            unit_price: selected.amount,
+            quantity: 1,
+            currency_id: "COP",
           },
-          quantity: 1,
+        ],
+        payer: {
+          email: email || "usuario@ejemplo.com",
         },
-      ],
-      mode: selected.mode,
-      success_url: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/dashboard?success=true`,
-      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/builder?cancelled=true`,
-      ...(email ? { customer_email: email } : {}),
-    };
+        back_urls: {
+          success: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/dashboard?success=true`,
+          failure: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/pricing?error=true`,
+          pending: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/dashboard?pending=true`,
+        },
+        auto_return: "approved",
+        notification_url: `${process.env.NEXT_PUBLIC_APP_URL || ""}/api/webhook/mercadopago`,
+      },
+    });
 
-    const session = await stripe.checkout.sessions.create(sessionConfig);
-
-    return NextResponse.json({ url: session.url });
-  } catch (error) {
-    console.error("Checkout error:", error);
+    return NextResponse.json({ url: result.init_point });
+  } catch (error: any) {
+    console.error("/// MERCADO PAGO ERROR ///", error);
     return NextResponse.json(
-      { error: "Failed to create checkout session" },
+      { error: "Error al crear la preferencia de pago", details: error.message },
       { status: 500 }
     );
   }

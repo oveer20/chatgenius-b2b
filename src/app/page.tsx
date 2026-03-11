@@ -557,6 +557,7 @@ const plans = [
   {
     name: "Growth",
     price: "$49",
+    copPrice: "195.000",
     originalPrice: "$99",
     period: "/mes",
     description: "Para negocios que quieren escalar",
@@ -568,13 +569,15 @@ const plans = [
       "Personalización de marca completa",
       "Análisis de conversaciones",
     ],
-    cta: "Comenzar Prueba de 14 días",
-    href: "/dashboard",
+    cta: "Comenzar Ahora",
+    planId: "pro",
+    href: "#",
     popular: true,
   },
   {
     name: "Empresarial",
     price: "$199",
+    copPrice: "795.000",
     originalPrice: "$399",
     period: "/mes",
     description: "Volumen a gran escala con soporte VIP",
@@ -587,12 +590,42 @@ const plans = [
       "Bases de conocimiento ilimitadas",
     ],
     cta: "Contactar a Ventas",
-    href: "#",
+    planId: "enterprise",
+    href: "https://wa.me/573000000000?text=Hola,%20me%20interesa%20el%20plan%20Empresarial%20de%20ChatGenius",
     popular: false,
   },
 ];
 
 function Pricing() {
+  const [loading, setLoading] = useState<string | null>(null);
+
+  const handleCheckout = async (plan: any) => {
+    if (plan.name === "Starter") return;
+    if (plan.name === "Empresarial") {
+      window.open(plan.href, "_blank");
+      return;
+    }
+
+    setLoading(plan.planId);
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ plan: plan.planId }),
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        alert(data.error || "Error al procesar el pago");
+      }
+    } catch (err) {
+      alert("Error de conexión");
+    } finally {
+      setLoading(null);
+    }
+  };
+
   return (
     <section id="pricing" className="section">
       <div className="container">
@@ -637,6 +670,11 @@ function Pricing() {
                   <span className={styles.price}>{plan.price}</span>
                   <span className={styles.period}>{plan.period}</span>
                 </div>
+                {(plan as any).copPrice && (
+                  <div style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)', marginBottom: '1rem', fontWeight: 600 }}>
+                    ~ ${(plan as any).copPrice} COP
+                  </div>
+                )}
                 <p className={styles.pricingDesc}>{plan.description}</p>
                 {plan.popular && (
                   <div style={{
@@ -660,13 +698,14 @@ function Pricing() {
                     </li>
                   ))}
                 </ul>
-                <Link
-                  href={plan.href}
+                <button
+                  disabled={loading === (plan as any).planId}
+                  onClick={() => handleCheckout(plan)}
                   className={plan.popular ? "btn-primary" : "btn-secondary"}
                   style={{ width: "100%", marginTop: "auto" }}
                 >
-                  {plan.cta}
-                </Link>
+                  {loading === (plan as any).planId ? "Procesando..." : plan.cta}
+                </button>
               </motion.div>
             ))}
           </div>
