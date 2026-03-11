@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import {
   FiMessageSquare,
@@ -13,9 +13,14 @@ import {
   FiArrowRight,
   FiZap,
   FiDatabase,
-  FiCode
+  FiCode,
+  FiCopy,
+  FiCheck,
+  FiBox,
+  FiTrendingUp
 } from "react-icons/fi";
 import styles from "./dashboard.module.css";
+import { supabase } from "@/lib/supabase";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -26,29 +31,44 @@ const fadeInUp = {
   }),
 };
 
+interface Bot {
+  id: string;
+  name: string;
+  description: string | null;
+  model: string;
+  knowledge_base: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
 export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState<"agents" | "settings">("agents");
+  const [bots, setBots] = useState<Bot[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
 
-  // Demo data
-  const agents = [
-    {
-      id: "1",
-      name: "Soporte E-commerce",
-      model: "Gemini 1.5 Pro",
-      updatedAt: "2026-03-10",
-      conversations: 1250,
-      status: "Activo"
-    },
-    {
-      id: "2",
-      name: "Agente Captación Leads Real Estate",
-      model: "Gemini 1.5 Flash",
-      desc: "Impulsado por Google Gemini y recuperación de documentos (RAG). Sin alucinaciones: responde estrictamente en base a tus manuales.",
-      updatedAt: "2026-03-08",
-      conversations: 340,
-      status: "Entrenando..."
-    },
-  ];
+  // Fetch bots from Supabase
+  useEffect(() => {
+    async function fetchBots() {
+      const { data, error } = await supabase
+        .from("bots")
+        .select("*")
+        .order("updated_at", { ascending: false });
+
+      if (data) setBots(data);
+      if (error) console.error("Error loading bots:", error);
+      setLoading(false);
+    }
+    fetchBots();
+  }, []);
+
+  const handleCopySnippet = (botId: string) => {
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://chatgenius-b2b.vercel.app";
+    const snippet = `<script src="${appUrl}/widget.js" data-bot-id="${botId}"></script>`;
+    navigator.clipboard.writeText(snippet);
+    setCopiedId(botId);
+    setTimeout(() => setCopiedId(null), 2000);
+  };
 
   const handleUpgrade = async (plan: string) => {
     try {
@@ -63,6 +83,11 @@ export default function DashboardPage() {
     } catch (err) {
       alert("Error de conexión");
     }
+  };
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    window.location.href = "/login";
   };
 
   return (
@@ -85,7 +110,7 @@ export default function DashboardPage() {
             className={`${styles.navItem} ${activeTab === "settings" ? styles.navItemActive : ""}`}
             onClick={() => setActiveTab("settings")}
           >
-            <FiSettings /> Configuración de Empresa
+            <FiSettings /> Configuración
           </button>
         </nav>
 
@@ -96,7 +121,7 @@ export default function DashboardPage() {
           <button onClick={() => handleUpgrade('pro')} className="btn-primary" style={{ width: "100%", fontSize: "0.85rem", padding: "0.65rem" }}>
             <FiZap /> Upgrade a Growth
           </button>
-          <button className={styles.logoutBtn}>
+          <button onClick={handleLogout} className={styles.logoutBtn}>
              <FiLogOut /> Cerrar Sesión
           </button>
         </div>
@@ -120,52 +145,101 @@ export default function DashboardPage() {
               </Link>
             </motion.div>
 
-            <div className={styles.resumeGrid}> {/* We keep the CSS class name for grid structure */}
-              {agents.map((agent, i) => (
-                <motion.div
-                  key={agent.id}
-                  className={`glass-card ${styles.resumeCard}`}
-                  variants={fadeInUp}
-                  custom={i + 1}
-                >
-                  <div className={styles.resumePreview}>
-                    <FiMessageSquare size={32} />
-                  </div>
-                  <div className={styles.resumeInfo}>
-                    <h3>{agent.name}</h3>
-                    <div className={styles.resumeMeta}>
-                      <span><FiClock /> {agent.updatedAt}</span>
-                      <span><FiDatabase /> {agent.conversations} chats</span>
-                    </div>
-                    <span 
-                      className={styles.templateBadge} 
-                      style={{
-                        backgroundColor: agent.status === "Activo" ? "rgba(16, 185, 129, 0.1)" : "rgba(245, 158, 11, 0.1)", 
-                        color: agent.status === "Activo" ? "var(--success)" : "var(--warning)"
-                      }}
-                    >
-                      {agent.status}
-                    </span>
-                  </div>
-                  <div className={styles.resumeActions}>
-                    <Link href={`/dashboard/bot/${agent.id}`} className="btn-secondary" style={{ fontSize: "0.8rem", padding: "0.5rem 1rem" }}>
-                      <FiSettings /> Entrenar
-                    </Link>
-                    <button onClick={() => setActiveTab("settings")} className="btn-primary" style={{ fontSize: "0.8rem", padding: "0.5rem 1rem" }}>
-                      <FiCode /> Instalar
-                    </button>
-                  </div>
-                </motion.div>
-              ))}
-
-              {/* Add new card */}
-              <motion.div variants={fadeInUp} custom={agents.length + 1}>
-                <Link href="/dashboard/bot/new" className={styles.addCard}>
-                  <FiPlus size={32} />
-                  <span>Configurar nuevo asistente</span>
+            {loading ? (
+              <div style={{ textAlign: "center", padding: "4rem", color: "var(--text-secondary)" }}>
+                <FiZap size={32} style={{ animation: "pulse 1.5s infinite" }} />
+                <p style={{ marginTop: "1rem" }}>Cargando tus agentes...</p>
+              </div>
+            ) : bots.length === 0 ? (
+              /* Empty State - Premium */
+              <motion.div 
+                variants={fadeInUp} 
+                custom={1}
+                style={{
+                  textAlign: "center",
+                  padding: "4rem 2rem",
+                  background: "var(--bg-primary)",
+                  borderRadius: "var(--radius-xl)",
+                  border: "2px dashed var(--border)",
+                  marginTop: "2rem"
+                }}
+              >
+                <div style={{
+                  width: "80px",
+                  height: "80px",
+                  borderRadius: "50%",
+                  background: "linear-gradient(135deg, #3b82f6, #8b5cf6)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  margin: "0 auto 1.5rem",
+                  boxShadow: "0 8px 32px rgba(59, 130, 246, 0.3)"
+                }}>
+                  <FiBox size={36} color="white" />
+                </div>
+                <h2 style={{ fontSize: "1.5rem", fontWeight: "800", color: "var(--text-primary)", marginBottom: "0.75rem" }}>
+                  ¡Crea tu primer agente de IA!
+                </h2>
+                <p style={{ color: "var(--text-secondary)", maxWidth: "400px", margin: "0 auto 2rem", lineHeight: "1.6" }}>
+                  En menos de 2 minutos tendrás un chatbot inteligente respondiendo por ti 24/7. Solo necesitas darle un nombre y entrenarlo.
+                </p>
+                <Link href="/dashboard/bot/new" className="btn-primary" style={{ fontSize: "1rem", padding: "0.85rem 2rem" }}>
+                  <FiPlus /> Crear Mi Primer Agente <FiArrowRight />
                 </Link>
               </motion.div>
-            </div>
+            ) : (
+              /* Bot Cards Grid */
+              <div className={styles.resumeGrid}>
+                {bots.map((bot, i) => (
+                  <motion.div
+                    key={bot.id}
+                    className={`glass-card ${styles.resumeCard}`}
+                    variants={fadeInUp}
+                    custom={i + 1}
+                  >
+                    <div className={styles.resumePreview}>
+                      <FiMessageSquare size={32} />
+                    </div>
+                    <div className={styles.resumeInfo}>
+                      <h3>{bot.name}</h3>
+                      <div className={styles.resumeMeta}>
+                        <span><FiClock /> {new Date(bot.updated_at).toLocaleDateString("es-ES")}</span>
+                        <span><FiDatabase /> {bot.knowledge_base ? "Entrenado" : "Sin entrenar"}</span>
+                      </div>
+                      <span 
+                        className={styles.templateBadge} 
+                        style={{
+                          backgroundColor: bot.knowledge_base ? "rgba(16, 185, 129, 0.1)" : "rgba(245, 158, 11, 0.1)", 
+                          color: bot.knowledge_base ? "var(--success)" : "var(--warning)"
+                        }}
+                      >
+                        {bot.knowledge_base ? "✅ Activo" : "⚠️ Pendiente"}
+                      </span>
+                    </div>
+                    <div className={styles.resumeActions}>
+                      <Link href={`/dashboard/bot/${bot.id}`} className="btn-secondary" style={{ fontSize: "0.8rem", padding: "0.5rem 1rem" }}>
+                        <FiSettings /> Entrenar
+                      </Link>
+                      <button 
+                        onClick={() => handleCopySnippet(bot.id)} 
+                        className="btn-primary" 
+                        style={{ fontSize: "0.8rem", padding: "0.5rem 1rem" }}
+                      >
+                        {copiedId === bot.id ? <><FiCheck /> ¡Copiado!</> : <><FiCode /> Instalar</>}
+                      </button>
+                    </div>
+                  </motion.div>
+                ))}
+
+                {/* Add new card */}
+                <motion.div variants={fadeInUp} custom={bots.length + 1}>
+                  <Link href="/dashboard/bot/new" className={styles.addCard}>
+                    <FiPlus size={32} />
+                    <span>Configurar nuevo asistente</span>
+                  </Link>
+                </motion.div>
+              </div>
+            )}
           </motion.div>
         ) : (
           <motion.div
@@ -180,38 +254,38 @@ export default function DashboardPage() {
             </div>
 
             <div className={`glass-card ${styles.settingsCard}`}>
-              <h3>Instalación del Widget</h3>
+              <h3>🔗 Instalación del Widget</h3>
               <p style={{ fontSize: "0.9rem", color: "var(--text-secondary)", marginBottom: "1rem" }}>
                 Copia y pega este código antes de cerrar la etiqueta <code>&lt;/body&gt;</code> en tu sitio web.
               </p>
-              <div style={{ background: "#000", padding: "1rem", borderRadius: "var(--radius-md)", position: "relative" }}>
-                 <code style={{ fontSize: "0.8rem", color: "#34d399", display: "block", overflowX: "auto" }}>
-                   {`<script 
-  src="${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/widget.js" 
-  data-bot-id="tu-agente-id">
-</script>`}
+              <div style={{ background: "#0f172a", padding: "1.25rem", borderRadius: "var(--radius-md)", position: "relative" }}>
+                 <code style={{ fontSize: "0.8rem", color: "#34d399", display: "block", overflowX: "auto", lineHeight: "1.6" }}>
+                   {`<script \n  src="${process.env.NEXT_PUBLIC_APP_URL || 'https://chatgenius-b2b.vercel.app'}/widget.js" \n  data-bot-id="TU-BOT-ID">\n</script>`}
                  </code>
                  <button 
                   onClick={() => {
-                    navigator.clipboard.writeText(`<script src="${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/widget.js" data-bot-id="tu-agente-id"></script>`);
-                    alert("¡Código copiado!");
+                    navigator.clipboard.writeText(`<script src="${process.env.NEXT_PUBLIC_APP_URL || 'https://chatgenius-b2b.vercel.app'}/widget.js" data-bot-id="TU-BOT-ID"></script>`);
+                    alert("¡Código copiado al portapapeles!");
                   }}
-                  style={{ position: "absolute", top: "0.5rem", right: "0.5rem", padding: "0.2rem 0.5rem", fontSize: "0.7rem", background: "var(--bg-glass)", border: "1px solid var(--border)", borderRadius: "4px" }}>
-                   Copiar
+                  style={{ position: "absolute", top: "0.75rem", right: "0.75rem", padding: "0.4rem 0.8rem", fontSize: "0.75rem", background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.2)", borderRadius: "6px", color: "#34d399", cursor: "pointer", display: "flex", alignItems: "center", gap: "0.3rem" }}>
+                   <FiCopy /> Copiar
                  </button>
               </div>
+              <p style={{ fontSize: "0.75rem", color: "var(--text-tertiary)", marginTop: "0.75rem" }}>
+                💡 Reemplaza <code>TU-BOT-ID</code> con el ID de tu agente. Puedes encontrarlo en la sección "Entrenar" de cada bot.
+              </p>
             </div>
 
             <div className={`glass-card ${styles.settingsCard}`}>
-              <h3>Información de la Cuenta</h3>
+              <h3>👤 Información de la Cuenta</h3>
               <div className={styles.settingsForm}>
                 <div className={styles.settingsField}>
                   <label className="label">Nombre de la Empresa</label>
-                  <input className="input" defaultValue="TechCorp 3000" />
+                  <input className="input" defaultValue="" placeholder="Tu empresa..." />
                 </div>
                 <div className={styles.settingsField}>
                   <label className="label">Email de Administración</label>
-                  <input className="input" type="email" defaultValue="admin@techcorp.com" />
+                  <input className="input" type="email" defaultValue="" placeholder="admin@tuempresa.com" />
                 </div>
                 <button className="btn-primary" style={{ alignSelf: "flex-start" }}>
                   Guardar Cambios
@@ -220,11 +294,11 @@ export default function DashboardPage() {
             </div>
 
             <div className={`glass-card ${styles.settingsCard}`}>
-              <h3>Plan Actual</h3>
+              <h3>💎 Plan Actual</h3>
               <div className={styles.planInfo}>
                 <div>
                   <strong>Starter Mode</strong>
-                  <p>1 Agente, 500 mensajes, marca de agua de ChatGenius</p>
+                  <p>1 Agente, 500 mensajes/mes, marca de agua de ChatGenius</p>
                 </div>
                 <button onClick={() => handleUpgrade('enterprise')} className="btn-primary">
                   Upgrade a Enterprise — $199/mes <FiArrowRight />

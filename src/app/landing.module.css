@@ -819,5 +819,19 @@
     gap: var(--space-4);
     text-align: center;
   }
+
+  .heroGrid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .heroGrid > div:last-child {
+    display: none;
+  }
 }
 
+.heroGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: center;
+}

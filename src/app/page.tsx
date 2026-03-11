@@ -106,59 +106,206 @@ function Navbar() {
 }
 
 /* ============================================
-   Hero
+   Hero with Interactive Demo Chat
    ============================================ */
 function Hero() {
+  const [demoMessages, setDemoMessages] = useState([
+    { role: "assistant", content: "¡Hola! 👋 Soy un ejemplo de ChatGenius. Pregúntame lo que quieras o haz clic en una sugerencia." }
+  ]);
+  const [demoInput, setDemoInput] = useState("");
+  const [demoTyping, setDemoTyping] = useState(false);
+
+  const demoResponses: Record<string, string> = {
+    "¿Qué es ChatGenius?": "ChatGenius es una plataforma de chatbots con IA que permite a las empresas atender a sus clientes 24/7, reduciendo tickets de soporte en un 60% y aumentando ventas. 🚀",
+    "¿Cuánto cuesta?": "Tenemos un plan gratuito con 500 mensajes/mes. Nuestro plan Growth cuesta solo $49/mes (antes $99) con agentes ilimitados. ¡Un agente humano te costaría $1,200/mes! 💰",
+    "¿Cómo funciona?": "Es muy simple: 1️⃣ Subes tu conocimiento (textos, PDFs), 2️⃣ Personalizas el tono de tu bot, 3️⃣ Copias un código en tu web. ¡Listo en 2 minutos!",
+  };
+
+  const handleDemoSend = (text?: string) => {
+    const msg = text || demoInput.trim();
+    if (!msg) return;
+    setDemoMessages(prev => [...prev, { role: "user", content: msg }]);
+    setDemoInput("");
+    setDemoTyping(true);
+    
+    setTimeout(() => {
+      const response = demoResponses[msg] || "¡Excelente pregunta! Para darte la mejor respuesta, te invito a crear tu cuenta gratis y probar el poder completo de la IA. 🤖✨";
+      setDemoMessages(prev => [...prev, { role: "assistant", content: response }]);
+      setDemoTyping(false);
+    }, 1200);
+  };
+
   return (
     <section className={styles.hero}>
       <div className={styles.heroGlow} />
       <div className="container">
-        <motion.div
-          className={styles.heroContent}
-          initial="hidden"
-          animate="visible"
-          variants={stagger}
-        >
-          <motion.div variants={fadeInUp} custom={0}>
-            <span className="badge">✨ Respuestas Inteligentes B2B</span>
+        <div className={styles.heroGrid}>
+          {/* Left: Text */}
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={stagger}
+          >
+            <motion.div variants={fadeInUp} custom={0}>
+              <span className="badge">✨ Respuestas Inteligentes B2B</span>
+            </motion.div>
+            <motion.h1 className={styles.heroTitle} variants={fadeInUp} custom={1} style={{ textAlign: "left" }}>
+              Revoluciona tu atención al cliente
+              <br />
+              <span className="gradient-text">con IA en minutos</span>
+            </motion.h1>
+            <motion.p className={styles.heroSubtitle} variants={fadeInUp} custom={2} style={{ textAlign: "left" }}>
+              Sube tus documentos, conecta tu tienda y nuestro asistente virtual responderá automáticamente a tus clientes, aumentando ventas y reduciendo tickets de soporte 24/7.
+            </motion.p>
+            <motion.div className={styles.heroCtas} variants={fadeInUp} custom={3} style={{ justifyContent: "flex-start" }}>
+              <Link href="/dashboard" className="btn-primary">
+                Crear Mi Chatbot Ahora <FiArrowRight />
+              </Link>
+            </motion.div>
+            <motion.div className={styles.heroStats} variants={fadeInUp} custom={4} style={{ justifyContent: "flex-start" }}>
+              <div className={styles.heroStat}>
+                <strong>1M+</strong>
+                <span>Mensajes Respondidos</span>
+              </div>
+              <div className={styles.heroStatDivider} />
+              <div className={styles.heroStat}>
+                <strong>80%</strong>
+                <span>Tickets Resueltos por IA</span>
+              </div>
+              <div className={styles.heroStatDivider} />
+              <div className={styles.heroStat}>
+                <strong>4.9★</strong>
+                <span>Satisfacción</span>
+              </div>
+            </motion.div>
           </motion.div>
-          <motion.h1 className={styles.heroTitle} variants={fadeInUp} custom={1}>
-            Revoluciona tu atención al cliente
-            <br />
-            <span className="gradient-text">con IA en minutos</span>
-          </motion.h1>
-          <motion.p className={styles.heroSubtitle} variants={fadeInUp} custom={2}>
-            Sube tus documentos, conecta tu tienda y nuestro asistente virtual responderá automáticamente a tus clientes, aumentando ventas y reduciendo tickets de soporte 24/7.
-          </motion.p>
-          <motion.div className={styles.heroCtas} variants={fadeInUp} custom={3}>
-            <Link href="/dashboard" className="btn-primary">
-              Crear Mi Chatbot Ahora <FiArrowRight />
-            </Link>
-            <a href="#features" className="btn-secondary">
-              Ver Demo
-            </a>
+
+          {/* Right: Interactive Demo Chat */}
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.5, duration: 0.6 }}
+            style={{
+              background: "white",
+              borderRadius: "1.25rem",
+              boxShadow: "0 25px 60px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.05)",
+              overflow: "hidden",
+              display: "flex",
+              flexDirection: "column",
+              height: "460px"
+            }}
+          >
+            {/* Chat Header */}
+            <div style={{
+              padding: "1rem 1.25rem",
+              background: "linear-gradient(135deg, #3b82f6, #8b5cf6)",
+              color: "white",
+              display: "flex",
+              alignItems: "center",
+              gap: "0.75rem",
+              flexShrink: 0
+            }}>
+              <div style={{ width: "36px", height: "36px", borderRadius: "50%", background: "rgba(255,255,255,0.2)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.1rem" }}>
+                🤖
+              </div>
+              <div>
+                <div style={{ fontWeight: "700", fontSize: "0.9rem" }}>Asistente ChatGenius</div>
+                <div style={{ fontSize: "0.7rem", opacity: 0.8 }}>● En línea — pruébame ahora</div>
+              </div>
+            </div>
+
+            {/* Chat Messages */}
+            <div style={{ flex: 1, padding: "1rem", overflowY: "auto", display: "flex", flexDirection: "column", gap: "0.75rem", background: "#f8fafc" }}>
+              {demoMessages.map((msg, i) => (
+                <div key={i} style={{
+                  alignSelf: msg.role === "user" ? "flex-end" : "flex-start",
+                  maxWidth: "85%",
+                  padding: "0.65rem 0.9rem",
+                  borderRadius: msg.role === "user" ? "1rem 1rem 0.2rem 1rem" : "1rem 1rem 1rem 0.2rem",
+                  fontSize: "0.82rem",
+                  lineHeight: "1.5",
+                  background: msg.role === "user" ? "linear-gradient(135deg, #3b82f6, #8b5cf6)" : "white",
+                  color: msg.role === "user" ? "white" : "#1e293b",
+                  boxShadow: "0 1px 3px rgba(0,0,0,0.08)"
+                }}>
+                  {msg.content}
+                </div>
+              ))}
+              {demoTyping && (
+                <div style={{ alignSelf: "flex-start", padding: "0.65rem 0.9rem", borderRadius: "1rem", background: "white", fontSize: "0.82rem", color: "#94a3b8", boxShadow: "0 1px 3px rgba(0,0,0,0.08)" }}>
+                  <span style={{ animation: "pulse 1.5s infinite" }}>escribiendo...</span>
+                </div>
+              )}
+            </div>
+
+            {/* Suggestion Chips */}
+            <div style={{ padding: "0.5rem 1rem", display: "flex", gap: "0.4rem", flexWrap: "wrap", borderTop: "1px solid #e2e8f0", background: "white" }}>
+              {Object.keys(demoResponses).map((q, i) => (
+                <button
+                  key={i}
+                  onClick={() => handleDemoSend(q)}
+                  style={{
+                    padding: "0.35rem 0.7rem",
+                    borderRadius: "2rem",
+                    border: "1px solid #e2e8f0",
+                    background: "#f1f5f9",
+                    fontSize: "0.7rem",
+                    color: "#3b82f6",
+                    cursor: "pointer",
+                    fontWeight: "600",
+                    whiteSpace: "nowrap",
+                    transition: "all 0.2s"
+                  }}
+                >
+                  {q}
+                </button>
+              ))}
+            </div>
+
+            {/* Input */}
+            <form
+              onSubmit={(e) => { e.preventDefault(); handleDemoSend(); }}
+              style={{ padding: "0.75rem 1rem", display: "flex", gap: "0.5rem", borderTop: "1px solid #e2e8f0", background: "white", flexShrink: 0 }}
+            >
+              <input
+                value={demoInput}
+                onChange={(e) => setDemoInput(e.target.value)}
+                placeholder="Escribe algo..."
+                style={{
+                  flex: 1,
+                  padding: "0.6rem 1rem",
+                  border: "1px solid #e2e8f0",
+                  borderRadius: "2rem",
+                  fontSize: "0.82rem",
+                  outline: "none",
+                  background: "#f8fafc"
+                }}
+              />
+              <button
+                type="submit"
+                style={{
+                  width: "36px",
+                  height: "36px",
+                  borderRadius: "50%",
+                  background: "linear-gradient(135deg, #3b82f6, #8b5cf6)",
+                  color: "white",
+                  border: "none",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center"
+                }}
+              >
+                <FiArrowRight size={16} />
+              </button>
+            </form>
           </motion.div>
-          <motion.div className={styles.heroStats} variants={fadeInUp} custom={4}>
-            <div className={styles.heroStat}>
-              <strong>1M+</strong>
-              <span>Mensajes Respondidos</span>
-            </div>
-            <div className={styles.heroStatDivider} />
-            <div className={styles.heroStat}>
-              <strong>80%</strong>
-              <span>Tickets Resueltos por IA</span>
-            </div>
-            <div className={styles.heroStatDivider} />
-            <div className={styles.heroStat}>
-              <strong>4.9★</strong>
-              <span>Satisfacción del Cliente</span>
-            </div>
-          </motion.div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
 }
+
 
 /* ============================================
    How It Works
@@ -394,8 +541,9 @@ const plans = [
   {
     name: "Starter",
     price: "$0",
+    originalPrice: null,
     period: "/mes",
-    description: "Perfecto para validación",
+    description: "Para validar tu idea sin riesgo",
     features: [
       "1 Agente de IA",
       "Hasta 500 mensajes/mes",
@@ -409,14 +557,15 @@ const plans = [
   {
     name: "Growth",
     price: "$49",
+    originalPrice: "$99",
     period: "/mes",
-    description: "Para negocios en expansión",
+    description: "Para negocios que quieren escalar",
     features: [
       "Agentes de IA Ilimitados",
       "Hasta 5,000 mensajes",
       "Entrenamiento con RAG Avanzado",
       "Sin marca de agua",
-      "Personalización de marca",
+      "Personalización de marca completa",
       "Análisis de conversaciones",
     ],
     cta: "Comenzar Prueba de 14 días",
@@ -426,13 +575,14 @@ const plans = [
   {
     name: "Empresarial",
     price: "$199",
+    originalPrice: "$399",
     period: "/mes",
-    description: "Volumen a gran escala",
+    description: "Volumen a gran escala con soporte VIP",
     features: [
       "Todo lo de Growth",
       "Mensajes ilimitados",
       "Soporte dedicado por Slack",
-      "Acceso a la API",
+      "Acceso completo a la API",
       "Conexión con CRM (Salesforce/Hubspot)",
       "Bases de conocimiento ilimitadas",
     ],
@@ -459,7 +609,7 @@ function Pricing() {
             Precios diseñados para escalar
           </motion.h2>
           <motion.p className="section-subtitle" variants={fadeInUp} custom={2}>
-            Paga una fracción del costo de un empleado de soporte humano, con una eficiencia 10 veces mayor.
+            Un agente humano cuesta ~$1,200/mes. ChatGenius hace lo mismo desde <strong>$0</strong>. Haz la cuenta.
           </motion.p>
 
           <div className={styles.pricingGrid}>
@@ -470,13 +620,39 @@ function Pricing() {
                 variants={fadeInUp}
                 custom={i + 3}
               >
-                {plan.popular && <div className={styles.popularBadge}>Más Popular</div>}
+                {plan.popular && <div className={styles.popularBadge}>⭐ Más Popular</div>}
                 <h3>{plan.name}</h3>
                 <div className={styles.pricingAmount}>
+                  {plan.originalPrice && (
+                    <span style={{ 
+                      textDecoration: "line-through", 
+                      color: "var(--text-tertiary)", 
+                      fontSize: "1.2rem", 
+                      marginRight: "0.5rem",
+                      fontWeight: "400"
+                    }}>
+                      {plan.originalPrice}
+                    </span>
+                  )}
                   <span className={styles.price}>{plan.price}</span>
                   <span className={styles.period}>{plan.period}</span>
                 </div>
                 <p className={styles.pricingDesc}>{plan.description}</p>
+                {plan.popular && (
+                  <div style={{
+                    background: "rgba(16, 185, 129, 0.1)",
+                    border: "1px solid rgba(16, 185, 129, 0.2)",
+                    borderRadius: "var(--radius-md)",
+                    padding: "0.6rem 1rem",
+                    fontSize: "0.8rem",
+                    color: "var(--success)",
+                    fontWeight: "600",
+                    textAlign: "center",
+                    marginBottom: "0.5rem"
+                  }}>
+                    💰 Ahorras $1,151/mes vs. un agente humano
+                  </div>
+                )}
                 <ul className={styles.pricingFeatures}>
                   {plan.features.map((f, j) => (
                     <li key={j}>
@@ -499,6 +675,7 @@ function Pricing() {
     </section>
   );
 }
+
 
 /* ============================================
    Testimonials

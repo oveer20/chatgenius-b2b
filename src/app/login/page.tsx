@@ -4,7 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FiMail, FiLock, FiUser, FiArrowRight } from "react-icons/fi";
+import { FiMail, FiLock, FiUser, FiArrowRight, FiShield, FiCheckCircle } from "react-icons/fi";
 import { supabase } from "@/lib/supabase";
 import styles from "./auth.module.css";
 
@@ -90,7 +90,7 @@ export default function AuthPage() {
             <input
               className="input"
               type="email"
-              placeholder="tu@email.com"
+              placeholder="tu@empresa.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -119,7 +119,7 @@ export default function AuthPage() {
             disabled={loading}
             style={{ width: "100%", padding: "0.9rem" }}
           >
-            {loading ? "Procesando..." : mode === "login" ? "Iniciar Sesión" : "Crear Cuenta"}
+            {loading ? "Procesando..." : mode === "login" ? "Iniciar Sesión" : "Crear Cuenta Gratis"}
             <FiArrowRight />
           </button>
         </form>
@@ -127,17 +127,63 @@ export default function AuthPage() {
         <p className={styles.switchMode}>
           {mode === "login" ? "¿No tienes cuenta?" : "¿Ya tienes cuenta?"}{" "}
           <button onClick={() => { setMode(mode === "login" ? "signup" : "login"); setMessage(""); }}>
-            {mode === "login" ? "Regístrate" : "Inicia sesión"}
+            {mode === "login" ? "Regístrate gratis" : "Inicia sesión"}
           </button>
         </p>
 
-        <div className={styles.divider}>
-          <span>o</span>
+        {/* Trust Signals */}
+        <div style={{
+          marginTop: "1.5rem",
+          padding: "1rem",
+          background: "rgba(59, 130, 246, 0.05)",
+          borderRadius: "var(--radius-md)",
+          border: "1px solid rgba(59, 130, 246, 0.1)"
+        }}>
+          <div style={{ 
+            display: "flex", 
+            alignItems: "center", 
+            gap: "0.5rem", 
+            fontSize: "0.8rem", 
+            color: "var(--text-secondary)",
+            marginBottom: "0.75rem",
+            fontWeight: "600"
+          }}>
+            <FiShield style={{ color: "var(--accent-blue)" }} /> Tus datos están protegidos
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", fontSize: "0.75rem", color: "var(--text-tertiary)" }}>
+              <FiCheckCircle style={{ color: "var(--success)", flexShrink: 0 }} /> Encriptación de grado bancario (AES-256)
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", fontSize: "0.75rem", color: "var(--text-tertiary)" }}>
+              <FiCheckCircle style={{ color: "var(--success)", flexShrink: 0 }} /> Cumplimiento GDPR & SOC 2
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", fontSize: "0.75rem", color: "var(--text-tertiary)" }}>
+              <FiCheckCircle style={{ color: "var(--success)", flexShrink: 0 }} /> Más de 500 empresas confían en nosotros
+            </div>
+          </div>
         </div>
 
-        <Link href="/dashboard" className="btn-secondary" style={{ width: "100%", justifyContent: "center" }}>
-          Ir al Panel de Control de Demo
-        </Link>
+        {/* Trust Logos */}
+        <div style={{
+          marginTop: "1rem",
+          display: "flex",
+          justifyContent: "center",
+          gap: "1.5rem",
+          opacity: 0.4,
+          fontSize: "0.7rem",
+          color: "var(--text-tertiary)",
+          fontWeight: "700",
+          letterSpacing: "0.05em",
+          textTransform: "uppercase"
+        }}>
+          <span>ShopMax</span>
+          <span>·</span>
+          <span>TechCorp</span>
+          <span>·</span>
+          <span>FastShip</span>
+          <span>·</span>
+          <span>InmoTech</span>
+        </div>
       </motion.div>
     </div>
   );

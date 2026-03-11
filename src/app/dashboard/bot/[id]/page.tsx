@@ -13,7 +13,8 @@ import {
   FiCpu,
   FiRefreshCw,
   FiSend,
-  FiZap
+  FiZap,
+  FiCode
 } from "react-icons/fi";
 import styles from "../../dashboard.module.css";
 import { supabase } from "@/lib/supabase";
@@ -298,6 +299,59 @@ export default function BotEditor() {
                   </label>
                </div>
             </section>
+
+            {/* Installation Section */}
+            {!isNew && (
+              <section style={{ marginBottom: "2rem" }}>
+                <h3 style={{ marginBottom: "1.5rem", display: "flex", alignItems: "center", gap: "0.75rem", fontSize: "1.1rem", fontWeight: "700", color: "var(--text-primary)" }}>
+                  <FiCode style={{ color: "var(--accent-blue)" }} /> Instalar en tu Sitio Web
+                </h3>
+                <div className="glass-card" style={{ padding: "1.5rem", background: "var(--bg-primary)" }}>
+                  <p style={{ fontSize: "0.85rem", color: "var(--text-secondary)", marginBottom: "1rem", lineHeight: "1.5" }}>
+                    Copia y pega este código antes de <code style={{ background: "var(--bg-tertiary)", padding: "0.15rem 0.4rem", borderRadius: "4px" }}>&lt;/body&gt;</code> en tu sitio web para activar el chat.
+                  </p>
+                  <div style={{ 
+                    background: "#0f172a", 
+                    padding: "1.25rem", 
+                    borderRadius: "var(--radius-md)", 
+                    position: "relative",
+                    border: "1px solid rgba(255,255,255,0.1)" 
+                  }}>
+                    <code style={{ fontSize: "0.78rem", color: "#34d399", display: "block", overflowX: "auto", lineHeight: "1.7", fontFamily: "monospace" }}>
+                      {`<script\n  src="${typeof window !== 'undefined' ? window.location.origin : ''}/widget.js"\n  data-bot-id="${id}">\n</script>`}
+                    </code>
+                    <button
+                      onClick={() => {
+                        const appUrl = typeof window !== 'undefined' ? window.location.origin : '';
+                        navigator.clipboard.writeText(`<script src="${appUrl}/widget.js" data-bot-id="${id}"></script>`);
+                        alert("✅ ¡Código copiado al portapapeles!");
+                      }}
+                      style={{ 
+                        position: "absolute", 
+                        top: "0.75rem", 
+                        right: "0.75rem", 
+                        padding: "0.4rem 0.8rem", 
+                        fontSize: "0.75rem", 
+                        background: "rgba(255,255,255,0.1)", 
+                        border: "1px solid rgba(255,255,255,0.2)", 
+                        borderRadius: "6px", 
+                        color: "#34d399", 
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.3rem",
+                        fontWeight: "600"
+                      }}
+                    >
+                      📋 Copiar
+                    </button>
+                  </div>
+                  <p style={{ fontSize: "0.75rem", color: "var(--text-tertiary)", marginTop: "0.75rem" }}>
+                    💡 Tu ID de bot es: <code style={{ background: "var(--bg-tertiary)", padding: "0.1rem 0.3rem", borderRadius: "4px", fontWeight: "600" }}>{id}</code>
+                  </p>
+                </div>
+              </section>
+            )}
           </div>
         </div>
 
