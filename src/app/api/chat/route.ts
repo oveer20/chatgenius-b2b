@@ -3,7 +3,9 @@ import openai from "@/lib/openai";
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
+    const rawBody = await request.text();
+    const body = rawBody ? JSON.parse(rawBody) : {};
+    
     const { messages, systemPrompt, knowledgeBase, temperature, model = "gpt-4o-mini" } = body;
 
     if (!messages || !Array.isArray(messages)) {
@@ -45,10 +47,16 @@ export async function POST(request: NextRequest) {
     const result = completion.choices[0]?.message;
 
     return NextResponse.json({ message: result });
-  } catch (error) {
-    console.error("Chat API error:", error);
+  } catch (error: any) {
+    console.error("/// CHAT API ERROR DETAILS ///");
+    console.error("Message:", error.message);
+    console.error("Type:", error.type);
+    console.error("Code:", error.code);
+    console.error("Stack:", error.stack);
+    console.error("/// END ERROR DETAILS ///");
+    
     return NextResponse.json(
-      { error: "Error de conexión con la IA" },
+      { error: `Error de conexión con la IA: ${error.message || "Desconocido"}` },
       { status: 500 }
     );
   }
