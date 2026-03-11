@@ -60,6 +60,8 @@ export default function DashboardPage() {
       if (data) setBots(data);
       if (error) console.error("Error loading bots:", error);
       setLoading(false);
+    }
+
     async function fetchLeads() {
       const { data, error } = await supabase
         .from("leads")
@@ -68,6 +70,7 @@ export default function DashboardPage() {
       if (data) setLeads(data);
       if (error) console.error("Error loading leads:", error);
     }
+
     fetchBots();
     fetchLeads();
   }, []);
