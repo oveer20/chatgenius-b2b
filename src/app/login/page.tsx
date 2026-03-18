@@ -60,8 +60,8 @@ export default function AuthPage() {
         transition={{ duration: 0.5 }}
       >
         <Link href="/" className={styles.logo}>
-          <span className={styles.logoIcon}>✦</span>
-          Chat<span className="gradient-text">Genius</span>
+          <img src="/arsenex_shield.png" alt="Arsenex AI Logo" style={{ height: '32px', filter: 'brightness(1.5)', opacity: 0.9 }} />
+          <span>Arsen<span style={{ color: 'var(--accent-blue)' }}>ex</span> <small style={{fontSize: '0.6rem', opacity: 0.5}}>AI</small></span>
         </Link>
 
         <h1>{mode === "login" ? "Bienvenido de vuelta" : "Crea tu cuenta"}</h1>

@@ -18,7 +18,11 @@ import {
   FiCheck,
   FiBox,
   FiTrendingUp,
-  FiUsers
+  FiUsers,
+  FiPhone,
+  FiExternalLink,
+  FiActivity,
+  FiTrash2
 } from "react-icons/fi";
 import {
   BarChart,
@@ -64,11 +68,22 @@ interface Bot {
 }
 
 export default function DashboardPage() {
-  const [activeTab, setActiveTab] = useState<"agents" | "leads" | "analytics" | "settings">("agents");
+  const [activeTab, setActiveTab] = useState<"agents" | "leads" | "chats" | "analytics" | "settings">("agents");
   const [bots, setBots] = useState<Bot[]>([]);
   const [leads, setLeads] = useState<any[]>([]);
+  const [chats, setChats] = useState<any[]>([]);
+  const [selectedChat, setSelectedChat] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    async function getUser() {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+    }
+    getUser();
+  }, []);
 
   // Fetch bots from Supabase
   useEffect(() => {
@@ -92,12 +107,33 @@ export default function DashboardPage() {
       if (error) console.error("Error loading leads:", error);
     }
 
+    async function fetchChats() {
+      const { data, error } = await supabase
+        .from("chats")
+        .select(`
+          *,
+          bots(name),
+          messages(role, content, created_at)
+        `)
+        .order("created_at", { ascending: false });
+      
+      if (data) {
+        // Enlazar chats con leads por session_id (offline join)
+        const enrichedChats = data.map(chat => {
+          const lead = (leads || []).find(l => l.session_id === chat.session_id);
+          return { ...chat, lead };
+        });
+        setChats(enrichedChats);
+      }
+      if (error) console.error("Error loading chats:", error);
+    }
+
     fetchBots();
-    fetchLeads();
-  }, []);
+    fetchLeads().then(() => fetchChats());
+  }, [leads.length]); // Re-fetch when leads change
 
   const handleCopySnippet = (botId: string) => {
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://chatgenius-b2b.vercel.app";
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://arsenex.ai";
     const snippet = `<script src="${appUrl}/widget.js" data-bot-id="${botId}"></script>`;
     navigator.clipboard.writeText(snippet);
     setCopiedId(botId);
@@ -109,7 +145,11 @@ export default function DashboardPage() {
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan, email: "demo@empresa.com" })
+        body: JSON.stringify({ 
+          plan, 
+          email: user?.email,
+          userId: user?.id
+        })
       });
       const data = await res.json();
       if (data.url) window.location.href = data.url;
@@ -124,13 +164,35 @@ export default function DashboardPage() {
     window.location.href = "/login";
   };
 
+  const handleDeleteBot = async (botId: string, botName: string) => {
+    if (!confirm(`¿Estás seguro de que deseas eliminar permanentemente el agente "${botName}"? Esta acción no se puede deshacer.`)) {
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/bots/${botId}`, {
+        method: "DELETE"
+      });
+
+      if (res.ok) {
+        setBots(bots.filter(b => b.id !== botId));
+        alert("Agente eliminado correctamente.");
+      } else {
+        const error = await res.json();
+        alert(`Error al eliminar: ${error.error}`);
+      }
+    } catch (err) {
+      alert("Error de conexión al intentar eliminar el agente.");
+    }
+  };
+
   return (
     <div className={styles.dashboard}>
       {/* Sidebar */}
       <aside className={styles.sidebar}>
         <Link href="/" className={styles.logo}>
-          <span className={styles.logoIcon}>✦</span>
-          Chat<span className="gradient-text">Genius</span>
+          <img src="/arsenex_shield.png" alt="Arsenex Logo" className={styles.logoImage} style={{ filter: 'brightness(1.2)' }} />
+          <span style={{ fontFamily: 'var(--font-display)', letterSpacing: '-0.02em' }}>Arsen<span style={{ color: 'var(--accent-blue)' }}>ex</span> <small style={{fontSize: '0.6rem', opacity: 0.5}}>AI</small></span>
         </Link>
 
         <nav className={styles.nav}>
@@ -147,6 +209,12 @@ export default function DashboardPage() {
             <FiUsers /> Leads Capturados
           </button>
           <button
+            className={`${styles.navItem} ${activeTab === "chats" ? styles.navItemActive : ""}`}
+            onClick={() => setActiveTab("chats")}
+          >
+            <FiActivity /> Conversaciones
+          </button>
+          <button
             className={`${styles.navItem} ${activeTab === "analytics" ? styles.navItemActive : ""}`}
             onClick={() => setActiveTab("analytics")}
           >
@@ -161,11 +229,11 @@ export default function DashboardPage() {
         </nav>
 
         <div className={styles.sidebarFooter}>
-          <div className={styles.planBadge}>
-            <FiStar /> Plan Starter
+          <div className={styles.planBadge} style={{ background: 'rgba(0, 112, 255, 0.05)', border: '1px solid rgba(0, 112, 255, 0.1)' }}>
+            <FiStar style={{ color: 'var(--accent-blue)' }} /> <span style={{ fontWeight: 800, color: 'var(--accent-blue)' }}>EXECUTIVE ACCESS</span>
           </div>
-          <button onClick={() => handleUpgrade('pro')} className="btn-primary" style={{ width: "100%", fontSize: "0.85rem", padding: "0.65rem" }}>
-            <FiZap /> Upgrade a Growth
+          <button onClick={() => handleUpgrade('enterprise')} className="btn-primary" style={{ width: "100%", fontSize: "0.85rem", padding: "0.65rem", boxShadow: 'var(--shadow-glow)' }}>
+            <FiZap /> Upgrade a Enterprise
           </button>
           <button onClick={handleLogout} className={styles.logoutBtn}>
              <FiLogOut /> Cerrar Sesión
@@ -183,8 +251,8 @@ export default function DashboardPage() {
           >
             <motion.div className={styles.header} variants={fadeInUp} custom={0}>
               <div>
-                <h1>Gestión de Agentes</h1>
-                <p>Configura, entrena y monitorea tus asistentes inteligentes impulsados por Google Gemini.</p>
+                <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-3xl)' }}>Gestión de Agentes</h1>
+                <p style={{ color: 'var(--text-secondary)' }}>Configura y entrena tus asistentes inteligentes con tecnología de vanguardia.</p>
               </div>
               <Link href="/dashboard/bot/new" className="btn-primary">
                 <FiPlus /> Crear Nuevo Agente
@@ -271,6 +339,14 @@ export default function DashboardPage() {
                       >
                         {copiedId === bot.id ? <><FiCheck /> ¡Copiado!</> : <><FiCode /> Instalar</>}
                       </button>
+                      <button 
+                        onClick={() => handleDeleteBot(bot.id, bot.name)} 
+                        className="btn-secondary" 
+                        style={{ fontSize: "0.8rem", padding: "0.5rem", background: "rgba(239, 68, 68, 0.1)", color: "#ef4444", borderColor: "rgba(239, 68, 68, 0.2)" }}
+                        title="Eliminar Agente"
+                      >
+                        <FiTrash2 />
+                      </button>
                     </div>
                   </motion.div>
                 ))}
@@ -282,6 +358,85 @@ export default function DashboardPage() {
                 </motion.div>
               </div>
             )}
+          </motion.div>
+        )}
+
+        {activeTab === "chats" && (
+          <motion.div initial="hidden" animate="visible" variants={fadeInUp} custom={0} style={{ height: "calc(100vh - 120px)", display: "flex", flexDirection: "column" }}>
+            <header className={styles.header}>
+              <div>
+                <h1 className={styles.title}>Conversaciones en Vivo</h1>
+                <p className={styles.subtitle}>Mira qué están preguntando tus clientes en tiempo real.</p>
+              </div>
+            </header>
+
+            <div style={{ display: "grid", gridTemplateColumns: "350px 1fr", gap: "1.5rem", flex: 1, minHeight: 0 }}>
+              {/* Chat List */}
+              <div className="glass-card" style={{ padding: "1rem", overflowY: "auto", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                {chats.length > 0 ? chats.map((chat) => (
+                  <div 
+                    key={chat.id} 
+                    onClick={() => setSelectedChat(chat)}
+                    style={{ 
+                      padding: "1rem", 
+                      borderRadius: "12px", 
+                      background: selectedChat?.id === chat.id ? "rgba(79,125,245,0.1)" : "rgba(255,255,255,0.02)",
+                      border: "1px solid",
+                      borderColor: selectedChat?.id === chat.id ? "var(--accent-blue)" : "transparent",
+                      cursor: "pointer",
+                      transition: "all 0.2s"
+                    }}
+                  >
+                    <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.3rem" }}>
+                      <strong style={{ fontSize: "0.9rem" }}>{chat.lead?.name || "Visitante Anónimo"}</strong>
+                      <span style={{ fontSize: "0.75rem", opacity: 0.5 }}>{new Date(chat.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                    </div>
+                    <div style={{ fontSize: "0.8rem", color: "var(--text-secondary)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                      {chat.bots?.name || "Asistente"}
+                    </div>
+                  </div>
+                )) : (
+                  <div style={{ textAlign: "center", padding: "2rem", color: "var(--text-tertiary)" }}>
+                    <FiMessageSquare size={32} style={{ marginBottom: "1rem", opacity: 0.3 }} />
+                    <p style={{ fontSize: "0.85rem" }}>No hay conversaciones aún.</p>
+                  </div>
+                )}
+              </div>
+
+              {/* Chat Detail */}
+              <div className="glass-card" style={{ padding: "0", display: "flex", flexDirection: "column", background: "rgba(10,15,25,0.4)" }}>
+                {selectedChat ? (
+                  <>
+                    <div style={{ padding: "1.25rem", borderBottom: "1px solid rgba(255,255,255,0.05)", background: "rgba(255,255,255,0.02)" }}>
+                      <h3 style={{ fontSize: "1rem" }}>{selectedChat.lead?.name || "Anónimo"}</h3>
+                      <p style={{ fontSize: "0.8rem", opacity: 0.6 }}>Chateando con: {selectedChat.bots?.name}</p>
+                    </div>
+                    <div style={{ flex: 1, padding: "1.5rem", overflowY: "auto", display: "flex", flexDirection: "column", gap: "1rem" }}>
+                      {selectedChat.messages?.map((msg: any, idx: number) => (
+                        <div key={idx} style={{ 
+                          alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start',
+                          maxWidth: "80%",
+                          padding: "0.8rem 1rem",
+                          borderRadius: "15px",
+                          fontSize: "0.9rem",
+                          background: msg.role === 'user' ? "var(--accent-blue)" : "rgba(255,255,255,0.05)",
+                          color: msg.role === 'user' ? "white" : "var(--text-primary)",
+                          borderBottomRightRadius: msg.role === 'user' ? "0" : "15px",
+                          borderBottomLeftRadius: msg.role === 'user' ? "15px" : "0",
+                        }}>
+                          {msg.content}
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-tertiary)", flexDirection: "column", gap: "1rem" }}>
+                    <FiActivity size={48} style={{ opacity: 0.1 }} />
+                    <p>Selecciona una conversación para ver los detalles.</p>
+                  </div>
+                )}
+              </div>
+            </div>
           </motion.div>
         )}
 
@@ -301,16 +456,59 @@ export default function DashboardPage() {
                     <th style={{ textAlign: "left", padding: "1.25rem", fontSize: "0.85rem", opacity: 0.7 }}>Nombre</th>
                     <th style={{ textAlign: "left", padding: "1.25rem", fontSize: "0.85rem", opacity: 0.7 }}>Email</th>
                     <th style={{ textAlign: "left", padding: "1.25rem", fontSize: "0.85rem", opacity: 0.7 }}>WhatsApp</th>
+                    <th style={{ textAlign: "left", padding: "1.25rem", fontSize: "0.85rem", opacity: 0.7 }}>Propósito</th>
+                    <th style={{ textAlign: "left", padding: "1.25rem", fontSize: "0.85rem", opacity: 0.7 }}>Prioridad</th>
                     <th style={{ textAlign: "left", padding: "1.25rem", fontSize: "0.85rem", opacity: 0.7 }}>Agente</th>
                     <th style={{ textAlign: "left", padding: "1.25rem", fontSize: "0.85rem", opacity: 0.7 }}>Fecha</th>
+                    <th style={{ textAlign: "center", padding: "1.25rem", fontSize: "0.85rem", opacity: 0.7 }}>Acciones</th>
                   </tr>
                 </thead>
                 <tbody>
                   {leads.length > 0 ? leads.map((lead) => (
                     <tr key={lead.id} style={{ borderBottom: "1px solid rgba(255,255,255,0.03)" }}>
                       <td style={{ padding: "1.25rem", fontSize: "0.9rem", fontWeight: "600" }}>{lead.name}</td>
-                      <td style={{ padding: "1.25rem", fontSize: "0.9rem", color: "var(--text-secondary)" }}>{lead.email}</td>
-                      <td style={{ padding: "1.25rem", fontSize: "0.9rem", color: "var(--text-secondary)" }}>{lead.whatsapp || "No provisto"}</td>
+                      <td style={{ padding: "1.25rem", fontSize: "0.9rem", color: "var(--text-secondary)" }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                          {lead.email}
+                          <button 
+                            onClick={() => {
+                              navigator.clipboard.writeText(lead.email);
+                              alert("Email copiado");
+                            }}
+                            className={styles.miniActionBtn}
+                            title="Copiar Email"
+                          >
+                            <FiCopy size={12} />
+                          </button>
+                        </div>
+                      </td>
+                      <td style={{ padding: "1.25rem", fontSize: "0.9rem", color: "var(--text-secondary)" }}>
+                        {lead.whatsapp || "No provisto"}
+                      </td>
+                      <td style={{ padding: "1.25rem", fontSize: "0.85rem" }}>
+                        <span style={{ 
+                          padding: "0.25rem 0.6rem", 
+                          background: lead.intent === 'Sales' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(255,255,255,0.05)', 
+                          color: lead.intent === 'Sales' ? 'var(--success)' : 'var(--text-secondary)', 
+                          borderRadius: "20px",
+                          fontWeight: "600",
+                          fontSize: "0.75rem"
+                        }}>
+                          {lead.intent || "General"}
+                        </span>
+                      </td>
+                      <td style={{ padding: "1.25rem", fontSize: "0.85rem" }}>
+                        <span style={{ 
+                          padding: "0.25rem 0.6rem", 
+                          background: lead.score === 'Hot' ? 'rgba(239, 68, 68, 0.1)' : lead.score === 'Warm' ? 'rgba(245, 158, 11, 0.1)' : 'rgba(59, 130, 246, 0.1)', 
+                          color: lead.score === 'Hot' ? '#ef4444' : lead.score === 'Warm' ? '#f59e0b' : 'var(--accent-blue)', 
+                          borderRadius: "20px",
+                          fontWeight: "800",
+                          fontSize: "0.75rem"
+                        }}>
+                          {lead.score || "Cold"}
+                        </span>
+                      </td>
                       <td style={{ padding: "1.25rem", fontSize: "0.85rem" }}>
                         <span style={{ padding: "0.25rem 0.6rem", background: "rgba(79,125,245,0.1)", color: "var(--accent-blue)", borderRadius: "20px" }}>
                           {lead.bots?.name || "Bot"}
@@ -319,10 +517,28 @@ export default function DashboardPage() {
                       <td style={{ padding: "1.25rem", fontSize: "0.85rem", color: "var(--text-tertiary)" }}>
                         {new Date(lead.created_at).toLocaleDateString()}
                       </td>
+                      <td style={{ padding: "1.25rem", textAlign: "center" }}>
+                        <div style={{ display: "flex", justifyContent: "center", gap: "0.75rem" }}>
+                          {lead.whatsapp && (
+                            <a 
+                              href={`https://wa.me/${lead.whatsapp.replace(/\D/g, '')}?text=${encodeURIComponent(`Hola ${lead.name}, gracias por contactar a través de nuestra IA. ¿En qué podemos ayudarte?`)}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className={styles.contactBtnWhatsapp}
+                              title="Contactar por WhatsApp"
+                            >
+                              <FiPhone size={14} /> WhatsApp
+                            </a>
+                          )}
+                          <button className={styles.miniActionBtn} title="Ver detalles">
+                            <FiExternalLink size={14} />
+                          </button>
+                        </div>
+                      </td>
                     </tr>
                   )) : (
                     <tr>
-                      <td colSpan={5} style={{ padding: "4rem", textAlign: "center", color: "var(--text-tertiary)" }}>
+                      <td colSpan={8} style={{ padding: "4rem", textAlign: "center", color: "var(--text-tertiary)" }}>
                         <FiUsers style={{ fontSize: "2rem", marginBottom: "1rem" }} />
                         <p>No se han capturado leads todavía.</p>
                       </td>
@@ -333,12 +549,13 @@ export default function DashboardPage() {
             </div>
           </motion.div>
         )}
+
         {activeTab === "analytics" && (
           <motion.div initial="hidden" animate="visible" variants={fadeInUp} custom={0}>
             <header className={styles.header}>
               <div>
-                <h1 className={styles.title}>Analíticas de Rendimiento</h1>
-                <p className={styles.subtitle}>Monitorea el crecimiento y efectividad de tus agentes.</p>
+                <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-3xl)' }}>Panel de Control Ejecutivo</h1>
+                <p style={{ color: 'var(--text-secondary)' }}>Monitorea el crecimiento y la efectividad de tu arsenal de IA.</p>
               </div>
             </header>
 
@@ -451,12 +668,12 @@ export default function DashboardPage() {
                 Copia y pega este código antes de cerrar la etiqueta <code>&lt;/body&gt;</code> en tu sitio web.
               </p>
               <div style={{ background: "#0f172a", padding: "1.25rem", borderRadius: "var(--radius-md)", position: "relative" }}>
-                 <code style={{ fontSize: "0.8rem", color: "#34d399", display: "block", overflowX: "auto", lineHeight: "1.6" }}>
-                   {`<script \n  src="${process.env.NEXT_PUBLIC_APP_URL || 'https://chatgenius-b2b.vercel.app'}/widget.js" \n  data-bot-id="TU-BOT-ID">\n</script>`}
-                 </code>
+                   <code style={{ fontSize: "0.8rem", color: "#34d399", display: "block", overflowX: "auto", lineHeight: "1.6" }}>
+                    {`<script \n  src="${process.env.NEXT_PUBLIC_APP_URL || 'https://arsenex-ai.vercel.app'}/widget.js" \n  data-bot-id="TU-BOT-ID">\n</script>`}
+                  </code>
                  <button 
                   onClick={() => {
-                    navigator.clipboard.writeText(`<script src="${process.env.NEXT_PUBLIC_APP_URL || 'https://chatgenius-b2b.vercel.app'}/widget.js" data-bot-id="TU-BOT-ID"></script>`);
+                    navigator.clipboard.writeText(`<script src="${process.env.NEXT_PUBLIC_APP_URL || 'https://arsenex-ai.vercel.app'}/widget.js" data-bot-id="TU-BOT-ID"></script>`);
                     alert("¡Código copiado al portapapeles!");
                   }}
                   style={{ position: "absolute", top: "0.75rem", right: "0.75rem", padding: "0.4rem 0.8rem", fontSize: "0.75rem", background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.2)", borderRadius: "6px", color: "#34d399", cursor: "pointer", display: "flex", alignItems: "center", gap: "0.3rem" }}>
@@ -487,7 +704,7 @@ export default function DashboardPage() {
               <div className={styles.planInfo}>
                 <div>
                   <strong>Starter Mode</strong>
-                  <p>1 Agente, 500 mensajes/mes, marca de agua de ChatGenius</p>
+                  <p>1 Agente, 500 mensajes/mes, marca de agua de Arsenex</p>
                 </div>
                 <button onClick={() => handleUpgrade('enterprise')} className="btn-primary">
                   Upgrade a Enterprise — $199/mes <FiArrowRight />
