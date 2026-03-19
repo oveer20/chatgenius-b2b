@@ -29,7 +29,7 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
    - `STRIPE_SECRET_KEY`: Tu llave de Stripe (modo Live).
    - `NEXT_PUBLIC_SUPABASE_URL`: URL de tu proyecto Supabase.
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY`: API Key anon de Supabase.
-   - `NEXT_PUBLIC_APP_URL`: La URL final de tu dominio (ej: `https://chatgenius.ai`).
+   - `NEXT_PUBLIC_APP_URL`: La URL final de tu dominio (ej: `https://arsenex-ai.vercel.app`).
 4. ¡Listo! Tu SaaS estará vivo.
 
 ## 🛠️ Estructura del Proyecto

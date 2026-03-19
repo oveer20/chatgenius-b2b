@@ -2,37 +2,21 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "ChatGenius B2B — Asistentes de IA para Soporte al Cliente",
-  description:
-    "Crea y entrena chatbots con inteligencia artificial para tu empresa en minutos. Automatiza tu atención al cliente y aumenta ventas 24/7.",
-  keywords: [
-    "AI chatbot",
-    "B2B SaaS",
-    "customer support AI",
-    "chatbots para empresas",
-    "atención al cliente automatizada",
-    "soporte 24/7",
-    "inteligencia artificial",
-  ],
-  authors: [{ name: "ChatGenius" }],
+  title: 'Stratix AI — Architectural Strategic Intelligence',
+  description: 'El estándar global de inteligencia estratégica para empresas B2B de élite. Automatización, diseño y estrategia impulsada por el Ecosistema Stratix.',
+  keywords: ["soporte 24/7", "inteligencia artificial", "IA B2B", "Stratix AI"],
+  authors: [{ name: "Stratix AI" }],
   openGraph: {
-    title: "ChatGenius B2B — Asistentes de IA",
-    description:
-      "Automatiza tu atención al cliente con chatbots inteligentes.",
-    type: "website",
-    locale: "es_ES",
-    siteName: "ChatGenius",
+    title: 'Stratix AI | Ecosistema de Inteligencia para Negocios de Élite',
+    description: 'Automatiza tu proceso de ventas y atención con una suite integrada de IA. Tecnología avanzada para empresas estratégicas.',
+    images: ['/stratix_shield.png'],
   },
   twitter: {
-    card: "summary_large_image",
-    title: "ChatGenius B2B — Asistentes de IA",
-    description:
-      "Automatiza tu atención al cliente con chatbots inteligentes.",
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
+    card: 'summary_large_image',
+    title: 'Stratix AI | La Suite de IA Corporativa',
+    description: 'Escala tus operaciones con inteligencia estratégica.',
+    images: ['/stratix_shield.png'],
+  }
 };
 
 export default function RootLayout({
@@ -55,7 +39,7 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "SoftwareApplication",
-              name: "ChatGenius B2B",
+              name: "Stratix AI",
               applicationCategory: "BusinessApplication",
               offers: {
                 "@type": "Offer",
@@ -63,7 +47,7 @@ export default function RootLayout({
                 priceCurrency: "USD",
               },
               description:
-                "Plataforma B2B para crear chatbots con Inteligencia Artificial para atención al cliente automatizada.",
+                "El ecosistema definitivo de IA para empresas. Automatiza tu atención al cliente con tecnología avanzada de Google Labs.",
             }),
           }}
         />

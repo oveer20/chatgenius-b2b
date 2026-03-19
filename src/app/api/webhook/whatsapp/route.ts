@@ -3,7 +3,7 @@ import openai from "@/lib/openai";
 import { supabase } from "@/lib/supabase";
 
 /**
- * WhatsApp Webhook for ChatGenius B2B
+ * WhatsApp Webhook for Stratix AI
  * This endpoint handles Meta (Facebook) webhook verification (GET)
  * and incoming messages (POST).
  */
@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
   const challenge = searchParams.get("hub.challenge");
 
   // This should match the 'Verify Token' you set in the Meta Developer Portal
-  const VERIFY_TOKEN = process.env.WHATSAPP_VERIFY_TOKEN || "chatgenius_secret_token";
+  const VERIFY_TOKEN = process.env.WHATSAPP_VERIFY_TOKEN || "stratix_secret_token";
 
   if (mode === "subscribe" && token === VERIFY_TOKEN) {
     console.log("WhatsApp Webhook Verified!");
@@ -31,7 +31,6 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
 
-    // Verify it's a message from WhatsApp
     if (body.object === "whatsapp_business_account") {
       const entry = body.entry?.[0];
       const changes = entry?.changes?.[0];
@@ -39,44 +38,67 @@ export async function POST(request: NextRequest) {
       const message = value?.messages?.[0];
 
       if (message) {
-        const from = message.from; // Phone number
+        const from = message.from; 
         const text = message.text?.body;
-        const businessPhoneNumberId = value.metadata?.display_phone_number; // Or phone_number_id
-
-        console.log(`Received WhatsApp message from ${from}: ${text}`);
+        const businessPhoneNumber = value.metadata?.display_phone_number;
 
         if (text) {
-          // 1. Identify which Bot this corresponds to
-          // In a real scenario, you'd map the 'businessPhoneNumberId' to a specific Bot ID in your DB.
-          // For now, we'll use Bot ID '1' as a default or fetch it from your DB.
-          const botId = "1"; // Simplified for the engine
-
+          // 1. Fetch bot by display phone number
           const { data: bot } = await supabase
             .from("bots")
             .select("*")
-            .eq("id", botId)
+            .eq("whatsapp_phone_number", businessPhoneNumber)
             .single();
 
-          // 2. Process with AI (RAG)
-          const systemPrompt = bot?.system_prompt || "Eres un asistente de IA útil.";
-          // We could also fetch documents from knowledge base here...
-          
-          const completion = await openai.chat.completions.create({
-            model: bot?.model || "gpt-4o",
-            messages: [
-              { role: "system", content: systemPrompt },
-              { role: "user", content: text }
-            ],
-          });
+          if (!bot) {
+             console.error(`No bot found for WhatsApp phone: ${businessPhoneNumber}`);
+             return NextResponse.json({ status: "bot_not_found" });
+          }
 
-          const aiResponse = completion.choices[0].message.content;
+          // 2. Build AI Context (Opal Intelligence)
+          const systemPrompt = `
+            Eres un asistente de IA para la empresa: ${bot.name}.
+            ---
+            ${bot.system_prompt || "Responde de forma concisa."}
+            ---
+            INSTRUCCIONES DE ANALÍTICA (OPAL):
+            Detecta el INTENTO del usuario: Sales, Support, Information, or Complaint.
+            Detecta el SCORE (Interés): Cold, Warm, Hot.
+            Al final de tu respuesta, SIEMPRE incluye: [[META:{"intent": "detected", "score": "detected"}]]
+          `;
 
-          // 3. Send response back to WhatsApp
-          // This requires a POST to Meta's Graph API
+          const { getGeminiResponse } = await import("@/lib/gemini");
+          const aiRawResponse = await getGeminiResponse([{ role: "user", content: text }], systemPrompt);
+
+          // 3. Extract Meta & Clean Response
+          let cleanText = aiRawResponse;
+          let intent = "Information";
+          let score = "Cold";
+
+          const metaMatch = aiRawResponse.match(/\[\[META:([\s\S]*?)\]\]/);
+          if (metaMatch) {
+            try {
+              const meta = JSON.parse(metaMatch[1]);
+              intent = meta.intent || intent;
+              score = meta.score || score;
+              cleanText = aiRawResponse.replace(/\[\[META:[\s\S]*?\]\]/, "").trim();
+            } catch (e) {}
+          }
+
+          // 4. Save Lead Intelligence
+          await supabase.from("leads").upsert([{
+            bot_id: bot.id,
+            name: `WA_${from}`,
+            whatsapp: from,
+            intent,
+            score
+          }], { onConflict: 'whatsapp' });
+
+          // 5. Send back to WhatsApp
           const WHATSAPP_TOKEN = process.env.WHATSAPP_ACCESS_TOKEN;
           const PHONE_NUMBER_ID = value.metadata?.phone_number_id;
 
-          if (WHATSAPP_TOKEN && PHONE_NUMBER_ID && aiResponse) {
+          if (WHATSAPP_TOKEN && PHONE_NUMBER_ID) {
             await fetch(`https://graph.facebook.com/v17.0/${PHONE_NUMBER_ID}/messages`, {
               method: "POST",
               headers: {
@@ -87,17 +109,15 @@ export async function POST(request: NextRequest) {
                 messaging_product: "whatsapp",
                 to: from,
                 type: "text",
-                text: { body: aiResponse },
+                text: { body: cleanText },
               }),
             });
-            console.log(`Response sent to WhatsApp: ${aiResponse}`);
           }
         }
       }
       return NextResponse.json({ status: "success" });
     }
-
-    return NextResponse.json({ status: "not a whatsapp message" }, { status: 404 });
+    return NextResponse.json({ status: "ignored" });
   } catch (error: any) {
     console.error("WhatsApp Webhook Error:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });

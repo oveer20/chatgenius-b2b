@@ -1,4 +1,4 @@
-# Guía de Despliegue: ChatGenius B2B 🚀 (Vercel)
+# Guía de Despliegue: Arsenex AI B2B 🚀 (Vercel)
 
 Sigue estos pasos para subir tu app a la nube y tener una URL pública hoy mismo.
 

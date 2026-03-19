@@ -1,0 +1,38 @@
+The "--name" option is deprecated (https://vercel.link/name-flag)
+Retrieving project…
+(node:50455) Warning: Setting the NODE_TLS_REJECT_UNAUTHORIZED environment variable to '0' makes TLS connections and HTTPS requests insecure by disabling certificate verification.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Deploying oveer20s-projects/antigravity
+Uploading [--------------------] (0.0B/39.5KB)
+Uploading [========------------] (16.0KB/39.5KB)
+Uploading [================----] (32.0KB/39.5KB)
+Uploading [===================-] (39.1KB/39.5KB)
+Uploading [====================] (39.5KB/39.5KB)
+Inspect: https://vercel.com/oveer20s-projects/antigravity/2Zypm9XdcXUKkeKvve8XQFaRAgWD [3s]
+Production: https://antigravity-ji39vcuul-oveer20s-projects.vercel.app [3s]
+https://antigravity-ji39vcuul-oveer20s-projects.vercel.appBuilding...
+Building...
+Building: Running build in Washington, D.C., USA (East) – iad1
+Building: Build machine configuration: 2 cores, 8 GB
+Building: Retrieving list of deployment files...
+Building: Skipping build cache, deployment was triggered without cache.
+Building: Downloading 90 deployment files...
+Building: Running "vercel build"
+Building: Vercel CLI 50.32.4
+Building: Installing dependencies...
+Building: added 477 packages in 16s
+Building: 150 packages are looking for funding
+Building: run `npm fund` for details
+Building: Detected Next.js version: 16.1.6
+Building: Running "npm run build"
+Building: > antigravity@0.1.0 build
+Building: > next build
+Building: Attention: Next.js now collects completely anonymous telemetry regarding usage.
+Building: This information is used to shape Next.js' roadmap and prioritize features.
+Building: You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+Building: https://nextjs.org/telemetry
+Building: ▲ Next.js 16.1.6 (Turbopack)
+Building: Creating an optimized production build ...
+Building: ✓ Compiled successfully in 13.6s
+Building: Running TypeScript ...
+Error: Command "npm run build" exited with 1

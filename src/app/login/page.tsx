@@ -60,8 +60,8 @@ export default function AuthPage() {
         transition={{ duration: 0.5 }}
       >
         <Link href="/" className={styles.logo}>
-          <img src="/arsenex_shield.png" alt="Arsenex AI Logo" style={{ height: '32px', filter: 'brightness(1.5)', opacity: 0.9 }} />
-          <span>Arsen<span style={{ color: 'var(--accent-blue)' }}>ex</span> <small style={{fontSize: '0.6rem', opacity: 0.5}}>AI</small></span>
+          <img src="/stratix_shield.png" alt="Stratix AI Logo" style={{ height: '32px', filter: 'brightness(1.5)', opacity: 0.9 }} />
+          <span>Strat<span style={{ color: 'var(--accent-blue)' }}>ix</span> <small style={{fontSize: '0.6rem', opacity: 0.5}}>AI</small></span>
         </Link>
 
         <h1>{mode === "login" ? "Bienvenido de vuelta" : "Crea tu cuenta"}</h1>
@@ -132,32 +132,18 @@ export default function AuthPage() {
         </p>
 
         {/* Trust Signals */}
-        <div style={{
-          marginTop: "1.5rem",
-          padding: "1rem",
-          background: "rgba(59, 130, 246, 0.05)",
-          borderRadius: "var(--radius-md)",
-          border: "1px solid rgba(59, 130, 246, 0.1)"
-        }}>
-          <div style={{ 
-            display: "flex", 
-            alignItems: "center", 
-            gap: "0.5rem", 
-            fontSize: "0.8rem", 
-            color: "var(--text-secondary)",
-            marginBottom: "0.75rem",
-            fontWeight: "600"
-          }}>
+        <div className={styles.trustBox}>
+          <div className={styles.trustHeader}>
             <FiShield style={{ color: "var(--accent-blue)" }} /> Tus datos están protegidos
           </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", fontSize: "0.75rem", color: "var(--text-tertiary)" }}>
-              <FiCheckCircle style={{ color: "var(--success)", flexShrink: 0 }} /> Encriptación de grado bancario (AES-256)
+          <div className={styles.trustList}>
+            <div className={styles.trustItem}>
+              <FiCheckCircle style={{ color: "var(--success)", flexShrink: 0 }} /> Encriptación de alta seguridad (AES-256)
             </div>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", fontSize: "0.75rem", color: "var(--text-tertiary)" }}>
+            <div className={styles.trustItem}>
               <FiCheckCircle style={{ color: "var(--success)", flexShrink: 0 }} /> Cumplimiento GDPR & SOC 2
             </div>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", fontSize: "0.75rem", color: "var(--text-tertiary)" }}>
+            <div className={styles.trustItem}>
               <FiCheckCircle style={{ color: "var(--success)", flexShrink: 0 }} /> Más de 500 empresas confían en nosotros
             </div>
           </div>

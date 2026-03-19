@@ -1,11 +1,11 @@
-# Guía de Lanzamiento: ChatGenius B2B 🚀
+# Guía de Lanzamiento: Arsenex AI B2B 🚀
 
 ¡Felicidades! Tienes una plataforma tecnológica de primer nivel. Ahora es momento de convertirla en un negocio rentable. Sigue estos pasos exactos para lanzar hoy mismo.
 
 ## 1. Despliegue Técnico (La "Nube")
 Tu aplicación vive actualmente en tu computadora. Para que el mundo la vea, necesitas subirla a internet:
 - **Vercel**: Es la mejor opción para aplicaciones Next.js. Es gratis para empezar y escala con tu negocio.
-- **Dominios**: Compra un dominio profesional (ej. `chatgenius.ia` o `getchatgenius.com`). Un dominio `.com` o `.ai` da mucha más confianza a las empresas.
+- **Dominios**: Compra un dominio profesional (ej. `arsenex-ai.ia` o `getarsenex-ai.com`). Un dominio `.com` o `.ai` da mucha más confianza a las empresas.
 
 ## 2. Configuración de Producción 🔑
 Antes de lanzar, asegúrate de cambiar las "llaves de prueba" por "llaves reales" en tu archivo `.env.local`:
@@ -17,7 +17,8 @@ Antes de lanzar, asegúrate de cambiar las "llaves de prueba" por "llaves reales
 No esperes que la gente llegue sola. Ve a buscar a los clientes donde les duele el problema:
 - **Paso 1: Identificación**: Busca en Google Maps "Clínicas Dentales", "Inmobiliarias" o "Agencias de Viajes" locales.
 - **Paso 2: La Oferta Irresistible**: Llámalos o visítalos y di: *"Hola, he desarrollado una IA que atiende a tus pacientes/clientes por WhatsApp y Web las 24 horas. Te la instalo gratis por 7 días. Si te gusta, te cobro $49/mes. Si no, la quito y no me debes nada"*.
-- **Paso 3: Instalación**: Usa el código que generamos en el Dashboard y pégalo en su sitio. Tardas menos de 5 minutos.
+- **Paso 3: Monitoreo en Vivo**: Muéstrales cómo **pueden ver en tiempo real** lo que sus clientes preguntan desde su propio Dashboard en la pestaña de "Conversaciones". Esto cierra ventas porque les da control total.
+- **Paso 4: Instalación**: Usa el código que generamos en el Dashboard y pégalo en su sitio. Tardas menos de 5 minutos.
 
 ## 4. El "High-Ticket" (Agencia de IA)
 En lugar de vender solo el SaaS, vende el **servicio de configuración**.

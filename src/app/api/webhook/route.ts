@@ -26,9 +26,23 @@ export async function POST(request: NextRequest) {
     switch (event.type) {
       case "checkout.session.completed": {
         const session = event.data.object as Stripe.Checkout.Session;
-        console.log("Payment successful for:", session.customer_email);
-        // In production: Update user's plan in Supabase
-        // await supabase.from('users').update({ plan: 'pro' }).eq('email', session.customer_email);
+        const userId = session.client_reference_id || session.metadata?.userId;
+        const plan = session.metadata?.plan;
+
+        if (userId && plan) {
+          const { supabase } = await import("@/lib/supabase");
+          const { error } = await supabase
+            .from("profiles")
+            .update({ 
+               plan: plan,
+               subscription_status: 'active',
+               updated_at: new Date().toISOString()
+            })
+            .eq("id", userId);
+
+          if (error) console.error("Error updating profile from Stripe:", error);
+          else console.log(`Plan ${plan} activated for user ${userId} via Stripe`);
+        }
         break;
       }
 

@@ -13,12 +13,13 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { plan, email } = body;
+    const { plan, email, userId } = body;
 
     // Plans in COP (Approximate conversion from USD)
     const prices: Record<string, { amount: number; name: string }> = {
-      pro: { amount: 195000, name: "ChatGenius Growth — Acceso Mensual" },
-      enterprise: { amount: 795000, name: "ChatGenius Enterprise — Acceso Mensual" },
+      starter: { amount: 195000, name: "Stratix Pioneer Elite — Acceso Ecosistema" },
+      pro: { amount: 395000, name: "Stratix Professional — Acceso Ecosistema" },
+      enterprise: { amount: 995000, name: "Stratix Enterprise — Acceso Ecosistema" },
     };
 
     const selected = prices[plan];
@@ -30,6 +31,7 @@ export async function POST(request: NextRequest) {
     
     const result = await preference.create({
       body: {
+        external_reference: userId, // CRITICAL: Link payment to user
         items: [
           {
             id: plan,

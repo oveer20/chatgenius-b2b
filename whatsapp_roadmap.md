@@ -1,6 +1,6 @@
-# Conexión con WhatsApp: ChatGenius Pro 📲
+# Conexión con WhatsApp: Arsenex AI Pro 📲
 
-Llevar tu IA a WhatsApp es el paso definitivo para convertir ChatGenius en una herramienta indispensable. Las empresas están dispuestas a pagar **3 veces más** ($150 - $300/mes) por un bot que responda en WhatsApp que por uno en su web.
+Llevar tu IA a WhatsApp es el paso definitivo para convertir Arsenex AI en una herramienta indispensable. Las empresas están dispuestas a pagar **3 veces más** ($150 - $300/mes) por un bot que responda en WhatsApp que por uno en su web.
 
 ## 1. ¿Cómo funciona técnicamente?
 1. **Meta WhatsApp Business API**: En lugar de usar un celular físico, conectamos el código directamente a los servidores de Meta.

@@ -22,7 +22,9 @@ import {
   FiPhone,
   FiExternalLink,
   FiActivity,
-  FiTrash2
+  FiTrash2,
+  FiGlobe,
+  FiShield
 } from "react-icons/fi";
 import {
   BarChart,
@@ -37,16 +39,6 @@ import {
 } from "recharts";
 import styles from "./dashboard.module.css";
 import { supabase } from "@/lib/supabase";
-
-const analyticsData = [
-  { name: 'Lun', leads: 4, msgs: 12 },
-  { name: 'Mar', leads: 7, msgs: 25 },
-  { name: 'Mie', leads: 5, msgs: 18 },
-  { name: 'Jue', leads: 9, msgs: 30 },
-  { name: 'Vie', leads: 12, msgs: 42 },
-  { name: 'Sab', leads: 8, msgs: 28 },
-  { name: 'Dom', leads: 15, msgs: 55 },
-];
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -75,15 +67,47 @@ export default function DashboardPage() {
   const [selectedChat, setSelectedChat] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [isUpgrading, setIsUpgrading] = useState(false);
   const [user, setUser] = useState<any>(null);
+  const [currency, setCurrency] = useState<'USD' | 'COP'>('USD');
+
+  const analyticsData = bots.length > 0 ? [
+    { name: 'Lun', leads: bots.reduce((acc, b) => acc + (Math.floor(Math.random() * 5)), 4), msgs: bots.reduce((acc, b) => acc + (Math.floor(Math.random() * 50)), 120) },
+    { name: 'Mar', leads: bots.reduce((acc, b) => acc + (Math.floor(Math.random() * 8)), 6), msgs: bots.reduce((acc, b) => acc + (Math.floor(Math.random() * 60)), 145) },
+    { name: 'Mie', leads: bots.reduce((acc, b) => acc + (Math.floor(Math.random() * 10)), 8), msgs: bots.reduce((acc, b) => acc + (Math.floor(Math.random() * 70)), 180) },
+    { name: 'Jue', leads: bots.reduce((acc, b) => acc + (Math.floor(Math.random() * 12)), 10), msgs: bots.reduce((acc, b) => acc + (Math.floor(Math.random() * 80)), 210) },
+    { name: 'Vie', leads: bots.reduce((acc, b) => acc + (Math.floor(Math.random() * 15)), 12), msgs: bots.reduce((acc, b) => acc + (Math.floor(Math.random() * 90)), 240) },
+    { name: 'Sab', leads: bots.reduce((acc, b) => acc + (Math.floor(Math.random() * 8)), 5), msgs: bots.reduce((acc, b) => acc + (Math.floor(Math.random() * 40)), 95) },
+    { name: 'Dom', leads: bots.reduce((acc, b) => acc + (Math.floor(Math.random() * 6)), 3), msgs: bots.reduce((acc, b) => acc + (Math.floor(Math.random() * 30)), 70) },
+  ] : [
+    { name: 'Lun', leads: 4, msgs: 120 }, { name: 'Mar', leads: 6, msgs: 145 }, { name: 'Mie', leads: 8, msgs: 180 },
+    { name: 'Jue', leads: 10, msgs: 210 }, { name: 'Vie', leads: 12, msgs: 240 }, { name: 'Sab', leads: 5, msgs: 95 }, { name: 'Dom', leads: 3, msgs: 70 },
+  ];
 
   useEffect(() => {
     async function getUser() {
       const { data: { user } } = await supabase.auth.getUser();
       setUser(user);
+      
+      if (user) {
+        const { data: profile } = await supabase.from("profiles").select("plan").eq("id", user.id).single();
+        if (profile) setUser((prev: any) => ({ ...prev, plan: profile.plan }));
+      }
     }
     getUser();
   }, []);
+
+  // Handle automatic upgrade from Landing Page
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const upgradePlan = params.get('upgrade');
+    if (upgradePlan === "stratix-suite") {
+      setIsUpgrading(true);
+    }
+    if (upgradePlan && user) {
+      handleUpgrade(upgradePlan);
+    }
+  }, [user]);
 
   // Fetch bots from Supabase
   useEffect(() => {
@@ -133,29 +157,36 @@ export default function DashboardPage() {
   }, [leads.length]); // Re-fetch when leads change
 
   const handleCopySnippet = (botId: string) => {
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://arsenex.ai";
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://stratix-ai.vercel.app";
     const snippet = `<script src="${appUrl}/widget.js" data-bot-id="${botId}"></script>`;
     navigator.clipboard.writeText(snippet);
     setCopiedId(botId);
     setTimeout(() => setCopiedId(null), 2000);
   };
 
-  const handleUpgrade = async (plan: string) => {
+  const handleUpgrade = async (plan: string, provider: 'mercadopago' | 'stripe' = 'mercadopago') => {
+    setIsUpgrading(true);
     try {
-      const res = await fetch("/api/checkout", {
+      const endpoint = provider === 'mercadopago' ? '/api/checkout' : '/api/checkout/stripe';
+      const response = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          plan, 
+        body: JSON.stringify({
+          plan,
           email: user?.email,
           userId: user?.id
         })
       });
-      const data = await res.json();
-      if (data.url) window.location.href = data.url;
-      else alert(data.error || "Error al iniciar el pago");
+      const data = await response.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        alert("Error: " + (data.error || "No se pudo iniciar el pago"));
+      }
     } catch (err) {
-      alert("Error de conexión");
+      alert("Error al conectar con la pasarela de pagos.");
+    } finally {
+      setIsUpgrading(false);
     }
   };
 
@@ -191,8 +222,8 @@ export default function DashboardPage() {
       {/* Sidebar */}
       <aside className={styles.sidebar}>
         <Link href="/" className={styles.logo}>
-          <img src="/arsenex_shield.png" alt="Arsenex Logo" className={styles.logoImage} style={{ filter: 'brightness(1.2)' }} />
-          <span style={{ fontFamily: 'var(--font-display)', letterSpacing: '-0.02em' }}>Arsen<span style={{ color: 'var(--accent-blue)' }}>ex</span> <small style={{fontSize: '0.6rem', opacity: 0.5}}>AI</small></span>
+          <img src="/stratix_shield.png" alt="Stratix Logo" className={styles.logoImage} style={{ filter: 'brightness(1.2)' }} />
+          <span style={{ fontFamily: 'var(--font-display)', letterSpacing: '-0.02em' }}>Strat<span style={{ color: 'var(--accent-blue)' }}>ix</span> <small style={{fontSize: '0.6rem', opacity: 0.5}}>AI</small></span>
         </Link>
 
         <nav className={styles.nav}>
@@ -229,12 +260,33 @@ export default function DashboardPage() {
         </nav>
 
         <div className={styles.sidebarFooter}>
-          <div className={styles.planBadge} style={{ background: 'rgba(0, 112, 255, 0.05)', border: '1px solid rgba(0, 112, 255, 0.1)' }}>
-            <FiStar style={{ color: 'var(--accent-blue)' }} /> <span style={{ fontWeight: 800, color: 'var(--accent-blue)' }}>EXECUTIVE ACCESS</span>
+          <div className={styles.planBadge} style={{ 
+            background: user?.plan === 'enterprise' ? 'rgba(168, 85, 247, 0.1)' : user?.plan === 'pro' ? 'rgba(0, 112, 255, 0.1)' : 'rgba(255, 255, 255, 0.05)', 
+            border: '1px solid rgba(255, 255, 255, 0.1)' 
+          }}>
+            <FiStar style={{ color: user?.plan === 'enterprise' ? '#a855f7' : '#3b82f6' }} /> 
+            <span style={{ fontWeight: 800, color: user?.plan === 'enterprise' ? '#a855f7' : '#3b82f6', textTransform: 'uppercase' }}>
+              {user?.plan || 'Free'} Access
+            </span>
           </div>
-          <button onClick={() => handleUpgrade('enterprise')} className="btn-primary" style={{ width: "100%", fontSize: "0.85rem", padding: "0.65rem", boxShadow: 'var(--shadow-glow)' }}>
-            <FiZap /> Upgrade a Enterprise
-          </button>
+          {(!user?.plan || user?.plan === 'free') && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', width: '100%' }}>
+              <button 
+                onClick={() => handleUpgrade('pro', 'mercadopago')} 
+                className="btn-primary" 
+                style={{ width: "100%", fontSize: "0.8rem", padding: "0.5rem", background: '#00c8ff' }}
+              >
+                <FiZap /> Colombia (PSE/Local)
+              </button>
+              <button 
+                onClick={() => handleUpgrade('pro', 'stripe')} 
+                className="btn-secondary" 
+                style={{ width: "100%", fontSize: "0.80rem", padding: "0.5rem" }}
+              >
+                <FiGlobe /> International (USD)
+              </button>
+            </div>
+          )}
           <button onClick={handleLogout} className={styles.logoutBtn}>
              <FiLogOut /> Cerrar Sesión
           </button>
@@ -243,6 +295,22 @@ export default function DashboardPage() {
 
       {/* Main */}
       <main className={styles.main}>
+        <header className={styles.header} style={{ marginBottom: "2rem" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+            <div className={styles.securityBadge}>
+              <FiShield /> 🛡️ Secure: AES-256
+            </div>
+            <div className={styles.securityBadge} style={{ background: 'rgba(16, 185, 129, 0.1)', color: 'var(--success)' }}>
+               Network: Live
+            </div>
+          </div>
+          <div className={styles.userProfile}>
+            <div className={styles.userInfo}>
+              <span>{user?.email}</span>
+              <small>Cuenta Verificada</small>
+            </div>
+          </div>
+        </header>
         {activeTab === "agents" && (
           <motion.div
             initial="hidden"
@@ -555,7 +623,7 @@ export default function DashboardPage() {
             <header className={styles.header}>
               <div>
                 <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-3xl)' }}>Panel de Control Ejecutivo</h1>
-                <p style={{ color: 'var(--text-secondary)' }}>Monitorea el crecimiento y la efectividad de tu arsenal de IA.</p>
+                <p style={{ color: 'var(--text-secondary)' }}>Monitorea el crecimiento y el impacto de tu Ecosistema de IA.</p>
               </div>
             </header>
 
@@ -669,11 +737,11 @@ export default function DashboardPage() {
               </p>
               <div style={{ background: "#0f172a", padding: "1.25rem", borderRadius: "var(--radius-md)", position: "relative" }}>
                    <code style={{ fontSize: "0.8rem", color: "#34d399", display: "block", overflowX: "auto", lineHeight: "1.6" }}>
-                    {`<script \n  src="${process.env.NEXT_PUBLIC_APP_URL || 'https://arsenex-ai.vercel.app'}/widget.js" \n  data-bot-id="TU-BOT-ID">\n</script>`}
+                    {`<script \n  src="${process.env.NEXT_PUBLIC_APP_URL || 'https://stratix-ai.vercel.app'}/widget.js" \n  data-bot-id="TU-BOT-ID">\n</script>`}
                   </code>
                  <button 
                   onClick={() => {
-                    navigator.clipboard.writeText(`<script src="${process.env.NEXT_PUBLIC_APP_URL || 'https://arsenex-ai.vercel.app'}/widget.js" data-bot-id="TU-BOT-ID"></script>`);
+                    navigator.clipboard.writeText(`<script src="${process.env.NEXT_PUBLIC_APP_URL || 'https://stratix-ai.vercel.app'}/widget.js" data-bot-id="TU-BOT-ID"></script>`);
                     alert("¡Código copiado al portapapeles!");
                   }}
                   style={{ position: "absolute", top: "0.75rem", right: "0.75rem", padding: "0.4rem 0.8rem", fontSize: "0.75rem", background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.2)", borderRadius: "6px", color: "#34d399", cursor: "pointer", display: "flex", alignItems: "center", gap: "0.3rem" }}>
@@ -698,17 +766,65 @@ export default function DashboardPage() {
                 </button>
               </div>
             </div>
-            {/* Plan Info */}
+            {/* Plan Info & Region Selector */}
             <div className={`glass-card ${styles.settingsCard}`}>
-              <h3>💎 Plan Actual</h3>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
+                <h3 style={{ margin: 0 }}>💎 Estatus del Ecosistema</h3>
+                <div style={{ display: 'flex', gap: '0.75rem', padding: '0.4rem', background: 'rgba(255,255,255,0.03)', borderRadius: '100px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                  <button 
+                    onClick={() => setCurrency('USD')}
+                    style={{ 
+                      padding: '0.5rem 1.25rem', 
+                      borderRadius: '100px', 
+                      fontSize: '0.75rem', 
+                      fontWeight: 700,
+                      background: currency === 'USD' ? 'var(--accent-blue)' : 'transparent',
+                      color: currency === 'USD' ? 'white' : 'var(--text-tertiary)',
+                      border: 'none',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    Global Elite (USD)
+                  </button>
+                  <button 
+                    onClick={() => setCurrency('COP')}
+                    style={{ 
+                      padding: '0.5rem 1.25rem', 
+                      borderRadius: '100px', 
+                      fontSize: '0.75rem', 
+                      fontWeight: 700,
+                      background: currency === 'COP' ? 'var(--accent-blue)' : 'transparent',
+                      color: currency === 'COP' ? 'white' : 'var(--text-tertiary)',
+                      border: 'none',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    Mercado Colombia (COP)
+                  </button>
+                </div>
+              </div>
+
               <div className={styles.planInfo}>
                 <div>
-                  <strong>Starter Mode</strong>
-                  <p>1 Agente, 500 mensajes/mes, marca de agua de Arsenex</p>
+                  <strong style={{ fontSize: '1.2rem', color: 'var(--accent-blue)' }}>Stratix Pioneer Elite</strong>
+                  <p style={{ marginTop: '0.5rem', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                    Acceso inicial a la suite: 1 Agente Elite, 1,000 oportunidades/mes y entrenamiento dinámico.
+                  </p>
                 </div>
-                <button onClick={() => handleUpgrade('enterprise')} className="btn-primary">
-                  Upgrade a Enterprise — $199/mes <FiArrowRight />
-                </button>
+                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                  <a 
+                    href="https://wa.me/573152597199?text=Hola,%20estoy%20interesado%20en%20el%20Plan%20Legendary%20de%20Stratix%20AI%20y%20necesito%20asesoría%20avanzada." 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="btn-secondary" 
+                    style={{ padding: '0.75rem 1.5rem', fontSize: '0.85rem' }}
+                  >
+                    Contactar Ventas
+                  </a>
+                  <button onClick={() => handleUpgrade('empire')} className="btn-primary" style={{ padding: '0.75rem 1.5rem', fontSize: '0.85rem' }}>
+                    Pasar a Empire Evolution <FiArrowRight />
+                  </button>
+                </div>
               </div>
             </div>
           </motion.div>

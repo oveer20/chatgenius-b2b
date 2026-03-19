@@ -133,3 +133,58 @@
   background: var(--border);
 }
 
+@media (max-width: 480px) {
+  .authCard {
+    padding: var(--space-8) var(--space-6);
+  }
+  .logo img {
+    height: 24px !important;
+  }
+  .authCard h1 {
+    font-size: var(--text-2xl);
+  }
+}
+
+.trustBox {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: rgba(59, 130, 246, 0.05);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(59, 130, 246, 0.1);
+}
+
+.trustHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+}
+
+.trustList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.trustItem {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+}
+
+@media (max-width: 480px) {
+  .trustBox {
+    padding: 0.75rem;
+  }
+  .trustItem {
+    font-size: 0.65rem;
+  }
+}
+
+
+

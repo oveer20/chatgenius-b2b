@@ -15,7 +15,9 @@ import {
   FiSend,
   FiZap,
   FiCode,
-  FiGlobe
+  FiGlobe,
+  FiStar,
+  FiLayout
 } from "react-icons/fi";
 import styles from "../../dashboard.module.css";
 import { supabase } from "@/lib/supabase";
@@ -31,6 +33,7 @@ export default function BotEditor() {
     systemPrompt: isNew ? "" : "Eres un asistente de atención al cliente amable de una tienda de electrónica. Tu objetivo es ayudar a los clientes con sus dudas y recomendar productos basados en sus necesidades.",
     temperature: 0.7,
     model: "gemini-1.5-flash",
+    whatsappPhoneNumber: "",
   });
 
   const [chatMessages, setChatMessages] = useState([
@@ -41,6 +44,13 @@ export default function BotEditor() {
   const [isSaving, setIsSaving] = useState(false);
   const [knowledgeBase, setKnowledgeBase] = useState(isNew ? "" : "Nuestros envíos tardan 3-5 días hábiles. El costo de envío es de $5.");
   
+  // Arsenal State
+  const [pomelliLoading, setPomelliLoading] = useState(false);
+  const [pomelliUrl, setPomelliUrl] = useState("");
+  const [showPomelliModal, setShowPomelliModal] = useState(false);
+  const [stitchLoading, setStitchLoading] = useState(false);
+  const [stitchResult, setStitchResult] = useState<any>(null);
+
   const scrollRef = useRef<HTMLDivElement>(null);
 
   // Auto-scroll to bottom of chat
@@ -67,6 +77,7 @@ export default function BotEditor() {
           systemPrompt: data.system_prompt || "",
           temperature: data.temperature || 0.7,
           model: data.model || "gemini-1.5-flash",
+          whatsappPhoneNumber: data.whatsapp_phone_number || "",
         });
         setKnowledgeBase(data.knowledge_base || "");
       }
@@ -84,6 +95,7 @@ export default function BotEditor() {
         knowledge_base: knowledgeBase,
         temperature: botData.temperature,
         model: botData.model,
+        whatsapp_phone_number: botData.whatsappPhoneNumber,
         updated_at: new Date().toISOString(),
       };
 
@@ -188,6 +200,51 @@ export default function BotEditor() {
     }
   };
 
+  const handlePomelliAnalysis = async () => {
+    if (!pomelliUrl) return alert("Ingresa una URL");
+    setPomelliLoading(true);
+    try {
+      const res = await fetch("/api/arsenal/pomelli", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: pomelliUrl })
+      });
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+      
+      // Update bot data with suggestions
+      setBotData(prev => ({
+        ...prev,
+        systemPrompt: data.systemPromptSuggestion,
+        description: data.mission
+      }));
+      setPomelliUrl("");
+      setShowPomelliModal(false);
+      alert("¡ADN de Marca detectado y aplicado con éxito!");
+    } catch (err: any) {
+      alert("Error en análisis Pomelli: " + err.message);
+    } finally {
+      setPomelliLoading(false);
+    }
+  };
+
+  const handleStitchReview = async () => {
+    setStitchLoading(true);
+    try {
+      const res = await fetch("/api/arsenal/stitch", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ config: { name: botData.name, model: botData.model, temperature: botData.temperature } })
+      });
+      const data = await res.json();
+      setStitchResult(data);
+    } catch (err: any) {
+      alert("Error en revisión Stitch");
+    } finally {
+      setStitchLoading(false);
+    }
+  };
+
   return (
     <div className={styles.dashboard} style={{ 
       height: "100vh", 
@@ -196,6 +253,25 @@ export default function BotEditor() {
       flexDirection: "column",
       minHeight: "0" // Override module CSS min-height: 100vh
     }}>
+      {/* Intelligent Suite Header */}
+      <div style={{ background: 'var(--bg-secondary)', borderBottom: '1px solid var(--border)', padding: '0.75rem 2rem', display: 'flex', gap: '2rem', alignItems: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.7rem', fontWeight: 800, color: 'var(--text-tertiary)' }}>
+          <FiZap style={{ color: '#FFD700' }} /> SUITE LABS STATUS:
+        </div>
+        <div className={styles.arsenalStatusItem}>
+          <div className={styles.statusDot} style={{ background: '#FF3D00' }}></div>
+          <span>Pomelli Branding: <b>Sincronizado</b></span>
+        </div>
+        <div className={styles.arsenalStatusItem}>
+          <div className={styles.statusDot} style={{ background: '#00B0FF' }}></div>
+          <span>Stitch UI: <b>Optimizado</b></span>
+        </div>
+        <div className={styles.arsenalStatusItem}>
+          <div className={styles.statusDot} style={{ background: '#6200EA' }}></div>
+          <span>Opal Logic: <b>Activo</b></span>
+        </div>
+      </div>
+
       {/* Header Editor */}
       <header className={styles.header} style={{ 
         padding: "1rem 2rem", 
@@ -214,7 +290,7 @@ export default function BotEditor() {
           </button>
           <div style={{ display: "flex", flexDirection: "column" }}>
              <h2 style={{ fontSize: "1.2rem", fontWeight: "800", color: "var(--text-primary)" }}>{isNew ? "Crear Nuevo Agente" : botData.name}</h2>
-             <span style={{ fontSize: "0.75rem", color: "var(--text-tertiary)", fontWeight: "600" }}>PROYECTO: {id}</span>
+             <span style={{ fontSize: "0.75rem", color: "var(--text-tertiary)", fontWeight: "600" }}>STRATIX PROJECT: {id}</span>
           </div>
         </div>
         <button onClick={handleSave} className="btn-primary" disabled={isSaving}>
@@ -243,14 +319,16 @@ export default function BotEditor() {
                   />
                 </div>
                 <div>
-                  <label className="label">Descripción Interna</label>
-                  <textarea 
+                  <label className="label">WhatsApp Business Phone (Meta ID)</label>
+                  <input 
                     className="input" 
-                    style={{ minHeight: "80px" }}
-                    value={botData.description} 
-                    onChange={e => setBotData({...botData, description: e.target.value})}
-                    placeholder="Describe para qué sirve este bot..."
+                    value={botData.whatsappPhoneNumber} 
+                    onChange={e => setBotData({...botData, whatsappPhoneNumber: e.target.value})} 
+                    placeholder="Ej. 10459382745102 (Meta ID)"
                   />
+                  <p style={{ fontSize: "0.7rem", color: "var(--text-tertiary)", marginTop: "0.4rem" }}>
+                    Vincula este bot a tu cuenta de WhatsApp Business para automatizar ventas.
+                  </p>
                 </div>
               </div>
             </section>
@@ -287,19 +365,76 @@ export default function BotEditor() {
                       <option value="gemini-1.5-pro">Gemini 1.5 Pro (Más Inteligente)</option>
                     </select>
                   </div>
-                  <div>
-                    <label className="label">Creatividad: {botData.temperature}</label>
-                    <input 
-                      type="range" 
-                      min="0" 
-                      max="1" 
-                      step="0.1" 
-                      value={botData.temperature} 
-                      onChange={e => setBotData({...botData, temperature: parseFloat(e.target.value)})}
-                      style={{ width: "100%", height: "40px", accentColor: "var(--accent-blue)" }}
-                    />
-                  </div>
                 </div>
+              </div>
+            </section>
+
+            {/* Intelligent Suite (Dedicated Section) */}
+            <section style={{ marginBottom: "3rem" }}>
+              <h3 style={{ marginBottom: "1.5rem", display: "flex", alignItems: "center", gap: "0.75rem", fontSize: "1.1rem", fontWeight: "700", color: "var(--text-primary)" }}>
+                <FiZap style={{ color: "var(--accent-blue)" }} /> Elite Suite Integrated Tools
+              </h3>
+              <div className="glass-card" style={{ padding: "2rem", display: "flex", flexDirection: "column", gap: "1.5rem", background: "var(--bg-primary)" }}>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>
+                  Utiliza las herramientas experimentales de Google Labs para optimizar tu agente.
+                </p>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                  <button 
+                    onClick={() => setShowPomelliModal(true)}
+                    disabled={pomelliLoading}
+                    className={styles.labsTool} 
+                    style={{ background: 'rgba(255, 61, 0, 0.05)', border: '1px solid rgba(255, 61, 0, 0.2)' }}
+                  >
+                    {pomelliLoading ? <FiRefreshCw className="spin" /> : <FiStar style={{ color: '#FF3D00' }} />} DNA Brand (Pomelli)
+                  </button>
+                  <button 
+                    onClick={handleStitchReview}
+                    disabled={stitchLoading}
+                    className={styles.labsTool} 
+                    style={{ background: 'rgba(0, 176, 255, 0.05)', border: '1px solid rgba(0, 176, 255, 0.2)' }}
+                  >
+                    {stitchLoading ? <FiRefreshCw className="spin" /> : <FiLayout style={{ color: '#00B0FF' }} />} UI Health (Stitch)
+                  </button>
+                </div>
+
+                {stitchResult && (
+                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} style={{ marginTop: '1.5rem', padding: '1rem', background: 'rgba(255,255,255,0.02)', borderRadius: '12px', border: '1px solid var(--border)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                      <span style={{ fontSize: '0.8rem', fontWeight: 600 }}>Health Score: <b>{stitchResult.score}/100</b></span>
+                      <span style={{ fontSize: '0.7rem', color: 'var(--accent-blue)', textTransform: 'uppercase' }}>{stitchResult.status}</span>
+                    </div>
+                    <ul style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', paddingLeft: '1rem', listStyle: 'none' }}>
+                      {stitchResult.suggestions.map((s: string, idx: number) => <li key={idx} style={{ marginBottom: '4px' }}>• {s}</li>)}
+                    </ul>
+                  </motion.div>
+                )}
+              </div>
+            </section>
+
+            <section style={{ marginBottom: "3rem" }}>
+              <h3 style={{ marginBottom: "1.5rem", display: "flex", alignItems: "center", gap: "0.75rem", fontSize: "1.1rem", fontWeight: "700", color: "var(--text-primary)" }}>
+                <FiZap style={{ color: "var(--accent-blue)" }} /> Opal Decision Engine (Reglas)
+              </h3>
+              <div className="glass-card" style={{ padding: "2rem", display: "flex", flexDirection: "column", gap: "1.5rem", background: "var(--bg-primary)" }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                   <div style={{ padding: '1rem', background: 'rgba(98, 0, 234, 0.05)', border: '1px solid rgba(98, 0, 234, 0.2)', borderRadius: '12px' }}>
+                      <p style={{ fontSize: '0.7rem', fontWeight: 800, color: '#6200EA', marginBottom: '0.5rem' }}>IF LEAD PRIORITY IS:</p>
+                      <select className="input" style={{ fontSize: '0.8rem', height: '35px' }}>
+                        <option>HOT (Muy Interesado)</option>
+                        <option>WARM (Explorando)</option>
+                      </select>
+                   </div>
+                   <div style={{ padding: '1rem', background: 'rgba(98, 0, 234, 0.05)', border: '1px solid rgba(98, 0, 234, 0.2)', borderRadius: '12px' }}>
+                      <p style={{ fontSize: '0.7rem', fontWeight: 800, color: '#6200EA', marginBottom: '0.5rem' }}>THEN ACTION IS:</p>
+                      <select className="input" style={{ fontSize: '0.8rem', height: '35px' }}>
+                        <option>Notificar vía WhatsApp</option>
+                        <option>Enviar Email a Admin</option>
+                      </select>
+                   </div>
+                </div>
+                <p style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)' }}>
+                  Opal utiliza el Logic Engine para ejecutar acciones preventivas basadas en el sentimiento del cliente detectado en tiempo real.
+                </p>
               </div>
             </section>
 
@@ -392,7 +527,7 @@ export default function BotEditor() {
                     border: "1px solid rgba(255,255,255,0.1)" 
                   }}>
                     <code style={{ fontSize: "0.78rem", color: "#34d399", display: "block", overflowX: "auto", lineHeight: "1.7", fontFamily: "monospace" }}>
-                      {`<script\n  src="${typeof window !== 'undefined' ? window.location.origin : ''}/widget.js"\n  data-bot-id="${id}">\n</script>`}
+                      {`<script\n  src="/widget.js"\n  data-bot-id="${id}">\n</script>`}
                     </code>
                     <button
                       onClick={() => {

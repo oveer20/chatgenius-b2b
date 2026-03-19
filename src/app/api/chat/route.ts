@@ -19,6 +19,13 @@ export async function POST(request: NextRequest) {
       ---
       ${knowledgeBase || "No hay información adicional disponible."}
       ---
+      
+      INSTRUCCIONES PRO (OPAL STYLE):
+      - Analiza la temperatura del lead (INTERÉS): Cold (poco interés), Warm (preguntas específicas), Hot (listo para comprar/agendar).
+      - Detecta el INTENTO del usuario: Sales, Support, Information, Technical, or Complaint.
+      - Al final de tu respuesta, SIEMPRE incluye un bloque JSON oculto con este formato exacto:
+        [[META:{"intent": "detected_intent", "score": "detected_score_name", "confidence": 0-100}]]
+      
       Responde siempre basándote en el contexto anterior.
     `;
 
@@ -34,11 +41,33 @@ export async function POST(request: NextRequest) {
 
     const text = await getGeminiResponse(messages, fullSystemPrompt);
 
+    // Extract Metadata Opal Style
+    let intent = "Information";
+    let score = "Cold";
+    let cleanText = text;
+
+    const metaMatch = text.match(/\[\[META:([\s\S]*?)\]\]/);
+    if (metaMatch) {
+      try {
+        const meta = JSON.parse(metaMatch[1]);
+        intent = meta.intent || intent;
+        score = meta.score || score;
+        cleanText = text.replace(/\[\[META:[\s\S]*?\]\]/, "").trim();
+      } catch (e) {
+        console.error("Error parsing Opal Meta:", e);
+      }
+    }
+
     return NextResponse.json({ 
       message: {
         role: "assistant",
-        content: text
-      } 
+        content: cleanText
+      },
+      analysis: {
+        intent,
+        score,
+        timestamp: new Date().toISOString()
+      }
     });
   } catch (error: any) {
     console.error("/// CHAT API ERROR (GEMINI) ///");

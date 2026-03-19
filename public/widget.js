@@ -1,22 +1,22 @@
 (function() {
-    // ChatGenius Embeddable Widget
+    // Arsenex AI Embeddable Widget
     const CONFIG = {
-        primaryColor: '#4f7df5',
+        primaryColor: '#0070FF',
         botId: document.currentScript ? document.currentScript.getAttribute('data-bot-id') : 'demo',
-        apiUrl: 'http://localhost:3000/api/widget/chat' // Change to production URL later
+        apiUrl: 'https://arsenex-ai.vercel.app/api/widget/chat'
     };
 
     // Inject styles
     const style = document.createElement('style');
     style.innerHTML = `
-        #chatgenius-widget {
+        #arsenex-widget {
             position: fixed;
             bottom: 20px;
             right: 20px;
             z-index: 999999;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
-        #chatgenius-button {
+        #arsenex-button {
             width: 60px;
             height: 60px;
             border-radius: 30px;
@@ -28,10 +28,10 @@
             justify-content: center;
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        #chatgenius-button:hover { transform: scale(1.1); }
-        #chatgenius-button svg { fill: white; width: 30px; height: 30px; }
+        #arsenex-button:hover { transform: scale(1.1); }
+        #arsenex-button svg { fill: white; width: 30px; height: 30px; }
         
-        #chatgenius-window {
+        #arsenex-window {
             position: absolute;
             bottom: 80px;
             right: 0;
@@ -45,7 +45,7 @@
             overflow: hidden;
             border: 1px solid #eee;
         }
-        #chatgenius-header {
+        #arsenex-header {
             padding: 15px;
             background: ${CONFIG.primaryColor};
             color: white;
@@ -54,7 +54,7 @@
             justify-content: space-between;
             align-items: center;
         }
-        #chatgenius-messages {
+        #arsenex-messages {
             flex: 1;
             padding: 15px;
             overflow-y: auto;
@@ -63,7 +63,7 @@
             gap: 10px;
             background: #f9f9f9;
         }
-        #chatgenius-lead-form {
+        #arsenex-lead-form {
             padding: 20px;
             display: flex;
             flex-direction: column;
@@ -72,15 +72,15 @@
             height: 100%;
             justify-content: center;
         }
-        .cg-input {
+        .ax-input {
             padding: 10px 15px;
             border: 1px solid #ddd;
             border-radius: 8px;
             font-size: 14px;
             outline: none;
         }
-        .cg-input:focus { border-color: ${CONFIG.primaryColor}; }
-        .cg-btn {
+        .ax-input:focus { border-color: ${CONFIG.primaryColor}; }
+        .ax-btn {
             background: ${CONFIG.primaryColor};
             color: white;
             border: none;
@@ -90,32 +90,32 @@
             cursor: pointer;
             transition: opacity 0.2s;
         }
-        .cg-btn:hover { opacity: 0.9; }
+        .ax-btn:hover { opacity: 0.9; }
         
-        .cg-msg {
+        .ax-msg {
             max-width: 80%;
             padding: 8px 12px;
             border-radius: 15px;
             font-size: 14px;
             line-height: 1.4;
         }
-        .cg-msg-bot { background: #eee; align-self: flex-start; border-bottom-left-radius: 0; }
-        .cg-msg-user { background: ${CONFIG.primaryColor}; color: white; align-self: flex-end; border-bottom-right-radius: 0; }
+        .ax-msg-bot { background: #eee; align-self: flex-start; border-bottom-left-radius: 0; }
+        .ax-msg-user { background: ${CONFIG.primaryColor}; color: white; align-self: flex-end; border-bottom-right-radius: 0; }
         
-        #chatgenius-input-area {
+        #arsenex-input-area {
             padding: 10px;
             border-top: 1px solid #eee;
             display: flex;
             gap: 5px;
         }
-        #chatgenius-input {
+        #arsenex-input {
             flex: 1;
             border: 1px solid #ddd;
             padding: 8px 12px;
             border-radius: 20px;
             outline: none;
         }
-        #chatgenius-send {
+        #arsenex-send {
             background: ${CONFIG.primaryColor};
             border: none;
             color: white;
@@ -128,59 +128,66 @@
 
     // Create container
     const container = document.createElement('div');
-    container.id = 'chatgenius-widget';
+    container.id = 'arsenex-widget';
     container.innerHTML = `
-        <div id="chatgenius-window">
-            <div id="chatgenius-header">
-                <span>ChatGenius Support</span>
-                <span id="chatgenius-close" style="cursor:pointer">&times;</span>
+        <div id="arsenex-window">
+            <div id="arsenex-header">
+                <span>Arsenex AI Support</span>
+                <span id="arsenex-close" style="cursor:pointer">&times;</span>
             </div>
             
-            <div id="chatgenius-messages" style="display:none">
-                <div class="cg-msg cg-msg-bot">¡Hola! ¿En qué puedo ayudarte hoy?</div>
+            <div id="arsenex-messages" style="display:none">
+                <div class="ax-msg ax-msg-bot">¡Hola! Soy tu asistente de Arsenex. ¿En qué puedo ayudarte hoy?</div>
             </div>
 
-            <form id="chatgenius-lead-form">
+            <form id="arsenex-lead-form">
                 <div style="font-weight:bold; font-size:18px; color:#333; margin-bottom:5px">Bienvenido 👋</div>
-                <div style="font-size:13px; color:#666; margin-bottom:15px">Déjanos tus datos para brindarte una mejor atención.</div>
-                <input type="text" id="cg-name" class="cg-input" placeholder="Nombre completo" required>
-                <input type="email" id="cg-email" class="cg-input" placeholder="Correo electrónico" required>
-                <input type="tel" id="cg-tel" class="cg-input" placeholder="WhatsApp (opcional)">
-                <button type="submit" class="cg-btn">Empezar Chat</button>
+                <div style="font-size:13px; color:#666; margin-bottom:15px">Déjanos tus datos para brindarte una mejor atención estratégica.</div>
+                <input type="text" id="ax-name" class="ax-input" placeholder="Nombre completo" required>
+                <input type="email" id="ax-email" class="ax-input" placeholder="Correo electrónico" required>
+                <input type="tel" id="ax-tel" class="ax-input" placeholder="WhatsApp (opcional)">
+                <button type="submit" class="ax-btn">Empezar Chat</button>
             </form>
 
-            <form id="chatgenius-input-area" style="display:none">
-                <input type="text" id="chatgenius-input" placeholder="Escribe tu duda..." autocomplete="off">
-                <button type="submit" id="chatgenius-send">Ir</button>
+            <form id="arsenex-input-area" style="display:none">
+                <input type="text" id="arsenex-input" placeholder="Escribe tu duda..." autocomplete="off">
+                <button type="submit" id="arsenex-send">Ir</button>
             </form>
         </div>
-        <div id="chatgenius-button">
+        <div id="arsenex-button">
             <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
         </div>
     `;
     document.body.appendChild(container);
 
-    const btn = document.getElementById('chatgenius-button');
-    const win = document.getElementById('chatgenius-window');
-    const close = document.getElementById('chatgenius-close');
-    const leadForm = document.getElementById('chatgenius-lead-form');
-    const chatMessages = document.getElementById('chatgenius-messages');
-    const chatInputArea = document.getElementById('chatgenius-input-area');
-    const form = document.getElementById('chatgenius-input-area');
-    const input = document.getElementById('chatgenius-input');
-    const msgContainer = document.getElementById('chatgenius-messages');
+    const btn = document.getElementById('arsenex-button');
+    const win = document.getElementById('arsenex-window');
+    const close = document.getElementById('arsenex-close');
+    const leadForm = document.getElementById('arsenex-lead-form');
+    const chatMessages = document.getElementById('arsenex-messages');
+    const chatInputArea = document.getElementById('arsenex-input-area');
+    const form = document.getElementById('arsenex-input-area');
+    const input = document.getElementById('arsenex-input');
+    const msgContainer = document.getElementById('arsenex-messages');
 
     let chatHistory = [];
     let leadCaptured = false;
+    
+    // Session management
+    let sessionId = localStorage.getItem('arsenex_session_id');
+    if (!sessionId) {
+        sessionId = 'sess_' + Math.random().toString(36).substr(2, 9);
+        localStorage.setItem('arsenex_session_id', sessionId);
+    }
 
     btn.onclick = () => win.style.display = win.style.display === 'flex' ? 'none' : 'flex';
     close.onclick = () => win.style.display = 'none';
 
     leadForm.onsubmit = async (e) => {
         e.preventDefault();
-        const name = document.getElementById('cg-name').value;
-        const email = document.getElementById('cg-email').value;
-        const whatsapp = document.getElementById('cg-tel').value;
+        const name = document.getElementById('ax-name').value;
+        const email = document.getElementById('ax-email').value;
+        const whatsapp = document.getElementById('ax-tel').value;
 
         // Transition to chat UI
         leadForm.style.display = 'none';
@@ -190,10 +197,17 @@
 
         // Save lead asynchronously
         try {
-            fetch('http://localhost:3000/api/widget/lead', {
+            const leadApiUrl = CONFIG.apiUrl.replace('/chat', '/lead');
+            fetch(leadApiUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ botId: CONFIG.botId, name, email, whatsapp })
+                body: JSON.stringify({ 
+                    botId: CONFIG.botId, 
+                    name, 
+                    email, 
+                    whatsapp,
+                    sessionId: sessionId // Link lead to session
+                })
             });
         } catch(e) {}
     };
@@ -217,6 +231,7 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 
                     botId: CONFIG.botId,
+                    sessionId: sessionId,
                     messages: chatHistory
                 })
             });
@@ -234,7 +249,7 @@
 
     function addMessage(text, side) {
         const div = document.createElement('div');
-        div.className = `cg-msg cg-msg-${side}`;
+        div.className = `ax-msg ax-msg-${side}`;
         div.innerText = text;
         msgContainer.appendChild(div);
         msgContainer.scrollTop = msgContainer.scrollHeight;

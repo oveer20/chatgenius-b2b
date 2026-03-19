@@ -1,4 +1,4 @@
-# Walkthrough: ChatGenius B2B SaaS
+# Walkthrough: Arsenex AI B2B SaaS
 
 ¡La aplicación ha sido transformada exitosamente en un SaaS B2B altamente rentable! Hemos pasado de un generador de currículums a una plataforma completa de **Asistentes de Inteligencia Artificial para Empresas**.
 
@@ -48,7 +48,7 @@ He realizado un build de producción completo (`npm run build`) para detectar y 
 
 ## 📸 Demostración Visual
 
-![Landing Page ChatGenius](/Users/josegaviria/.gemini/antigravity/brain/48f3b1f7-5b32-4d69-807a-08394fa9b3cb/landing_page_1773137245550.png)
+![Landing Page Arsenex AI](/Users/josegaviria/.gemini/antigravity/brain/48f3b1f7-5b32-4d69-807a-08394fa9b3cb/landing_page_1773137245550.png)
 *La Landing Page diseñada para convertir visitantes en clientes de pago.*
 
 ![Dashboard de Agentes](/Users/josegaviria/.gemini/antigravity/brain/48f3b1f7-5b32-4d69-807a-08394fa9b3cb/dashboard_page_1773137355977.png)

@@ -15,13 +15,13 @@ Este script está diseñado para cerrar ventas de forma rápida con negocios loc
 *Cuando ya te dieron el "Sí, muéstrame".*
 
 1. **El Dolor**: "¿Cuánto tiempo pierdes al día respondiendo las mismas preguntas sobre [Envíos/Citas/Precios]?"
-2. **La Solución**: "Mi IA, ChatGenius, no solo responde, sino que está entrenada con **tus propios manuales**. No inventa nada."
+2. **La Solución**: "Mi IA, Arsenex AI, no solo responde, sino que está entrenada con **tus propios manuales**. No inventa nada."
 3. **El Cierre**: "La prueba es gratis. Si en una semana ves que te ahorra tiempo, la suscripción es de $49/mes. Te sale más barato que un café al día. ¿Te gustaría que la instaláramos ahora mismo?"
 
 ## Manejo de Objeciones (Respuestas Rápidas)
 - **"Es muy difícil de usar"**: "Yo me encargo de todo el set-up. Tú no tienes que tocar código."
 - **"¿Y si la IA dice algo mal?"**: "Nosotros la limitamos con tu 'Base de Conocimientos'. Solo dice lo que tú le permitas."
-- **"Ya tengo un chat"**: "Los chats viejos son de opciones (presione 1, presione 2). ChatGenius entiende el lenguaje humano y responde como una persona."
+- **"Ya tengo un chat"**: "Los chats viejos son de opciones (presione 1, presione 2). Arsenex AI entiende el lenguaje humano y responde como una persona."
 
 ## Tu Meta Diaria
 - Contactar a **20 negocios** al día.

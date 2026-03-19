@@ -3,14 +3,16 @@
 .dashboard {
   display: flex;
   min-height: 100vh;
-  background-color: var(--bg-secondary);
+  background-color: var(--bg-primary);
 }
 
 /* Sidebar */
 .sidebar {
   width: 260px;
-  background: var(--bg-primary);
-  border-right: 1px solid var(--border);
+  background: var(--bg-glass-strong);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-right: 1px solid var(--bg-glass-border);
   padding: var(--space-6);
   display: flex;
   flex-direction: column;
@@ -34,10 +36,14 @@
 
 .logoIcon {
   font-size: var(--text-2xl);
-  background: var(--accent-gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--accent-blue);
+  text-shadow: 0 0 20px rgba(0, 112, 255, 0.3);
+}
+
+.logoImage {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
 }
 
 .nav {
@@ -62,15 +68,15 @@
 
 .navItem:hover {
   color: var(--accent-blue);
-  background: var(--bg-tertiary);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .navItemActive {
-  color: var(--accent-blue);
-  background: var(--accent-gradient-subtle);
-  border: 1px solid var(--border-accent);
+  color: white;
+  background: var(--accent-blue);
+  box-shadow: 0 4px 20px rgba(0, 112, 255, 0.4);
 }
-
+ Broadway 
 .sidebarFooter {
   border-top: 1px solid var(--border);
   padding-top: var(--space-6);
@@ -136,6 +142,21 @@
   margin-top: var(--space-1);
 }
 
+.securityBadge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 6px 12px;
+  background: rgba(59, 130, 246, 0.1);
+  color: var(--accent-blue);
+  border-radius: 100px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
 /* Resume Grid */
 .resumeGrid {
   display: grid;
@@ -148,19 +169,23 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  background: var(--bg-primary);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-md);
+  background: var(--bg-card);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--bg-glass-border);
+  border-radius: var(--radius-xl);
+  transition: all var(--transition-base);
 }
 
 .resumeCard:hover {
+  transform: translateY(-5px);
   border-color: var(--accent-blue);
-  box-shadow: var(--shadow-lg);
+  background: var(--bg-card-hover);
+  box-shadow: var(--shadow-glow);
 }
 
 .resumePreview {
   height: 140px;
-  background: var(--bg-tertiary);
+  background: rgba(255, 255, 255, 0.02);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -219,10 +244,10 @@
   justify-content: center;
   gap: var(--space-3);
   min-height: 280px;
-  border: 2px dashed var(--border);
-  background: var(--bg-primary);
+  border: 2px dashed var(--bg-glass-border);
+  background: transparent;
   border-radius: var(--radius-xl);
-  color: var(--text-tertiary);
+  color: var(--text-secondary);
   font-size: var(--text-base);
   font-weight: 600;
   transition: all var(--transition-base);
@@ -319,9 +344,16 @@
 
   .nav {
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: space-between;
     width: 100%;
+    padding: 0 10px;
   }
+
+  .navItem {
+    padding: 10px;
+    font-size: 1.2rem;
+  }
+
 
   .sidebarFooter {
     display: none;
@@ -329,9 +361,10 @@
 
   .main {
     margin-left: 0;
-    margin-bottom: 80px;
-    padding: var(--space-6);
+    margin-bottom: 70px;
+    padding: 20px 15px;
   }
+
 
   .header {
     flex-direction: column;
@@ -344,3 +377,130 @@
   }
 }
 
+/* Leads Table Actions */
+.miniActionBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-md);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  color: var(--text-tertiary);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  padding: 0;
+}
+
+.miniActionBtn:hover {
+  background: var(--bg-secondary);
+  color: var(--accent-blue);
+  border-color: var(--accent-blue);
+}
+
+.contactBtnWhatsapp {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.8rem;
+  background: rgba(37, 211, 102, 0.1);
+  border: 1px solid rgba(37, 211, 102, 0.2);
+  border-radius: 20px;
+  color: #25d366 !important;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all var(--transition-base);
+}
+
+.contactBtnWhatsapp:hover {
+  background: #25d366;
+  color: white !important;
+  transform: translateY(-1px);
+}
+
+/* Google Arsenal Integration */
+.arsenalStatusItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.statusDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  box-shadow: 0 0 10px currentColor;
+}
+
+.labsTool {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  color: var(--text-primary);
+  border: none;
+}
+
+.labsTool:hover {
+  filter: brightness(1.2);
+  transform: translateY(-2px);
+}
+/* Modals & Loaders */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(12px);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.modalContent {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 500px;
+  padding: 2.5rem;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+
+.modalContent h3 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+}
+
+.modalContent p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
