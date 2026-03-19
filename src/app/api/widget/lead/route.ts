@@ -109,7 +109,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    return NextResponse.json({ success: true, lead: data[0] });
+    return NextResponse.json({ success: true, lead: data ? data[0] : null });
   } catch (error: any) {
     console.error("/// LEAD API ERROR ///");
     console.error(error);
