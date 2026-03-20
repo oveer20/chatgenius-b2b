@@ -1,22 +1,22 @@
 (function() {
-    // Arsenex AI Embeddable Widget
+    // Stratix AI Embeddable Widget
     const CONFIG = {
         primaryColor: '#0070FF',
         botId: document.currentScript ? document.currentScript.getAttribute('data-bot-id') : 'demo',
-        apiUrl: 'https://arsenex-ai.vercel.app/api/widget/chat'
+        apiUrl: 'https://stratix-ai.vercel.app/api/widget/chat'
     };
 
     // Inject styles
     const style = document.createElement('style');
     style.innerHTML = `
-        #arsenex-widget {
+        #stratix-widget {
             position: fixed;
             bottom: 20px;
             right: 20px;
             z-index: 999999;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: var(--font-display, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif);
         }
-        #arsenex-button {
+        #stratix-button {
             width: 60px;
             height: 60px;
             border-radius: 30px;
@@ -28,10 +28,10 @@
             justify-content: center;
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        #arsenex-button:hover { transform: scale(1.1); }
-        #arsenex-button svg { fill: white; width: 30px; height: 30px; }
+        #stratix-button:hover { transform: scale(1.1); }
+        #stratix-button svg { fill: white; width: 30px; height: 30px; }
         
-        #arsenex-window {
+        #stratix-window {
             position: absolute;
             bottom: 80px;
             right: 0;
@@ -45,7 +45,7 @@
             overflow: hidden;
             border: 1px solid #eee;
         }
-        #arsenex-header {
+        #stratix-header {
             padding: 15px;
             background: ${CONFIG.primaryColor};
             color: white;
@@ -54,7 +54,7 @@
             justify-content: space-between;
             align-items: center;
         }
-        #arsenex-messages {
+        #stratix-messages {
             flex: 1;
             padding: 15px;
             overflow-y: auto;
@@ -63,7 +63,7 @@
             gap: 10px;
             background: #f9f9f9;
         }
-        #arsenex-lead-form {
+        #stratix-lead-form {
             padding: 20px;
             display: flex;
             flex-direction: column;
@@ -72,15 +72,15 @@
             height: 100%;
             justify-content: center;
         }
-        .ax-input {
+        .st-input {
             padding: 10px 15px;
             border: 1px solid #ddd;
             border-radius: 8px;
             font-size: 14px;
             outline: none;
         }
-        .ax-input:focus { border-color: ${CONFIG.primaryColor}; }
-        .ax-btn {
+        .st-input:focus { border-color: ${CONFIG.primaryColor}; }
+        .st-btn {
             background: ${CONFIG.primaryColor};
             color: white;
             border: none;
@@ -90,32 +90,32 @@
             cursor: pointer;
             transition: opacity 0.2s;
         }
-        .ax-btn:hover { opacity: 0.9; }
+        .st-btn:hover { opacity: 0.9; }
         
-        .ax-msg {
+        .st-msg {
             max-width: 80%;
             padding: 8px 12px;
             border-radius: 15px;
             font-size: 14px;
             line-height: 1.4;
         }
-        .ax-msg-bot { background: #eee; align-self: flex-start; border-bottom-left-radius: 0; }
-        .ax-msg-user { background: ${CONFIG.primaryColor}; color: white; align-self: flex-end; border-bottom-right-radius: 0; }
+        .st-msg-bot { background: #eee; align-self: flex-start; border-bottom-left-radius: 0; }
+        .st-msg-user { background: ${CONFIG.primaryColor}; color: white; align-self: flex-end; border-bottom-right-radius: 0; }
         
-        #arsenex-input-area {
+        #stratix-input-area {
             padding: 10px;
             border-top: 1px solid #eee;
             display: flex;
             gap: 5px;
         }
-        #arsenex-input {
+        #stratix-input {
             flex: 1;
             border: 1px solid #ddd;
             padding: 8px 12px;
             border-radius: 20px;
             outline: none;
         }
-        #arsenex-send {
+        #stratix-send {
             background: ${CONFIG.primaryColor};
             border: none;
             color: white;
@@ -128,56 +128,56 @@
 
     // Create container
     const container = document.createElement('div');
-    container.id = 'arsenex-widget';
+    container.id = 'stratix-widget';
     container.innerHTML = `
-        <div id="arsenex-window">
-            <div id="arsenex-header">
-                <span>Arsenex AI Support</span>
-                <span id="arsenex-close" style="cursor:pointer">&times;</span>
+        <div id="stratix-window">
+            <div id="stratix-header">
+                <span>Stratix AI Strategic Support</span>
+                <span id="stratix-close" style="cursor:pointer">&times;</span>
             </div>
             
-            <div id="arsenex-messages" style="display:none">
-                <div class="ax-msg ax-msg-bot">¡Hola! Soy tu asistente de Arsenex. ¿En qué puedo ayudarte hoy?</div>
+            <div id="stratix-messages" style="display:none">
+                <div class="st-msg st-msg-bot">¡Hola! Soy tu asistente de Stratix AI. ¿En qué puedo ayudarte hoy?</div>
             </div>
 
-            <form id="arsenex-lead-form">
-                <div style="font-weight:bold; font-size:18px; color:#333; margin-bottom:5px">Bienvenido 👋</div>
-                <div style="font-size:13px; color:#666; margin-bottom:15px">Déjanos tus datos para brindarte una mejor atención estratégica.</div>
-                <input type="text" id="ax-name" class="ax-input" placeholder="Nombre completo" required>
-                <input type="email" id="ax-email" class="ax-input" placeholder="Correo electrónico" required>
-                <input type="tel" id="ax-tel" class="ax-input" placeholder="WhatsApp (opcional)">
-                <button type="submit" class="ax-btn">Empezar Chat</button>
+            <form id="stratix-lead-form">
+                <div style="font-weight:bold; font-size:18px; color:#333; margin-bottom:5px">Bienvenido al Ecosistema Stratix 👋</div>
+                <div style="font-size:13px; color:#666; margin-bottom:15px">Déjanos tus datos para brindarte una asesoría estratégica personalizada.</div>
+                <input type="text" id="st-name" class="st-input" placeholder="Nombre completo" required>
+                <input type="email" id="st-email" class="st-input" placeholder="Correo electrónico" required>
+                <input type="tel" id="st-tel" class="st-input" placeholder="WhatsApp (opcional)">
+                <button type="submit" class="st-btn">Empezar Experiencia</button>
             </form>
 
-            <form id="arsenex-input-area" style="display:none">
-                <input type="text" id="arsenex-input" placeholder="Escribe tu duda..." autocomplete="off">
-                <button type="submit" id="arsenex-send">Ir</button>
+            <form id="stratix-input-area" style="display:none">
+                <input type="text" id="stratix-input" placeholder="Escribe tu consulta estratégica..." autocomplete="off">
+                <button type="submit" id="stratix-send">Ir</button>
             </form>
         </div>
-        <div id="arsenex-button">
+        <div id="stratix-button">
             <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
         </div>
     `;
     document.body.appendChild(container);
 
-    const btn = document.getElementById('arsenex-button');
-    const win = document.getElementById('arsenex-window');
-    const close = document.getElementById('arsenex-close');
-    const leadForm = document.getElementById('arsenex-lead-form');
-    const chatMessages = document.getElementById('arsenex-messages');
-    const chatInputArea = document.getElementById('arsenex-input-area');
-    const form = document.getElementById('arsenex-input-area');
-    const input = document.getElementById('arsenex-input');
-    const msgContainer = document.getElementById('arsenex-messages');
+    const btn = document.getElementById('stratix-button');
+    const win = document.getElementById('stratix-window');
+    const close = document.getElementById('stratix-close');
+    const leadForm = document.getElementById('stratix-lead-form');
+    const chatMessages = document.getElementById('stratix-messages');
+    const chatInputArea = document.getElementById('stratix-input-area');
+    const form = document.getElementById('stratix-input-area');
+    const input = document.getElementById('stratix-input');
+    const msgContainer = document.getElementById('stratix-messages');
 
     let chatHistory = [];
     let leadCaptured = false;
     
     // Session management
-    let sessionId = localStorage.getItem('arsenex_session_id');
+    let sessionId = localStorage.getItem('stratix_session_id');
     if (!sessionId) {
         sessionId = 'sess_' + Math.random().toString(36).substr(2, 9);
-        localStorage.setItem('arsenex_session_id', sessionId);
+        localStorage.setItem('stratix_session_id', sessionId);
     }
 
     btn.onclick = () => win.style.display = win.style.display === 'flex' ? 'none' : 'flex';
@@ -185,9 +185,9 @@
 
     leadForm.onsubmit = async (e) => {
         e.preventDefault();
-        const name = document.getElementById('ax-name').value;
-        const email = document.getElementById('ax-email').value;
-        const whatsapp = document.getElementById('ax-tel').value;
+        const name = document.getElementById('st-name').value;
+        const email = document.getElementById('st-email').value;
+        const whatsapp = document.getElementById('st-tel').value;
 
         // Transition to chat UI
         leadForm.style.display = 'none';
@@ -249,7 +249,7 @@
 
     function addMessage(text, side) {
         const div = document.createElement('div');
-        div.className = `ax-msg ax-msg-${side}`;
+        div.className = `st-msg st-msg-${side}`;
         div.innerText = text;
         msgContainer.appendChild(div);
         msgContainer.scrollTop = msgContainer.scrollHeight;

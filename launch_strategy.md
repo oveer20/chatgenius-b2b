@@ -1,11 +1,11 @@
-# Guía de Lanzamiento: Arsenex AI B2B 🚀
+# Guía de Lanzamiento: Stratix AI B2B 🚀
 
 ¡Felicidades! Tienes una plataforma tecnológica de primer nivel. Ahora es momento de convertirla en un negocio rentable. Sigue estos pasos exactos para lanzar hoy mismo.
 
 ## 1. Despliegue Técnico (La "Nube")
 Tu aplicación vive actualmente en tu computadora. Para que el mundo la vea, necesitas subirla a internet:
 - **Vercel**: Es la mejor opción para aplicaciones Next.js. Es gratis para empezar y escala con tu negocio.
-- **Dominios**: Compra un dominio profesional (ej. `arsenex-ai.ia` o `getarsenex-ai.com`). Un dominio `.com` o `.ai` da mucha más confianza a las empresas.
+- **Dominios**: Compra un dominio profesional (ej. `stratix-ai.app` o `getstratix-ai.com`). Un dominio `.com` o `.ai` da mucha más confianza a las empresas.
 
 ## 2. Configuración de Producción 🔑
 Antes de lanzar, asegúrate de cambiar las "llaves de prueba" por "llaves reales" en tu archivo `.env.local`:

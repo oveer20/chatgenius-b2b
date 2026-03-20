@@ -1,4 +1,4 @@
--- SQL Schema for Arsenex AI B2B
+-- SQL Schema for Stratix AI B2B
 -- Run this in your Supabase SQL Editor
 
 -- Table for AI Agents (Bots)
