@@ -3,4 +3,4 @@ Allow: /
 Disallow: /dashboard/
 Disallow: /api/
 
-Sitemap: https://arsenex-ai.vercel.app/sitemap.xml
+Sitemap: https://stratix-ai.vercel.app/sitemap.xml
