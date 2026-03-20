@@ -3,7 +3,7 @@
     const CONFIG = {
         primaryColor: '#0070FF',
         botId: document.currentScript ? document.currentScript.getAttribute('data-bot-id') : 'demo',
-        apiUrl: 'https://stratix-hq.vercel.app/api/widget/chat'
+        apiUrl: 'https://stratix-intelligence.vercel.app/api/widget/chat'
     };
 
     // Inject styles

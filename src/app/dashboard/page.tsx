@@ -157,7 +157,7 @@ export default function DashboardPage() {
   }, [leads.length]); // Re-fetch when leads change
 
   const handleCopySnippet = (botId: string) => {
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://stratix-hq.vercel.app";
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://stratix-intelligence.vercel.app";
     const snippet = `<script src="${appUrl}/widget.js" data-bot-id="${botId}"></script>`;
     navigator.clipboard.writeText(snippet);
     setCopiedId(botId);
@@ -737,11 +737,11 @@ export default function DashboardPage() {
               </p>
               <div style={{ background: "#0f172a", padding: "1.25rem", borderRadius: "var(--radius-md)", position: "relative" }}>
                    <code style={{ fontSize: "0.8rem", color: "#34d399", display: "block", overflowX: "auto", lineHeight: "1.6" }}>
-                    {`<script \n  src="${process.env.NEXT_PUBLIC_APP_URL || 'https://stratix-hq.vercel.app'}/widget.js" \n  data-bot-id="TU-BOT-ID">\n</script>`}
+                    {`<script \n  src="${process.env.NEXT_PUBLIC_APP_URL || 'https://stratix-intelligence.vercel.app'}/widget.js" \n  data-bot-id="TU-BOT-ID">\n</script>`}
                   </code>
                  <button 
                   onClick={() => {
-                    navigator.clipboard.writeText(`<script src="${process.env.NEXT_PUBLIC_APP_URL || 'https://stratix-hq.vercel.app'}/widget.js" data-bot-id="TU-BOT-ID"></script>`);
+                    navigator.clipboard.writeText(`<script src="${process.env.NEXT_PUBLIC_APP_URL || 'https://stratix-intelligence.vercel.app'}/widget.js" data-bot-id="TU-BOT-ID"></script>`);
                     alert("¡Código copiado al portapapeles!");
                   }}
                   style={{ position: "absolute", top: "0.75rem", right: "0.75rem", padding: "0.4rem 0.8rem", fontSize: "0.75rem", background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.2)", borderRadius: "6px", color: "#34d399", cursor: "pointer", display: "flex", alignItems: "center", gap: "0.3rem" }}>
@@ -821,8 +821,8 @@ export default function DashboardPage() {
                   >
                     Contactar Ventas
                   </a>
-                  <button onClick={() => handleUpgrade('empire')} className="btn-primary" style={{ padding: '0.75rem 1.5rem', fontSize: '0.85rem' }}>
-                    Pasar a Empire Evolution <FiArrowRight />
+                  <button onClick={() => handleUpgrade('pro')} className="btn-primary" style={{ padding: '0.75rem 1.5rem', fontSize: '0.85rem' }}>
+                    Pasar a Elite Strategic <FiArrowRight />
                   </button>
                 </div>
               </div>

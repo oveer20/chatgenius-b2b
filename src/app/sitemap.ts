@@ -2,7 +2,7 @@
 import { MetadataRoute } from 'next';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://stratix-hq.vercel.app';
+  const baseUrl = 'https://stratix-intelligence.vercel.app';
   
   return [
     {

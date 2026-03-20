@@ -343,18 +343,18 @@
 }
 
 /* Stratix Section */
-.arsenalSection {
+.suiteSection {
   padding: 120px 0;
   background: var(--bg-secondary);
 }
 
-.arsenalGrid {
+.suiteGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 30px;
 }
 
-.arsenalCard {
+.suiteCard {
   background: var(--bg-card);
   border: 1px solid var(--bg-glass-border);
   padding: 40px;
@@ -364,13 +364,13 @@
   height: 100%;
 }
 
-.activeArsenal {
+.activeSuite {
   border-color: var(--accent-blue);
   background: var(--bg-card-hover);
   box-shadow: var(--shadow-glow);
 }
 
-.arsenalIcon {
+.suiteIcon {
   width: 60px;
   height: 60px;
   border-radius: 16px;
@@ -382,28 +382,28 @@
   margin-bottom: 30px;
 }
 
-.arsenalBody h3 {
+.suiteBody h3 {
   font-size: 24px;
   font-weight: 800;
   margin-bottom: 15px;
   color: var(--text-primary);
 }
 
-.arsenalBody p {
+.suiteBody p {
   color: var(--text-secondary);
   font-size: 15px;
   line-height: 1.6;
   margin-bottom: 25px;
 }
 
-.arsenalList {
+.suiteList {
   list-style: none;
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-.arsenalList li {
+.suiteList li {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -412,7 +412,7 @@
   font-weight: 600;
 }
 
-.arsenalList svg {
+.suiteList svg {
   color: var(--accent-blue);
 }
 
@@ -713,7 +713,7 @@
   }
 
 
-  .arsenalGrid, .pricingGrid {
+  .suiteGrid, .pricingGrid {
     grid-template-columns: 1fr;
   }
   .footerGrid {

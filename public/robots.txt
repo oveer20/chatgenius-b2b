@@ -3,4 +3,4 @@ Allow: /
 Disallow: /dashboard/
 Disallow: /api/
 
-Sitemap: https://stratix-hq.vercel.app/sitemap.xml
+Sitemap: https://stratix-intelligence.vercel.app/sitemap.xml

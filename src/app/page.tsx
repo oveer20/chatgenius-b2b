@@ -112,7 +112,7 @@ export default function LandingPage() {
           
           <div className={styles.navLinks}>
             <a href="#features">Tecnología</a>
-            <a href="#arsenal">Ecosistema Labs</a>
+            <a href="#suite">Ecosistema Labs</a>
             <a href="#pricing">Precios</a>
             <a href="#faq">FAQ</a>
             <div className={styles.navDivider}></div>
@@ -274,28 +274,28 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* The Arsenal Section (Google Labs Integration) */}
-      <section className={styles.arsenalSection} id="arsenal">
+      {/* The Elite Suite (Google Labs Integration) */}
+      <section className={styles.suiteSection} id="suite">
         <div className="container">
           <SectionHeader 
             badge="El Ecosistema Google"
-            title="Sincronización Total con Labs"
-            subtitle="No es solo un chatbot. Es una arquitectura coordinada de las IA más avanzadas del mundo."
+            title="Sincronización Total con el Ecosistema"
+            subtitle="No es solo un chatbot. Es una arquitectura coordinada de inteligencias estratégicas."
           />
 
-          <div className={styles.arsenalGrid}>
+          <div className={styles.suiteGrid}>
             <motion.div 
-              className={`${styles.arsenalCard} ${activeTab === 'pomelli' ? styles.activeArsenal : ''}`}
+              className={`${styles.suiteCard} ${activeTab === 'pomelli' ? styles.activeSuite : ''}`}
               onMouseEnter={() => setActiveTab('pomelli')}
               whileHover={{ scale: 1.02 }}
             >
-              <div className={styles.arsenalIcon} style={{ background: 'linear-gradient(135deg, #FF3D00, #FF9100)' }}>
+              <div className={styles.suiteIcon} style={{ background: 'linear-gradient(135deg, #FF3D00, #FF9100)' }}>
                 <FiStar />
               </div>
-              <div className={styles.arsenalBody}>
+              <div className={styles.suiteBody}>
                 <h3>Pomelli Branding</h3>
                 <p>Nuestra IA analiza tu sitio web y redes sociales (vía Pomelli) para capturar el ADN de tu marca automáticamente.</p>
-                <ul className={styles.arsenalList}>
+                <ul className={styles.suiteList}>
                   <li><FiCheck /> Extracción de Colores Pro</li>
                   <li><FiCheck /> Tono de Voz Coherente</li>
                   <li><FiCheck /> Identidad Visual Única</li>
@@ -304,17 +304,17 @@ export default function LandingPage() {
             </motion.div>
 
             <motion.div 
-              className={`${styles.arsenalCard} ${activeTab === 'stitch' ? styles.activeArsenal : ''}`}
+              className={`${styles.suiteCard} ${activeTab === 'stitch' ? styles.activeSuite : ''}`}
               onMouseEnter={() => setActiveTab('stitch')}
               whileHover={{ scale: 1.02 }}
             >
-              <div className={styles.arsenalIcon} style={{ background: 'linear-gradient(135deg, #00B0FF, #00E5FF)' }}>
+              <div className={styles.suiteIcon} style={{ background: 'linear-gradient(135deg, #00B0FF, #00E5FF)' }}>
                 <FiLayout />
               </div>
-              <div className={styles.arsenalBody}>
+              <div className={styles.suiteBody}>
                 <h3>Stitch UI Design</h3>
                 <p>Generación instantánea de interfaces adaptativas. Tu chatbot se verá impecable en cualquier dispositivo.</p>
-                <ul className={styles.arsenalList}>
+                <ul className={styles.suiteList}>
                   <li><FiCheck /> Layouts Glassmorphism</li>
                   <li><FiCheck /> Animaciones Ultra-fluidas</li>
                   <li><FiCheck /> Responsive de Alta Gama</li>
@@ -323,17 +323,17 @@ export default function LandingPage() {
             </motion.div>
 
             <motion.div 
-              className={`${styles.arsenalCard} ${activeTab === 'opal' ? styles.activeArsenal : ''}`}
+              className={`${styles.suiteCard} ${activeTab === 'opal' ? styles.activeSuite : ''}`}
               onMouseEnter={() => setActiveTab('opal')}
               whileHover={{ scale: 1.02 }}
             >
-              <div className={styles.arsenalIcon} style={{ background: 'linear-gradient(135deg, #6200EA, #AA00FF)' }}>
+              <div className={styles.suiteIcon} style={{ background: 'linear-gradient(135deg, #6200EA, #AA00FF)' }}>
                 <FiLayers />
               </div>
-              <div className={styles.arsenalBody}>
+              <div className={styles.suiteBody}>
                 <h3>Opal Logic Builder</h3>
                 <p>Configura el comportamiento de tu IA mediante nodos lógicos. Potencia sin necesidad de código.</p>
-                <ul className={styles.arsenalList}>
+                <ul className={styles.suiteList}>
                   <li><FiCheck /> Árboles de Decisión IA</li>
                   <li><FiCheck /> Integración de Datos Real</li>
                   <li><FiCheck /> Flujos de Venta Proactivos</li>
@@ -454,7 +454,7 @@ export default function LandingPage() {
             <motion.div className={`${styles.priceCard} ${styles.featuredPrice}`} whileHover={{ y: -10 }}>
               <div className={styles.featuredBadge}>MÁS VENDIDO — MÁXIMO ROI</div>
               <div className={styles.pHeader}>
-                <h4>Empire Evolution</h4>
+                <h4>Elite Strategic</h4>
                 <div className={styles.priceValue}>
                   {currency === 'USD' ? '$99' : '$395k'}<span>/mes</span>
                 </div>
