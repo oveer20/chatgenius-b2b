@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
       // 2a. Send Notification to Admin (You)
       await resend.emails.send({
         from: 'Stratix AI <notifications@resend.dev>',
-        to: process.env.NOTIFICATION_EMAIL || 'admin@stratix-ai.vercel.app',
+        to: process.env.NOTIFICATION_EMAIL || 'admin@stratix-hq.vercel.app',
         subject: `🔥 Nuevo Lead Detectado - Stratix AI (vía ${bot?.name || 'Stratix'})`,
         html: `
           <div style="font-family: sans-serif; padding: 20px; color: #1e293b;">
@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
             <p><strong>📱 WhatsApp:</strong> ${whatsapp || 'No proporcionado'}</p>
             <p><strong>🤖 Agente:</strong> ${bot?.name || 'Stratix'}</p>
             <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;" />
-            <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://stratix-ai.vercel.app'}/dashboard" style="background: #3b82f6; color: white; padding: 10px 20px; text-decoration: none; border-radius: 8px; font-weight: bold;">Ver en el Dashboard</a>
+            <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://stratix-hq.vercel.app'}/dashboard" style="background: #3b82f6; color: white; padding: 10px 20px; text-decoration: none; border-radius: 8px; font-weight: bold;">Ver en el Dashboard</a>
           </div>
         `
       });
@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
             <p style="font-size: 1.1rem; line-height: 1.6;">Gracias por interesarte en <strong>Stratix AI</strong>. Como lo prometido es deuda, aquí tienes tu acceso a nuestra guía exclusiva para automatizar tu negocio con Inteligencia Artificial.</p>
             
             <div style="text-align: center; margin: 30px 0;">
-              <a href="https://stratix-ai.vercel.app/guia-ia-negocios.pdf" style="background: #3b82f6; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 1rem; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);">📥 Descargar Mi Guía Gratis</a>
+              <a href="https://stratix-hq.vercel.app/guia-ia-negocios.pdf" style="background: #3b82f6; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 1rem; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);">📥 Descargar Mi Guía Gratis</a>
             </div>
 
             <p style="color: #64748b; font-size: 0.9rem;">¿Sabías que un agente de IA puede reducir tus costos operativos en un 70%? Si quieres ver cómo Stratix puede ayudar a tu empresa específicamente, responde a este correo o agenda una llamada con nosotros.</p>
