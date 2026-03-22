@@ -6,6 +6,11 @@ export const metadata: Metadata = {
   description: 'El estándar global de inteligencia estratégica para empresas B2B de élite. Automatización, diseño y estrategia impulsada por el Ecosistema Stratix.',
   keywords: ["soporte 24/7", "inteligencia artificial", "IA B2B", "Stratix AI"],
   authors: [{ name: "Stratix AI" }],
+  // 👇 AQUÍ ESTÁ LA MAGIA DEL NAVEGADOR Y EL IPHONE
+  icons: {
+    icon: "/stratix_shield.png",
+    apple: "/stratix_shield.png",
+  },
   openGraph: {
     title: 'Stratix AI | Ecosistema de Inteligencia para Negocios de Élite',
     description: 'Automatiza tu proceso de ventas y atención con una suite integrada de IA. Tecnología avanzada para empresas estratégicas.',
