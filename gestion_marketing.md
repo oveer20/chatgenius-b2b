@@ -1,9 +1,9 @@
-# Gestión y Marketing: Arsenex AI B2B 📈
+# Gestión y Marketing: Stratix AI B2B 📈
 
 Como tu asistente de IA, he construido el motor. Ahora te explicaré cómo manejar el "negocio" y cómo puedo ayudarte a escalarlo.
 
 ## 1. ¿Cómo te llega el dinero? (Stripe)
-El código que escribimos conecta Arsenex AI con **Stripe**. 
+El código que escribimos conecta Stratix AI con **Stripe**. 
 - **El flujo**: Cliente paga -> Stripe procesa -> Stripe deposita en **tu cuenta bancaria** (cada 2-3 días automáticamente).
 - **Tu Panel de Control**: Debes entrar a [dashboard.stripe.com](https://dashboard.stripe.com). Ahí verás:
   - Quién se suscribió.
@@ -32,7 +32,7 @@ El código que escribimos conecta Arsenex AI con **Stripe**.
 ### Semana 2: La Prueba de Fuego (Meta Ads) 🚀
 - **Presupuesto**: Empieza con $5-$10 USD al día.
 - **Público**: Dueños de E-commerce, Inmobiliarias, Dueños de Negocios en Shopify.
-- **Copy del Anuncio**: *"Deja de perder ventas por no responder a tiempo. Instala Arsenex AI y ten un vendedor 24/7 por menos de lo que cuesta un café"*.
+- **Copy del Anuncio**: *"Deja de perder ventas por no responder a tiempo. Instala Stratix AI y ten un vendedor 24/7 por menos de lo que cuesta un café"*.
 
 ### Semana 3: Optimización
 - Revisamos quién entró a la web pero no pagó.

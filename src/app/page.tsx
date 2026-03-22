@@ -4,78 +4,33 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useScroll, useTransform, Variants } from "framer-motion";
 import Link from "next/link";
 import {
-  FiZap,
-  FiStar,
-  FiArrowRight,
-  FiCpu,
-  FiTrendingUp,
-  FiShield,
-  FiCheck,
-  FiChevronDown,
-  FiMessageSquare,
-  FiLayout,
-  FiLayers,
-  FiSmartphone,
-  FiGlobe,
-  FiPlay,
-  FiInstagram,
-  FiLinkedin,
-  FiLock
+  FiZap, FiStar, FiArrowRight, FiCpu, FiTrendingUp, FiShield,
+  FiCheck, FiChevronDown, FiLayout, FiLayers, FiSmartphone,
+  FiGlobe, FiPlay, FiInstagram, FiLinkedin, FiLock,
+  FiDatabase, FiCloud, FiServer, FiActivity, FiUser, FiShoppingBag
 } from "react-icons/fi";
 import styles from "./landing.module.css";
+
+const words = ["para Creadores", "para PyMEs", "para Empresas", "para Ti"];
 
 const fadeInUp: Variants = {
   hidden: { opacity: 0, y: 40 },
   visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
+    opacity: 1, y: 0,
     transition: { delay: i * 0.1, duration: 0.8, ease: [0.215, 0.610, 0.355, 1.0] }
   }),
 };
 
-const staggerContainer: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.2
-    }
-  }
-};
-
-/* ============================================
-   Componentes Enriquecidos
-   ============================================ */
-
 function SectionHeader({ badge, title, subtitle }: { badge: string, title: string, subtitle: string }) {
   return (
-    <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
-      <motion.span 
-        initial={{ opacity: 0, y: 10 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        className={styles.badge}
-        style={{ marginBottom: '1.5rem' }}
-      >
+    <div style={{ textAlign: 'center', marginBottom: '5rem', position: 'relative', zIndex: 10 }}>
+      <motion.span initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className={styles.badge} style={{ marginBottom: '1.5rem' }}>
         {badge}
       </motion.span>
-      <motion.h2 
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ delay: 0.2 }}
-        className={styles.sectionTitle}
-        style={{ fontSize: 'var(--text-5xl)', fontWeight: 900, letterSpacing: '-0.03em', marginBottom: '1.5rem', textAlign: 'center', width: '100%' }}
-      >
+      <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className={styles.sectionTitle} style={{ fontSize: 'var(--text-5xl)', fontWeight: 900, letterSpacing: '-0.03em', marginBottom: '1.5rem', textAlign: 'center', width: '100%' }}>
         {title}
       </motion.h2>
-      <motion.p
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ delay: 0.3 }}
-        style={{ color: 'var(--text-secondary)', fontSize: '1.25rem', maxWidth: '700px', margin: '0 auto', textAlign: 'center' }}
-      >
+      <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: 0.3 }} style={{ color: 'var(--text-secondary)', fontSize: '1.25rem', maxWidth: '700px', margin: '0 auto', textAlign: 'center' }}>
         {subtitle}
       </motion.p>
     </div>
@@ -87,11 +42,28 @@ export default function LandingPage() {
   const [activeTab, setActiveTab] = useState("pomelli");
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [currency, setCurrency] = useState<'USD' | 'COP'>('USD');
-  
-  const targetRef = useRef(null);
-  const { scrollYProgress } = useScroll({ target: targetRef });
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
+  const [billingCycle, setBillingCycle] = useState<'monthly' | 'annual'>('monthly');
+  const [index, setIndex] = useState(0);
+
+  const [mousePos, setMousePos] = useState({ x: -1000, y: -1000 });
+
+  const getPrice = (baseUSD: number, baseCOP: number) => {
+    const isAnnual = billingCycle === 'annual';
+    const discount = 0.8;
+    return currency === 'USD'
+      ? (isAnnual ? Math.round(baseUSD * discount) : baseUSD)
+      : (isAnnual ? Math.round(baseCOP * discount) : baseCOP);
+  };
+
+  useEffect(() => {
+    const interval = setInterval(() => setIndex((prev) => (prev + 1) % words.length), 3000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Scroll Parallax Suave
+  const { scrollY } = useScroll();
+  const heroOpacity = useTransform(scrollY, [0, 600], [1, 0]);
+  const heroY = useTransform(scrollY, [0, 600], [0, 150]);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -99,572 +71,292 @@ export default function LandingPage() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const handleMouseMove = (e: React.MouseEvent) => {
+    setMousePos({ x: e.clientX, y: e.clientY });
+  };
+
   return (
-    <div className={styles.landingWrapper} style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)' }}>
+    <div
+      className={styles.landingWrapper}
+      style={{ backgroundColor: '#0B1120', color: 'var(--text-primary)', position: 'relative', overflowX: 'hidden' }}
+      onMouseMove={handleMouseMove}
+    >
+      {/* Efecto Mouse Glow Premium adaptado al fondo azul */}
+      <div
+        style={{
+          position: 'fixed', top: mousePos.y - 300, left: mousePos.x - 300,
+          width: '600px', height: '600px',
+          background: 'radial-gradient(circle, rgba(0, 112, 255, 0.12) 0%, rgba(0, 0, 0, 0) 60%)',
+          borderRadius: '50%', pointerEvents: 'none', zIndex: 0,
+          transition: 'opacity 0.3s ease',
+          opacity: mousePos.x === -1000 ? 0 : 1
+        }}
+      />
+
+      {/* Botón Flotante de WhatsApp Seguro */}
+      <a href="https://wa.me/573152597199?text=Hola,%20quiero%20conocer%20m%C3%A1s%20sobre%20Stratix%20AI." target="_blank" rel="noopener noreferrer" style={{ position: 'fixed', bottom: '30px', right: '30px', backgroundColor: '#25D366', color: 'white', width: '60px', height: '60px', borderRadius: '50%', display: 'flex', justifyContent: 'center', alignItems: 'center', boxShadow: '0 4px 15px rgba(37, 211, 102, 0.4)', zIndex: 1000, cursor: 'pointer', transition: 'transform 0.3s ease' }} onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1)'} onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}>
+        <svg viewBox="0 0 24 24" width="35" height="35" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z" /></svg>
+      </a>
+
       {/* Navigation */}
-      <nav className={`${styles.navbar} ${scrolled ? styles.navScrolled : ""}`}>
+      <nav className={`${styles.navbar} ${scrolled ? styles.navScrolled : ""}`} style={{ zIndex: 100 }}>
         <div className={`container ${styles.navInner}`}>
           <Link href="/" className={styles.logo}>
             <div className={styles.logoGlow}></div>
             <img src="/stratix_shield.png" alt="Stratix Logo" className={styles.logoImage} />
-            <span style={{ fontFamily: 'var(--font-display)', letterSpacing: '-0.02em' }}>Strat<span style={{ color: 'var(--accent-blue)' }}>ix</span> <small style={{fontSize: '0.6rem', opacity: 0.5}}>AI</small></span>
+            <span style={{ fontFamily: 'var(--font-display)', letterSpacing: '-0.02em' }}>Strat<span style={{ color: 'var(--accent-blue)' }}>ix</span> <small style={{ fontSize: '0.6rem', opacity: 0.5 }}>AI</small></span>
           </Link>
-          
           <div className={styles.navLinks}>
             <a href="#features">Tecnología</a>
             <a href="#suite">Ecosistema Labs</a>
-            <a href="#pricing">Precios</a>
+            <a href="#pricing">Planes</a>
             <a href="#faq">FAQ</a>
             <div className={styles.navDivider}></div>
             <Link href="/login" className={styles.loginLink}>Ingresar</Link>
-            <Link href="/dashboard" className="btn-primary" style={{ padding: '0.75rem 1.5rem' }}>
+            <Link href="/dashboard" className="btn-primary" style={{ padding: '0.75rem 1.5rem', boxShadow: '0 0 20px rgba(0,112,255,0.3)' }}>
               Comenzar Gratis <FiArrowRight />
             </Link>
-          </div>
-
-          <div className={styles.mobileActions}>
-            <Link href="/login" className={styles.loginIcon}><FiLayout /></Link>
-            <Link href="/dashboard" className="btn-primary" style={{ padding: '0.5rem 1rem', fontSize: '13px' }}>Pro</Link>
           </div>
         </div>
       </nav>
 
-      {/* Hero Section Masterpiece */}
-      <section className={styles.hero} ref={targetRef}>
-        <motion.div style={{ opacity, scale }} className="container">
+      {/* Hero Section Mass Market con Parallax */}
+      <section className={styles.hero} style={{ position: 'relative', zIndex: 10 }}>
+        <motion.div style={{ opacity: heroOpacity, y: heroY }} className="container">
           <div className={styles.heroContent}>
             <div className={styles.heroText}>
-              <motion.div 
-                initial="hidden"
-                animate="visible"
-                variants={fadeInUp}
-                custom={0}
-                className={styles.heroBadge}
-              >
-                <FiZap /> Powered by Gemini 2.5 Pro & Google Labs
-              </motion.div>
-              
-              <motion.h1 
-                className={styles.heroTitle}
-                initial="hidden"
-                animate="visible"
-                variants={fadeInUp}
-                custom={1}
-              >
-                El Ecosistema de <br />
-                <span style={{ color: 'var(--accent-blue)', textShadow: '0 0 30px rgba(0, 112, 255, 0.3)' }}>IA B2B</span> Estratégico
-              </motion.h1>
-              
-              <motion.p 
-                className={styles.heroSubtitle}
-                initial="hidden"
-                animate="visible"
-                variants={fadeInUp}
-                custom={2}
-              >
-                Integramos la potencia de <b>Pomelli, Stitch y Opal</b> en una suite de élite para transformar tu atención al cliente en una máquina de ventas automatizada e inteligente.
-              </motion.p>
-              
-              <motion.div 
-                className={styles.heroCtas}
-                initial="hidden"
-                animate="visible"
-                variants={fadeInUp}
-                custom={3}
-              >
-                <Link href="/dashboard" className="btn-primary" style={{ padding: '1.2rem 2.5rem', fontSize: '1.2rem' }}>
-                   Lanzar Suite Pro <FiArrowRight />
-                </Link>
-                <button 
-                  onClick={() => document.getElementById('demo-section')?.scrollIntoView({ behavior: 'smooth' })}
-                  className="btn-secondary" 
-                  style={{ padding: '1.2rem 2.5rem', fontSize: '1.2rem' }}
-                >
-                  Ver Experiencia <FiPlay />
-                </button>
+              <motion.div initial="hidden" animate="visible" variants={fadeInUp} custom={0} className={styles.heroBadge} style={{ border: '1px solid rgba(0,112,255,0.3)', background: 'rgba(0,112,255,0.05)' }}>
+                <FiZap style={{ color: '#0070f3' }} /> Inteligencia Artificial de Clase Mundial, para Todos.
               </motion.div>
 
-              <motion.div 
-                className={styles.heroStats}
-                initial="hidden"
-                animate="visible"
-                variants={fadeInUp}
-                custom={4}
-              >
-                <div className={styles.statItem}>
-                  <strong>+95%</strong>
-                  <span>Precisión IA</span>
-                </div>
-                <div className={styles.statDivider}></div>
-                <div className={styles.statItem}>
-                  <strong>24/7</strong>
-                  <span>Operación</span>
-                </div>
-                <div className={styles.statDivider}></div>
-                <div className={styles.statItem}>
-                  <strong>&lt; 2s</strong>
-                  <span>Respuesta</span>
-                </div>
+              <motion.h1 className={styles.heroTitle} initial="hidden" animate="visible" variants={fadeInUp} custom={1}>
+                El Ecosistema IA <br />
+                <span style={{ color: 'var(--accent-blue)', textShadow: '0 0 40px rgba(0, 112, 255, 0.4)', display: 'inline-block', minWidth: '320px' }}>
+                  {words[index]}
+                </span>
+              </motion.h1>
+
+              <motion.p className={styles.heroSubtitle} initial="hidden" animate="visible" variants={fadeInUp} custom={2}>
+                No importa si trabajas solo, tienes una tienda online o diriges una multinacional. Stratix transforma tu atención al cliente y ventas en un sistema automático que no duerme.
+              </motion.p>
+
+              <motion.div className={styles.heroCtas} initial="hidden" animate="visible" variants={fadeInUp} custom={3}>
+                <Link href="/dashboard" className="btn-primary" style={{ padding: '1.2rem 2.5rem', fontSize: '1.2rem', boxShadow: '0 10px 30px rgba(0,112,255,0.25)' }}>
+                  Crear mi Cuenta Gratis <FiArrowRight />
+                </Link>
+                <button onClick={() => document.getElementById('demo-section')?.scrollIntoView({ behavior: 'smooth' })} className="btn-secondary" style={{ padding: '1.2rem 2.5rem', fontSize: '1.2rem', backdropFilter: 'blur(10px)' }}>
+                  Pruébalo ahora <FiPlay />
+                </button>
               </motion.div>
             </div>
 
-            <motion.div 
-              className={styles.heroVisual}
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.5, duration: 1 }}
-            >
+            <motion.div className={styles.heroVisual} initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.5, duration: 1 }}>
               <div className={styles.masterMockup}>
-                 <div className={styles.mockupGlass}>
-                    <div className={styles.mockupHeader}>
-                      <div className={styles.mockupDots}><span></span><span></span><span></span></div>
-                      <div className={styles.mockupTopBar}>Opal Intelligence Active</div>
-                    </div>
-                    <div className={styles.mockupContent}>
-                       <div className={styles.chatMessage}>
-                         <div className={styles.aiAvatar}>AX</div>
-                         <p>Analizando interés del lead... detectada intención de compra alta (98%). Activando protocolo Stratix.</p>
-                       </div>
-                       <div className={styles.chatMessageUser}>
-                         <p>Me interesa el plan Enterprise para mi equipo de 50 personas.</p>
-                       </div>
-                       <div className={styles.analysisCard}>
-                         <div className={styles.analysisHeader}>
-                           <FiCpu /> <span>Lead Scoring Engine</span>
-                         </div>
-                         <div className={styles.analysisStats}>
-                            <div className={styles.aStat}><span>Intent</span><strong>Ventas</strong></div>
-                            <div className={styles.aStat}><span>Score</span><strong style={{ color: '#ff4d4d' }}>Hot 🔥</strong></div>
-                         </div>
-                       </div>
-                    </div>
-                 </div>
-                 <div className={styles.mockupGlow}></div>
+                <div className={styles.mockupGlass} style={{ border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(15, 23, 42, 0.6)' }}>
+                  <div className={styles.mockupHeader}>
+                    <div className={styles.mockupDots}><span></span><span></span><span></span></div>
+                    <div className={styles.mockupTopBar} style={{ color: '#888' }}>Asistente Inteligente Activo</div>
+                  </div>
+                  <div className={styles.mockupContent}>
+                    <div className={styles.chatMessage}><div className={styles.aiAvatar} style={{ background: '#0070f3' }}>AI</div><p>¡Hola! Analicé tu sitio web y tus redes sociales. Ya estoy listo para responder preguntas y cerrar ventas por ti.</p></div>
+                    <div className={styles.chatMessageUser}><p>¡Increíble! ¿Puedes atender mi WhatsApp y mi Instagram al mismo tiempo?</p></div>
+                    <div className={styles.chatMessage}><div className={styles.aiAvatar} style={{ background: '#0070f3' }}>AI</div><p>Sí, atiendo a miles de clientes a la vez en todas tus plataformas, las 24 horas del día. 🚀</p></div>
+                  </div>
+                </div>
+                <div className={styles.mockupGlow}></div>
               </div>
             </motion.div>
           </div>
         </motion.div>
       </section>
 
-      {/* How It Works Layer */}
-      <section className={styles.stepsSection}>
+      {/* Cinta Infinita Universal (Marquee) - Fondo ajustado */}
+      <section style={{ overflow: 'hidden', whiteSpace: 'nowrap', width: '100%', borderTop: '1px solid rgba(255,255,255,0.05)', borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '2rem 0', background: '#060B14', position: 'relative', zIndex: 10 }}>
+        <motion.div
+          animate={{ x: ["0%", "-50%"] }}
+          transition={{ repeat: Infinity, ease: "linear", duration: 25 }}
+          style={{ display: 'inline-flex', gap: '5rem', opacity: 0.6, fontSize: '1.2rem', fontWeight: 'bold', color: '#888' }}
+        >
+          {Array(2).fill(0).map((_, i) => (
+            <div key={i} style={{ display: 'flex', gap: '5rem' }}>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><FiSmartphone color="#25D366" /> WhatsApp Business</span>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><FiInstagram color="#E1306C" /> Instagram Direct</span>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><FiShoppingBag color="#96bf48" /> Shopify & E-commerce</span>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><FiCloud color="#00A4EF" /> Microsoft Azure Ready</span>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><FiDatabase color="#F2C811" /> Excel & Power BI</span>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><FiCheck color="#ff4d4d" /> Hubspot CRM</span>
+            </div>
+          ))}
+        </motion.div>
+      </section>
+
+      {/* Casos de Uso Multi-Público */}
+      <section className={styles.useCasesSection} id="features" style={{ position: 'relative', zIndex: 10, paddingTop: '5rem' }}>
         <div className="container">
-          <SectionHeader 
-            badge="Simplicidad Radical"
-            title="De Cero a Experto en Segundos"
-            subtitle="Tres pasos para activar la suite de inteligencia más potente de tu industria."
-          />
-          <div className={styles.stepsGrid}>
-            <motion.div className={styles.stepCard} variants={fadeInUp} custom={1}>
-              <div className={styles.stepNumber}>01</div>
-              <h3>Scan & Link</h3>
-              <p>Pega tu URL o sube tus manuales. Nuestra IA absorbe cada detalle de tu negocio al instante.</p>
+          <SectionHeader badge="Para todos los tamaños" title="Diseñado para Escalar Contigo" subtitle="Desde tu primer cliente hasta tu millonésima venta. Stratix se adapta a ti." />
+          <div className={styles.useCasesBox}>
+            <motion.div className={styles.useCaseItem} whileHover={{ y: -5 }}>
+              <FiUser style={{ fontSize: '2rem', color: 'var(--accent-blue)', marginBottom: '1rem' }} />
+              <h5>Profesionales y Creadores</h5>
+              <p>Eres una sola persona. Deja que la IA agende tus citas, responda DM's y mande cotizaciones mientras tú te enfocas en tu arte o profesión.</p>
             </motion.div>
-            <motion.div className={styles.stepCard} variants={fadeInUp} custom={2}>
-              <div className={styles.stepNumber}>02</div>
-              <h3>Train DNA</h3>
-              <p>Pomelli y Opal definen tu tono de voz y lógica de ventas. Tu agente no solo habla, ¡convence!</p>
+            <motion.div className={styles.useCaseItem} whileHover={{ y: -5 }}>
+              <FiShoppingBag style={{ fontSize: '2rem', color: 'var(--accent-blue)', marginBottom: '1rem' }} />
+              <h5>PyMEs y Tiendas Online</h5>
+              <p>Conecta todo tu inventario. La IA asesora a tus clientes 24/7, recomienda productos por WhatsApp y recupera carritos abandonados.</p>
             </motion.div>
-            <motion.div className={styles.stepCard} variants={fadeInUp} custom={3}>
-              <div className={styles.stepNumber}>03</div>
-              <h3>Deploy Suite</h3>
-              <p>Inserta el código en tu web o conecta WhatsApp. Empieza a capturar leads calificados 24/7.</p>
+            <motion.div className={styles.useCaseItem} whileHover={{ y: -5 }}>
+              <FiGlobe style={{ fontSize: '2rem', color: 'var(--accent-blue)', marginBottom: '1rem' }} />
+              <h5>Empresas y Corporaciones</h5>
+              <p>Infraestructura Azure, cumplimiento normativo ISO y Big Data. Califica miles de leads al mes y envíalos directo a tu equipo de ventas.</p>
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* The Elite Suite (Google Labs Integration) */}
-      <section className={styles.suiteSection} id="suite">
+      {/* The Elite Suite */}
+      <section className={styles.suiteSection} id="suite" style={{ position: 'relative', zIndex: 10 }}>
         <div className="container">
-          <SectionHeader 
-            badge="El Ecosistema Google"
-            title="Sincronización Total con el Ecosistema"
-            subtitle="No es solo un chatbot. Es una arquitectura coordinada de inteligencias estratégicas."
-          />
-
+          <SectionHeader badge="El Ecosistema Tecnológico" title="Todo lo que necesitas en un solo lugar" subtitle="No necesitas saber programar. Nosotros unimos las piezas complejas por ti." />
           <div className={styles.suiteGrid}>
-            <motion.div 
-              className={`${styles.suiteCard} ${activeTab === 'pomelli' ? styles.activeSuite : ''}`}
-              onMouseEnter={() => setActiveTab('pomelli')}
-              whileHover={{ scale: 1.02 }}
-            >
-              <div className={styles.suiteIcon} style={{ background: 'linear-gradient(135deg, #FF3D00, #FF9100)' }}>
-                <FiStar />
-              </div>
+            <motion.div className={`${styles.suiteCard} ${activeTab === 'pomelli' ? styles.activeSuite : ''}`} onMouseEnter={() => setActiveTab('pomelli')} whileHover={{ scale: 1.02 }} style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}>
+              <div className={styles.suiteIcon} style={{ background: 'linear-gradient(135deg, #FF3D00, #FF9100)' }}><FiStar /></div>
               <div className={styles.suiteBody}>
-                <h3>Pomelli Branding</h3>
-                <p>Nuestra IA analiza tu sitio web y redes sociales (vía Pomelli) para capturar el ADN de tu marca automáticamente.</p>
-                <ul className={styles.suiteList}>
-                  <li><FiCheck /> Extracción de Colores Pro</li>
-                  <li><FiCheck /> Tono de Voz Coherente</li>
-                  <li><FiCheck /> Identidad Visual Única</li>
-                </ul>
+                <h3>Pomelli Branding</h3><p>Le damos a tu IA la personalidad de tu marca. Sonará exactamente como tú o como el mejor vendedor de tu empresa.</p>
               </div>
             </motion.div>
-
-            <motion.div 
-              className={`${styles.suiteCard} ${activeTab === 'stitch' ? styles.activeSuite : ''}`}
-              onMouseEnter={() => setActiveTab('stitch')}
-              whileHover={{ scale: 1.02 }}
-            >
-              <div className={styles.suiteIcon} style={{ background: 'linear-gradient(135deg, #00B0FF, #00E5FF)' }}>
-                <FiLayout />
-              </div>
+            <motion.div className={`${styles.suiteCard} ${activeTab === 'stitch' ? styles.activeSuite : ''}`} onMouseEnter={() => setActiveTab('stitch')} whileHover={{ scale: 1.02 }} style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}>
+              <div className={styles.suiteIcon} style={{ background: 'linear-gradient(135deg, #00B0FF, #00E5FF)' }}><FiLayout /></div>
               <div className={styles.suiteBody}>
-                <h3>Stitch UI Design</h3>
-                <p>Generación instantánea de interfaces adaptativas. Tu chatbot se verá impecable en cualquier dispositivo.</p>
-                <ul className={styles.suiteList}>
-                  <li><FiCheck /> Layouts Glassmorphism</li>
-                  <li><FiCheck /> Animaciones Ultra-fluidas</li>
-                  <li><FiCheck /> Responsive de Alta Gama</li>
-                </ul>
+                <h3>Stitch UI Framework</h3><p>Si lo instalas en tu web, se verá increíble en celulares y computadoras con un diseño moderno y súper rápido.</p>
               </div>
             </motion.div>
-
-            <motion.div 
-              className={`${styles.suiteCard} ${activeTab === 'opal' ? styles.activeSuite : ''}`}
-              onMouseEnter={() => setActiveTab('opal')}
-              whileHover={{ scale: 1.02 }}
-            >
-              <div className={styles.suiteIcon} style={{ background: 'linear-gradient(135deg, #6200EA, #AA00FF)' }}>
-                <FiLayers />
-              </div>
+            <motion.div className={`${styles.suiteCard} ${activeTab === 'opal' ? styles.activeSuite : ''}`} onMouseEnter={() => setActiveTab('opal')} whileHover={{ scale: 1.02 }} style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}>
+              <div className={styles.suiteIcon} style={{ background: 'linear-gradient(135deg, #6200EA, #AA00FF)' }}><FiLayers /></div>
               <div className={styles.suiteBody}>
-                <h3>Opal Logic Builder</h3>
-                <p>Configura el comportamiento de tu IA mediante nodos lógicos. Potencia sin necesidad de código.</p>
-                <ul className={styles.suiteList}>
-                  <li><FiCheck /> Árboles de Decisión IA</li>
-                  <li><FiCheck /> Integración de Datos Real</li>
-                  <li><FiCheck /> Flujos de Venta Proactivos</li>
-                </ul>
+                <h3>Opal Logic Core</h3><p>El "cerebro". La IA sabe cuándo un cliente solo está preguntando y cuándo está listo para comprar para avisarte al instante.</p>
               </div>
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* ROI & Comparison Section: Traditional vs Stratix */}
-      <section className={styles.roiSection} id="roi">
+      {/* Pricing Universal */}
+      <section className={styles.pricingSection} id="pricing" style={{ position: 'relative', zIndex: 10 }}>
         <div className="container">
-          <SectionHeader 
-            badge="Stratix vs Tradicional"
-            title="El Costo de la Inacción"
-            subtitle="Compara el impacto de automatizar tu estrategia vs. depender de métodos tradicionales."
-          />
+          <SectionHeader badge="Planes Claros" title="Empieza gratis, crece sin límites" subtitle="Tecnología de punta al alcance de tu presupuesto." />
 
-          <div className={styles.roiGrid}>
-            <motion.div className={styles.roiTraditional} initial={{ opacity: 0, x: -50 }} whileInView={{ opacity: 1, x: 0 }}>
-              <h4>Métodos Tradicionales</h4>
-              <p>Agencias externas, equipos humanos limitados.</p>
-              <ul className={styles.roiList}>
-                <li><FiX style={{ color: '#ef4444' }} /> Costos de $1,500+ USD / mes</li>
-                <li><FiX style={{ color: '#ef4444' }} /> Horarios limitados (8/5)</li>
-                <li><FiX style={{ color: '#ef4444' }} /> Lead Scoring manual y lento</li>
-                <li><FiX style={{ color: '#ef4444' }} /> Respuestas en 2-4 horas</li>
-              </ul>
-            </motion.div>
-
-            <div className={styles.roiVs}>VS</div>
-
-            <motion.div className={styles.roiStratix} initial={{ opacity: 0, x: 50 }} whileInView={{ opacity: 1, x: 0 }}>
-              <div className={styles.heroBadge}>Recomendado</div>
-              <h4>Stratix AI Evolution</h4>
-              <p>Tecnología de grado empresarial de Google Labs a tu servicio.</p>
-              <ul className={styles.roiList}>
-                <li><FiCheck /> Inversión desde $49 USD / mes</li>
-                <li><FiCheck /> Disponibilidad total 24/7/365</li>
-                <li><FiCheck /> <b>Opal Intent Detection Instantáneo</b></li>
-                <li><FiCheck /> Respuestas en menos de 2 segundos</li>
-              </ul>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Specialized Use Cases */}
-      <section className={styles.useCasesSection}>
-        <div className="container">
-           <div className={styles.useCasesBox}>
-              <div className={styles.useCaseItem}>
-                 <FiGlobe />
-                 <h5>Inmobiliarias Pro</h5>
-                 <p>Califica leads interesados en propiedades 24/7 y agenda visitas automáticamente.</p>
-              </div>
-              <div className={styles.useCaseItem}>
-                 <FiSmartphone />
-                 <h5>E-commerce High-End</h5>
-                 <p>Pomelli extrae tu catálogo y la IA vende como tu mejor vendedor estrella.</p>
-              </div>
-              <div className={styles.useCaseItem}>
-                 <FiTrendingUp />
-                 <h5>Agencias B2B</h5>
-                 <p>Escala tu captación de clientes sin contratar más personal de ventas.</p>
-              </div>
-           </div>
-        </div>
-      </section>
-
-      {/* Pricing Restoration & Enrichment */}
-      <section className={styles.pricingSection} id="pricing">
-        <div className="container">
-          <SectionHeader 
-            badge="Precios Transparentes"
-            title="Inversión que se Paga Sola"
-            subtitle="Elige el plan que mejor se adapte al volumen de tu operación. Sin contratos ocultos."
-          />
-
-          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '4rem', gap: '1.5rem', flexWrap: 'wrap' }}>
-             <button 
-               onClick={() => setCurrency('USD')} 
-               className={currency === 'USD' ? 'btn-primary' : 'btn-secondary'}
-               style={{ padding: '0.75rem 2rem', fontSize: '1rem', minWidth: '220px', borderRadius: '100px', boxShadow: currency === 'USD' ? '0 10px 30px rgba(0, 112, 255, 0.3)' : 'none' }}
-             >
-               Global Elite (USD)
-             </button>
-             <button 
-               onClick={() => setCurrency('COP')} 
-               className={currency === 'COP' ? 'btn-primary' : 'btn-secondary'}
-               style={{ padding: '0.75rem 2rem', fontSize: '1rem', minWidth: '220px', borderRadius: '100px', boxShadow: currency === 'COP' ? '0 10px 30px rgba(0, 112, 255, 0.3)' : 'none' }}
-             >
-               Mercado Colombia (COP)
-             </button>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '4rem', gap: '2rem' }}>
+            <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
+              <button onClick={() => setCurrency('USD')} className={currency === 'USD' ? 'btn-primary' : 'btn-secondary'} style={{ padding: '0.75rem 2rem', borderRadius: '100px' }}>Precios (USD)</button>
+              <button onClick={() => setCurrency('COP')} className={currency === 'COP' ? 'btn-primary' : 'btn-secondary'} style={{ padding: '0.75rem 2rem', borderRadius: '100px' }}>Colombia (COP)</button>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', backgroundColor: 'rgba(255,255,255,0.05)', padding: '0.5rem', borderRadius: '100px', border: '1px solid rgba(255,255,255,0.1)' }}>
+              <button onClick={() => setBillingCycle('monthly')} style={{ padding: '0.5rem 1.5rem', borderRadius: '100px', border: 'none', backgroundColor: billingCycle === 'monthly' ? 'var(--accent-blue)' : 'transparent', color: billingCycle === 'monthly' ? 'white' : 'var(--text-secondary)', cursor: 'pointer', fontWeight: 'bold', transition: 'all 0.3s' }}>Mensual</button>
+              <button onClick={() => setBillingCycle('annual')} style={{ padding: '0.5rem 1.5rem', borderRadius: '100px', border: 'none', backgroundColor: billingCycle === 'annual' ? 'var(--accent-blue)' : 'transparent', color: billingCycle === 'annual' ? 'white' : 'var(--text-secondary)', cursor: 'pointer', fontWeight: 'bold', transition: 'all 0.3s', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>Anual <span style={{ backgroundColor: '#25D366', color: 'white', fontSize: '0.7rem', padding: '2px 6px', borderRadius: '10px' }}>Ahorra 20%</span></button>
+            </div>
           </div>
 
           <div className={styles.pricingGrid}>
             <motion.div className={styles.priceCard} whileHover={{ y: -10 }}>
               <div className={styles.pHeader}>
-                <h4>Stratix Suite</h4>
-                <div className={styles.priceValue}>
-                  {currency === 'USD' ? '$49' : '$195k'}<span>/mes</span>
-                </div>
-                <p style={{ fontSize: '0.85rem', color: 'var(--text-tertiary)', marginTop: '0.5rem' }}>Perfecto para validar ventas 24/7.</p>
+                <h4>Starter / Freelance</h4><div className={styles.priceValue}>{currency === 'USD' ? `$${getPrice(19, 75)}` : `$${getPrice(19, 75)}k`}<span>/mes</span></div>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-tertiary)', marginTop: '0.5rem' }}>Para creadores y marcas personales.</p>
               </div>
-              <ul className={styles.pFeatures}>
-                <li><FiCheck /> 1 Agente de IA Elite</li>
-                <li><FiCheck /> 1,000 Oportunidades/mes</li>
-                <li><FiCheck /> Entrenamiento Multi-Doc</li>
-                <li><FiCheck /> Soporte Prioritario</li>
-                <li className={styles.disabled}><FiX /> Lead Scoring Opal</li>
-                <li className={styles.disabled}><FiX /> Branding Pomelli</li>
-              </ul>
-              <Link href="/dashboard?upgrade=starter" className="btn-secondary" style={{ width: '100%', marginTop: 'auto' }}>Comenzar Ahora</Link>
+              <ul className={styles.pFeatures}><li><FiCheck /> 1 Agente de IA</li><li><FiCheck /> 500 Conversaciones/mes</li><li><FiCheck /> Integración Web</li></ul>
+              <Link href="/dashboard" className="btn-secondary" style={{ width: '100%', marginTop: 'auto' }}>Empezar Prueba Gratis</Link>
             </motion.div>
 
-            <motion.div className={`${styles.priceCard} ${styles.featuredPrice}`} whileHover={{ y: -10 }}>
-              <div className={styles.featuredBadge}>MÁS VENDIDO — MÁXIMO ROI</div>
+            <motion.div className={`${styles.priceCard} ${styles.featuredPrice}`} whileHover={{ y: -10 }} style={{ border: '1px solid var(--accent-blue)', boxShadow: '0 0 30px rgba(0,112,255,0.15)' }}>
+              <div className={styles.featuredBadge}>MÁS POPULAR — PYMES</div>
               <div className={styles.pHeader}>
-                <h4>Elite Strategic</h4>
-                <div className={styles.priceValue}>
-                  {currency === 'USD' ? '$99' : '$395k'}<span>/mes</span>
-                </div>
-                <p style={{ fontSize: '0.85rem', color: 'var(--text-tertiary)', marginTop: '0.5rem' }}>Domina tu nicho con inteligencia total.</p>
+                <h4>Business Pro</h4><div className={styles.priceValue}>{currency === 'USD' ? `$${getPrice(49, 195)}` : `$${getPrice(49, 195)}k`}<span>/mes</span></div>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-tertiary)', marginTop: '0.5rem' }}>Para negocios y tiendas online.</p>
               </div>
-              <ul className={styles.pFeatures}>
-                <li><FiCheck /> 3 Agentes de IA Elite</li>
-                <li><FiCheck /> 5,000 Oportunidades/mes</li>
-                <li><FiCheck /> <b>Opal Intent Detection</b></li>
-                <li><FiCheck /> <b>Pomelli Brand Kit</b></li>
-                <li><FiCheck /> WhatsApp Business Ready</li>
-                <li><FiCheck /> Soporte 24/7</li>
-              </ul>
-              <Link href="/dashboard?upgrade=pro" className="btn-primary" style={{ animation: 'pulse-blue 2s infinite', width: '100%', marginTop: 'auto' }}>Elevar Estrategia</Link>
+              <ul className={styles.pFeatures}><li><FiCheck /> 3 Agentes de IA</li><li><FiCheck /> 2,500 Conversaciones/mes</li><li><FiCheck /> <b>Conexión a WhatsApp e IG</b></li><li><FiCheck /> Lead Scoring Automático</li></ul>
+              <Link href="/dashboard" className="btn-primary" style={{ animation: 'pulse-blue 2s infinite', width: '100%', marginTop: 'auto' }}>Crear Cuenta Pro</Link>
             </motion.div>
 
             <motion.div className={styles.priceCard} whileHover={{ y: -10 }}>
               <div className={styles.pHeader}>
-                <h4>Legendary (Enterprise)</h4>
-                <div className={styles.priceValue}>
-                  {currency === 'USD' ? '$249' : '$995k'}<span>/mes</span>
-                </div>
-                <p style={{ fontSize: '0.85rem', color: 'var(--text-tertiary)', marginTop: '0.5rem' }}>Personalización absoluta y escala masiva.</p>
+                <h4>Enterprise</h4><div className={styles.priceValue}>{currency === 'USD' ? `$${getPrice(199, 795)}` : `$${getPrice(199, 795)}k`}<span>/mes</span></div>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-tertiary)', marginTop: '0.5rem' }}>Para agencias y corporaciones.</p>
               </div>
-              <ul className={styles.pFeatures}>
-                <li><FiCheck /> Agentes Ilimitados</li>
-                <li><FiCheck /> Oportunidades Ilimitadas</li>
-                <li><FiCheck /> Integración API Full</li>
-                <li><FiCheck /> <b>White-Label Suite</b></li>
-                <li><FiCheck /> Account Manager Dedicado</li>
-                <li><FiCheck /> SLA Empresarial</li>
-              </ul>
-              <Link href="/dashboard?upgrade=enterprise" className="btn-secondary" style={{ width: '100%', marginTop: 'auto' }}>Consultoría Ejecutiva</Link>
+              <ul className={styles.pFeatures}><li><FiCheck /> Agentes Ilimitados</li><li><FiCheck /> Conversaciones Ilimitadas</li><li><FiCheck /> Integración API & CRM (Hubspot)</li><li><FiCheck /> Soporte Dedicado 24/7</li></ul>
+              <Link href="/dashboard" className="btn-secondary" style={{ width: '100%', marginTop: 'auto' }}>Contactar Ventas</Link>
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* Testimonials Section (Social Proof) */}
-      <section className={styles.testimonialsSection}>
+      {/* El Manifiesto - Fondo ajustado al azul oscuro */}
+      <section className={styles.companySection} id="company" style={{ position: 'relative', zIndex: 10, padding: '6rem 0', backgroundColor: '#060B14', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
         <div className="container">
-          <SectionHeader 
-            badge="Opiniones de Élite"
-            title="Liderazgo B2B Real"
-            subtitle="Mira cómo Stratix AI está transformando equipos de ventas en sistemas de alto rendimiento."
+          <SectionHeader
+            badge="Nuestro Propósito"
+            title="La Inteligencia Artificial no debería ser un lujo."
+            subtitle="Creemos en democratizar la tecnología de grado empresarial para que cualquier negocio, sin importar su tamaño, pueda competir a nivel global."
           />
-          <div className={styles.testimonialsGrid}>
-            <motion.div className={styles.testiCard} whileHover={{ y: -5 }}>
-              <div className={styles.testiStars}><FiStar/><FiStar/><FiStar/><FiStar/><FiStar/></div>
-              <p>"Redujimos el tiempo de respuesta de 4 horas a 2 segundos. Las ventas por WhatsApp se dispararon un 40% en el primer mes."</p>
-              <div className={styles.testiUser}>
-                <strong>Carlos R.</strong>
-                <span>Founder, PropTech Solutions</span>
-              </div>
-            </motion.div>
-            <motion.div className={styles.testiCard} whileHover={{ y: -5 }}>
-              <div className={styles.testiStars}><FiStar/><FiStar/><FiStar/><FiStar/><FiStar/></div>
-              <p>"El Lead Scoring de Opal es brujería. Solo hablamos con gente que ya está lista para comprar. El ROI fue inmediato."</p>
-              <div className={styles.testiUser}>
-                <strong>Laura M.</strong>
-                <span>Sales VP, High-End E-commerce</span>
-              </div>
-            </motion.div>
-            <motion.div className={styles.testiCard} whileHover={{ y: -5 }}>
-              <div className={styles.testiStars}><FiStar/><FiStar/><FiStar/><FiStar/><FiStar/></div>
-              <p>"La estética de Stitch hizo que el bot se viera parte de nuestra marca, no un pegote barato. Nuestros clientes están impresionados."</p>
-              <div className={styles.testiUser}>
-                <strong>Andrés S.</strong>
-                <span>Director Creativo, Agency X</span>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
+          <div className={styles.companyGrid} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '3rem', marginTop: '2rem' }}>
 
-      {/* Live Demo Experience */}
-      <section className={styles.demoSection} id="demo-section">
-        <div className="container">
-          <SectionHeader 
-            badge="Live Experience"
-            title="Vive la Suite en Vivo"
-            subtitle="Interactúa con nuestro Asistente Estratégico y descubre cómo Stratix AI puede transformar tu negocio en segundos."
-          />
-          
-          <div className={styles.demoBox}>
-            <div className={styles.demoPhone}>
-              <div className={styles.phoneHeader}>
-                <div className={styles.phoneStatus}>
-                   <div className={styles.statusDot} style={{ background: 'var(--success)' }}></div>
-                   <span>Stratix Assistant Online</span>
-                </div>
-              </div>
-              <div className={styles.phoneScreen}>
-                {/* Visual representation of the chat */}
-                <div className={styles.demoChatContainer}>
-                   <div className={styles.demoMsg}>Hola, soy el Agente de Stratix. ¿Cómo puedo ayudarte a escalar hoy?</div>
-                   <div className={styles.demoMsgUser}>¿Cómo funciona el Lead Scoring de Opal?</div>
-                   <div className={styles.demoMsg}>Opal detecta la intención de compra en tiempo real. Si un cliente está listo, te lo notifico al instante como un lead 'Hot' en tu CRM. 🔥</div>
-                </div>
-                <div className={styles.phoneInput}>
-                  Escribe un mensaje...
-                  <FiArrowRight style={{ color: 'var(--accent-blue)' }} />
-                </div>
-              </div>
-            </div>
-            
-            <div className={styles.demoInfo}>
-              <div className={styles.demoFeature}>
-                <FiZap />
-                <div>
-                  <h6>Respuesta Ultra-Rápida</h6>
-                  <p>Menos de 2 segundos impulsado por Google Gemini 1.5 Pro.</p>
-                </div>
-              </div>
-              <div className={styles.demoFeature}>
-                <FiShield />
-                <div>
-                  <h6>Privacidad Blindada</h6>
-                  <p>Tus datos se procesan en entornos seguros de Google Cloud.</p>
-                </div>
-              </div>
-              <div style={{ marginTop: '2rem' }}>
-                <Link href="/dashboard" className="btn-primary" style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-                   Adquirir este Agente para mi Web
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ Restoration */}
-      {/* Company Section: Mission & Vision */}
-      <section className={styles.companySection} id="company">
-        <div className="container">
-          <SectionHeader 
-            badge="Nuestra Esencia"
-            title="Sólidos en Propósito, Élite en Ejecución"
-            subtitle="Stratix AI no es solo software; es la evolución de la productividad B2B."
-          />
-          
-          <div className={styles.companyGrid}>
-            <motion.div className={styles.companyCard} initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }}>
-              <div className={styles.companyIcon}><FiZap /></div>
-              <h4>Nuestra Misión</h4>
-              <p>
-                Automatizar el crecimiento empresarial mediante tecnología de IA de vanguardia, 
-                eliminando los cuellos de botella humanos para permitir que las empresas escalen 
-                de forma inteligente, eficiente y sin límites.
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ padding: '2.5rem', borderRadius: '16px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}>
+              <FiZap style={{ fontSize: '2rem', color: '#0070f3', marginBottom: '1.5rem' }} />
+              <h4 style={{ fontSize: '1.3rem', marginBottom: '1rem', fontWeight: 'bold' }}>El Manifiesto Stratix</h4>
+              <p style={{ color: 'var(--text-secondary)', lineHeight: '1.7' }}>
+                Nacimos para eliminar los cuellos de botella operativos. Nuestra tecnología está diseñada para que dejes de responder mensajes repetitivos y te enfoques en lo que realmente importa: la estrategia, la creatividad y el crecimiento de tu empresa.
               </p>
             </motion.div>
-            
-            <motion.div className={styles.companyCard} initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2 }}>
-              <div className={styles.companyIcon}><FiGlobe /></div>
-              <h4>Nuestra Visión</h4>
-              <p>
-                Consolidarnos como el estándar global de automatización estratégica, donde cada 
-                interacción empresarial sea potenciada por un agente inteligente que actúe como 
-                un copiloto de alto rendimiento.
+
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} style={{ padding: '2.5rem', borderRadius: '16px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}>
+              <FiGlobe style={{ fontSize: '2rem', color: '#0070f3', marginBottom: '1.5rem' }} />
+              <h4 style={{ fontSize: '1.3rem', marginBottom: '1rem', fontWeight: 'bold' }}>Visión Global</h4>
+              <p style={{ color: 'var(--text-secondary)', lineHeight: '1.7' }}>
+                Aspiramos a ser el motor invisible detrás del millón de empresas más eficientes del mundo. Construimos infraestructura robusta, segura y ética que actúa como un aliado estratégico, trabajando incansablemente 24/7.
               </p>
             </motion.div>
+
           </div>
         </div>
       </section>
 
-      <section className={styles.faqSection} id="faq">
+      {/* FAQ */}
+      {/* FAQ Ampliado y Estratégico */}
+      <section className={styles.faqSection} id="faq" style={{ position: 'relative', zIndex: 10 }}>
         <div style={{ width: '100%', maxWidth: '1200px', margin: '0 auto', padding: '0 20px', textAlign: 'center' }}>
-          <SectionHeader 
-            badge="Preguntas Frecuentes"
-            title="Despeja tus Dudas"
-            subtitle="Todo lo que necesitas saber para empezar a escalar hoy mismo."
-          />
-
-          <div className={styles.faqList} style={{ margin: '0 auto' }}>
+          <SectionHeader badge="Preguntas Frecuentes" title="Todo lo que necesitas saber" subtitle="Derribamos tus dudas para que empieces a escalar hoy mismo." />
+          <div className={styles.faqList} style={{ margin: '0 auto', textAlign: 'left' }}>
             {[
               {
-                q: "¿Qué diferencia a Stratix AI de un chatbot tradicional?",
-                a: "A diferencia de los chatbots básicos, Stratix utiliza una suite integrada: Pomelli captura el ADN de tu marca, Stitch diseña una interfaz de alta gama, y Opal aplica lógica de ventas avanzada. No solo responde dudas; califica prospectos y agenda citas de manera autónoma."
+                q: "¿Necesito conocimientos técnicos o saber programar para usar Stratix?",
+                a: "¡Para nada! La plataforma está diseñada con una interfaz intuitiva (Stitch UI). Solo necesitas pegar el enlace de tu sitio web o subir tus manuales en PDF, y nuestra IA estructurará su propio conocimiento en menos de 2 minutos."
               },
               {
-                q: "¿Cómo entrena Stratix AI con la información de mi negocio?",
-                a: "Muy fácil. Puedes subir archivos PDF, TXT o simplemente darnos la URL de tu sitio web. Nuestra IA 'escanea' y procesa toda la información para estar lista en menos de 2 minutos."
+                q: "¿Qué pasa si la IA no sabe una respuesta o el cliente pide un humano?",
+                a: "Stratix cuenta con un protocolo de 'Hand-off' inteligente. Si detecta una consulta fuera de su entrenamiento o una solicitud explícita de soporte humano, pausa la automatización y notifica a tu equipo para que tomen el control del chat sin que el cliente note la transición."
               },
               {
-                q: "¿Puedo usar Stratix AI en WhatsApp y mi CRM?",
-                a: "Absolutamente. Stratix es omnicanal. Puedes integrar tu agente en tu sitio web, WhatsApp Business, y conectarlo con tu CRM (Hubspot, Zoho, etc.) vía Webhooks para que cada lead detectado por nuestra IA llegue directo a tu equipo de ventas."
+                q: "¿Puedo conectar la IA con mis herramientas actuales (Shopify, Hubspot, etc.)?",
+                a: "Absolutamente. Stratix se integra de forma nativa y mediante Webhooks con los CRMs y plataformas de e-commerce más populares del mercado. Los leads calificados por el motor de Opal irán directamente a tu base de datos en tiempo real."
               },
               {
-                q: "¿Qué es el Lead Scoring de Opal y cómo ayuda a mis ventas?",
-                a: "Opal analiza cada interacción en tiempo real y clasifica a tus visitantes como 'Hot', 'Warm' o 'Cold' basándose en su intención de compra detectada. Así, tu equipo comercial recibe solo los prospectos que realmente están listos para comprar."
+                q: "¿La Inteligencia Artificial puede atender en otros idiomas?",
+                a: "Sí, el ecosistema de Stratix es multilingüe por naturaleza. Puede conversar fluidamente en más de 50 idiomas, detectando y adaptándose automáticamente al idioma en el que tu cliente inicie la conversación."
               },
               {
-                q: "¿Es seguro el manejo de los datos de mi empresa?",
-                a: "La seguridad es nuestra prioridad. Utilizamos encriptación de grado empresarial y cumplimos con los estándares de privacidad de datos de Google Cloud, asegurando que tu información y la de tus clientes esté siempre protegida."
+                q: "¿Qué sucede si mi negocio crece y supero el límite de mi plan?",
+                a: "Tu operación nunca se detendrá. Te notificaremos cuando estés al 90% de tu capacidad mensual. Podrás escalar al siguiente nivel con un solo clic o, si lo prefieres, pagar un micro-cargo por cada conversación adicional sin cambiar de plan."
+              },
+              {
+                q: "¿Están seguros los datos confidenciales de mi empresa y mis clientes?",
+                a: "La seguridad es el pilar de nuestra arquitectura. Operamos bajo modelos Zero Trust apoyados en la infraestructura de Microsoft Azure y Google Cloud. Cumplimos con estándares ISO para garantizar que tu información esté encriptada y jamás se use para entrenar modelos públicos."
               }
             ].map((item, idx) => (
               <div key={idx} className={`${styles.faqItem} ${openFaq === idx ? styles.faqOpen : ''}`} onClick={() => setOpenFaq(openFaq === idx ? null : idx)}>
-                <div className={styles.faqQuestion}>
-                  {item.q}
-                  <FiChevronDown />
-                </div>
+                <div className={styles.faqQuestion} style={{ fontWeight: 'bold' }}>{item.q} <FiChevronDown /></div>
                 <AnimatePresence>
                   {openFaq === idx && (
-                    <motion.div 
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      className={styles.faqAnswer}
-                    >
-                      <p>{item.a}</p>
+                    <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className={styles.faqAnswer}>
+                      <p style={{ marginTop: '1rem', color: 'var(--text-secondary)', lineHeight: '1.6' }}>{item.a}</p>
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -674,86 +366,33 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* CTA Final */}
-      <section className={styles.ctaFinal}>
+      {/* Footer Completo */}
+      <footer className={styles.footer} style={{ position: 'relative', zIndex: 10, backgroundColor: '#060B14' }}>
         <div className="container">
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className={styles.ctaBox}
-          >
-            <h2>¿Listo para optimizar tu Estrategia?</h2>
-            <p>Únete a las empresas que ya están automatizando su crecimiento con IA.</p>
-            <div className={styles.ctaActions}>
-              <Link href="/dashboard" className="btn-primary" style={{ padding: '1.2rem 3.5rem', fontSize: '1.1rem' }}>Comenzar Ahora</Link>
-              <button 
-                onClick={() => document.getElementById('demo-section')?.scrollIntoView({ behavior: 'smooth' })}
-                className="btn-secondary" 
-                style={{ padding: '1.2rem 3.5rem', fontSize: '1.1rem' }}
-              >
-                Ver Demo en Vivo
-              </button>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Footer Enriquecido */}
-      <footer className={styles.footer}>
-        <div className="container">
-          <div className={styles.footerTrust}>
-            <div className={styles.trustItem}><FiShield /> <span>Pagos Encriptados 256-bit</span></div>
-            <div className={styles.trustItem}><FiLock /> <span>Nivel Bancario (PCI-DSS)</span></div>
-            <div className={styles.trustItem}><FiCheck /> <span>Infraestructura Google Cloud</span></div>
-            <div className={styles.trustItem}><FiStar /> <span>Soporte Elite 24/7</span></div>
-          </div>
           <div className={styles.footerGrid}>
             <div className={styles.footerBrand}>
-            <div className={styles.footerLogo}>
-              <img src="/stratix_shield.png" alt="Stratix Logo" className={styles.logoImage} />
-              <span>Strat<span style={{ color: 'var(--accent-blue)' }}>ix</span> AI</span>
-            </div>
-            <p>La Arquitectura de Inteligencia Estratégica.</p>
-              <div className={styles.socialLinks}>
-                <a href="#"><FiInstagram /></a>
-                <a href="#"><FiLinkedin /></a>
+              <div className={styles.footerLogo}>
+                <img src="/stratix_shield.png" alt="Stratix Logo" className={styles.logoImage} />
+                <span>Strat<span style={{ color: 'var(--accent-blue)' }}>ix</span> AI</span>
               </div>
+              <p>Haciendo la Inteligencia Artificial accesible para todos.</p>
+              <div className={styles.socialLinks}><a href="#"><FiInstagram /></a><a href="#"><FiLinkedin /></a></div>
             </div>
             <div className={styles.footerCol}>
-              <h4>Compañía</h4>
-              <ul className={styles.footerLinks}>
-                <li><a href="#company" onClick={(e) => { e.preventDefault(); document.getElementById('company')?.scrollIntoView({ behavior: 'smooth' }); }}>Nuestra Misión</a></li>
-                <li><a href="#company" onClick={(e) => { e.preventDefault(); document.getElementById('company')?.scrollIntoView({ behavior: 'smooth' }); }}>Nuestra Visión</a></li>
-                <li><a href="https://wa.me/573152597199" target="_blank" rel="noopener noreferrer">Contacto Directo</a></li>
-              </ul>
+              <h4>Compañía</h4><ul className={styles.footerLinks}><li><a href="#company" onClick={(e) => { e.preventDefault(); document.getElementById('company')?.scrollIntoView({ behavior: 'smooth' }); }}>El Manifiesto</a></li><li><a href="https://wa.me/573152597199" target="_blank">Contacto Directo</a></li></ul>
             </div>
             <div className={styles.footerCol}>
-              <h4>Legal</h4>
-              <ul className={styles.footerLinks}>
-                <li><Link href="/legal/terms">Términos</Link></li>
-                <li><Link href="/legal/privacy">Privacidad</Link></li>
-              </ul>
+              <h4>Legal</h4><ul className={styles.footerLinks}><li><Link href="/legal/terms">Términos de Servicio</Link></li><li><Link href="/legal/privacy">Política de Privacidad</Link></li></ul>
             </div>
             <div className={styles.footerCol}>
-              <h4>Producto</h4>
-              <ul className={styles.footerLinks}>
-                <li><a href="#features">Tecnología</a></li>
-                <li><a href="#pricing">Planes</a></li>
-                <li><a href="#demo-section">Demo</a></li>
-              </ul>
+              <h4>Producto</h4><ul className={styles.footerLinks}><li><a href="#features">Funcionalidades</a></li><li><a href="#pricing">Planes y Precios</a></li></ul>
             </div>
           </div>
           <div className={styles.footerBottom}>
             <p>© 2026 Stratix AI. Todos los derechos reservados.</p>
-            <p>Powered by <b>Advanced Agentic Coding</b></p>
           </div>
         </div>
       </footer>
     </div>
   );
-}
-
-function FiX(props: any) {
-    return <svg {...props} stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>;
 }

@@ -1,14 +1,14 @@
 
 # 🟢 Guía Maestra: Conexión de WhatsApp Cloud API
 
-Sigue estos pasos para que tu bot de Arsenex AI empiece a responder por WhatsApp.
+Sigue estos pasos para que tu bot de Stratix AI empiece a responder por WhatsApp.
 
 ## 1. Crear una App en Meta for Developers
 1. Ve a [developers.facebook.com](https://developers.facebook.com/) e inicia sesión.
 2. Haz clic en **"Mis aplicaciones"** -> **"Crear aplicación"**.
 3. Selecciona el tipo de app **"Otro"** -> **"Siguiente"**.
 4. Elige **"Empresa"** como tipo de aplicación.
-5. Dale un nombre (ej. `Arsenex AI_Bot`) y confirma.
+5. Dale un nombre (ej. `Stratix AI_Bot`) y confirma.
 
 ## 2. Configurar el Producto de WhatsApp
 1. En el panel lateral, busca **"WhatsApp"** y haz clic en **"Configurar"**.
