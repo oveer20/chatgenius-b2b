@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { 
   FiArrowRight, FiCheck, FiCpu, FiLayout, FiTarget, FiZap, FiShield, 
   FiChevronDown, FiPlayCircle, FiActivity, FiSmartphone, FiShoppingCart, 
-  FiDatabase, FiGlobe, FiClock, FiLayers, FiUsers 
+  FiDatabase, FiGlobe, FiClock, FiLayers, FiUsers, FiBox 
 } from "react-icons/fi";
 
 export default function LandingPage() {
@@ -15,7 +15,7 @@ export default function LandingPage() {
   return (
     <div style={{ backgroundColor: '#060B14', minHeight: '100vh', color: 'white', fontFamily: 'system-ui, sans-serif', overflowX: 'hidden' }}>
       
-      {/* 1. NAVEGACIÓN PRO */}
+      {/* 1. NAVEGACIÓN ÉLITE */}
       <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.2rem 5%', background: 'rgba(6, 11, 20, 0.95)', backdropFilter: 'blur(15px)', position: 'sticky', top: 0, zIndex: 100, borderBottom: '1px solid rgba(212, 175, 55, 0.1)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <FiShield style={{ color: '#D4AF37', fontSize: '1.8rem' }} />
@@ -44,7 +44,7 @@ export default function LandingPage() {
         </motion.div>
       </header>
 
-      {/* 3. MÉTRICAS DE IMPACTO (NUEVO) */}
+      {/* 3. MÉTRICAS DE IMPACTO */}
       <section style={{ padding: '4rem 5%', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '3rem', borderTop: '1px solid rgba(255,255,255,0.05)', borderBottom: '1px solid rgba(255,255,255,0.05)', textAlign: 'center' }}>
         <div><h2 style={{ fontSize: '3rem', fontWeight: 900, color: '#D4AF37' }}>99.9%</h2><p style={{ opacity: 0.5, fontSize: '0.8rem', letterSpacing: '1px' }}>UPTIME OPERATIVO</p></div>
         <div><h2 style={{ fontSize: '3rem', fontWeight: 900, color: '#D4AF37' }}>24/7</h2><p style={{ opacity: 0.5, fontSize: '0.8rem', letterSpacing: '1px' }}>VENTAS AUTÓNOMAS</p></div>
@@ -52,21 +52,26 @@ export default function LandingPage() {
         <div><h2 style={{ fontSize: '3rem', fontWeight: 900, color: '#D4AF37' }}>+10k</h2><p style={{ opacity: 0.5, fontSize: '0.8rem', letterSpacing: '1px' }}>LEADS PROCESADOS</p></div>
       </section>
 
-      {/* 4. CÓMO FUNCIONA (NUEVO) */}
-      <section style={{ padding: '8rem 5%', textAlign: 'center' }}>
-        <h2 style={{ fontSize: '2.5rem', fontWeight: 900, marginBottom: '5rem' }}>Tres Pasos hacia la <span style={{ color: '#D4AF37' }}>Eficiencia</span></h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '4rem', maxWidth: '1100px', margin: '0 auto' }}>
-          {[
-            { n: "01", t: "Conecta", d: "Vincula tu WhatsApp o Instagram en un clic con Stitch UI." },
-            { n: "02", t: "Entrena", d: "Inyecta tu base de conocimientos en el cerebro de Opal Logic." },
-            { n: "03", t: "Escala", d: "Tu agente empieza a cerrar ventas y calificar leads de inmediato." }
-          ].map((step, i) => (
-            <div key={i} style={{ position: 'relative' }}>
-              <span style={{ fontSize: '5rem', fontWeight: 900, opacity: 0.05, position: 'absolute', top: '-40px', left: '50%', transform: 'translateX(-50%)', color: '#D4AF37' }}>{step.n}</span>
-              <h3 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '1rem', position: 'relative' }}>{step.t}</h3>
-              <p style={{ opacity: 0.5, lineHeight: 1.6 }}>{step.d}</p>
-            </div>
-          ))}
+      {/* 4. FLEXIBILIDAD TOTAL: ESCALAR */}
+      <section style={{ padding: '8rem 5%' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <div style={{ marginBottom: '5rem', textAlign: 'center' }}>
+            <h2 style={{ fontSize: '3rem', fontWeight: 900, marginBottom: '1rem' }}>Diseñado para Escalar</h2>
+            <p style={{ fontSize: '1.2rem', opacity: 0.4 }}>Desde marcas personales hasta corporaciones multinacionales.</p>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '2.5rem' }}>
+            {[
+              { t: "Profesionales", d: "Agende citas y responda DMs mientras se enfoca en su arte.", i: <FiSmartphone /> },
+              { t: "PyMEs y Tiendas Online", d: "La IA vende por usted en WhatsApp 24/7 y recupera carritos.", i: <FiShoppingCart /> },
+              { t: "Empresas", d: "Infraestructura robusta para calificar y procesar miles de leads.", i: <FiDatabase /> }
+            ].map((item, i) => (
+              <div key={i} style={{ padding: '3rem', background: 'rgba(255,255,255,0.02)', borderRadius: '30px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                <div style={{ color: '#D4AF37', fontSize: '2rem', marginBottom: '1.5rem' }}>{item.i}</div>
+                <h3 style={{ fontSize: '1.6rem', marginBottom: '1rem', fontWeight: 800 }}>{item.t}</h3>
+                <p style={{ opacity: 0.5, lineHeight: 1.7 }}>{item.d}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -75,9 +80,9 @@ export default function LandingPage() {
         <h2 style={{ textAlign: 'center', fontSize: '3rem', fontWeight: 900, marginBottom: '5rem' }}>Ecosistema <span style={{ color: '#D4AF37' }}>Labs</span></h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '2.5rem', maxWidth: '1200px', margin: '0 auto' }}>
           {[
-            { t: "Pomelli Branding", d: "Personalidad y voz de marca inconfundible.", i: <FiZap /> },
-            { t: "Stitch UI", d: "Interfaces táctiles diseñadas para dispositivos móviles.", i: <FiLayout /> },
-            { t: "Opal Logic", d: "Detección estratégica de intenciones de compra.", i: <FiTarget /> }
+            { t: "Pomelli Branding", d: "Le damos a su IA la personalidad y voz exacta de su marca corporativa.", i: <FiZap /> },
+            { t: "Stitch UI", d: "Interfaz fluida y moderna que se adapta a cualquier dispositivo táctil.", i: <FiLayout /> },
+            { t: "Opal Logic", d: "El cerebro estratégico que detecta intenciones de compra y califica leads.", i: <FiTarget /> }
           ].map((item, i) => (
             <div key={i} style={{ padding: '3.5rem 2.5rem', background: 'rgba(255,255,255,0.01)', borderRadius: '30px', border: '1px solid rgba(212,175,55,0.1)', textAlign: 'center' }}>
               <div style={{ color: '#D4AF37', fontSize: '2.5rem', marginBottom: '1.5rem' }}>{item.i}</div>
@@ -88,7 +93,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 6. DEMO INTERACTIVO */}
+      {/* 6. DEMO DEMOSTRATIVO */}
       <section id="demo" style={{ padding: '8rem 5%', textAlign: 'center' }}>
          <div style={{ maxWidth: '1000px', margin: '0 auto', background: '#000', borderRadius: '40px', border: '1px solid rgba(212,175,55,0.3)', padding: '3rem', textAlign: 'left', position: 'relative', overflow: 'hidden' }}>
             <div style={{ display: 'flex', gap: '10px', marginBottom: '2rem' }}>
@@ -105,31 +110,7 @@ export default function LandingPage() {
          </div>
       </section>
 
-      {/* 7. BENTO GRID DE BENEFICIOS (NUEVO) */}
-      <section style={{ padding: '8rem 5%' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gridAutoRows: '200px', gap: '1.5rem', maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ gridColumn: 'span 2', background: 'rgba(212,175,55,0.05)', borderRadius: '25px', padding: '2rem', border: '1px solid rgba(212,175,55,0.2)' }}>
-            <FiShield style={{ color: '#D4AF37', fontSize: '2rem' }} />
-            <h3 style={{ marginTop: '1rem', fontWeight: 800 }}>Seguridad AES-256</h3>
-            <p style={{ opacity: 0.5, fontSize: '0.9rem' }}>Tus datos empresariales están blindados bajo protocolos de grado militar.</p>
-          </div>
-          <div style={{ gridRow: 'span 2', background: 'rgba(255,255,255,0.02)', borderRadius: '25px', padding: '2rem', border: '1px solid rgba(255,255,255,0.05)' }}>
-            <FiGlobe style={{ color: '#D4AF37', fontSize: '2rem' }} />
-            <h3 style={{ marginTop: '1rem', fontWeight: 800 }}>Políglota Nativo</h3>
-            <p style={{ opacity: 0.5, fontSize: '0.9rem' }}>Atención fluida en más de 50 idiomas sin errores de traducción.</p>
-          </div>
-          <div style={{ background: 'rgba(255,255,255,0.02)', borderRadius: '25px', padding: '2rem', border: '1px solid rgba(255,255,255,0.05)' }}>
-            <FiClock style={{ color: '#D4AF37', fontSize: '1.5rem' }} />
-            <h4 style={{ fontWeight: 800 }}>Respuesta Instantánea</h4>
-          </div>
-          <div style={{ background: 'rgba(212,175,55,0.1)', borderRadius: '25px', padding: '2rem', border: '1px solid #D4AF37' }}>
-            <FiLayers style={{ color: '#000', fontSize: '1.5rem' }} />
-            <h4 style={{ fontWeight: 800, color: '#000' }}>Escalabilidad Infinita</h4>
-          </div>
-        </div>
-      </section>
-
-      {/* 8. PLANES */}
+      {/* 7. PLANES */}
       <section id="planes" style={{ padding: '8rem 5%' }}>
         <h2 style={{ textAlign: 'center', fontSize: '3rem', fontWeight: 900, marginBottom: '5rem' }}>Inversión <span style={{ color: '#D4AF37' }}>Estratégica</span></h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2.5rem', maxWidth: '1200px', margin: '0 auto' }}>
@@ -150,31 +131,31 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 9. PROPÓSITO, MISIÓN Y VISIÓN (EXPANDIDO) */}
+      {/* 8. PROPÓSITO, MISIÓN Y VISIÓN (RECUPERADO) */}
       <section id="proposito" style={{ padding: '8rem 5%', background: 'linear-gradient(to bottom, #060B14, #0B1120)', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
         <div style={{ maxWidth: '900px', margin: '0 auto', textAlign: 'center' }}>
           <h2 style={{ fontSize: '2.5rem', fontWeight: 900, marginBottom: '2rem' }}>La IA no debería ser un lujo.</h2>
-          <p style={{ fontSize: '1.2rem', opacity: 0.6, lineHeight: 1.8, marginBottom: '5rem' }}>Democratizando tecnología de grado empresarial para el crecimiento global y la soberanía tecnológica de los creadores.</p>
+          <p style={{ fontSize: '1.2rem', opacity: 0.6, lineHeight: 1.8, marginBottom: '5rem' }}>Democratizando tecnología de grado empresarial para el crecimiento global.</p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '4rem', textAlign: 'left' }}>
             <div>
               <h4 style={{ color: '#D4AF37', fontWeight: 900, marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '8px' }}><FiGlobe /> VISIÓN STRATIX</h4>
-              <p style={{ fontSize: '0.9rem', opacity: 0.4, lineHeight: 1.7 }}>Eliminamos cuellos de botella operativos para que usted se enfoque en la creatividad. Construimos el aliado estratégico que trabaja 24/7 sin descanso.</p>
+              <p style={{ fontSize: '0.9rem', opacity: 0.4, lineHeight: 1.7 }}>Eliminamos cuellos de botella operativos para que usted se enfoque en la creatividad. Construimos el aliado estratégico que trabaja 24/7.</p>
             </div>
             <div>
               <h4 style={{ color: '#D4AF37', fontWeight: 900, marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '8px' }}><FiBox /> MISIÓN ÉLITE</h4>
-              <p style={{ fontSize: '0.85rem', opacity: 0.4, lineHeight: 1.7 }}>Proveer infraestructura táctica de IA que permita a marcas personales y empresas escalar su impacto sin necesidad de grandes equipos humanos.</p>
+              <p style={{ fontSize: '0.85rem', opacity: 0.4, lineHeight: 1.7 }}>Proveer infraestructura táctica de IA que permita a marcas personales y empresas escalar su impacto sin límites humanos.</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 10. FAQ INTERACTIVO */}
+      {/* 9. FAQ COMPLETO */}
       <section style={{ padding: '8rem 5%', background: '#060B14' }}>
         <h2 style={{ textAlign: 'center', fontSize: '2.5rem', fontWeight: 900, marginBottom: '4rem' }}>Preguntas <span style={{ color: '#D4AF37' }}>Frecuentes</span></h2>
         <div style={{ maxWidth: '750px', margin: '0 auto' }}>
           {[
             { q: "¿Necesito saber programar?", a: "No. Stratix está diseñado con una interfaz Stitch UI intuitiva para que configures todo sin tocar código." },
-            { q: "¿En qué idiomas atiende?", a: "Nuestros agentes son políglotas nativos. Pueden conversar en más de 50 idiomas con fluidez perfecta." },
+            { q: "¿Qué pasa si la IA no sabe responder?", a: "El sistema detecta la duda y escala el lead automáticamente a tu equipo humano." },
             { q: "¿Es segura mi información?", a: "Absolutamente. Usamos encriptación de grado militar y aislamiento de datos para cada cliente." }
           ].map((item, i) => (
             <div key={i} onClick={() => setActiveFaq(activeFaq === i ? null : i)} style={{ padding: '1.8rem', borderBottom: '1px solid rgba(255,255,255,0.05)', cursor: 'pointer' }}>
@@ -192,19 +173,10 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 11. FINAL CTA (NUEVO) */}
-      <section style={{ padding: '8rem 5%', textAlign: 'center' }}>
-        <div style={{ background: 'linear-gradient(135deg, #0B1120 0%, #060B14 100%)', padding: '5rem 2rem', borderRadius: '40px', border: '1px solid rgba(212,175,55,0.2)', maxWidth: '1000px', margin: '0 auto' }}>
-          <h2 style={{ fontSize: '3rem', fontWeight: 900, marginBottom: '1.5rem' }}>¿Listo para el <span style={{ color: '#D4AF37' }}>Siguiente Nivel</span>?</h2>
-          <p style={{ opacity: 0.5, marginBottom: '3rem', fontSize: '1.1rem' }}>Únase a los creadores y empresas que ya están automatizando su éxito.</p>
-          <Link href="/login" style={{ padding: '20px 50px', backgroundColor: '#D4AF37', color: '#000', borderRadius: '15px', fontWeight: 900, textDecoration: 'none', fontSize: '1.2rem', boxShadow: '0 10px 40px rgba(212,175,55,0.3)' }}>Comenzar Despliegue Gratis</Link>
-        </div>
-      </section>
-
-      {/* FOOTER CORPORATIVO */}
+      {/* 10. FOOTER CORPORATIVO */}
       <footer style={{ padding: '5rem 5% 3rem', borderTop: '1px solid rgba(255,255,255,0.05)', textAlign: 'center' }}>
         <div style={{ display: 'flex', justifyContent: 'center', gap: '3rem', marginBottom: '3rem', opacity: 0.5, fontSize: '0.9rem', fontWeight: 600 }}>
-          <span>Tecnología</span> <span>Planes</span> <span>Privacidad</span> <span>Términos</span>
+          <span>Tecnología</span> <span>Planes</span> <span>Contacto</span>
         </div>
         <p style={{ opacity: 0.3, fontSize: '0.8rem' }}>© 2026 Stratix AI — Architectural Strategic Intelligence. Cartagena, CO.</p>
       </footer>
