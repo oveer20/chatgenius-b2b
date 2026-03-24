@@ -5,43 +5,48 @@ export async function POST(request: NextRequest) {
   try {
     const rawBody = await request.text();
     const body = rawBody ? JSON.parse(rawBody) : {};
-    
-    const { messages, systemPrompt, knowledgeBase, temperature } = body;
+
+    const { messages, systemPrompt, knowledgeBase, model, temperature } = body;
 
     if (!messages || !Array.isArray(messages)) {
-      return NextResponse.json({ error: "Messages array is required" }, { status: 400 });
+      return NextResponse.json({ error: "Se requiere un array de mensajes válido" }, { status: 400 });
     }
 
+    // Configuración del Promt Maestro de Élite
     const fullSystemPrompt = `
-      ${systemPrompt || "Eres un asistente de IA útil."}
+      IDENTIDAD: Eres un Agente de Inteligencia Estratégica de Stratix AI. 
+      TU TONO: Profesional, arquitectónico, ejecutivo y altamente resolutivo.
       
-      CONTEXTO DE LA EMPRESA:
+      BASE DE CONOCIMIENTO (NÚCLEO):
       ---
-      ${knowledgeBase || "No hay información adicional disponible."}
+      ${knowledgeBase || "Utiliza tu base de conocimientos general con enfoque corporativo."}
       ---
       
-      INSTRUCCIONES PRO (OPAL STYLE):
-      - Analiza la temperatura del lead (INTERÉS): Cold (poco interés), Warm (preguntas específicas), Hot (listo para comprar/agendar).
-      - Detecta el INTENTO del usuario: Sales, Support, Information, Technical, or Complaint.
-      - Al final de tu respuesta, SIEMPRE incluye un bloque JSON oculto con este formato exacto:
+      DIRECTRICES ESTRATÉGICAS:
+      ${systemPrompt || "Ayuda al usuario a escalar su negocio con soluciones inteligentes."}
+
+      INSTRUCCIONES PRO (OPAL LOGIC):
+      1. Evalúa el INTERÉS del lead: Cold (curiosidad), Warm (interés técnico/específico), Hot (intención clara de compra/agendamiento).
+      2. Clasifica el INTENTO: Sales, Support, Information, Technical, or Complaint.
+      3. Al final de tu respuesta, SIEMPRE inserta este bloque JSON oculto:
         [[META:{"intent": "detected_intent", "score": "detected_score_name", "confidence": 0-100}]]
       
-      Responde siempre basándote en el contexto anterior.
+      IMPORTANTE: No menciones que eres una IA a menos que se te pregunte directamente. Responde con la precisión que un usuario de iPhone 16 Pro Max esperaría.
     `;
 
-    // Check if Gemini API key is configured
+    // Verificación de Seguridad de la Llave
     if (!process.env.GOOGLE_GEMINI_API_KEY) {
-       return NextResponse.json({
-         message: {
-           role: "assistant",
-           content: "⚠️ Configura tu GOOGLE_GEMINI_API_KEY en Vercel para activar la IA gratuita."
-         }
-       });
+      return NextResponse.json({
+        message: {
+          role: "assistant",
+          content: "⚠️ Sincronización fallida: Falta la llave maestra de Google en el servidor. Contacta a Camilo Pascuas."
+        }
+      });
     }
 
     const text = await getGeminiResponse(messages, fullSystemPrompt);
 
-    // Extract Metadata Opal Style
+    // Extracción de Metadatos Opal Logic
     let intent = "Information";
     let score = "Cold";
     let cleanText = text;
@@ -54,11 +59,11 @@ export async function POST(request: NextRequest) {
         score = meta.score || score;
         cleanText = text.replace(/\[\[META:[\s\S]*?\]\]/, "").trim();
       } catch (e) {
-        console.error("Error parsing Opal Meta:", e);
+        console.error("Error en el parseo de Opal Meta:", e);
       }
     }
 
-    return NextResponse.json({ 
+    return NextResponse.json({
       message: {
         role: "assistant",
         content: cleanText
@@ -69,23 +74,23 @@ export async function POST(request: NextRequest) {
         timestamp: new Date().toISOString()
       }
     });
+
   } catch (error: any) {
-    console.error("/// CHAT API ERROR (GEMINI) ///");
-    console.error(error);
-    
+    console.error("/// CRITICAL STRATIX API ERROR ///");
+
     const isQuotaExceeded = error.message?.includes("429") || error.message?.includes("quota") || error.toString().includes("429");
 
     if (isQuotaExceeded) {
-      return NextResponse.json({ 
+      return NextResponse.json({
         message: {
           role: "assistant",
-          content: "🤖 Estoy recibiendo muchas consultas en este momento. Por favor, dame unos 10 segundos para procesar todo y vuelve a preguntarme. ¡Gracias por tu paciencia!"
+          content: "🤖 El núcleo de procesamiento está al máximo de su capacidad. Por favor, espera 10 segundos mientras reequilibramos la carga estratégica."
         }
       });
     }
 
     return NextResponse.json(
-      { error: "Lo siento, el motor de IA está ocupado. Intenta de nuevo en un momento." },
+      { error: "El motor de IA está en mantenimiento preventivo. Intenta en un momento." },
       { status: 500 }
     );
   }
