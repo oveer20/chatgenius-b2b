@@ -30,9 +30,9 @@ export default function DashboardPage() {
   const [user, setUser] = useState<any>(null);
 
   const analyticsData = [
-    { name: 'Lun', leads: 4, msgs: 120 }, { name: 'Mar', leads: 6, msgs: 145 },
-    { name: 'Mie', leads: 8, msgs: 180 }, { name: 'Jue', leads: 10, msgs: 210 },
-    { name: 'Vie', leads: 12, msgs: 240 }, { name: 'Sab', leads: 5, msgs: 95 },
+    { name: 'Lun', leads: 4, msgs: 120 }, { name: 'Mar', leads: 6, msgs: 145 }, 
+    { name: 'Mie', leads: 8, msgs: 180 }, { name: 'Jue', leads: 10, msgs: 210 }, 
+    { name: 'Vie', leads: 12, msgs: 240 }, { name: 'Sab', leads: 5, msgs: 95 }, 
     { name: 'Dom', leads: 3, msgs: 70 },
   ];
 
@@ -52,7 +52,7 @@ export default function DashboardPage() {
       // Cargar Agentes
       const { data: bData } = await supabase.from("bots").select("*").order("updated_at", { ascending: false });
       if (bData) setBots(bData);
-
+      
       // Cargar Leads con el nombre del bot asociado
       const { data: lData } = await supabase.from("leads").select("*, bots(name)").order("created_at", { ascending: false });
       if (lData) setLeads(lData);
@@ -69,7 +69,7 @@ export default function DashboardPage() {
 
   return (
     <div className={styles.dashboard} style={{ backgroundColor: '#0B1120', minHeight: '100vh', color: 'white' }}>
-
+      
       {/* Sidebar Elite */}
       <aside className={styles.sidebar} style={{ borderRight: '1px solid rgba(212, 175, 55, 0.1)', background: '#060B14' }}>
         <Link href="/" className={styles.logo} style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px', padding: '2rem' }}>
@@ -91,11 +91,11 @@ export default function DashboardPage() {
 
         <div className={styles.sidebarFooter} style={{ padding: '2rem', marginTop: 'auto' }}>
           <div style={{ background: 'rgba(212, 175, 55, 0.05)', border: '1px solid rgba(212, 175, 55, 0.2)', padding: '10px', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <FiStar style={{ color: '#D4AF37' }} />
+            <FiStar style={{ color: '#D4AF37' }} /> 
             <span style={{ fontWeight: 800, color: '#D4AF37', fontSize: '0.7rem', textTransform: 'uppercase' }}>Pioneer Access</span>
           </div>
           <button onClick={handleLogout} className={styles.logoutBtn} style={{ marginTop: '1.5rem', background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <FiLogOut /> Cerrar Sesión
+             <FiLogOut /> Cerrar Sesión
           </button>
         </div>
       </aside>
@@ -108,20 +108,20 @@ export default function DashboardPage() {
               <FiShield /> AES-256 SECURE
             </div>
           </div>
-
+          
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
             <div style={{ textAlign: 'right' }}>
               <span style={{ fontSize: '0.7rem', color: '#D4AF37', fontWeight: 800, display: 'block', letterSpacing: '0.05em' }}>BIENVENIDO, ELITE</span>
               <span style={{ fontSize: '1rem', fontWeight: 600 }}>{user?.display_name || "Cargando..."}</span>
             </div>
             <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'rgba(212,175,55,0.1)', border: '1px solid #D4AF37', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <FiUser color="#D4AF37" />
+               <FiUser color="#D4AF37" />
             </div>
           </div>
         </header>
 
         <div style={{ marginTop: '3rem' }}>
-
+          
           {/* PESTAÑA: AGENTES */}
           {activeTab === "agents" && (
             <motion.div initial="hidden" animate="visible" variants={fadeInUp}>
@@ -191,8 +191,7 @@ export default function DashboardPage() {
                           </span>
                         </td>
                         <td style={{ padding: '1.2rem 1rem' }}>
-                          <div style={{
-                            display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 800,
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 800,
                             color: lead.score === 'Hot' ? '#ef4444' : lead.score === 'Warm' ? '#f59e0b' : '#3b82f6'
                           }}>
                             <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: lead.score === 'Hot' ? '#ef4444' : lead.score === 'Warm' ? '#f59e0b' : '#3b82f6', boxShadow: `0 0 10px ${lead.score === 'Hot' ? '#ef4444' : lead.score === 'Warm' ? '#f59e0b' : '#3b82f6'}` }} />
