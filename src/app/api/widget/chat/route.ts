@@ -2,9 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { getGeminiResponse } from "@/lib/gemini";
 
-// Public API for the chat widget
 export async function POST(request: NextRequest) {
-  // Service role client to bypass RLS for bot lookup
+  // Cliente administrativo para bypass de RLS en el ecosistema Stratix
   const supabaseAdmin = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL || "",
     process.env.SUPABASE_SERVICE_ROLE_KEY || ""
@@ -16,13 +15,12 @@ export async function POST(request: NextRequest) {
     const { messages, botId, sessionId } = body;
 
     if (!messages || !botId) {
-      return NextResponse.json({ error: "Missing parameters" }, { status: 400 });
+      return NextResponse.json({ error: "Parámetros de conexión insuficientes" }, { status: 400 });
     }
 
-    // --- SESSION & PERSISTENCE (Phase 23) ---
+    // --- PERSISTENCIA ESTRATÉGICA (Sesiones de Inteligencia) ---
     let chatId: string | null = null;
     if (sessionId) {
-      // 1. Check if chat exists
       const { data: existingChat } = await supabaseAdmin
         .from("chats")
         .select("id")
@@ -33,7 +31,6 @@ export async function POST(request: NextRequest) {
       if (existingChat) {
         chatId = existingChat.id;
       } else {
-        // 2. Create new chat
         const { data: newChat } = await supabaseAdmin
           .from("chats")
           .insert([{ session_id: sessionId, bot_id: botId }])
@@ -42,9 +39,9 @@ export async function POST(request: NextRequest) {
         if (newChat) chatId = newChat.id;
       }
 
-      // 3. Save User Message
+      // Registro de interacción del usuario
       const lastUserMessage = messages[messages.length - 1];
-      if (lastUserMessage && lastUserMessage.role === 'user' && chatId) {
+      if (lastUserMessage?.role === 'user' && chatId) {
         await supabaseAdmin.from("messages").insert([{
           chat_id: chatId,
           role: 'user',
@@ -52,9 +49,8 @@ export async function POST(request: NextRequest) {
         }]);
       }
     }
-    // ----------------------------------------
 
-    // 1. Fetch bot from Supabase
+    // 1. Obtención del Activo IA y Perfil del Propietario
     const { data: bot, error: botError } = await supabaseAdmin
       .from("bots")
       .select("name, system_prompt, knowledge_base, user_id")
@@ -62,11 +58,9 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (botError || !bot) {
-      console.error("Error fetching bot for widget:", botError);
-      return NextResponse.json({ error: "Bot not found" }, { status: 404 });
+      return NextResponse.json({ error: "Activo IA no localizado en el núcleo" }, { status: 404 });
     }
 
-    // 1b. Fetch owner profile separately
     const { data: profile } = await supabaseAdmin
       .from("profiles")
       .select("plan, messages_sent_this_month")
@@ -74,59 +68,58 @@ export async function POST(request: NextRequest) {
       .single();
 
     const owner: any = profile || { plan: 'free', messages_sent_this_month: 0 };
-    
-    // 2. Check Plan Quotas (Phase 22)
+
+    // 2. Validación de Cuotas de Servicio (SLA)
     if (owner.plan === 'free' && owner.messages_sent_this_month >= 500) {
       return NextResponse.json({
-        // System message to reset or confirm training
         message: {
-          role: "system",
-          content: `Eres el Asistente Estratégico de Stratix AI. Tu objetivo es ayudar a los usuarios basándote EXCLUSIVAMENTE en la información proporcionada. Si no sabes algo, responde cortésmente e invita a contactar a soporte humano: https://wa.me/573152597199`
+          role: "assistant",
+          content: "SISTEMA: El límite de consultas gratuitas para este activo ha sido alcanzado. Contacte al administrador de Stratix para escalar el plan."
         }
       });
     }
 
-    // 3. Build the context-aware system prompt
-    const branding = owner.plan === 'enterprise' 
-      ? "\nMARCA DE AGUA: No mencionas a Stratix AI. Eres una solución 100% marca blanca."
-      : "";
+    // 3. Arquitectura del Prompt de Élite
+    const branding = owner.plan === 'enterprise'
+      ? "MARCA BLANCA: Actúa como una solución interna propia de la empresa. No menciones proveedores externos."
+      : "IDENTIDAD: Eres un asistente potenciado por la tecnología de Stratix AI.";
 
     const fullSystemPrompt = `
-      Eres un asistente de IA experto para la empresa: ${bot.name}.
+      NÚCLEO DE OPERACIÓN: Eres el asistente experto de la empresa: ${bot.name}.
       
-      INSTRUCCIONES DE PERSONALIDAD:
+      PERSONALIDAD Y TONO:
       ---
-      ${bot.system_prompt || "Responde de forma concisa y profesional. Si no sabes algo, pide el correo para contactar después."}
+      ${bot.system_prompt || "Responde de forma ejecutiva, concisa y profesional."}
       ${branding}
       ---
       
-      BASE DE CONOCIMIENTO (CONFIANZA TOTAL):
+      BASE DE CONOCIMIENTO (NÚCLEO DE CONFIANZA):
       ---
-      ${bot.knowledge_base || "No hay información adicional disponible."}
+      ${bot.knowledge_base || "No hay información adicional. Limítate a funciones de asistencia general."}
       ---
 
-      INSTRUCCIONES PRO (OPAL STYLE):
-      - Analiza la temperatura del lead (INTERÉS): Cold (poco interés), Warm (preguntas específicas), Hot (listo para comprar/agendar).
-      - Detecta el INTENTO del usuario: Sales, Support, Information, Technical, or Complaint.
-      - Al final de tu respuesta, SIEMPRE incluye un bloque JSON oculto con este formato exacto:
-        [[META:{"intent": "detected_intent", "score": "detected_score_name", "confidence": 0-100}]]
+      PROTOCOLOS DE INTELIGENCIA (OPAL LOGIC):
+      1. ANALIZA EL LEAD (SCORE): Cold (curiosidad), Warm (interés técnico), Hot (listo para conversión/cierre).
+      2. DETECTA EL INTENTO: Sales, Support, Information, Technical, or Complaint.
+      3. METADATOS OBLIGATORIOS: Al final de cada respuesta, inserta:
+         [[META:{"intent": "detected_intent", "score": "detected_score_name", "confidence": 0-100}]]
       
-      REGLA CRÍTICA: Responde ÚNICAMENTE basándote en la base de conocimiento y tus instrucciones de personalidad.
+      REGLA MAESTRA: Tu conocimiento se limita ESTRICTAMENTE a la base proporcionada. Si no sabes la respuesta, ofrece contactar a un especialista humano.
     `;
 
+    // 4. Procesamiento en el Núcleo Gemini
     if (!process.env.GOOGLE_GEMINI_API_KEY) {
-       return NextResponse.json({
-         message: {
-           role: "assistant",
-           content: "🚀 Stratix Demo: Configura tu GOOGLE_GEMINI_API_KEY para activar la IA en producción."
-         }
-       });
-     }
+      return NextResponse.json({
+        message: {
+          role: "assistant",
+          content: "⚠️ ERROR DE NÚCLEO: Clave de IA no configurada. Contacte a Camilo Pascuas."
+        }
+      });
+    }
 
-    // 5. Get response from Gemini
     const text = await getGeminiResponse(messages, fullSystemPrompt);
 
-    // 6. Extract Metadata Opal Style (Phase 25)
+    // 5. Extracción de Inteligencia Opal
     let intent = "Information";
     let score = "Cold";
     let cleanText = text;
@@ -139,14 +132,13 @@ export async function POST(request: NextRequest) {
         score = meta.score || score;
         cleanText = text.replace(/\[\[META:[\s\S]*?\]\]/, "").trim();
       } catch (e) {
-        console.error("Error parsing Opal Meta:", e);
+        console.error("Error en el parseo de Opal Meta:", e);
       }
     }
 
-    // 7. Increment message count
+    // 6. Registro de Actividad y Actualización de Lead (CRM)
     await supabaseAdmin.rpc('increment_message_count', { user_uuid: bot.user_id });
 
-    // 8. Save Assistant Message & Update Lead Intelligence (Pro)
     if (chatId) {
       await supabaseAdmin.from("messages").insert([{
         chat_id: chatId,
@@ -157,20 +149,18 @@ export async function POST(request: NextRequest) {
       if (sessionId) {
         await supabaseAdmin
           .from("leads")
-          .update({ intent, score })
+          .update({ intent, score, updated_at: new Date().toISOString() })
           .eq("session_id", sessionId);
       }
     }
 
-    return NextResponse.json({ 
-      message: {
-        role: "assistant",
-        content: cleanText
-      },
+    return NextResponse.json({
+      message: { role: "assistant", content: cleanText },
       analysis: { intent, score }
     });
+
   } catch (error: any) {
-    console.error("Widget API error:", error);
-    return NextResponse.json({ error: `Error de red: ${error.message}` }, { status: 500 });
+    console.error("/// CRITICAL WIDGET API ERROR ///", error);
+    return NextResponse.json({ error: "Interrupción en el flujo de datos estratégicos." }, { status: 500 });
   }
 }
