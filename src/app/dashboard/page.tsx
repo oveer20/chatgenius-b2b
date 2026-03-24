@@ -12,19 +12,11 @@ import {
   FiStar,
   FiArrowRight,
   FiZap,
-  FiDatabase,
-  FiCode,
-  FiCopy,
   FiCheck,
-  FiBox,
   FiTrendingUp,
   FiUsers,
-  FiPhone,
-  FiExternalLink,
-  FiActivity,
-  FiTrash2,
-  FiGlobe,
-  FiShield
+  FiShield,
+  FiUser
 } from "react-icons/fi";
 import {
   BarChart,
@@ -60,57 +52,46 @@ interface Bot {
 }
 
 export default function DashboardPage() {
-  const [activeTab, setActiveTab] = useState<"agents" | "leads" | "chats" | "analytics" | "settings">("agents");
+  const [activeTab, setActiveTab] = useState<"agents" | "leads" | "analytics" | "settings">("agents");
   const [bots, setBots] = useState<Bot[]>([]);
-  const [leads, setLeads] = useState<any[]>([]);
-  const [chats, setChats] = useState<any[]>([]);
-  const [selectedChat, setSelectedChat] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [copiedId, setCopiedId] = useState<string | null>(null);
-  const [isUpgrading, setIsUpgrading] = useState(false);
   const [user, setUser] = useState<any>(null);
-  const [currency, setCurrency] = useState<'USD' | 'COP'>('USD');
 
-  // Datos de analíticas con colores corporativos
+  // Analíticas con estética Stratix Gold
   const analyticsData = [
-    { name: 'Lun', leads: 4, msgs: 120 }, { name: 'Mar', leads: 6, msgs: 145 }, { name: 'Mie', leads: 8, msgs: 180 },
-    { name: 'Jue', leads: 10, msgs: 210 }, { name: 'Vie', leads: 12, msgs: 240 }, { name: 'Sab', leads: 5, msgs: 95 }, { name: 'Dom', leads: 3, msgs: 70 },
+    { name: 'Lun', leads: 4, msgs: 120 },
+    { name: 'Mar', leads: 6, msgs: 145 },
+    { name: 'Mie', leads: 8, msgs: 180 },
+    { name: 'Jue', leads: 10, msgs: 210 },
+    { name: 'Vie', leads: 12, msgs: 240 },
+    { name: 'Sab', leads: 5, msgs: 95 },
+    { name: 'Dom', leads: 3, msgs: 70 },
   ];
 
   useEffect(() => {
-    async function getUser() {
+    async function getUserData() {
       const { data: { user } } = await supabase.auth.getUser();
-      setUser(user);
       if (user) {
-        const { data: profile } = await supabase.from("profiles").select("plan").eq("id", user.id).single();
-        if (profile) setUser((prev: any) => ({ ...prev, plan: profile.plan }));
+        // Extraemos el nombre de los metadatos guardados en el registro
+        const fullName = user.user_metadata?.full_name || user.email?.split('@')[0];
+        setUser({
+          ...user,
+          display_name: fullName,
+          plan: "Pioneer Elite"
+        });
       }
     }
-    getUser();
+    getUserData();
   }, []);
 
   useEffect(() => {
     async function fetchData() {
       const { data: bData } = await supabase.from("bots").select("*").order("updated_at", { ascending: false });
       if (bData) setBots(bData);
-
-      const { data: lData } = await supabase.from("leads").select("*, bots(name)").order("created_at", { ascending: false });
-      if (lData) setLeads(lData);
-
-      const { data: cData } = await supabase.from("chats").select("*, bots(name), messages(*)").order("created_at", { ascending: false });
-      if (cData) setChats(cData);
-
       setLoading(false);
     }
     fetchData();
   }, []);
-
-  const handleCopySnippet = (botId: string) => {
-    const snippet = `<script src="https://stratix-ai.vercel.app/widget.js" data-bot-id="${botId}"></script>`;
-    navigator.clipboard.writeText(snippet);
-    setCopiedId(botId);
-    setTimeout(() => setCopiedId(null), 2000);
-  };
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -118,15 +99,16 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className={styles.dashboard} style={{ backgroundColor: '#0B1120' }}>
-      {/* Sidebar con Logo SVG Dorado */}
-      <aside className={styles.sidebar} style={{ borderRight: '1px solid rgba(212, 175, 55, 0.1)' }}>
-        <Link href="/" className={styles.logo}>
-          <img src="/stratix_shield.svg" alt="Stratix Logo" className={styles.logoImage} style={{ width: '32px' }} />
-          <span style={{ fontFamily: 'var(--font-display)', fontWeight: 800 }}>Strat<span style={{ color: '#D4AF37' }}>ix</span> AI</span>
+    <div className={styles.dashboard} style={{ backgroundColor: '#0B1120', minHeight: '100vh', color: 'white' }}>
+
+      {/* Sidebar Elite */}
+      <aside className={styles.sidebar} style={{ borderRight: '1px solid rgba(212, 175, 55, 0.1)', background: '#060B14' }}>
+        <Link href="/" className={styles.logo} style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px', padding: '2rem' }}>
+          <img src="/stratix_shield.svg" alt="Stratix Logo" style={{ width: '32px' }} />
+          <span style={{ fontSize: '1.2rem', fontWeight: 800, color: 'white' }}>Strat<span style={{ color: '#D4AF37' }}>ix</span> AI</span>
         </Link>
 
-        <nav className={styles.nav}>
+        <nav className={styles.nav} style={{ padding: '0 1rem' }}>
           <button className={`${styles.navItem} ${activeTab === "agents" ? styles.navItemActive : ""}`} onClick={() => setActiveTab("agents")}>
             <FiMessageSquare /> Mis Agentes Elite
           </button>
@@ -141,92 +123,97 @@ export default function DashboardPage() {
           </button>
         </nav>
 
-        <div className={styles.sidebarFooter}>
-          <div className={styles.planBadge} style={{ background: 'rgba(212, 175, 55, 0.05)', border: '1px solid rgba(212, 175, 55, 0.2)' }}>
+        <div className={styles.sidebarFooter} style={{ padding: '2rem', marginTop: 'auto' }}>
+          <div style={{ background: 'rgba(212, 175, 55, 0.05)', border: '1px solid rgba(212, 175, 55, 0.2)', padding: '10px', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
             <FiStar style={{ color: '#D4AF37' }} />
-            <span style={{ fontWeight: 800, color: '#D4AF37', textTransform: 'uppercase', fontSize: '0.7rem' }}>
-              Pioneer Elite Access
-            </span>
+            <span style={{ fontWeight: 800, color: '#D4AF37', fontSize: '0.7rem', textTransform: 'uppercase' }}>Pioneer Access</span>
           </div>
-          <button onClick={handleLogout} className={styles.logoutBtn} style={{ marginTop: '1rem' }}>
+          <button onClick={handleLogout} className={styles.logoutBtn} style={{ marginTop: '1.5rem', background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}>
             <FiLogOut /> Cerrar Sesión
           </button>
         </div>
       </aside>
 
       {/* Main Content */}
-      <main className={styles.main}>
-        <header className={styles.header} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '1.5rem' }}>
+      <main className={styles.main} style={{ padding: '2rem' }}>
+        <header className={styles.header} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '1.5rem' }}>
           <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-            <div className={styles.securityBadge} style={{ border: '1px solid rgba(212,175,55,0.3)', color: '#D4AF37' }}>
-              <FiShield /> Encryption: AES-256
-            </div>
-            <div className={styles.securityBadge} style={{ background: 'rgba(16, 185, 129, 0.1)', color: '#10b981' }}>
-              Status: Live
+            <div style={{ border: '1px solid rgba(212,175,55,0.3)', padding: '4px 12px', borderRadius: '20px', color: '#D4AF37', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '5px' }}>
+              <FiShield /> AES-256 SECURE
             </div>
           </div>
-          <div className={styles.userProfile}>
-            <span style={{ fontSize: '0.9rem', fontWeight: 600 }}>{user?.email || "oveer20@icloud.com"}</span>
+
+          {/* Perfil de Usuario Personalizado */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <div style={{ textAlign: 'right' }}>
+              <span style={{ fontSize: '0.7rem', color: '#D4AF37', fontWeight: 800, display: 'block', letterSpacing: '0.05em' }}>BIENVENIDO, ELITE</span>
+              <span style={{ fontSize: '1rem', fontWeight: 600 }}>{user?.display_name || "Camilo Pascuas"}</span>
+            </div>
+            <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'rgba(212,175,55,0.1)', border: '1px solid #D4AF37', display: 'flex', alignItems: 'center', justifyCenter: 'center' }}>
+              <FiUser color="#D4AF37" style={{ margin: 'auto' }} />
+            </div>
           </div>
         </header>
 
-        <div style={{ marginTop: '2rem' }}>
+        <div style={{ marginTop: '3rem' }}>
           {activeTab === "agents" && (
             <motion.div initial="hidden" animate="visible" variants={fadeInUp}>
-              <div className={styles.header}>
-                <h1 style={{ fontSize: '2rem', fontWeight: 900 }}>Gestión de Activos IA</h1>
-                <Link href="/dashboard/bot/new" className="btn-primary" style={{ background: '#D4AF37', color: '#000' }}>
-                  <FiPlus /> Crear Agente Elite
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+                <h1 style={{ fontSize: '2rem', fontWeight: 900 }}>Mis Activos IA</h1>
+                <Link href="/dashboard/bot/new" className="btn-primary" style={{ background: '#D4AF37', color: '#000', padding: '10px 20px', borderRadius: '8px', fontWeight: 'bold', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <FiPlus /> Crear Agente
                 </Link>
               </div>
 
-              <div className={styles.resumeGrid} style={{ marginTop: '2rem' }}>
-                {bots.map((bot, i) => (
-                  <div key={bot.id} className="glass-card" style={{ padding: '2rem', border: '1px solid rgba(212,175,55,0.1)' }}>
-                    <h3 style={{ color: '#D4AF37', marginBottom: '1rem' }}>{bot.name}</h3>
-                    <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem' }}>
-                      <span style={{ fontSize: '0.7rem', opacity: 0.6 }}><FiClock /> {new Date(bot.updated_at).toLocaleDateString()}</span>
-                      <span style={{ fontSize: '0.7rem', color: '#10b981' }}><FiCheck /> Activo</span>
-                    </div>
-                    <div style={{ display: 'flex', gap: '0.5rem' }}>
-                      <button onClick={() => handleCopySnippet(bot.id)} className="btn-primary" style={{ flex: 1, fontSize: '0.8rem' }}>
-                        {copiedId === bot.id ? "¡Copiado!" : "Copiar ID"}
-                      </button>
-                      <Link href={`/dashboard/bot/${bot.id}`} className="btn-secondary" style={{ padding: '0.5rem' }}>
-                        <FiSettings />
+              <div className={styles.resumeGrid} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem' }}>
+                {bots.length > 0 ? bots.map((bot, i) => (
+                  <div key={bot.id} style={{ background: 'rgba(255,255,255,0.02)', padding: '2rem', borderRadius: '20px', border: '1px solid rgba(212,175,55,0.1)' }}>
+                    <h3 style={{ color: '#D4AF37', marginBottom: '0.5rem' }}>{bot.name}</h3>
+                    <p style={{ fontSize: '0.8rem', opacity: 0.6, marginBottom: '1.5rem' }}>{bot.model} — Activo</p>
+                    <div style={{ display: 'flex', gap: '10px' }}>
+                      <Link href={`/dashboard/bot/${bot.id}`} style={{ flex: 1, textAlign: 'center', padding: '10px', background: 'rgba(255,255,255,0.05)', borderRadius: '8px', textDecoration: 'none', color: 'white', fontSize: '0.8rem' }}>
+                        Configurar
                       </Link>
+                      <button style={{ padding: '10px', background: '#D4AF37', border: 'none', borderRadius: '8px', cursor: 'pointer' }}>
+                        <FiZap color="#000" />
+                      </button>
                     </div>
                   </div>
-                ))}
+                )) : (
+                  <div style={{ gridColumn: '1/-1', textAlign: 'center', padding: '4rem', opacity: 0.5 }}>
+                    <FiDatabase size={40} style={{ marginBottom: '1rem' }} />
+                    <p>No hay agentes configurados aún.</p>
+                  </div>
+                )}
               </div>
             </motion.div>
           )}
 
           {activeTab === "analytics" && (
             <motion.div initial="hidden" animate="visible" variants={fadeInUp}>
-              <h2 style={{ marginBottom: '2rem' }}>Analítica Estratégica</h2>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', height: '400px' }}>
-                <div className="glass-card" style={{ padding: '1.5rem' }}>
-                  <p style={{ opacity: 0.6, fontSize: '0.8rem', marginBottom: '1rem' }}>CONVERSIÓN DE LEADS</p>
-                  <ResponsiveContainer width="100%" height="90%">
+              <h2 style={{ marginBottom: '2rem' }}>Analítica de Rendimiento</h2>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', height: '350px' }}>
+                <div style={{ background: 'rgba(255,255,255,0.02)', padding: '1.5rem', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                  <p style={{ fontSize: '0.7rem', opacity: 0.5, marginBottom: '1.5rem', fontWeight: 800 }}>CAPTURA DE LEADS (7D)</p>
+                  <ResponsiveContainer width="100%" height="80%">
                     <BarChart data={analyticsData}>
                       <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
-                      <XAxis dataKey="name" stroke="#888" fontSize={12} />
-                      <YAxis stroke="#888" fontSize={12} />
-                      <Tooltip contentStyle={{ background: '#0B1120', border: '1px solid #D4AF37' }} />
+                      <XAxis dataKey="name" stroke="#555" fontSize={10} />
+                      <YAxis stroke="#555" fontSize={10} />
+                      <Tooltip contentStyle={{ background: '#0B1120', border: '1px solid #D4AF37', borderRadius: '8px' }} />
                       <Bar dataKey="leads" fill="#D4AF37" radius={[4, 4, 0, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
-                <div className="glass-card" style={{ padding: '1.5rem' }}>
-                  <p style={{ opacity: 0.6, fontSize: '0.8rem', marginBottom: '1rem' }}>FLUJO DE MENSAJES</p>
-                  <ResponsiveContainer width="100%" height="90%">
+                <div style={{ background: 'rgba(255,255,255,0.02)', padding: '1.5rem', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                  <p style={{ fontSize: '0.7rem', opacity: 0.5, marginBottom: '1.5rem', fontWeight: 800 }}>VOLUMEN DE MENSAJES</p>
+                  <ResponsiveContainer width="100%" height="80%">
                     <LineChart data={analyticsData}>
                       <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
-                      <XAxis dataKey="name" stroke="#888" fontSize={12} />
-                      <YAxis stroke="#888" fontSize={12} />
-                      <Tooltip contentStyle={{ background: '#0B1120', border: '1px solid #D4AF37' }} />
-                      <Line type="monotone" dataKey="msgs" stroke="#D4AF37" strokeWidth={3} dot={{ fill: '#D4AF37' }} />
+                      <XAxis dataKey="name" stroke="#555" fontSize={10} />
+                      <YAxis stroke="#555" fontSize={10} />
+                      <Tooltip contentStyle={{ background: '#0B1120', border: '1px solid #D4AF37', borderRadius: '8px' }} />
+                      <Line type="monotone" dataKey="msgs" stroke="#D4AF37" strokeWidth={3} dot={{ fill: '#D4AF37', r: 4 }} />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
