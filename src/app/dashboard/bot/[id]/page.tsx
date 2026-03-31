@@ -41,6 +41,8 @@ export default function BotEditor() {
   const [leads, setLeads] = useState<any[]>([]);
   const [isLoadingLeads, setIsLoadingLeads] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [crawlerUrl, setCrawlerUrl] = useState("");
+  const [isCrawling, setIsCrawling] = useState(false);
 
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -171,6 +173,35 @@ export default function BotEditor() {
       alert("Fallo en la asimilación: " + err.message);
     } finally {
       setIsUploading(false);
+    }
+  };
+
+  const handleCrawlUrl = async () => {
+    if (!crawlerUrl || !crawlerUrl.startsWith("http")) {
+      alert("Por favor ingresa una URL válida (http/https)");
+      return;
+    }
+    setIsCrawling(true);
+    try {
+      const response = await fetch(`/api/bots/${id}/crawl`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: crawlerUrl })
+      });
+      const data = await response.json();
+      if (data.success) {
+        alert(`¡Página absorbida! Se generaron ${data.chunks} vectores de conocimiento.`);
+        if (data.textSegment) {
+          setKnowledgeBase(prev => prev + `\n\n--- SITE: ${crawlerUrl} ---\n` + data.textSegment + "\n[...]");
+        }
+        setCrawlerUrl(""); // Limpiar
+      } else {
+        throw new Error(data.error);
+      }
+    } catch (err: any) {
+      alert("Fallo al escanear sitio web: " + err.message);
+    } finally {
+      setIsCrawling(false);
     }
   };
 
@@ -362,6 +393,25 @@ export default function BotEditor() {
                         {isUploading ? "SUBIENDO..." : "SUBIR PDF PRO"}
                         <input type="file" accept=".pdf" onChange={handleFileUpload} style={{ display: 'none' }} disabled={isUploading} />
                       </label>
+                    </div>
+
+                    <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem' }}>
+                      <input
+                        type="url"
+                        value={crawlerUrl}
+                        onChange={e => setCrawlerUrl(e.target.value)}
+                        placeholder="https://www.tu-empresa.com"
+                        style={{ flex: 1, padding: '12px', background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(212,175,55,0.3)', borderRadius: '10px', color: 'white', fontSize: '0.85rem' }}
+                        disabled={isCrawling}
+                      />
+                      <button
+                        onClick={handleCrawlUrl}
+                        disabled={isCrawling || !crawlerUrl}
+                        style={{ padding: '0 20px', background: 'rgba(212,175,55,0.1)', color: '#D4AF37', border: '1px solid rgba(212,175,55,0.3)', borderRadius: '10px', fontSize: '0.8rem', fontWeight: 900, cursor: (isCrawling || !crawlerUrl) ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}
+                      >
+                        {isCrawling ? <FiRefreshCw className="spin" /> : <FiGlobe />}
+                        {isCrawling ? "ESCANEANDO..." : "ABSORBER WEB"}
+                      </button>
                     </div>
 
                     <textarea
