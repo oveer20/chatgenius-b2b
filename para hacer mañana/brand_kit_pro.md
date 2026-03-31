@@ -1,40 +1,34 @@
+# 💎 Stratix Intelligence: Brand Kit (The S-Shield Architecture)
 
-# 💎 Arsenex AI Pro: Brand Kit (The Arsenal)
+Este Brand Kit define la identidad visual de **Stratix Intelligence** como la infraestructura de inteligencia estratégica más avanzada del mercado B2B. Proyecta **Autoridad, Arquitectura y Lujo Tecnológico**.
 
-Este Brand Kit define la identidad visual y comunicativa de Arsenex AI en su etapa **Pro**. Está diseñado para proyectar autoridad, innovación y lujo tecnológico.
-
-## 🎨 Paleta de Colores (High-Contrast Premium)
+## 🎨 Paleta de Colores (Gold & Deep Onyx)
 
 | Color | Hex | Uso |
 | :--- | :--- | :--- |
-| **Deep Onyx** | `#050505` | Fondo principal (clase mundial) |
-| **Electric Azure** | `#0070FF` | Call to action y acentos primarios |
-| **Pro White** | `#F5F5F7` | Texto principal (legibilidad Apple-style) |
-| **Slate Gray** | `#86868B` | Texto secundario y etiquetas |
-| **Glass Border** | `rgba(255, 255, 255, 0.1)` | Bordes de tarjetas y efectos de cristal |
+| **Elite Gold** | `#D4AF37` | Isotipo "S", Acentos, Llamados a la acción (Premium) |
+| **Deep Onyx** | `#060B14` | Fondo de marca, Espacio negativo inteligente |
+| **Midnight Blue** | `#0B1120` | Degradados, Capas de UI secundarias |
+| **Glass White** | `#F8F9FA` | Tipografía principal (Máxima legibilidad) |
+| **Circuit Gray** | `#334155` | Detalles técnicos, Bordes de cards, Iconografía sutil |
 
-## 🔠 Tipografía (Stitch Style)
+## 🔠 Tipografía (Architectural Intelligence)
 
-- **Principal**: `Inter` (Variable) - Elegante, moderna y técnica.
-- **Display**: `Outfit` - Para títulos grandes que denotan confianza.
-- **Espaciado**: Uso generoso de *whitespace* para dar aire de exclusividad.
+- **Primaria (Títulos)**: `Outfit` (Bold/ExtraBold) - Expresa confianza y estructura.
+- **Secundaria (Cuerpo)**: `Inter` - Limpia, aireada y perfectamente legible en dashboard.
+- **Jerarquía**: Uso de interlineado amplio y tracking reducido en titulares para un "look" editorial de alto nivel.
 
-## ✨ Efectos Visuales (Stitch Arsenal)
+## 📐 El Isotipo (Structural Brain)
+- **Concepto**: Una "S" geométrica dorada incrustada en un mapa neuronal de circuitos. Representa la fusión perfecta entre **Negocios (S)** e **Inteligencia (Cerebro)**.
+- **Aplicación**: Siempre sobre fondo oscuro (`#060B14`) para maximizar el contraste con el degradado dorado metálico.
 
-- **Glassmorphism**: Uso de `backdrop-filter: blur(20px)` en navbars y cards sobre fondos oscuros.
-- **Dynamic Glow**: Sutiles brillos (box-shadows) en los colores de la marca para destacar elementos clave.
-- **Smooth Motion**: Transiciones de `0.4s` con curvas easing `cubic-bezier(0.4, 0, 0.2, 1)`.
+## 🗣️ Voz y Tono (Elite Strategic Voice)
 
-## 🗣️ Voz y Tono (Pro Voice)
+- **Tono**: Arquitectónico, Predictivo e Infalible.
+- **Enfoque**: Hablamos de **Sistemas de Crecimiento**, no de "bots". Stratix es el socio que nunca duerme.
+- **Palabras Clave**: *Estratégico*, *Arquitectura*, *Núcleo*, *Inmediato*, *Resultados Exponenciales*.
 
-- **Autoridad Amigable**: Hablamos como un experto que soluciona problemas complejos de forma sencilla.
-- **Enfoque en Resultados**: No vendemos "un bot", vendemos "tiempo recuperado" y "ventas ganadas".
-- **Sin tecnicismos aburridos**: Usamos palabras poderosas como *Inmediato*, *Automático*, *Infalible*, *Inteligencia*.
-
----
-
-## 📸 Guía para Redes Sociales
-
-- **Logo**: El icono de Arsenex AI siempre centrado, con mucho espacio alrededor.
-- **Fondo de posts**: Gradientes oscuros con un punto de luz azul.
-- **Contenido**: 70% resultados y testimonios, 20% educación sobre IA, 10% venta directa.
+## 📸 Estética Visual
+- **Fondo**: Deep Black con sutiles gradientes hacia el azul noche.
+- **Efectos**: Glassmorphism (`blur-20`), Bordes dorados de `1px` con opacidad `0.2`.
+- **Slogan**: "Vende Más, Duerme Mejor" (Architectural Strategic Intelligence).

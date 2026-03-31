@@ -1,51 +1,50 @@
+# 🛡️ Plan de Social Media: 30 Días de Autoridad Estratégica (Stratix Style)
 
-# 📱 Plan de Social Media: 30 Días de Autoridad IA (Pomelli Style)
+Jose, este plan está diseñado para posicionar a **Stratix Intelligence** como la infraestructura de IA definitiva para el mercado B2B de alto nivel. Menos ruido, más autoridad.
 
-Este plan está diseñado para que Arsenex AI se vea como una empresa consolidada y profesional desde el primer día. Sigue esta rutina de publicaciones para maximizar el alcance y la confianza.
-
-## 🗓️ Estructura Semanal (El Ciclo Pro)
-- **Lunes**: El Gancho (Problema + Solución IA).
-- **Miércoles**: Educación (Cómo funciona la IA B2B).
-- **Viernes**: Prueba Social (Casos de uso inmobiliarios/médicos).
-- **Domingo**: Reflexión Pro (El futuro de los negocios).
-
----
-
-## 📅 Semana 1: El Despertar del Negocio
-*Objetivo: Establecer que los métodos antiguos (formularios) están muriendo.*
-
-| Día | Post | Copy Sugerido | CTA |
-| :--- | :--- | :--- | :--- |
-| 1 | Lanzamiento | "El soporte al cliente de 9 a 5 ha muerto. Bienvenido a la era 24/7." | "Prueba la Demo" |
-| 3 | El "Error" | "¿Sabías que el 60% de los leads se pierden por no responder en menos de 5 min?" | "Deja de perder ventas" |
-| 5 | El Bot | "Conoce a tu nuevo empleado estrella: No duerme, no se cansa y sabe todo tu negocio." | "Agenda una auditoría" |
-
-## 📅 Semana 2: Autoridad y Confianza
-*Objetivo: Demostrar que Arsenex AI es para profesionales, no un juguete.*
-
-| Día | Post | Copy Sugerido | CTA |
-| :--- | :--- | :--- | :--- |
-| 8 | Monitoreo | "La paz mental es ver en tiempo real cómo tu IA atiende a tus clientes." | "Mira el Dashboard" |
-| 10 | Privacidad | "Tus datos, tu control. Seguridad de grado empresarial para tu base de conocimientos." | "Lee más" |
-| 12 | Inmobiliarias | "Cómo las inmobiliarias están cerrando ventas mientras sus asesores duermen." | "Ver caso de éxito" |
-
-## 📅 Semanas 3 y 4: Conversión Agresiva
-*Objetivo: Cerrar las pruebas gratis de 7 días.*
-
-| Día | Post | Copy Sugerido | CTA |
-| :--- | :--- | :--- | :--- |
-| 15 | El código | "Instala tu asistente en 30 segundos. Un clic y estás en el futuro." | "Instala Gratis" |
-| 18 | Comparación | "Bot de Reglas vs. Arsenex AI IA. Spoiler: El bot de reglas perdió." | "Cambia a IA" |
-| 22 | Leads | "7 leads capturados en una noche. Esto es lo que pasa cuando no cierras nunca." | "Empieza Hoy" |
-| 30 | El futuro | "Arsenex AI no es opcional, es el nuevo estándar. ¿Te quedas atrás?" | "Unete al Pro" |
+## 🗓️ Arquitectura Semanal (El Ciclo de Élite)
+- **Lunes (Manifiesto)**: Visión estratégica y el fin de los procesos manuales.
+- **Miércoles (Opal Logic)**: Educación técnica sobre calificación de leads y ROI.
+- **Viernes (Showcase)**: Casos de uso de élite (Inmobiliarias de lujo, Salud, Consultoría).
+- **Domingo (Visión CEO)**: Reflexiones sobre el futuro de la arquitectura de negocios.
 
 ---
 
-## 🎨 Tips de Diseño (Arsenal Pomelli)
-1. Usa **fotos de alta calidad** de personas usando laptops en ambientes modernos.
-2. Mantén el **espacio negativo** (no amontones texto).
-3. Usa la paleta de **Deep Onyx y Electric Azure** en todos los gráficos.
-4. Los subtítulos siempre con tipografía **Outfit**.
+## 📅 Semana 1: El Despertar de la Inteligencia
+*Objetivo: Establecer que el "Soporte al Cliente" ha evolucionado a "Inteligencia Estratégica".*
+
+| Día | Post | Copy Sugerido | CTA |
+| :--- | :--- | :--- | :--- |
+| 1 | Lanzamiento | "La arquitectura operativa de tu negocio acaba de recibir un upgrade. Stratix está aquí." | "Explora el Núcleo" |
+| 3 | El Costo real | "Dormir te sale caro. Cada lead sin responder a las 2 AM es una inversión perdida." | "Vende Más, Duerme Mejor" |
+| 5 | Opal Logic | "No es un bot, es un motor de decisión. Stratix califica, tú solo cierras." | "Ver Demo Estratégica" |
+
+## 📅 Semana 2: Confianza y Transparencia
+*Objetivo: Mostrar la robustez y control total del dashboard.*
+
+| Día | Post | Copy Sugerido | CTA |
+| :--- | :--- | :--- | :--- |
+| 8 | Elite Dashboard | "La radiografía de tus ventas en tiempo real. Control total sobre cada lead Hot." | "Mira el Interior" |
+| 10 | RAG Engine | "Entrena a tu ejecutivo en 15 segundos con tus propios catálogos corporativos." | "IA con Memoria" |
+| 12 | Real Estate | "Cómo las inmobiliarias de lujo están escalando su atención sin contratar más personal." | "Escala tu Inmobiliaria" |
+
+## 📅 Semanas 3 y 4: Conversión y Cierre
+*Objetivo: Impulsar el agendamiento de demos estratégicas con el formulario del home.*
+
+| Día | Post | Copy Sugerido | CTA |
+| :--- | :--- | :--- | :--- |
+| 15 | El Shield | "Seguridad y eficiencia grado militar para tu atención al cliente." | "Activa tu Escudo" |
+| 18 | Comparación | "Chatbots genéricos vs. Stratix Intelligence. La diferencia está en el ROI." | "Cambia a Élite" |
+| 22 | Alertas Hot | "7 Leads Hot detectados mientras el equipo descansaba. Así funciona una empresa moderna." | "Recibe Alertas Hot" |
+| 30 | El Futuro | "Stratix no es una opción, es la ventaja competitiva de 2026. ¿Te vas a quedar atrás?" | "Empieza la Demo" |
+
+---
+
+## 🎨 Guía de Diseño (Stratix Elite Aesthetic)
+1. **Contraste Extremo**: Fondos **Deep Onyx** (`#060B14`) con tipografía dorada o blanca de alta legibilidad.
+2. **Minimalismo RAG**: Pocos elementos, mucho aire, enfocados en el logo de la "S" dorada.
+3. **Imágenes Hero**: Usa las imágenes de banners dorados que me enviaste como separadores visuales potentes.
+4. **Tipografía**: Títulos siempre en **Outfit** (Extra Bold).
 
 > [!TIP]
-> Puedes usar herramientas como **Canva** o **Figma** con los colores del Brand Kit Pro para crear estos artes en minutos. Si necesitas que te genere copys específicos para un post, solo pídemelo.
+> Recuerda Jose: En **LinkedIn**, el copy debe ser más largo y analítico. En **Instagram**, deja que la imagen dorada haga el 80% del trabajo y usa el copy para cerrar con autoridad. 🛡️✨

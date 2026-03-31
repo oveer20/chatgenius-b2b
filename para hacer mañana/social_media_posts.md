@@ -1,62 +1,68 @@
+# ✍️ Stratix Intelligence: Social Media Content (Series de Élite)
 
-# ✍️ Arsenex AI: Social Media Content (Semana 1)
+Jose, estos copies están afinados para proyectar el lujo y la precisión técnica de **Stratix**. Usa fondos oscuros con el logo dorado en el centro para maximizar el impacto.
 
-Aquí tienes los textos listos para copiar y pegar en tus publicaciones. Estan diseñados para enganchar a dueños de negocios y tomadores de decisiones.
+---
 
-## Publicación 1: El Lanzamiento (Gancho de ROI)
-**Objetivo:** Generar curiosidad y autoridad.
-**Imagen sugerida:** [Logo Arsenex AI]
+## Publicación 1: El Manifiesto (Arquitectura de Ventas)
+**Objetivo:** Establecer autoridad y el nuevo posicionamiento.
+**Imagen sugerida:** [Banner Principal Dorado - STRATIX INTELLIGENCE]
 
 > **Copy:**
-> ¿Cuántas ventas está perdiendo tu negocio mientras duermes? 💸
+> ¿Tu negocio tiene una fachada digital o una **arquitectura de ventas**? 🛡️✨
 >
-> Presentamos **Arsenex AI B2B**. No es solo un chatbot; es tu mejor vendedor que nunca descansa, nunca se cansa y aprende todo sobre tu empresa en minutos.
+> Presentamos **Stratix Intelligence**. No es un simple chatbot; es la infraestructura de IA diseñada para empresas que no se conforman con lo básico. 
 >
-> ✅ Respuestas instantáneas.
-> ✅ Captura de leads en piloto automático.
-> ✅ Monitoreo en vivo desde tu propio Dashboard.
+> ✅ **Opal Logic**: Calificación de leads 'Hot' en tiempo real.
+> ✅ **RAG Engine**: Memoria corporativa absoluta (PDF/Web).
+> ✅ **Elite Dashboard**: Control táctico de cada conversación.
 >
-> Deja de dejar dinero sobre la mesa. Empieza gratis hoy mismo en el link de nuestra bio. 🚀
+> Deja de operar en el pasado. Es hora de escalar con inteligencia estratégica. 
+>
+> **Vende Más, Duerme Mejor.** Link en bio para tu Demo Estratégica. 🚀
 > 
-> #Arsenex AI #InteligenciaArtificial #SaaS #B2B #Automatizacion #Ventas247
+> #StratixIntelligence #EliteAI #B2B #StrategicGrowth #ArchitectureOfSales
 
 ---
 
-## Publicación 2: Foco en Inmobiliarias (Nicho)
-**Objetivo:** Mostrar utilidad específica.
-**Imagen sugerida:** [Post Template 1 con mockup de chat inmobiliario]
+## Publicación 2: El Poder de la Alerta (Hot Lead Focus)
+**Objetivo:** Mostrar el beneficio tangible de las alertas por correo.
+**Imagen sugerida:** [Mockup de un iPhone mostrando la notificación de "Hot Lead Detectado"]
 
 > **Copy:**
-> ¿Agendar visitas a propiedades a las 3 AM? Sí, es posible. 🏠✨
+> Una respuesta a tiempo vale por diez llamadas mañana. ⏳🔥
 >
-> Con Arsenex AI, tus interesados reciben fotos, precios y agendan citas incluso cuando tu equipo está fuera de la oficina. 
+> Con **Stratix**, no tienes que adivinar quién es un cliente potencial. Nuestro motor detecta intenciones de alta prioridad y te envía una **Alerta de Élite** al instante. 
 >
-> No pierdas el interés de ese lead caliente por una respuesta tardía. La IA responde en menos de 2 segundos con la precisión de un experto humano.
+> Imagina saber exactamente quién está listo para comprar en tu web a las 2 AM, sin haber movido un solo dedo. Eso es **Inteligencia Estratégica**.
 >
-> Prueba la demo hoy mismo. (Link en bio)
+> Únete a la nueva era de la automatización B2B. (Link en bio) 🛡️
 >
-> #RealEstateIA #PropTech #Inmobiliarias #Eficiencia #Arsenex AI
+> #HotLeads #OpalLogic #VentasSmart #Stratix #ROI #AIAutomation
 
 ---
 
-## Publicación 3: La Pestaña de "Conversaciones" (Transparencia)
-**Objetivo:** Mostrar el producto por dentro.
-**Imagen sugerida:** [Screenshot del Dashboard - Conversaciones]
+## Publicación 3: Transparencia de Dashboard (Stitch UI)
+**Objetivo:** Generar confianza mostrando el control total.
+**Imagen sugerida:** [Captura del Dashboard Real - Gráficos y Tabla de Leads]
 
 > **Copy:**
-> Control total. Transparencia absoluta. 🔍
+> Datos Reales. Decisiones de Élite. 📊✨
 >
-> En Arsenex AI no solo delegas tu atención al cliente a la IA, sino que puedes supervisarla en TIEMPO REAL. 
+> En el mundo **Stratix**, la opacidad no existe. Nuestro Dashboard te entrega la "Radiografía de tu Pipeline" en tiempo real:
 >
-> Nuestra pestaña de "Conversaciones" te permite ver qué están preguntando tus clientes, qué les está respondiendo el bot y detectar oportunidades de venta que antes pasaban desapercibidas.
+> 🔹 Temperatura de tus prospectos (Hot/Warm/Cold).
+> 🔹 Historial de conversaciones completo (Inbox Transparente).
+> 🔹 Métrica de consumo y eficiencia de IA.
 >
-> El poder de la IA con el control de un CEO.
+> Monitorea la arquitectura de tu empresa desde cualquier lugar del mundo. El control lo tienes tú.
 >
-> #BusinessIntel #AI #Dashboard #CustomerSupport #Arsenex AI
+> #BusinessIntelligence #StitchUI #StratixAI #DashboardElite #Fintech #RealEstateTech
 
 ---
 
-## Recomendaciones para Historias (Stories):
-- **Encuesta:** "¿Cuánto tiempo tardas en responder a un cliente? (A: < 1 min / B: > 1 hora)".
-- **Demo Rápida:** Graba tu pantalla usando el widget en la página de prueba.
-- **Detrás de escena:** "Configurando un nuevo agente para una clínica dental 🦷".
+## 💡 Recomendaciones para Estrategia en Historias (Stories):
+
+- **El "Unboxing" del Cerebro**: Muestra cómo subes un PDF de tu empresa y el bot responde al instante. "Entrenando a mi nuevo ejecutivo en 15 segundos".
+- **Test de Velocidad**: Graba el chat respondiendo a una pregunta técnica compleja sobre tu negocio.
+- **La Alerta en Vivo**: "Acabo de recibir un Lead Hot mientras tomaba café. Stratix trabajando por mí". ☕📱

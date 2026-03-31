@@ -1,53 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Stratix AI — Architectural Strategic Intelligence 🛡️✨
 
-## Getting Started
+**Stratix AI** is a premium B2B SaaS platform designed to automate high-ticket sales and customer interaction through elite artificial intelligence. Built for scale, it integrates seamlessly with WhatsApp, Instagram, and Web widgets using the proprietary **Opal Logic** decision engine.
 
-First, run the development server:
+---
 
+## 🌟 Key Pillars
+
+### 1. Opal Logic (The Brain)
+A multimodal decision engine that doesn't just "chat," but **qualifies** leads. It analyzes user intent (Hot/Warm/Cold), scores potential impact, and handles high-ticket sales flows with surgical precision.
+
+### 2. RAG Engine (The Knowledge)
+Retrieval-Augmented Generation at its finest. Upload PDFs, crawl entire websites, or paste raw text. Stratix uses **Supabase Vector (`pgvector`)** and **Gemini Embeddings** to give your bots a photographic memory of your business.
+
+### 3. Multi-Channel Elite
+- **WhatsApp Cloud API**: Official integration for professional scale.
+- **Dynamic Web Widget**: A beautiful, translucent UI that adapts to any website.
+- **Instagram (Coming Soon)**: Unified logic across all social touchpoints.
+
+### 4. Analytical Dashboard
+- **Pipeline Temperature**: Real-time visualization of lead quality.
+- **Message Quotas**: Built-in protection and usage monitoring for B2B accounts.
+- **Export Power**: One-click CSV export for CRM synchronization (Salesforce, HubSpot, etc.).
+
+---
+
+## 🛠️ Technology Stack
+- **Frontend**: Next.js 15 (App Router), Framer Motion, Recharts.
+- **Backend**: Supabase (Auth, DB, Vector Storage, Real-time).
+- **AI Core**: Google Gemini 1.5 Pro / Flash.
+- **Payments**: Mercado Pago (Local/Global gateway support).
+- **Notifications**: Resend (Elite HTML Transactional Emails).
+
+---
+
+## 🚀 Getting Started
+
+### 1. Local Development
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Required Environment Variables (.env.local)
+```bash
+# Core
+NEXT_PUBLIC_SUPABASE_URL=...
+NEXT_PUBLIC_SUPABASE_ANON_KEY=...
+SUPABASE_SERVICE_ROLE_KEY=...
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+# AI
+GOOGLE_GEMINI_API_KEY=...
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Payments & Mailing
+MP_ACCESS_TOKEN=...
+RESEND_API_KEY=...
 
-### 🚀 Despliegue en Vercel (Producción)
+# App Config
+NOTIFICATION_EMAIL=admin@stratix-intelligence.ai
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+```
 
-1. Sube este código a un repositorio privado en **GitHub**.
-2. Conecta el repositorio en [Vercel](https://vercel.com).
-3. Configura las siguientes variables de entorno:
-   - `OPENAI_API_KEY`: Tu llave de producción de OpenAI.
-   - `STRIPE_SECRET_KEY`: Tu llave de Stripe (modo Live).
-   - `NEXT_PUBLIC_SUPABASE_URL`: URL de tu proyecto Supabase.
-   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`: API Key anon de Supabase.
-   - `NEXT_PUBLIC_APP_URL`: La URL final de tu dominio (ej: `https://stratix-intelligence.vercel.app`).
-4. ¡Listo! Tu SaaS estará vivo.
+### 3. Database Setup (Supabase)
+Run the migration files located in `/supabase/migrations/` in order:
+1. `initial_schema.sql`
+2. `leads_schema.sql`
+3. `rag_engine.sql`
+4. `email_alerts.sql`
 
-## 🛠️ Estructura del Proyecto
-- `/src/app`: Rutas del Dashboard y Landing.
-- `/public/widget.js`: El motor del chat para los clientes.
-- `/src/api/widget/chat`: El endpoint que procesa los mensajes del widget.
+---
 
-## Learn More
+## 💎 Elite Features
+- **Fingerprinting**: Persistent user sessions across page reloads.
+- **Email Alerts**: Real-time notifications for "Hot Leads" directly to your inbox.
+- **Currency Toggle**: Native support for COP and USD in pricing.
+- **Usage Guards**: Automatic quota enforcement per plan (Free/Starter/Pro).
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## ✒️ License
+Stratix AI — Architectural Strategic Intelligence. 
+Cartagena, CO | 2026.
