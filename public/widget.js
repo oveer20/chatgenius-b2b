@@ -1,11 +1,21 @@
 (function () {
+    const getSessionId = () => {
+        let sid = localStorage.getItem('stratix_session_id');
+        if (!sid) {
+            sid = 'sx_' + Math.random().toString(36).substr(2, 9);
+            localStorage.setItem('stratix_session_id', sid);
+        }
+        return sid;
+    };
+
     // Stratix AI Elite Widget Configuration
     const CONFIG = {
-        primaryColor: '#D4AF37', // Oro Stratix
+        primaryColor: '#25D366', // Verde WhatsApp
         secondaryColor: '#0B1120', // Azul Medianoche
         botId: document.currentScript ? document.currentScript.getAttribute('data-bot-id') : 'demo',
-        // Asegúrate de que esta URL coincida con tu dominio de Vercel
-        apiUrl: window.location.origin + '/api/chat'
+        sessionId: getSessionId(),
+        apiUrl: window.location.origin + '/api/widget/chat',
+        leadsUrl: window.location.origin + '/api/leads'
     };
 
     // Inyección de Estilos de Alta Gama
@@ -23,16 +33,16 @@
             height: 65px;
             border-radius: 50%;
             background: ${CONFIG.primaryColor};
-            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 2px solid rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.4);
         }
-        #stratix-button:hover { transform: scale(1.05) rotate(5deg); }
-        #stratix-button svg { fill: ${CONFIG.secondaryColor}; width: 32px; height: 32px; }
+        #stratix-button:hover { transform: scale(1.1) rotate(5deg); }
+        #stratix-button svg { width: 35px; height: 35px; color: white; }
         
         #stratix-window {
             position: absolute;
@@ -188,7 +198,29 @@
 
     leadForm.onsubmit = async (e) => {
         e.preventDefault();
-        // Aquí podrías guardar el lead en Supabase
+        const name = document.getElementById('st-name').value.trim();
+        const email = document.getElementById('st-email').value.trim();
+        const tel = document.getElementById('st-tel').value.trim();
+
+        if (!name) return;
+
+        try {
+            await fetch(CONFIG.leadsUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name,
+                    email,
+                    phone: tel,
+                    botId: CONFIG.botId,
+                    sessionId: CONFIG.sessionId,
+                    metadata: { source: 'Widget Web', url: window.location.href }
+                })
+            });
+        } catch (err) {
+            console.error('Error capturando lead:', err);
+        }
+
         leadForm.style.display = 'none';
         chatMessages.style.display = 'flex';
         chatInputArea.style.display = 'flex';
@@ -208,7 +240,8 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     messages: [{ role: 'user', content: text }],
-                    botId: CONFIG.botId
+                    botId: CONFIG.botId,
+                    sessionId: CONFIG.sessionId
                 })
             });
             const data = await res.json();

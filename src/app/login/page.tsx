@@ -9,13 +9,9 @@ import { supabase } from "@/lib/supabase";
 import styles from "./auth.module.css";
 
 export default function AuthPage() {
-  const router = useRouter();
-  const [mode, setMode] = useState<"login" | "signup">("login");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
+  const { searchParams } = new URL(typeof window !== 'undefined' ? window.location.href : '');
+  const redirect = searchParams.get("redirect") || "/dashboard";
+  const plan = searchParams.get("plan");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,7 +37,10 @@ export default function AuthPage() {
           password,
         });
         if (error) throw error;
-        router.push("/dashboard");
+        
+        // Redirección inteligente tras el login
+        const finalRedirect = plan ? `${redirect}?plan=${plan}` : redirect;
+        router.push(finalRedirect);
       }
     } catch (error: any) {
       setMessage(`❌ Error: ${error.message || "Inténtalo de nuevo."}`);
@@ -61,7 +60,7 @@ export default function AuthPage() {
       >
         <Link href="/" className={styles.logo}>
           {/* Logo SVG Dorado Implementado */}
-          <img src="/stratix_shield.svg" alt="Stratix AI Logo" style={{ height: '40px' }} />
+          <img src="/stratix_shield.svg" alt="Stratix AI Logo" style={{ height: '32px' }} />
           <span style={{ fontWeight: 800 }}>Strat<span style={{ color: '#D4AF37' }}>ix</span> AI</span>
         </Link>
 

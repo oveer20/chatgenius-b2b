@@ -1,15 +1,40 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getGeminiResponse } from "@/lib/gemini";
+import { supabaseAdmin } from "@/lib/supabase-admin";
 
 export async function POST(request: NextRequest) {
   try {
     const rawBody = await request.text();
     const body = rawBody ? JSON.parse(rawBody) : {};
 
-    const { messages, systemPrompt, knowledgeBase, model, temperature } = body;
+    const { messages, systemPrompt, knowledgeBase, model, temperature, botId } = body;
 
     if (!messages || !Array.isArray(messages)) {
       return NextResponse.json({ error: "Se requiere un array de mensajes válido" }, { status: 400 });
+    }
+
+    // 1. Búsqueda de Conocimiento Estratégico (RAG)
+    let semanticContext = "";
+    if (botId) {
+      try {
+        const lastUserMessage = messages[messages.length - 1].content;
+        const { getEmbeddings } = await import("@/lib/gemini");
+        const queryEmbedding = await getEmbeddings(lastUserMessage);
+
+        const { data: chunks, error: matchError } = await supabaseAdmin.rpc("match_document_chunks", {
+          query_embedding: queryEmbedding,
+          match_threshold: 0.5,
+          match_count: 5,
+          p_bot_id: botId
+        });
+
+        if (!matchError && chunks) {
+          semanticContext = chunks.map((c: any) => c.content).join("\n\n");
+          console.log(`/// RAG: ${chunks.length} fragmentos recuperados para el bot ${botId}`);
+        }
+      } catch (err) {
+        console.error("/// FALLO EN MOTOR RAG ///", err);
+      }
     }
 
     // Configuración del Promt Maestro de Élite
@@ -19,6 +44,10 @@ export async function POST(request: NextRequest) {
       
       BASE DE CONOCIMIENTO (NÚCLEO):
       ---
+      CONTEXTO SEMÁNTICO (VECTORES):
+      ${semanticContext || "No se encontró información específica en los documentos vectorizados."}
+
+      CONOCIMIENTO ESTÁTICO (LEGACY):
       ${knowledgeBase || "Utiliza tu base de conocimientos general con enfoque corporativo."}
       ---
       
@@ -44,6 +73,7 @@ export async function POST(request: NextRequest) {
       });
     }
 
+    const { getGeminiResponse } = await import("@/lib/gemini");
     const text = await getGeminiResponse(messages, fullSystemPrompt);
 
     // Extracción de Metadatos Opal Logic

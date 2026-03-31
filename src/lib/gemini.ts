@@ -47,4 +47,19 @@ export async function getGeminiResponse(messages: any[], systemPrompt: string) {
   }
 }
 
+/**
+ * Generador de Embeddings Estratégicos
+ * Escala cualquier texto a un vector de 768 dimensiones (Optimizado para Gemini 1.5)
+ */
+export async function getEmbeddings(text: string) {
+  try {
+    const model = genAI.getGenerativeModel({ model: "text-embedding-004" });
+    const result = await model.embedContent(text);
+    return result.embedding.values;
+  } catch (error) {
+    console.error("/// ERROR GENERANDO EMBEDDINGS ///", error);
+    throw error;
+  }
+}
+
 export default genAI;

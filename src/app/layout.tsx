@@ -57,7 +57,10 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        <script src="/widget.js" data-bot-id="demo" defer></script>
+      </body>
     </html>
   );
 }

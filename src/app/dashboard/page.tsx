@@ -40,11 +40,32 @@ export default function DashboardPage() {
     async function getUserData() {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
-        const fullName = user.user_metadata?.full_name || user.email?.split('@')[0];
-        setUser({ ...user, display_name: fullName, plan: "Pioneer Elite" });
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("full_name, plan, subscription_status")
+          .eq("id", user.id)
+          .single();
+
+        const fullName = profile?.full_name || user.user_metadata?.full_name || user.email?.split('@')[0];
+        setUser({ 
+          ...user, 
+          display_name: fullName, 
+          plan: profile?.plan || "free",
+          subscription_status: profile?.subscription_status || "inactive"
+        });
       }
     }
     getUserData();
+  }, []);
+
+  // Manejo de redirección post-pago
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("success") === "true") {
+      alert("¡Éxito! Tu plan ha sido actualizado. Bienvenido a la élite de Stratix AI.");
+      // Limpiar la URL para evitar alerts repetidos
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
   }, []);
 
   useEffect(() => {
@@ -73,7 +94,7 @@ export default function DashboardPage() {
       {/* Sidebar Elite */}
       <aside className={styles.sidebar} style={{ borderRight: '1px solid rgba(212, 175, 55, 0.1)', background: '#060B14' }}>
         <Link href="/" className={styles.logo} style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px', padding: '2rem' }}>
-          <img src="/stratix_shield.svg" alt="Stratix Logo" style={{ width: '32px' }} />
+          <img src="/stratix_shield.svg" alt="Stratix Logo" style={{ height: '32px' }} />
           <span style={{ fontSize: '1.2rem', fontWeight: 800, color: 'white' }}>Strat<span style={{ color: '#D4AF37' }}>ix</span> AI</span>
         </Link>
 
@@ -92,7 +113,9 @@ export default function DashboardPage() {
         <div className={styles.sidebarFooter} style={{ padding: '2rem', marginTop: 'auto' }}>
           <div style={{ background: 'rgba(212, 175, 55, 0.05)', border: '1px solid rgba(212, 175, 55, 0.2)', padding: '10px', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
             <FiStar style={{ color: '#D4AF37' }} /> 
-            <span style={{ fontWeight: 800, color: '#D4AF37', fontSize: '0.7rem', textTransform: 'uppercase' }}>Pioneer Access</span>
+            <span style={{ fontWeight: 800, color: '#D4AF37', fontSize: '0.7rem', textTransform: 'uppercase' }}>
+              {user?.plan || "Free Access"}
+            </span>
           </div>
           <button onClick={handleLogout} className={styles.logoutBtn} style={{ marginTop: '1.5rem', background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}>
              <FiLogOut /> Cerrar Sesión

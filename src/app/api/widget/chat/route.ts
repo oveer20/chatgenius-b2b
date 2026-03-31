@@ -1,13 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
 import { getGeminiResponse } from "@/lib/gemini";
+import { supabaseAdmin } from "@/lib/supabase-admin";
 
 export async function POST(request: NextRequest) {
-  // Cliente administrativo para bypass de RLS en el ecosistema Stratix
-  const supabaseAdmin = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL || "",
-    process.env.SUPABASE_SERVICE_ROLE_KEY || ""
-  );
+  // Eliminamos definición local para usar el singleton de élite
 
   try {
     const rawBody = await request.text();
@@ -69,7 +65,29 @@ export async function POST(request: NextRequest) {
 
     const owner: any = profile || { plan: 'free', messages_sent_this_month: 0 };
 
-    // 2. Validación de Cuotas de Servicio (SLA)
+    // 2. Búsqueda de Conocimiento Estratégico (RAG)
+    let semanticContext = "";
+    try {
+      const lastUserMessage = messages[messages.length - 1].content;
+      const { getEmbeddings } = await import("@/lib/gemini");
+      const queryEmbedding = await getEmbeddings(lastUserMessage);
+
+      const { data: chunks, error: matchError } = await supabaseAdmin.rpc("match_document_chunks", {
+        query_embedding: queryEmbedding,
+        match_threshold: 0.5,
+        match_count: 5,
+        p_bot_id: botId
+      });
+
+      if (!matchError && chunks) {
+        semanticContext = chunks.map((c: any) => c.content).join("\n\n");
+        console.log(`/// RAG (Public): ${chunks.length} fragmentos recuperados.`);
+      }
+    } catch (err) {
+      console.error("/// FALLO MOTOR RAG (Public) ///", err);
+    }
+
+    // 3. Validación de Cuotas de Servicio (SLA)
     if (owner.plan === 'free' && owner.messages_sent_this_month >= 500) {
       return NextResponse.json({
         message: {
@@ -95,7 +113,11 @@ export async function POST(request: NextRequest) {
       
       BASE DE CONOCIMIENTO (NÚCLEO DE CONFIANZA):
       ---
-      ${bot.knowledge_base || "No hay información adicional. Limítate a funciones de asistencia general."}
+      CONTEXTO SEMÁNTICO (VECTORES):
+      ${semanticContext || "No se encontró información específica en los documentos vectorizados."}
+
+      CONOCIMIENTO ESTÁTICO:
+      ${bot.knowledge_base || "No hay información adicional."}
       ---
 
       PROTOCOLOS DE INTELIGENCIA (OPAL LOGIC):

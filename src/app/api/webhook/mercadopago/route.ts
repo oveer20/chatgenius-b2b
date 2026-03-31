@@ -1,43 +1,53 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Payment } from "mercadopago";
 import { client } from "@/lib/mercadopago";
-import { supabase } from "@/lib/supabase";
+import { supabaseAdmin } from "@/lib/supabase-admin";
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     console.log("/// MERCADO PAGO WEBHOOK RECEIVED ///", body);
 
-    // Mercado Pago sends 'action' and 'data.id'
+    // Mercado Pago envía 'action' y 'data.id'
     const { action, data } = body;
 
     if (action === "payment.created" || action === "payment.updated") {
-      const paymentId = data.id;
-      
-      // 1. Get payment details from MP
+      const paymentId = data?.id;
+      if (!paymentId) return NextResponse.json({ received: true });
+
+      // 1. Obtener detalles del pago desde MP
       const payment = new Payment(client);
       const paymentDetails = await payment.get({ id: paymentId });
       
-      console.log(`/// PAYMENT STATUS: ${paymentDetails.status} ///`);
+      console.log(`/// PAYMENT ${paymentId} STATUS: ${paymentDetails.status} ///`);
 
-      // 2. If approved, update user plan
+      // 2. Si está aprobado, activar el plan
       if (paymentDetails.status === "approved") {
         const userId = paymentDetails.external_reference;
-        const planId = paymentDetails.additional_info?.items?.[0]?.id || "pro";
+        const mpPlanId = paymentDetails.additional_info?.items?.[0]?.id || "pro";
+
+        // Mapeo estratégico de planes (Normalización)
+        const planMapping: Record<string, string> = {
+          "starter": "growth",
+          "pro": "growth", // O Pro si decides añadirlo
+          "enterprise": "enterprise"
+        };
+        const finalPlan = planMapping[mpPlanId] || "growth";
 
         if (userId) {
-          console.log(`/// ACTIVATING PLAN ${planId} FOR USER ${userId} ///`);
+          console.log(`/// ACTIVANDO PLAN ${finalPlan} PARA USUARIO ${userId} ///`);
           
-          const { error } = await supabase
+          const { error } = await supabaseAdmin
             .from("profiles")
             .update({ 
-              plan: planId === "enterprise" ? "enterprise" : "growth",
-              subscription_status: "active"
+              plan: finalPlan,
+              subscription_status: "active",
+              updated_at: new Date().toISOString()
             })
             .eq("id", userId);
 
           if (error) {
-            console.error("/// DATABASE UPDATE ERROR ///", error);
+            console.error("/// ERROR ACTUALIZANDO PERFIL ///", error);
             throw error;
           }
         }
