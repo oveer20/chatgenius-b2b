@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { 
   FiArrowRight, FiCheck, FiCpu, FiLayout, FiTarget, FiZap, FiShield, 
   FiChevronDown, FiPlayCircle, FiActivity, FiSmartphone, FiShoppingCart, 
-  FiDatabase, FiGlobe, FiClock, FiLayers, FiUsers, FiBox 
+  FiDatabase, FiGlobe, FiClock, FiLayers, FiUsers, FiBox, FiTrendingUp, FiHome 
 } from "react-icons/fi";
 import { supabase } from "@/lib/supabase";
 
@@ -23,6 +23,32 @@ export default function LandingPage() {
 
   // Auto-checkout si regresamos del login con un plan seleccionado
   const [hasAutoCheckedOut, setHasAutoCheckedOut] = useState(false);
+  
+  const [formData, setFormData] = useState({ name: "", email: "", phone: "" });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleDemoSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      const res = await fetch("/api/widget/lead", {
+        method: "POST",
+        body: JSON.stringify({
+          botId: "demo", // Lead general de la landing
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone
+        })
+      });
+      if (res.ok) setSubmitted(true);
+    } catch (err) {
+      console.error("Error enviando lead:", err);
+      alert("Hubo un error. Por favor intenta de nuevo.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
   
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -76,7 +102,7 @@ export default function LandingPage() {
       <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.2rem 5%', background: 'rgba(6, 11, 20, 0.95)', backdropFilter: 'blur(15px)', position: 'sticky', top: 0, zIndex: 100, borderBottom: '1px solid rgba(212, 175, 55, 0.1)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <img src="/stratix_shield.svg" alt="Stratix Logo" style={{ height: '32px', width: 'auto' }} />
-          <span style={{ fontSize: '1.5rem', fontWeight: 900, letterSpacing: '-1px' }}>Strat<span style={{ color: '#D4AF37' }}>ix</span> AI</span>
+          <span style={{ fontSize: '1.5rem', fontWeight: 900, letterSpacing: '-1px' }}>Strat<span style={{ color: '#D4AF37' }}>ix</span> Intelligence</span>
         </div>
         <div style={{ display: 'flex', gap: '2rem', alignItems: 'center', fontWeight: 600, fontSize: '0.85rem' }}>
           <a href="#proposito" style={{ color: 'white', textDecoration: 'none', opacity: 0.6 }}>Propósito</a>
@@ -107,7 +133,7 @@ export default function LandingPage() {
             </h1>
             
             <p style={{ fontSize: '1.25rem', opacity: 0.6, lineHeight: 1.6, marginBottom: '3.5rem', maxWidth: '550px' }}>
-              Stratix AI es la infraestructura de inteligencia que atiende, califica y cierra ventas por ti en WhatsApp, Instagram y Web. <strong>Para todo tipo de empresas.</strong>
+              Stratix Intelligence es la infraestructura de inteligencia que atiende, califica y cierra ventas por ti en WhatsApp, Instagram y Web. <strong>Para todo tipo de empresas.</strong>
             </p>
             <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
               <Link href="/login" style={{ padding: '20px 42px', backgroundColor: '#D4AF37', color: '#000', borderRadius: '14px', fontWeight: 900, textDecoration: 'none', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '12px', boxShadow: '0 10px 30px rgba(212,175,55,0.2)' }}>Comenzar Ahora <FiArrowRight /></Link>
@@ -394,34 +420,75 @@ export default function LandingPage() {
           </div>
 
           <div style={{ background: 'rgba(255,255,255,0.02)', padding: '3rem', borderRadius: '32px', border: '1px solid rgba(212,175,55,0.2)', position: 'relative' }}>
-            <form style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }} onSubmit={(e) => { e.preventDefault(); alert('🚀 ¡Solicitud enviada! Un arquitecto de Stratix se pondrá en contacto pronto.'); }}>
-              <div>
-                <label style={{ display: 'block', fontSize: '0.8rem', opacity: 0.5, marginBottom: '0.5rem' }}>Nombre Completo</label>
-                <input required type="text" placeholder="Tu nombre..." style={{ width: '100%', padding: '15px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', color: 'white' }} />
+            {submitted ? (
+              <div style={{ textAlign: 'center', padding: '2rem' }}>
+                <div style={{ width: '80px', height: '80px', background: '#D4AF37', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 2rem', fontSize: '2.5rem' }}>🚀</div>
+                <h3 style={{ fontSize: '1.8rem', fontWeight: 900, marginBottom: '1rem' }}>¡Solicitud Recibida!</h3>
+                <p style={{ opacity: 0.6, lineHeight: 1.6 }}>Un Arquitecto de Stratix Intelligence se pondrá en contacto pronto para tu diagnóstico.</p>
               </div>
-              <div>
-                <label style={{ display: 'block', fontSize: '0.8rem', opacity: 0.5, marginBottom: '0.5rem' }}>Email Corporativo</label>
-                <input required type="email" placeholder="email@empresa.com" style={{ width: '100%', padding: '15px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', color: 'white' }} />
-              </div>
-              <div>
-                <label style={{ display: 'block', fontSize: '0.8rem', opacity: 0.5, marginBottom: '0.5rem' }}>WhatsApp de Contacto</label>
-                <input required type="tel" placeholder="+57 300..." style={{ width: '100%', padding: '15px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', color: 'white' }} />
-              </div>
-              <button type="submit" style={{ width: '100%', padding: '20px', background: '#D4AF37', color: '#000', borderRadius: '12px', fontWeight: 900, cursor: 'pointer', border: 'none', marginTop: '1rem', fontSize: '1rem' }}>SOLICITAR MI DEMO GRATIS</button>
-            </form>
+            ) : (
+              <form style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }} onSubmit={handleDemoSubmit}>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.8rem', opacity: 0.5, marginBottom: '0.5rem' }}>Nombre Completo</label>
+                  <input 
+                    required 
+                    type="text" 
+                    placeholder="Tu nombre..." 
+                    value={formData.name}
+                    onChange={(e) => setFormData({...formData, name: e.target.value})}
+                    style={{ width: '100%', padding: '15px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', color: 'white' }} 
+                  />
+                </div>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.8rem', opacity: 0.5, marginBottom: '0.5rem' }}>Email Corporativo</label>
+                  <input 
+                    required 
+                    type="email" 
+                    placeholder="email@empresa.com" 
+                    value={formData.email}
+                    onChange={(e) => setFormData({...formData, email: e.target.value})}
+                    style={{ width: '100%', padding: '15px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', color: 'white' }} 
+                  />
+                </div>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.8rem', opacity: 0.5, marginBottom: '0.5rem' }}>WhatsApp de Contacto</label>
+                  <input 
+                    required 
+                    type="tel" 
+                    placeholder="+57 300..." 
+                    value={formData.phone}
+                    onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                    style={{ width: '100%', padding: '15px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', color: 'white' }} 
+                  />
+                </div>
+                <button 
+                  type="submit" 
+                  disabled={isSubmitting}
+                  style={{ width: '100%', padding: '20px', background: '#D4AF37', color: '#000', borderRadius: '12px', fontWeight: 900, cursor: isSubmitting ? 'not-allowed' : 'pointer', border: 'none', marginTop: '1rem', fontSize: '1rem', opacity: isSubmitting ? 0.7 : 1 }}
+                >
+                  {isSubmitting ? "ENVIANDO PROTOCOLO..." : "SOLICITAR MI DEMO GRATIS"}
+                </button>
+              </form>
+            )}
+            {/* Trust Badges under form */}
+            <div style={{ marginTop: '2.5rem', display: 'flex', justifyContent: 'center', gap: '20px', opacity: 0.4, filter: 'grayscale(1)' }}>
+              <img src="/stratix_shield.svg" style={{ height: '24px' }} alt="Protocol" />
+              <div style={{ fontSize: '0.7rem', fontWeight: 700, letterSpacing: '1px' }}>ENCRIPTACIÓN AES-256</div>
+              <div style={{ fontSize: '0.7rem', fontWeight: 700, letterSpacing: '1px' }}>GDPR COMPLIANT</div>
+            </div>
           </div>
 
         </div>
       </section>
 
       {/* 7.5 TESTIMONIOS (NEW) */}
-      <section style={{ padding: '8rem 5%', background: '#060B14', overflow: 'hidden' }}>
-        <h2 style={{ textAlign: 'center', fontSize: '2.5rem', fontWeight: 900, marginBottom: '5rem' }}>Confianza <span style={{ color: '#D4AF37' }}>Arquitectónica</span></h2>
+      <section id="testimonios" style={{ padding: '8rem 5%', background: '#060B14', overflow: 'hidden' }}>
+        <h2 style={{ textAlign: 'center', fontSize: '2.5rem', fontWeight: 900, marginBottom: '5rem' }}>Confianza <span style={{ color: '#D4AF37' }}>Corporativa</span></h2>
         <div style={{ display: 'flex', gap: '2rem', maxWidth: '1200px', margin: '0 auto', overflowX: 'auto', paddingBottom: '2rem', scrollbarWidth: 'none' }}>
           {[
-            { n: "Carlos Ruiz", r: "CEO, Nexo Digital", t: "Stratix no es un bot, es un empleado de élite que nunca duerme. Subimos las ventas en WhatsApp un 40% en un mes.", i: "https://i.pravatar.cc/150?u=carlos" },
-            { n: "Elena M.", r: "Fundadora de Bloom", t: "La capacidad de Opal Logic para entender mis productos es asombrosa. Ahorro 20 horas de soporte a la semana.", i: "https://i.pravatar.cc/150?u=elena" },
-            { n: "Julian S.", r: "Director Táctico, Elevate", t: "Buscábamos algo premium y Stratix superó las expectativas. La integración fue quirúrgica.", i: "https://i.pravatar.cc/150?u=julian" }
+            { n: "Arquitectura Inmobilairia", r: "Sector Bienes Raíces", t: "Logramos automatizar la preventa de un proyecto completo. Stratix maneja el 90% de las consultas por WhatsApp sin intervención humana.", i: "FiHome" },
+            { n: "Elevate Global", r: "Agencia de Marketing", t: "Buscábamos una suite de IA que no fallara. La integración de Stratix con nuestra base de conocimientos es quirúrgica.", i: "FiTrendingUp" },
+            { n: "Nexo Digital", r: "Soporte Técnico", t: "Nuestro tiempo de respuesta bajó de 10 minutos a 2 segundos. La satisfacción del cliente es de 9.8/10.", i: "FiZap" }
           ].map((test, i) => (
             <motion.div 
               key={i} 
@@ -429,13 +496,15 @@ export default function LandingPage() {
               style={{ minWidth: '350px', flex: '0 0 auto', background: 'rgba(255,255,255,0.02)', padding: '3rem', borderRadius: '32px', border: '1px solid rgba(212,175,55,0.1)' }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '2rem' }}>
-                <img src={test.i} style={{ width: '50px', height: '50px', borderRadius: '50%', border: '2px solid #D4AF37' }} />
+                <div style={{ width: '50px', height: '50px', borderRadius: '50%', background: 'rgba(212,175,55,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #D4AF37', color: '#D4AF37' }}>
+                  {i === 0 ? <FiLayout size={24} /> : i === 1 ? <FiTrendingUp size={24} /> : <FiZap size={24} />}
+                </div>
                 <div>
                   <div style={{ fontWeight: 800, fontSize: '1rem' }}>{test.n}</div>
                   <div style={{ fontSize: '0.8rem', opacity: 0.4 }}>{test.r}</div>
                 </div>
               </div>
-              <p style={{ fontStyle: 'italic', opacity: 0.6, lineHeight: 1.7, fontSize: '0.95rem' }}>"{test.t}"</p>
+              <p style={{ opacity: 0.6, lineHeight: 1.7, fontSize: '0.95rem' }}>"{test.t}"</p>
             </motion.div>
           ))}
         </div>
@@ -620,7 +689,7 @@ export default function LandingPage() {
           <div style={{ gridColumn: 'span 2' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '1.5rem' }}>
               <img src="/stratix_shield.svg" alt="Stratix Logo" style={{ height: '32px', width: 'auto' }} />
-              <span style={{ fontSize: '1.5rem', fontWeight: 900, letterSpacing: '-1px' }}>Strat<span style={{ color: '#D4AF37' }}>ix</span> AI</span>
+              <span style={{ fontSize: '1.5rem', fontWeight: 900, letterSpacing: '-1px' }}>Strat<span style={{ color: '#D4AF37' }}>ix</span> Intelligence</span>
             </div>
             <p style={{ opacity: 0.4, fontSize: '0.9rem', lineHeight: 1.8, maxWidth: '350px' }}>
               Redefiniendo el estándar global de inteligencia estratégica para empresas B2B de élite. Automatización pura, resultados exponenciales.
@@ -660,10 +729,10 @@ export default function LandingPage() {
         </div>
 
         <div style={{ maxWidth: '1200px', margin: '0 auto', paddingTop: '3rem', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '2rem' }}>
-          <p style={{ opacity: 0.3, fontSize: '0.8rem' }}>© 2026 Stratix AI — Architectural Strategic Intelligence. Cartagena, CO.</p>
+          <p style={{ opacity: 0.3, fontSize: '0.8rem' }}>© 2026 Stratix Intelligence — Architectural Strategic Intelligence. Cartagena, CO.</p>
           <div style={{ display: 'flex', gap: '2rem', opacity: 0.3, fontSize: '0.8rem', fontWeight: 700 }}>
-            <span>Privacidad</span>
-            <span>Términos</span>
+            <Link href="/legal/privacy" style={{ color: 'inherit', textDecoration: 'none' }}>Privacidad</Link>
+            <Link href="/legal/terms" style={{ color: 'inherit', textDecoration: 'none' }}>Términos</Link>
             <span>Seguridad</span>
           </div>
         </div>

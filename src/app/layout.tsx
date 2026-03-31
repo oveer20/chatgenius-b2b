@@ -2,23 +2,25 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: 'Stratix AI — Vende Más, Duerme Mejor',
-  description: 'El estándar global de Inteligencia Artificial para ventas y soporte B2B. Captura leads, automatiza WhatsApp y entrena a tu bot con nuestra tecnología RAG de Élite.',
-  keywords: ["inteligencia artificial", "SaaS B2B", "CRM con IA", "Stratix AI", "automatización de ventas", "WhatsApp Bot Inteligente", "RAG B2B", "captador de leads"],
-  authors: [{ name: "Stratix AI" }],
+  metadataBase: new URL('https://stratix-intelligence.vercel.app'),
+  title: 'Stratix Intelligence — El Estándar B2B de IA',
+  description: 'Arquitectura de Inteligencia Artificial para empresas de alto rendimiento. Automatiza ventas, soporte y captura leads con tecnología RAG de Élite.',
+  keywords: ["inteligencia artificial", "SaaS B2B", "CRM con IA", "Stratix Intelligence", "automatización de ventas", "WhatsApp Bot Inteligente", "RAG B2B", "captador de leads"],
+  authors: [{ name: "Stratix Intelligence" }],
   icons: {
     icon: "/stratix_shield.svg",
     apple: "/stratix_shield.svg",
   },
   openGraph: {
-    title: 'Stratix AI | Vende Más, Duerme Mejor',
-    description: 'Automatiza tu proceso de ventas y atención omnicanal con nuestra suite integrada de IA. Creado para dueños de negocios exigentes.',
+    title: 'Stratix Intelligence | Arquitectura de IA Corporativa',
+    description: 'Automatiza tu proceso de ventas y atención omnicanal con nuestra suite integrada de IA. Creado por arquitectos para dueños de negocios exigentes.',
     images: ['/stratix_shield.svg'], 
-    type: 'website'
+    type: 'website',
+    url: 'https://stratix-intelligence.vercel.app',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Stratix AI | La Suite de IA Corporativa',
+    title: 'Stratix Intelligence | La Suite de IA Corporativa',
     description: 'Escala tus operaciones con inteligencia estratégica y captura leads 24/7.',
     images: ['/stratix_shield.svg'],
   }

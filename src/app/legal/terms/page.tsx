@@ -1,40 +1,76 @@
-import React from 'react';
-import styles from '../../landing.module.css';
-import { FiArrowLeft } from 'react-icons/fi';
-import Link from 'next/link';
+"use client";
 
-export default function TermsPage() {
+import React from "react";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { FiArrowLeft, FiFileText, FiAlertCircle, FiTrendingUp } from "react-icons/fi";
+
+export default function TermsOfService() {
   return (
-    <main className={styles.legalPage} style={{ background: '#050505', minHeight: '100vh', padding: '100px 20px', color: 'var(--text-primary)' }}>
-      <div className="container" style={{ maxWidth: '800px', margin: '0 auto' }}>
-        <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--accent-blue)', textDecoration: 'none', marginBottom: '40px', fontWeight: 'bold' }}>
-          <FiArrowLeft /> Volver al Inicio
+    <div style={{ backgroundColor: "#060B14", color: "white", minHeight: "100vh", fontFamily: "sans-serif" }}>
+      {/* Header */}
+      <nav style={{ padding: "1.5rem 5%", borderBottom: "1px solid rgba(212,175,55,0.1)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <Link href="/" style={{ color: "#D4AF37", textDecoration: "none", display: "flex", alignItems: "center", gap: "10px", fontWeight: "bold" }}>
+          <FiArrowLeft /> VOLVER AL ECOSISTEMA
         </Link>
-        <h1 style={{ fontSize: '3rem', fontWeight: 900, marginBottom: '20px', letterSpacing: '-0.02em' }}>Términos de Servicio</h1>
-        <p style={{ color: 'var(--text-tertiary)', marginBottom: '40px' }}>Última actualización: 18 de Marzo, 2026</p>
-        
-        <div className={styles.legalContent} style={{ lineHeight: '1.8', fontSize: '1.1rem' }}>
-          <section style={{ marginBottom: '40px' }}>
-            <h3 style={{ color: 'var(--accent-blue)', marginBottom: '20px', fontSize: '1.5rem' }}>1. Aceptación de los Términos</h3>
-            <p>Al acceder y utilizar la "Suite" de Stratix AI, usted acepta estar sujeto a estos Términos de Servicio. Nuestra tecnología está diseñada para uso empresarial estratégico y profesional.</p>
-          </section>
-
-          <section style={{ marginBottom: '40px' }}>
-            <h3 style={{ color: 'var(--accent-blue)', marginBottom: '20px', fontSize: '1.5rem' }}>2. Uso del Ecosistema</h3>
-            <p>Usted es responsable de la información que entrena en sus agentes de IA. Stratix AI proporciona la Suite de herramientas (Pomelli, Stitch, Opal), pero la veracidad del contenido corre por cuenta del usuario.</p>
-          </section>
-
-          <section style={{ marginBottom: '40px' }}>
-            <h3 style={{ color: 'var(--accent-blue)', marginBottom: '20px', fontSize: '1.5rem' }}>3. Limitación de Responsabilidad</h3>
-            <p>Stratix AI utiliza modelos avanzados de Google Gemini. Aunque buscamos la máxima precisión, no somos responsables por alucinaciones de IA o decisiones comerciales tomadas basadas en respuestas del bot.</p>
-          </section>
-
-          <section style={{ marginBottom: '40px' }}>
-            <h3 style={{ color: 'var(--accent-blue)', marginBottom: '20px', fontSize: '1.5rem' }}>4. Suscripciones y Pagos</h3>
-            <p>Los planes Pioneer Elite, Empire Evolution y Custom Suite se facturan mensualmente. La cancelación puede hacerse en cualquier momento desde el Dashboard, manteniendo el acceso hasta el fin del periodo pagado.</p>
-          </section>
+        <div style={{ fontWeight: 900, fontSize: "1.2rem" }}>
+          Strat<span style={{ color: "#D4AF37" }}>ix</span> Intelligence
         </div>
-      </div>
-    </main>
+      </nav>
+
+      <main style={{ maxWidth: "800px", margin: "0 auto", padding: "5rem 1.5rem" }}>
+        <motion.div
+           initial={{ opacity: 0, y: 20 }}
+           animate={{ opacity: 1, y: 0 }}
+        >
+          <h1 style={{ fontSize: "3rem", fontWeight: 900, marginBottom: "1rem" }}>Términos de <span style={{ color: "#D4AF37" }}>Servicio</span></h1>
+          <p style={{ opacity: 0.5, marginBottom: "3rem" }}>Vigente para el ecosistema Stratix Intelligence en 2026</p>
+
+          <section style={{ marginBottom: "3rem" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "15px", marginBottom: "1.5rem", color: "#D4AF37" }}>
+              <FiFileText size={24} />
+              <h2 style={{ fontSize: "1.5rem", margin: 0 }}>Acuerdo de Élite</h2>
+            </div>
+            <p style={{ lineHeight: 1.8, opacity: 0.8 }}>
+              Al acceder a la infraestructura de **Stratix Intelligence**, usted acepta vincularse a este contrato de servicio estratégico. Diseñamos herramientas para líderes empresariales; por lo tanto, el uso indebido de nuestra IA para actividades ilícitas o spam está estrictamente prohibido.
+            </p>
+          </section>
+
+          <section style={{ marginBottom: "3rem" }}>
+             <h3 style={{ color: "#D4AF37", marginBottom: "1rem" }}>1. Licencia de Infraestructura IA</h3>
+             <p style={{ lineHeight: 1.8, opacity: 0.8 }}>
+               Stratix otorga una licencia limitada e intransferible para operar agentes inteligentes bajo su marca. Usted es responsable de la configuración de sus bots y de asegurar que el contenido cargado en su base de conocimientos cumpla con las leyes de propiedad intelectual de su jurisdicción.
+             </p>
+          </section>
+
+          <section style={{ marginBottom: "3rem" }}>
+             <h3 style={{ color: "#D4AF37", marginBottom: "1rem" }}>2. Planes y Suscripciones de Élite</h3>
+             <p style={{ lineHeight: 1.8, opacity: 0.8 }}>
+               El acceso a funciones avanzadas (RAG, WhatsApp API Ilimitado) está sujeto a la suscripción activa de un plan Élite. Los pagos procesados a través de **Mercado Pago** no son reembolsables una vez activado el consumo de créditos del modelo.
+             </p>
+          </section>
+
+          <section style={{ marginBottom: "3rem" }}>
+             <h3 style={{ color: "#D4AF37", marginBottom: "1rem" }}>3. Garantía Operativa</h3>
+             <p style={{ lineHeight: 1.8, opacity: 0.8 }}>
+               Nos esforzamos por mantener una disponibilidad del 99.9%. Sin embargo, no nos hacemos responsables por interrupciones menores derivadas de actualizaciones en las redes troncales de WhatsApp o servicios de Google Labs. Su éxito es nuestro motor prioritario.
+             </p>
+          </section>
+
+          <div style={{ padding: "2rem", background: "rgba(212,175,55,0.05)", borderRadius: "20px", border: "1px solid rgba(212,175,55,0.2)", marginTop: "5rem" }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+              <FiAlertCircle color="#D4AF37" size={24} />
+              <p style={{ opacity: 0.7, margin: 0 }}>
+                El uso continuado de Stratix Intelligence implica su total aceptación a estos términos de alto rendimiento.
+              </p>
+            </div>
+          </div>
+        </motion.div>
+      </main>
+
+      <footer style={{ textAlign: "center", padding: "4rem", opacity: 0.3, fontSize: "0.8rem" }}>
+        &copy; 2026 Stratix Intelligence — Todos los derechos reservados.
+      </footer>
+    </div>
   );
 }

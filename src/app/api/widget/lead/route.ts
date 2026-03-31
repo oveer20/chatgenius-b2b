@@ -9,7 +9,9 @@ export async function POST(request: NextRequest) {
   );
 
   try {
-    const { botId, name, email, whatsapp, sessionId } = await request.json();
+    const body = await request.json();
+    const { botId, name, email, whatsapp, phone, sessionId } = body;
+    const finalWhatsApp = whatsapp || phone;
 
     if (!botId) {
       return NextResponse.json({ error: "botId is required" }, { status: 400 });
@@ -22,7 +24,7 @@ export async function POST(request: NextRequest) {
           bot_id: botId, 
           name, 
           email, 
-          whatsapp,
+          whatsapp: finalWhatsApp,
           session_id: sessionId
         }
       ])
@@ -32,48 +34,56 @@ export async function POST(request: NextRequest) {
 
     // 2. Email Notifications
     try {
-      const { data: bot } = await supabaseAdmin
-        .from("bots")
-        .select("name, email_alerts_to")
-        .eq("id", botId)
-        .single();
+      let alertTo = process.env.NOTIFICATION_EMAIL || "stratixIntelligence@gmail.com";
+      let botName = "Stratix Intelligence Landing";
 
-      if (!bot?.email_alerts_to) return; // No alert if no email configured
+      if (botId !== "demo") {
+        const { data: bot } = await supabaseAdmin
+          .from("bots")
+          .select("name, email_alerts_to")
+          .eq("id", botId)
+          .single();
+        
+        if (bot?.email_alerts_to) alertTo = bot.email_alerts_to;
+        if (bot?.name) botName = bot.name;
+      }
 
       const { sendHotLeadAlert } = await import("@/lib/send-email");
 
       // 2a. Send Notification to the configured email
       await sendHotLeadAlert({
-        to: bot.email_alerts_to,
+        to: alertTo,
         subject: `🎯 NUEVO LEAD CAPTURADO: ${name}`,
-        botName: bot.name,
+        botName: botName,
         leadName: name,
-        leadContact: email || whatsapp || 'No provisto',
-        intent: 'Lead Externo (Formulario)',
-        summary: 'Este lead acaba de completar el formulario de contacto en el widget.'
+        leadContact: email || finalWhatsApp || 'No provisto',
+        intent: 'Lead de Venta (Directo)',
+        summary: 'Este lead acaba de completar el formulario estratégico en la plataforma.'
       });
 
-      // 2b. Send Lead Magnet to the Lead (The "Wow" Factor) - Phase 22
-      const { resend } = await import("@/lib/resend");
-      await resend.emails.send({
-        from: 'Stratix AI <bienvenida@resend.dev>',
-        to: email,
-        subject: `🎁 Tu regalo de Bienvenida: Guía de IA para Negocios`,
-        html: `
-          <div style="font-family: sans-serif; padding: 20px; color: #1e293b; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 12px;">
-            <h1 style="color: #3b82f6; text-align: center;">¡Hola ${name}! 👋</h1>
-            <p style="font-size: 1.1rem; line-height: 1.6;">Gracias por interesarte en <strong>Stratix AI</strong>. Como lo prometido es deuda, aquí tienes tu acceso a nuestra guía exclusiva para automatizar tu negocio con Inteligencia Artificial.</p>
-            
-            <div style="text-align: center; margin: 30px 0;">
-              <a href="https://stratix-intelligence.vercel.app/guia-ia-negocios.pdf" style="background: #3b82f6; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 1rem; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);">📥 Descargar Mi Guía Gratis</a>
+      // 2b. Send Lead Welcome Email
+      if (email) {
+        const { resend } = await import("@/lib/resend");
+        await resend.emails.send({
+          from: 'Stratix Intelligence <bienvenida@resend.dev>',
+          to: email,
+          subject: `🎁 Tu bienvenida a Stratix Intelligence`,
+          html: `
+            <div style="font-family: sans-serif; padding: 20px; color: #0f172a; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 12px; background: #fff;">
+              <h1 style="color: #D4AF37; text-align: center;">¡Hola ${name}! 👋</h1>
+              <p style="font-size: 1.1rem; line-height: 1.6;">Gracias por confiar en <strong>Stratix Intelligence</strong>. Estás un paso más cerca de automatizar tu éxito comercial.</p>
+              
+              <div style="text-align: center; margin: 30px 0;">
+                <a href="https://stratix-intelligence.vercel.app/" style="background: #000; color: #D4AF37; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 1rem; border: 1px solid #D4AF37;">📥 Conocer el Ecosistema</a>
+              </div>
+
+              <p style="color: #64748b; font-size: 0.9rem;">Pronto uno de nuestros arquitectos se pondrá en contacto contigo para tu diagnóstico personalizado.</p>
+              <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;" />
+              <p style="text-align: center; color: #94a3b8; font-size: 0.8rem;">Stratix Intelligence — Architectural Strategic Intelligence.</p>
             </div>
-
-            <p style="color: #64748b; font-size: 0.9rem;">¿Sabías que un agente de IA puede reducir tus costos operativos en un 70%? Si quieres ver cómo Stratix puede ayudar a tu empresa específicamente, responde a este correo o agenda una llamada con nosotros.</p>
-            <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;" />
-            <p style="text-align: center; color: #94a3b8; font-size: 0.8rem;">Stratix AI — La arquitectura de inteligencia estratégica.</p>
-          </div>
-        `
-      });
+          `
+        });
+      }
     } catch (e) {
       console.error("/// NOTIFICATION EMAIL ERROR ///", e);
     }
