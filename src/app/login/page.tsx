@@ -1,15 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { FiMail, FiLock, FiUser, FiArrowRight, FiShield, FiCheckCircle, FiZap } from "react-icons/fi";
 import { supabase } from "@/lib/supabase";
 import styles from "./auth.module.css";
 
-export default function AuthPage() {
-  const { searchParams } = new URL(typeof window !== 'undefined' ? window.location.href : '');
+function AuthContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [mode, setMode] = useState<"login" | "signup">("login");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+
   const redirect = searchParams.get("redirect") || "/dashboard";
   const plan = searchParams.get("plan");
 
@@ -160,5 +168,13 @@ export default function AuthPage() {
         </div>
       </motion.div>
     </div>
+  );
+}
+
+export default function AuthPage() {
+  return (
+    <Suspense fallback={<div style={{ minHeight: '100vh', backgroundColor: '#0B1120', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#D4AF37' }}>Cargando Protocolo de Seguridad...</div>}>
+      <AuthContent />
+    </Suspense>
   );
 }

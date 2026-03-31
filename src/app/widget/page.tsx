@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import { FiSend, FiMessageSquare, FiX } from "react-icons/fi";
 import { useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 
-export default function ChatWidget() {
+function ChatWidgetContent() {
   const searchParams = useSearchParams();
   const botId = searchParams.get("bot-id");
 
@@ -119,5 +119,13 @@ export default function ChatWidget() {
         </button>
       </form>
     </div>
+  );
+}
+
+export default function ChatWidget() {
+  return (
+    <Suspense fallback={<div style={{ padding: '20px', color: 'white' }}>Cargando Stratix AI...</div>}>
+      <ChatWidgetContent />
+    </Suspense>
   );
 }

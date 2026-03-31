@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import {
   FiMessageSquare, FiSettings, FiLogOut, FiPlus, FiClock, FiStar,

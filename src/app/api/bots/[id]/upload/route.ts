@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { syncBotKnowledge } from "@/lib/rag";
-import * as pdfjs from "pdfjs-dist";
+import { extractText } from "unpdf";
 
 export async function POST(
   request: NextRequest,
@@ -17,23 +17,14 @@ export async function POST(
       return NextResponse.json({ error: "No se proporcionó ningún archivo" }, { status: 400 });
     }
 
-    const buffer = await file.arrayBuffer();
+    const bufferRaw = await file.arrayBuffer();
+    const buffer = Buffer.from(bufferRaw);
     
-    // 1. Extraer texto del PDF
+    // 1. Extraer texto del PDF usando unpdf (Node/Edge/Browser friendly)
     let fullText = "";
     try {
-      const data = new Uint8Array(buffer);
-      const loadingTask = pdfjs.getDocument({ data });
-      const pdf = await loadingTask.promise;
-      
-      for (let i = 1; i <= pdf.numPages; i++) {
-        const page = await pdf.getPage(i);
-        const textContent = await page.getTextContent();
-        const pageText = textContent.items
-          .map((item: any) => item.str)
-          .join(" ");
-        fullText += pageText + "\n";
-      }
+      const { text } = await extractText(buffer);
+      fullText = Array.isArray(text) ? text.join("\n") : text;
     } catch (pdfError: any) {
       console.error("/// PDF PARSE ERROR ///", pdfError);
       return NextResponse.json({ error: "Error al procesar el PDF: " + pdfError.message }, { status: 500 });
