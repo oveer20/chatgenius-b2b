@@ -38,15 +38,25 @@ export async function POST(
           bot_id: id,
           content: text,
           embedding: embedding,
-          metadata: {
-            source: source || "Manual Input",
-            chunk_index: index,
-    const { chunks } = await syncBotKnowledge(botId, content, source || "Manual Input");
+          }
+        };
+      })
+    );
+
+    // 3. Inserción Masiva en Supabase
+    const { error: dbError } = await supabase
+      .from("knowledge")
+      .insert(processedChunks);
+
+    if (dbError) {
+      console.error("/// ERROR PERSISTIENDO CONOCIMIENTO ///", dbError);
+      throw dbError;
+    }
 
     return NextResponse.json({
       success: true,
-      message: `¡Núcleo de conocimiento actualizado! ${chunks} fragmentos sincronizados.`,
-      chunks_count: chunks
+      message: `¡Núcleo de conocimiento actualizado! ${chunks.length} fragmentos sincronizados.`,
+      chunks_count: chunks.length
     });
 
   } catch (error: any) {
