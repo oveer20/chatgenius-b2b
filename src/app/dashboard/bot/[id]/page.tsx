@@ -11,6 +11,7 @@ import {
 } from "react-icons/fi";
 import styles from "../../dashboard.module.css";
 import { supabase } from "@/lib/supabase";
+import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
 export default function BotEditor() {
   const { id } = useParams();
@@ -476,6 +477,62 @@ export default function BotEditor() {
                     )}
                   </div>
                 </div>
+
+                {/* Dashboard Analítico Visual - Recharts */}
+                {leads.length > 0 && (
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '3rem' }}>
+                    <div style={{ background: 'rgba(255,255,255,0.02)', padding: '1.5rem', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                      <h4 style={{ fontSize: '0.85rem', color: '#D4AF37', marginBottom: '1.5rem', fontWeight: 800, textAlign: 'center' }}>TEMPERATURA DEL PIPELINE</h4>
+                      <div style={{ height: '200px' }}>
+                        <ResponsiveContainer width="100%" height="100%">
+                          <PieChart>
+                            <Pie 
+                              data={[
+                                { name: 'Hot', value: leads.filter(l => l.score === 'Hot').length, color: '#D4AF37' },
+                                { name: 'Warm', value: leads.filter(l => l.score === 'Warm').length, color: '#FCD34D' },
+                                { name: 'Cold', value: leads.filter(l => l.score === 'Cold').length, color: '#9CA3AF' }
+                              ].filter(d => d.value > 0)} 
+                              cx="50%" cy="50%" innerRadius={60} outerRadius={80} paddingAngle={5} dataKey="value"
+                            >
+                              {[
+                                { name: 'Hot', value: leads.filter(l => l.score === 'Hot').length, color: '#D4AF37' },
+                                { name: 'Warm', value: leads.filter(l => l.score === 'Warm').length, color: '#FCD34D' },
+                                { name: 'Cold', value: leads.filter(l => l.score === 'Cold').length, color: '#9CA3AF' }
+                              ].filter(d => d.value > 0).map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={entry.color} />
+                              ))}
+                            </Pie>
+                            <Tooltip contentStyle={{ background: '#0B1120', border: '1px solid rgba(212,175,55,0.3)', borderRadius: '8px' }} itemStyle={{ color: '#D4AF37' }} />
+                          </PieChart>
+                        </ResponsiveContainer>
+                      </div>
+                    </div>
+
+                    <div style={{ background: 'rgba(255,255,255,0.02)', padding: '1.5rem', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                      <h4 style={{ fontSize: '0.85rem', color: '#D4AF37', marginBottom: '1.5rem', fontWeight: 800, textAlign: 'center' }}>INTENCIÓN DE COMPRA</h4>
+                      <div style={{ height: '200px' }}>
+                        <ResponsiveContainer width="100%" height="100%">
+                          <BarChart data={Object.keys(leads.reduce((acc, l) => {
+                            const intent = l.intent || 'Unknown';
+                            acc[intent] = (acc[intent] || 0) + 1;
+                            return acc;
+                          }, {} as Record<string, number>)).map(key => ({
+                            name: key.length > 10 ? key.substring(0,10)+'...' : key,
+                            count: leads.reduce((acc, l) => {
+                                const intent = l.intent || 'Unknown';
+                                acc[intent] = (acc[intent] || 0) + 1;
+                                return acc;
+                            }, {} as Record<string, number>)[key]
+                          }))}>
+                            <XAxis dataKey="name" stroke="rgba(255,255,255,0.3)" fontSize={11} tickLine={false} axisLine={false} />
+                            <Tooltip cursor={{ fill: 'rgba(255,255,255,0.05)' }} contentStyle={{ background: '#0B1120', border: '1px solid rgba(212,175,55,0.3)', borderRadius: '8px' }} />
+                            <Bar dataKey="count" fill="#D4AF37" radius={[4, 4, 0, 0]} />
+                          </BarChart>
+                        </ResponsiveContainer>
+                      </div>
+                    </div>
+                  </div>
+                )}
 
                 <div style={{ background: 'rgba(255,255,255,0.02)', borderRadius: '24px', border: '1px solid rgba(255,255,255,0.05)', overflow: 'hidden' }}>
                   {isLoadingLeads ? (

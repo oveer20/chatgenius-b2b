@@ -2,25 +2,25 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: 'Stratix AI — Architectural Strategic Intelligence',
-  description: 'El estándar global de inteligencia estratégica para empresas B2B de élite. Automatización, diseño y estrategia impulsada por el Ecosistema Stratix.',
-  keywords: ["soporte 24/7", "inteligencia artificial", "IA B2B", "Stratix AI"],
+  title: 'Stratix AI — Vende Más, Duerme Mejor',
+  description: 'El estándar global de Inteligencia Artificial para ventas y soporte B2B. Captura leads, automatiza WhatsApp y entrena a tu bot con nuestra tecnología RAG de Élite.',
+  keywords: ["inteligencia artificial", "SaaS B2B", "CRM con IA", "Stratix AI", "automatización de ventas", "WhatsApp Bot Inteligente", "RAG B2B", "captador de leads"],
   authors: [{ name: "Stratix AI" }],
-  // 👇 Esta sección es la que activa el escudo en la pestaña del navegador
   icons: {
     icon: "/stratix_shield.svg",
     apple: "/stratix_shield.svg",
   },
   openGraph: {
-    title: 'Stratix AI | Ecosistema de Inteligencia para Negocios de Élite',
-    description: 'Automatiza tu proceso de ventas y atención con una suite integrada de IA. Tecnología avanzada para empresas estratégicas.',
-    images: ['/stratix_shield.svg'], // Actualizado a .svg
+    title: 'Stratix AI | Vende Más, Duerme Mejor',
+    description: 'Automatiza tu proceso de ventas y atención omnicanal con nuestra suite integrada de IA. Creado para dueños de negocios exigentes.',
+    images: ['/stratix_shield.svg'], 
+    type: 'website'
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Stratix AI | La Suite de IA Corporativa',
-    description: 'Escala tus operaciones con inteligencia estratégica.',
-    images: ['/stratix_shield.svg'], // Actualizado a .svg
+    description: 'Escala tus operaciones con inteligencia estratégica y captura leads 24/7.',
+    images: ['/stratix_shield.svg'],
   }
 };
 
