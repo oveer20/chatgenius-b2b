@@ -78,6 +78,27 @@ export async function POST(request: NextRequest) {
 
         console.log(`/// MENSAJE ENTRANTE WHATSAPP [Bot: ${bot.name} | De: ${fromNumber}] ///`);
 
+        // 2.5 Validación de Cuotas de Servicio
+        const { data: profile } = await supabaseAdmin
+          .from("profiles")
+          .select("plan, messages_sent_this_month")
+          .eq("id", bot.user_id)
+          .single();
+
+        const owner: any = profile || { plan: 'free', messages_sent_this_month: 0 };
+        const planLimits: Record<string, number> = { free: 100, starter: 500, pro: 5000, enterprise: 9999999 };
+        const userPlan = owner.plan || 'free';
+        const messageLimit = planLimits[userPlan] || 100;
+
+        if (owner.messages_sent_this_month >= messageLimit) {
+           console.log(`/// WHATSAPP QUOTA EXCEEDED FOR BOT: ${bot.name} ///`);
+           const { sendWhatsAppMessage } = await import("@/lib/whatsapp");
+           if (bot.whatsapp_token) {
+              await sendWhatsAppMessage(phoneNumberId, bot.whatsapp_token, fromNumber, `🤖 SISTEMA:\nEl servidor de inteligencia artificial ha alcanzado su límite operativo para el plan actual (${userPlan.toUpperCase()}). Por favor contacte al administrador.`);
+           }
+           return NextResponse.json({ success: true, status: "quota_exceeded" });
+        }
+
         // 3. PERSISTENCIA ESTRATÉGICA (Sesión por Número de WhatsApp)
         let chatId: string | null = null;
         let chatMessages: any[] = [];

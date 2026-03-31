@@ -88,15 +88,24 @@ export async function POST(request: NextRequest) {
     }
 
     // 3. Validación de Cuotas de Servicio (SLA)
-    if (owner.plan === 'free' && owner.messages_sent_this_month >= 500) {
+    const planLimits: Record<string, number> = {
+      free: 100,
+      starter: 500,
+      pro: 5000,
+      enterprise: 9999999
+    };
+    
+    const userPlan = owner.plan || 'free';
+    const messageLimit = planLimits[userPlan] || 100;
+
+    if (owner.messages_sent_this_month >= messageLimit) {
       return NextResponse.json({
         message: {
           role: "assistant",
-          content: "SISTEMA: El límite de consultas gratuitas para este activo ha sido alcanzado. Contacte al administrador de Stratix para escalar el plan."
+          content: `🤖 SISTEMA DE SEGURIDAD ACTIVADO:\nEl plan ${userPlan.toUpperCase()} de este Agente IA ha alcanzado su límite de memoria de ${messageLimit} interacciones. Por favor contacte al administrador y proporcione este mensaje para escalar la licencia.`
         }
       });
     }
-
     // 3. Arquitectura del Prompt de Élite
     const branding = owner.plan === 'enterprise'
       ? "MARCA BLANCA: Actúa como una solución interna propia de la empresa. No menciones proveedores externos."

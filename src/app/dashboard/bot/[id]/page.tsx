@@ -7,7 +7,7 @@ import { useParams, useRouter } from "next/navigation";
 import {
   FiArrowLeft, FiSave, FiPlay, FiDatabase, FiSettings, FiCpu, FiRefreshCw,
   FiSend, FiZap, FiCode, FiGlobe, FiStar, FiLayout, FiShield, FiInfo,
-  FiBarChart2, FiUsers, FiMail, FiPhone, FiCalendar, FiMessageCircle, FiPlus
+  FiBarChart2, FiUsers, FiMail, FiPhone, FiCalendar, FiMessageCircle, FiPlus, FiDownload
 } from "react-icons/fi";
 import styles from "../../dashboard.module.css";
 import { supabase } from "@/lib/supabase";
@@ -203,6 +203,25 @@ export default function BotEditor() {
     } finally {
       setIsCrawling(false);
     }
+  };
+
+  const handleExportCSV = () => {
+    if (leads.length === 0) return;
+    
+    const headers = ["ID,Nombre,Email,Teléfono,Intención,Calificación,Fecha\n"];
+    const csvContent = leads.map(l => {
+      const date = new Date(l.created_at).toLocaleDateString();
+      return `"${l.id}","${l.name || ''}","${l.email || ''}","${l.phone || ''}","${l.intent || ''}","${l.score || ''}","${date}"`;
+    }).join("\n");
+    
+    const blob = new Blob([headers + csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", `leads_stratix_${id}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const handleSendMessage = async (e: React.FormEvent) => {
@@ -443,8 +462,18 @@ export default function BotEditor() {
                   <h3 style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '1.5rem', fontWeight: 900 }}>
                     <FiUsers color="#D4AF37" /> Prospectos Capturados
                   </h3>
-                  <div style={{ padding: '10px 20px', background: 'rgba(212,175,55,0.1)', borderRadius: '12px', border: '1px solid rgba(212,175,55,0.2)', fontSize: '0.9rem' }}>
-                    Total: <strong style={{ color: '#D4AF37' }}>{leads.length}</strong>
+                  <div style={{ display: 'flex', gap: '10px' }}>
+                    <div style={{ padding: '10px 20px', background: 'rgba(212,175,55,0.1)', borderRadius: '12px', border: '1px solid rgba(212,175,55,0.2)', fontSize: '0.9rem' }}>
+                      Total: <strong style={{ color: '#D4AF37' }}>{leads.length}</strong>
+                    </div>
+                    {leads.length > 0 && (
+                      <button 
+                        onClick={handleExportCSV}
+                        style={{ padding: '10px 20px', background: 'rgba(16, 185, 129, 0.1)', color: '#10b981', border: '1px solid rgba(16, 185, 129, 0.3)', borderRadius: '12px', cursor: 'pointer', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '8px' }}
+                      >
+                        <FiDownload /> Exportar a Excel
+                      </button>
+                    )}
                   </div>
                 </div>
 
