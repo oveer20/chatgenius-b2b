@@ -38,6 +38,9 @@ export async function POST(
           bot_id: id,
           content: text,
           embedding: embedding,
+          metadata: {
+            source: source || "Manual Input",
+            chunk_index: index,
           }
         };
       })
