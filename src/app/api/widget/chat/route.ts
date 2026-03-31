@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
     // 1. Obtención del Activo IA y Perfil del Propietario
     const { data: bot, error: botError } = await supabaseAdmin
       .from("bots")
-      .select("name, system_prompt, knowledge_base, user_id")
+      .select("name, system_prompt, knowledge_base, user_id, email_alerts_to")
       .eq("id", botId)
       .single();
 
@@ -178,10 +178,26 @@ export async function POST(request: NextRequest) {
       }]);
 
       if (sessionId) {
-        await supabaseAdmin
+        const { data: lead } = await supabaseAdmin
           .from("leads")
           .update({ intent, score, updated_at: new Date().toISOString() })
-          .eq("session_id", sessionId);
+          .eq("session_id", sessionId)
+          .select()
+          .single();
+
+        // 6.5 Alerta de Lead Caliente (Elite Alert)
+        if (score === 'Hot' && bot.email_alerts_to) {
+           const { sendHotLeadAlert } = await import("@/lib/send-email");
+           await sendHotLeadAlert({
+              to: bot.email_alerts_to,
+              subject: `🔥 LEAD CALIENTE DETECTADO: ${lead?.name || 'Usuario'}`,
+              botName: bot.name,
+              leadName: lead?.name || 'Prospecto Web',
+              leadContact: lead?.email || lead?.phone || sessionId,
+              intent: intent,
+              summary: cleanText.substring(0, 300)
+           });
+        }
       }
     }
 

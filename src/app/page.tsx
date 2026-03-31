@@ -111,7 +111,7 @@ export default function LandingPage() {
             </p>
             <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
               <Link href="/login" style={{ padding: '20px 42px', backgroundColor: '#D4AF37', color: '#000', borderRadius: '14px', fontWeight: 900, textDecoration: 'none', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '12px', boxShadow: '0 10px 30px rgba(212,175,55,0.2)' }}>Comenzar Ahora <FiArrowRight /></Link>
-              <a href="#demo" style={{ padding: '20px 42px', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '14px', fontWeight: 700, textDecoration: 'none', color: 'white', display: 'flex', alignItems: 'center', gap: '12px', background: 'rgba(255,255,255,0.03)', backdropFilter: 'blur(10px)' }}><FiPlayCircle /> Ver Demo</a>
+              <a href="#demo" style={{ padding: '20px 42px', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '14px', fontWeight: 700, textDecoration: 'none', color: 'white', display: 'flex', alignItems: 'center', gap: '12px', background: 'rgba(255,255,255,0.03)', backdropFilter: 'blur(10px)' }}><FiPlayCircle /> Agendar Demo</a>
             </div>
           </motion.div>
 
@@ -369,21 +369,49 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 7. DEMO DEMOSTRATIVO */}
-      <section id="demo" style={{ padding: '8rem 5%', textAlign: 'center' }}>
-         <div style={{ maxWidth: '1000px', margin: '0 auto', background: '#000', borderRadius: '40px', border: '1px solid rgba(212,175,55,0.3)', padding: '3rem', textAlign: 'left', position: 'relative', overflow: 'hidden' }}>
-            <div style={{ display: 'flex', gap: '10px', marginBottom: '2rem' }}>
-              <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#FF5F56' }} />
-              <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#FFBD2E' }} />
-              <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#27C93F' }} />
+      {/* 7. AGENDAR DEMO ESTRATÉGICA (CONVERTING FORM) */}
+      <section id="demo" style={{ padding: '8rem 5%', background: 'linear-gradient(to bottom, #0B1120, #060B14)' }}>
+        <div style={{ maxWidth: '1100px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '4rem', alignItems: 'center' }}>
+          
+          <div style={{ textAlign: 'left' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#D4AF37', marginBottom: '1.5rem' }}>
+              <FiZap /> <span style={{ fontWeight: 800, fontSize: '0.8rem', letterSpacing: '2px' }}>DEMO DE ÉLITE</span>
             </div>
-            <code style={{ fontSize: '1rem', color: '#D4AF37', display: 'block', marginBottom: '1rem' }}>&gt; Analizando entrada de usuario vía WhatsApp...</code>
-            <code style={{ fontSize: '1.1rem', color: 'white', opacity: 0.9 }}>&gt; "Necesito implementar IA en mi flujo de ventas, presupuesto alto."</code>
-            <motion.code initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }} style={{ fontSize: '1.1rem', color: '#27C93F', display: 'block', marginTop: '1.5rem' }}>
-              &gt; Opal Logic: Intención HIGH-TICKET detectada. Lead clasificado como HOT.
-            </motion.code>
-            <div style={{ position: 'absolute', bottom: '-20px', right: '-20px', opacity: 0.05 }}><FiActivity fontSize="15rem" color="#D4AF37" /></div>
-         </div>
+            <h2 style={{ fontSize: '3rem', fontWeight: 900, marginBottom: '2rem', lineHeight: 1.1 }}>¿Listo para escalar <br /><span style={{ color: '#D4AF37' }}>sin límites humanos?</span></h2>
+            <p style={{ opacity: 0.6, fontSize: '1.1rem', lineHeight: 1.6, marginBottom: '2.5rem' }}>
+              Deja tus datos y uno de nuestros arquitectos de IA se pondrá en contacto para diseñar una solución a la medida de tu empresa.
+            </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                <div style={{ width: '45px', height: '45px', background: 'rgba(212,175,55,0.1)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#D4AF37' }}><FiCheck /></div>
+                <span style={{ fontWeight: 600 }}>Diagnóstico de Automatización Gratis</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                <div style={{ width: '45px', height: '45px', background: 'rgba(212,175,55,0.1)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#D4AF37' }}><FiCheck /></div>
+                <span style={{ fontWeight: 600 }}>Proyección de ROI en 15 minutos</span>
+              </div>
+            </div>
+          </div>
+
+          <div style={{ background: 'rgba(255,255,255,0.02)', padding: '3rem', borderRadius: '32px', border: '1px solid rgba(212,175,55,0.2)', position: 'relative' }}>
+            <form style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }} onSubmit={(e) => { e.preventDefault(); alert('🚀 ¡Solicitud enviada! Un arquitecto de Stratix se pondrá en contacto pronto.'); }}>
+              <div>
+                <label style={{ display: 'block', fontSize: '0.8rem', opacity: 0.5, marginBottom: '0.5rem' }}>Nombre Completo</label>
+                <input required type="text" placeholder="Tu nombre..." style={{ width: '100%', padding: '15px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', color: 'white' }} />
+              </div>
+              <div>
+                <label style={{ display: 'block', fontSize: '0.8rem', opacity: 0.5, marginBottom: '0.5rem' }}>Email Corporativo</label>
+                <input required type="email" placeholder="email@empresa.com" style={{ width: '100%', padding: '15px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', color: 'white' }} />
+              </div>
+              <div>
+                <label style={{ display: 'block', fontSize: '0.8rem', opacity: 0.5, marginBottom: '0.5rem' }}>WhatsApp de Contacto</label>
+                <input required type="tel" placeholder="+57 300..." style={{ width: '100%', padding: '15px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', color: 'white' }} />
+              </div>
+              <button type="submit" style={{ width: '100%', padding: '20px', background: '#D4AF37', color: '#000', borderRadius: '12px', fontWeight: 900, cursor: 'pointer', border: 'none', marginTop: '1rem', fontSize: '1rem' }}>SOLICITAR MI DEMO GRATIS</button>
+            </form>
+          </div>
+
+        </div>
       </section>
 
       {/* 7.5 TESTIMONIOS (NEW) */}

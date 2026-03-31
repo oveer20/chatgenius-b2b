@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
         // 2. Identificar qué bot debe responder según el phoneNumberId receptor
         const { data: bot } = await supabaseAdmin
           .from("bots")
-          .select("*")
+          .select("id, name, system_prompt, knowledge_base, user_id, whatsapp_token, email_alerts_to")
           .eq("whatsapp_phone_number_id", phoneNumberId)
           .single();
 
@@ -226,6 +226,20 @@ export async function POST(request: NextRequest) {
               intent, 
               score 
             }]);
+          }
+
+          // 8.5 Alerta de Lead Caliente (WhatsApp Elite Alert)
+          if (score === 'Hot' && bot.email_alerts_to) {
+            const { sendHotLeadAlert } = await import("@/lib/send-email");
+            await sendHotLeadAlert({
+               to: bot.email_alerts_to,
+               subject: `🔥 WP LEAD CALIENTE: ${userName}`,
+               botName: bot.name,
+               leadName: userName,
+               leadContact: fromNumber,
+               intent: intent,
+               summary: cleanText.substring(0, 300)
+            });
           }
         }
 

@@ -28,6 +28,7 @@ export default function BotEditor() {
     whatsappPhoneId: "",
     whatsappToken: "",
     whatsappVerifyToken: "",
+    emailAlertsTo: "",
   });
 
   const [chatMessages, setChatMessages] = useState([
@@ -68,6 +69,7 @@ export default function BotEditor() {
           whatsappPhoneId: data.whatsapp_phone_number_id || "",
           whatsappToken: data.whatsapp_token || "",
           whatsappVerifyToken: data.whatsapp_verify_token || "",
+          emailAlertsTo: data.email_alerts_to || "",
         });
         setKnowledgeBase(data.knowledge_base || "");
       }
@@ -110,6 +112,7 @@ export default function BotEditor() {
         whatsapp_phone_number_id: botData.whatsappPhoneId,
         whatsapp_token: botData.whatsappToken,
         whatsapp_verify_token: botData.whatsappVerifyToken,
+        email_alerts_to: botData.emailAlertsTo,
         updated_at: new Date().toISOString(),
       };
 
@@ -356,6 +359,16 @@ export default function BotEditor() {
                           <option value="gpt-4o">GPT-4o (Elite)</option>
                           <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
                         </select>
+                      </div>
+                      <div>
+                        <label style={{ display: 'block', fontSize: '0.8rem', opacity: 0.6, marginBottom: '0.5rem' }}>Correo para Alertas Hot Leads 📧</label>
+                        <input
+                          type="email"
+                          value={botData.emailAlertsTo}
+                          onChange={e => setBotData({ ...botData, emailAlertsTo: e.target.value })}
+                          placeholder="ej: alertas@tuempresa.com"
+                          style={{ width: '100%', padding: '12px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', color: 'white' }}
+                        />
                       </div>
                     </div>
                   </div>

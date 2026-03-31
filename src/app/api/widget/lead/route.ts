@@ -34,33 +34,27 @@ export async function POST(request: NextRequest) {
     try {
       const { data: bot } = await supabaseAdmin
         .from("bots")
-        .select("name")
+        .select("name, email_alerts_to")
         .eq("id", botId)
         .single();
 
-      const { resend } = await import("@/lib/resend");
+      if (!bot?.email_alerts_to) return; // No alert if no email configured
 
-      // 2a. Send Notification to Admin (You)
-      await resend.emails.send({
-        from: 'Stratix AI <notifications@resend.dev>',
-        to: process.env.NOTIFICATION_EMAIL || 'admin@stratix-intelligence.vercel.app',
-        subject: `🔥 Nuevo Lead Detectado - Stratix AI (vía ${bot?.name || 'Stratix'})`,
-        html: `
-          <div style="font-family: sans-serif; padding: 20px; color: #1e293b;">
-            <h2 style="color: #3b82f6;">¡Tienes un nuevo prospecto! 🎊</h2>
-            <p>Se ha capturado un nuevo lead a través de tu asistente de IA.</p>
-            <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;" />
-            <p><strong>👤 Nombre:</strong> ${name}</p>
-            <p><strong>📧 Email:</strong> ${email}</p>
-            <p><strong>📱 WhatsApp:</strong> ${whatsapp || 'No proporcionado'}</p>
-            <p><strong>🤖 Agente:</strong> ${bot?.name || 'Stratix'}</p>
-            <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;" />
-            <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://stratix-intelligence.vercel.app'}/dashboard" style="background: #3b82f6; color: white; padding: 10px 20px; text-decoration: none; border-radius: 8px; font-weight: bold;">Ver en el Dashboard</a>
-          </div>
-        `
+      const { sendHotLeadAlert } = await import("@/lib/send-email");
+
+      // 2a. Send Notification to the configured email
+      await sendHotLeadAlert({
+        to: bot.email_alerts_to,
+        subject: `🎯 NUEVO LEAD CAPTURADO: ${name}`,
+        botName: bot.name,
+        leadName: name,
+        leadContact: email || whatsapp || 'No provisto',
+        intent: 'Lead Externo (Formulario)',
+        summary: 'Este lead acaba de completar el formulario de contacto en el widget.'
       });
 
       // 2b. Send Lead Magnet to the Lead (The "Wow" Factor) - Phase 22
+      const { resend } = await import("@/lib/resend");
       await resend.emails.send({
         from: 'Stratix AI <bienvenida@resend.dev>',
         to: email,
