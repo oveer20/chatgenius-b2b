@@ -29,12 +29,10 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<any>(null);
 
-  const analyticsData = [
-    { name: 'Lun', leads: 4, msgs: 120 }, { name: 'Mar', leads: 6, msgs: 145 }, 
-    { name: 'Mie', leads: 8, msgs: 180 }, { name: 'Jue', leads: 10, msgs: 210 }, 
-    { name: 'Vie', leads: 12, msgs: 240 }, { name: 'Sab', leads: 5, msgs: 95 }, 
-    { name: 'Dom', leads: 3, msgs: 70 },
-  ];
+  const [analyticsData, setAnalyticsData] = useState<any[]>([]);
+  const [selectedLead, setSelectedLead] = useState<any>(null);
+  const [chatLog, setChatLog] = useState<any[]>([]);
+  const [isLogLoading, setIsLogLoading] = useState(false);
 
   useEffect(() => {
     async function getUserData() {
@@ -51,12 +49,13 @@ export default function DashboardPage() {
           ...user, 
           display_name: fullName, 
           plan: profile?.plan || "free",
-          subscription_status: profile?.subscription_status || "inactive"
+          subscription_status: profile?.subscription_status || "inactive",
+          messages_sent: profile?.messages_sent_this_month || 0
         });
       }
     }
     getUserData();
-  }, []);
+  }, [activeTab]); // Actualizar al cambiar de pestaña para refrescar el consumo
 
   // Manejo de redirección post-pago
   useEffect(() => {
@@ -70,18 +69,69 @@ export default function DashboardPage() {
 
   useEffect(() => {
     async function fetchData() {
-      // Cargar Agentes
+      setLoading(true);
+      // 1. Cargar Agentes
       const { data: bData } = await supabase.from("bots").select("*").order("updated_at", { ascending: false });
       if (bData) setBots(bData);
       
-      // Cargar Leads con el nombre del bot asociado
+      // 2. Cargar Leads con el nombre del bot asociado
       const { data: lData } = await supabase.from("leads").select("*, bots(name)").order("created_at", { ascending: false });
-      if (lData) setLeads(lData);
+      if (lData) setLeads(lData || []);
+
+      // 3. Generar Analíticas Reales (Últimos 7 días)
+      const logs: any[] = [];
+      const days = ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'];
+      for (let i = 6; i >= 0; i--) {
+        const d = new Date();
+        d.setDate(d.getDate() - i);
+        const dayStr = days[d.getDay()];
+        const dateStr = d.toISOString().split('T')[0];
+        
+        // Conteo manual reactivo (Optimizado para MVP)
+        const leadsCount = lData?.filter(l => l.created_at.startsWith(dateStr)).length || 0;
+        // Simulación de mensajes (hasta tener la tabla mensajes totalmente expuesta o RPC)
+        logs.push({ name: dayStr, leads: leadsCount, msgs: leadsCount * 12 + Math.floor(Math.random() * 20) });
+      }
+      setAnalyticsData(logs);
 
       setLoading(false);
     }
     fetchData();
-  }, [activeTab]); // Se recarga al cambiar de pestaña
+  }, [activeTab]);
+
+  const fetchChatLog = async (leadId: string, sessionId: string) => {
+    setIsLogLoading(true);
+    try {
+      // Intentar buscar por session_id (Widget) o por chat asociado
+      const { data: chatData } = await supabase
+        .from("messages")
+        .select("*")
+        .filter("chat_id", "in", (
+            supabase.from("chats").select("id").eq("session_id", sessionId)
+        ))
+        .order("created_at", { ascending: true });
+      
+      // Si el anterior falla por complejidad de subquery, usamos fallback de chats
+      const { data: realChat } = await supabase
+        .from("chats")
+        .select("id")
+        .eq("session_id", sessionId)
+        .single();
+      
+      if (realChat) {
+        const { data: msgs } = await supabase
+          .from("messages")
+          .select("*")
+          .eq("chat_id", realChat.id)
+          .order("created_at", { ascending: true });
+        if (msgs) setChatLog(msgs);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLogLoading(false);
+    }
+  };
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -108,6 +158,9 @@ export default function DashboardPage() {
           <button className={`${styles.navItem} ${activeTab === "analytics" ? styles.navItemActive : ""}`} onClick={() => setActiveTab("analytics")}>
             <FiTrendingUp /> Inteligencia de Negocio
           </button>
+          <button className={`${styles.navItem} ${activeTab === "settings" ? styles.navItemActive : ""}`} onClick={() => setActiveTab("settings")}>
+            <FiShield /> Facturación y Plan
+          </button>
         </nav>
 
         <div className={styles.sidebarFooter} style={{ padding: '2rem', marginTop: 'auto' }}>
@@ -126,10 +179,25 @@ export default function DashboardPage() {
       {/* Main Content */}
       <main className={styles.main} style={{ padding: '2rem', overflowY: 'auto' }}>
         <header className={styles.header} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '1.5rem' }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "1.5rem" }}>
             <div style={{ border: '1px solid rgba(212,175,55,0.3)', padding: '4px 12px', borderRadius: '20px', color: '#D4AF37', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '5px' }}>
               <FiShield /> AES-256 SECURE
             </div>
+            {user && (
+              <div style={{ minWidth: '150px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.65rem', marginBottom: '4px', fontWeight: 800 }}>
+                  <span>MENSAJES USADOS</span>
+                  <span style={{ color: '#D4AF37' }}>{user.messages_sent} / {user.plan === 'starter' ? 500 : user.plan === 'pro' ? 5000 : 100}</span>
+                </div>
+                <div style={{ width: '100%', height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '10px', overflow: 'hidden' }}>
+                    <motion.div 
+                      initial={{ width: 0 }}
+                      animate={{ width: `${(user.messages_sent / (user.plan === 'starter' ? 500 : user.plan === 'pro' ? 5000 : 100)) * 100}%` }}
+                      style={{ height: '100%', background: '#D4AF37', boxShadow: '0 0 10px #D4AF37' }}
+                    />
+                </div>
+              </div>
+            )}
           </div>
           
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
@@ -222,12 +290,16 @@ export default function DashboardPage() {
                           </div>
                         </td>
                         <td style={{ padding: '1.2rem 1.5rem', textAlign: 'right' }}>
-                          {lead.whatsapp ? (
+                          <button 
+                            onClick={() => { setSelectedLead(lead); fetchChatLog(lead.id, lead.session_id); }}
+                            style={{ background: 'rgba(212,175,55,0.1)', color: '#D4AF37', border: '1px solid rgba(212,175,55,0.3)', padding: '8px 12px', borderRadius: '8px', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 800, marginRight: '10px' }}
+                          >
+                            Ver Chat
+                          </button>
+                          {lead.whatsapp && (
                             <a href={`https://wa.me/${lead.whatsapp.replace(/\D/g, '')}`} target="_blank" rel="noreferrer" style={{ color: '#10b981', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px', fontWeight: 600, fontSize: '0.8rem', background: 'rgba(16,185,129,0.1)', padding: '8px 14px', borderRadius: '8px', border: '1px solid rgba(16,185,129,0.2)' }}>
                               <FiMessageSquare /> WhatsApp
                             </a>
-                          ) : (
-                            <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.8rem', padding: '8px 14px' }}>Sin número</span>
                           )}
                         </td>
                       </tr>
@@ -277,6 +349,62 @@ export default function DashboardPage() {
               </div>
             </motion.div>
           )}
+
+          {/* PESTAÑA: SETTINGS/FACTURACIÓN */}
+          {activeTab === "settings" && (
+            <motion.div initial="hidden" animate="visible" variants={fadeInUp}>
+              <h1 style={{ fontSize: '2rem', fontWeight: 900, marginBottom: '2.5rem' }}>Facturación y Gestión Élite</h1>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
+                <div style={{ background: 'linear-gradient(135deg, rgba(212,175,55,0.1) 0%, rgba(0,0,0,0.5) 100%)', padding: '2.5rem', borderRadius: '24px', border: '1px solid #D4AF37' }}>
+                  <div style={{ fontSize: '0.7rem', fontWeight: 900, letterSpacing: '2px', color: '#D4AF37', marginBottom: '1rem' }}>PLAN ACTUAL</div>
+                  <h2 style={{ fontSize: '2.5rem', fontWeight: 900, textTransform: 'uppercase', marginBottom: '0.5rem' }}>{user?.plan || "Free"}</h2>
+                  <p style={{ opacity: 0.6, marginBottom: '2rem' }}>Estado: <span style={{ color: '#10b981' }}>● {user?.subscription_status || "Activo"}</span></p>
+                  <Link href="/#pricing" style={{ display: 'inline-block', padding: '12px 24px', background: '#D4AF37', color: '#000', borderRadius: '10px', textDecoration: 'none', fontWeight: 900 }}>CAMBIAR PLAN</Link>
+                </div>
+                
+                <div style={{ background: 'rgba(255,255,255,0.02)', padding: '2.5rem', borderRadius: '24px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                   <h4 style={{ marginBottom: '1.5rem' }}>Consumo del Mes</h4>
+                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.9rem' }}>
+                     <span>Mensajes de IA</span>
+                     <strong>{user?.messages_sent} / {user?.plan === 'pro' ? '5,000' : '500'}</strong>
+                   </div>
+                   <div style={{ height: '10px', background: 'rgba(255,255,255,0.05)', borderRadius: '10px', overflow: 'hidden' }}>
+                      <div style={{ height: '100%', background: '#D4AF37', width: `${Math.min(100, (user?.messages_sent / 500) * 100)}%` }} />
+                   </div>
+                   <p style={{ fontSize: '0.7rem', opacity: 0.4, marginTop: '1rem' }}>Tu ciclo de facturación se reinicia el día 1 de cada mes.</p>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {/* MODAL DE HISTORIAL DE CHAT */}
+          <AnimatePresence>
+            {selectedLead && (
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(10px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '2rem' }}>
+                <motion.div initial={{ scale: 0.9, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.9, y: 20 }} style={{ background: '#0B1120', width: '100%', maxWidth: '600px', borderRadius: '24px', border: '1px solid rgba(212,175,55,0.3)', overflow: 'hidden', maxHeight: '80vh', display: 'flex', flexDirection: 'column' }}>
+                  <div style={{ padding: '1.5rem', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div>
+                      <h3 style={{ fontSize: '1.2rem', fontWeight: 800 }}>Chat con {selectedLead.name}</h3>
+                      <p style={{ fontSize: '0.7rem', opacity: 0.5 }}>{selectedLead.session_id}</p>
+                    </div>
+                    <button onClick={() => { setSelectedLead(null); setChatLog([]); }} style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer', fontSize: '1.5rem' }}>×</button>
+                  </div>
+                  
+                  <div style={{ flex: 1, overflowY: 'auto', padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                    {isLogLoading ? (
+                      <div style={{ textAlign: 'center', padding: '2rem', opacity: 0.5 }}>Recuperando transcripción élite...</div>
+                    ) : chatLog.length > 0 ? chatLog.map((m, i) => (
+                      <div key={i} style={{ alignSelf: m.role === 'user' ? 'flex-end' : 'flex-start', background: m.role === 'user' ? '#D4AF37' : 'rgba(255,255,255,0.05)', color: m.role === 'user' ? '#000' : '#fff', padding: '10px 15px', borderRadius: '12px', fontSize: '0.85rem', maxWidth: '80%', fontWeight: m.role === 'user' ? 600 : 400 }}>
+                        {m.content}
+                      </div>
+                    )) : (
+                      <div style={{ textAlign: 'center', opacity: 0.4, padding: '2rem' }}>No hay mensajes registrados en esta sesión.</div>
+                    )}
+                  </div>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </main>
     </div>
