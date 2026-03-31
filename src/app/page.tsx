@@ -510,125 +510,216 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 7.7 ROI CALCULATOR (NEW) */}
-      <section style={{ padding: '8rem 5%', background: 'linear-gradient(to bottom, #060B14, #0B1120)' }}>
-        <div style={{ maxWidth: '1000px', margin: '0 auto', background: 'rgba(212,175,55,0.05)', borderRadius: '40px', border: '1px solid rgba(212,175,55,0.2)', padding: '5rem 3rem', textAlign: 'center' }}>
-          <h2 style={{ fontSize: '2.5rem', fontWeight: 900, marginBottom: '1.5rem' }}>Calcula tu <span style={{ color: '#D4AF37' }}>Retorno Estratégico</span></h2>
-          <p style={{ opacity: 0.5, marginBottom: '4rem' }}>Desliza para ver cuánto tiempo y dinero ahorras con Stratix.</p>
-          
-          <div style={{ maxWidth: '600px', margin: '0 auto' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem', fontWeight: 800 }}>
-              <span>Leads Mensuales</span>
-              <span style={{ color: '#D4AF37' }}>{leads}</span>
-            </div>
-            <input 
-              type="range" 
-              min="10" 
-              max="1000" 
-              value={leads} 
-              onChange={(e) => setLeads(parseInt(e.target.value))}
-              style={{ width: '100%', accentColor: '#D4AF37', cursor: 'pointer', marginBottom: '4rem' }}
-            />
+      {/* 7.7 ROI CALCULATOR (PREMIUM REDESIGN) */}
+      <section id="roi" style={{ padding: '12rem 5%', background: '#03070C', position: 'relative' }}>
+        <div style={{ position: 'absolute', top: '0', left: '0', width: '100%', height: '100%', background: 'radial-gradient(circle at 10% 90%, rgba(212,175,55,0.03) 0%, transparent 40%)', zIndex: 0 }} />
+        
+        <div style={{ maxWidth: '1100px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
+          <div style={{ 
+            background: 'rgba(255,255,255,0.01)', 
+            backdropFilter: 'blur(30px)', 
+            borderRadius: '50px', 
+            border: '1px solid rgba(212,175,55,0.15)', 
+            padding: '6rem 4rem', 
+            textAlign: 'center',
+            boxShadow: '0 40px 100px rgba(0,0,0,0.4)'
+          }}>
+            <h2 style={{ fontSize: '3rem', fontWeight: 900, marginBottom: '1.5rem', letterSpacing: '-1px' }}>Calcula tu <span style={{ color: '#D4AF37' }}>Retorno de Inversión</span></h2>
+            <p style={{ opacity: 0.4, marginBottom: '5rem', fontSize: '1.1rem' }}>Saca cuentas claras: Cuánto le cuesta a tu empresa NO tener un motor de Stratix operando.</p>
             
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '2rem' }}>
-              <div style={{ padding: '2rem', background: 'rgba(0,0,0,0.2)', borderRadius: '24px' }}>
-                <div style={{ fontSize: '0.8rem', opacity: 0.4, marginBottom: '0.5rem' }}>AHORRO OPERATIVO</div>
-                <div style={{ fontSize: '2rem', fontWeight: 900, color: '#D4AF37' }}>${(leads * 0.8 * 12).toLocaleString()}</div>
-                <div style={{ fontSize: '0.7rem', opacity: 0.3 }}>USD / MES</div>
+            <div style={{ maxWidth: '700px', margin: '0 auto' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '2rem', fontWeight: 800 }}>
+                <span style={{ fontSize: '1.2rem' }}>Interacciones Mensuales</span>
+                <span style={{ color: '#D4AF37', fontSize: '1.5rem' }}>{leads}</span>
               </div>
-              <div style={{ padding: '2rem', background: 'rgba(0,0,0,0.2)', borderRadius: '24px' }}>
-                <div style={{ fontSize: '0.8rem', opacity: 0.4, marginBottom: '0.5rem' }}>TIEMPO RECUPERADO</div>
-                <div style={{ fontSize: '2rem', fontWeight: 900, color: '#D4AF37' }}>{Math.round(leads * 0.25)}</div>
-                <div style={{ fontSize: '0.7rem', opacity: 0.3 }}>HORAS / MES</div>
+              
+              <div style={{ position: 'relative', marginBottom: '6rem' }}>
+                <input 
+                  type="range" 
+                  min="10" 
+                  max="1000" 
+                  value={leads} 
+                  onChange={(e) => setLeads(parseInt(e.target.value))}
+                  style={{ 
+                    width: '100%', 
+                    height: '8px',
+                    borderRadius: '5px',
+                    background: 'rgba(212,175,55,0.1)',
+                    outline: 'none',
+                    appearance: 'none',
+                    WebkitAppearance: 'none',
+                    cursor: 'pointer'
+                  }}
+                />
+                {/* Custom Thumb Styling would normally be in a .css file, using inline for speed */}
+                <style>{`
+                  input[type=range]::-webkit-slider-thumb {
+                    -webkit-appearance: none;
+                    height: 24px;
+                    width: 24px;
+                    border-radius: 50%;
+                    background: #D4AF37;
+                    box-shadow: 0 0 15px rgba(212,175,55,0.8);
+                    cursor: pointer;
+                  }
+                  input[type=range]::-moz-range-thumb {
+                    height: 24px;
+                    width: 24px;
+                    border-radius: 50%;
+                    background: #D4AF37;
+                    box-shadow: 0 0 15px rgba(212,175,55,0.8);
+                    cursor: pointer;
+                  }
+                `}</style>
+              </div>
+              
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '3rem' }}>
+                <div style={{ 
+                  padding: '3rem', 
+                  background: 'rgba(212,175,55,0.05)', 
+                  borderRadius: '35px', 
+                  border: '1px solid rgba(212,175,55,0.2)',
+                  transition: '0.3s'
+                }}>
+                  <div style={{ fontSize: '0.8rem', fontWeight: 900, color: '#D4AF37', marginBottom: '1.5rem', letterSpacing: '2px' }}>AHORRO OPERATIVO</div>
+                  <div style={{ fontSize: '3rem', fontWeight: 900 }}>
+                    <span style={{ fontSize: '1.5rem', verticalAlign: 'top', marginRight: '5px' }}>$</span>
+                    {(leads * 0.8 * 12).toLocaleString()}
+                  </div>
+                  <div style={{ fontSize: '0.75rem', opacity: 0.3, marginTop: '5px' }}>USD ESTIMADO / MES</div>
+                </div>
+                
+                <div style={{ 
+                  padding: '3rem', 
+                  background: 'rgba(255,255,255,0.02)', 
+                  borderRadius: '35px', 
+                  border: '1px solid rgba(255,255,255,0.05)'
+                }}>
+                  <div style={{ fontSize: '0.8rem', fontWeight: 900, opacity: 0.4, marginBottom: '1.5rem', letterSpacing: '2px' }}>TIEMPO RECUPERADO</div>
+                  <div style={{ fontSize: '3rem', fontWeight: 900, color: '#D4AF37' }}>
+                    {Math.round(leads * 0.25)}
+                    <span style={{ fontSize: '1.5rem', color: 'white', marginLeft: '5px' }}>hrs</span>
+                  </div>
+                  <div style={{ fontSize: '0.75rem', opacity: 0.3, marginTop: '5px' }}>TUYO PARA CRECER / MES</div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 8. BENTO GRID DE BENEFICIOS */}
-      <section style={{ padding: '8rem 5%' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gridAutoRows: '200px', gap: '1.5rem', maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ gridColumn: 'span 2', background: 'rgba(212,175,55,0.05)', borderRadius: '25px', padding: '2rem', border: '1px solid rgba(212,175,55,0.2)' }}>
-            <FiShield style={{ color: '#D4AF37', fontSize: '2rem' }} />
-            <h3 style={{ marginTop: '1rem', fontWeight: 800 }}>Seguridad AES-256</h3>
-            <p style={{ opacity: 0.5, fontSize: '0.9rem' }}>Tus datos empresariales están blindados bajo protocolos de grado militar.</p>
+      {/* 8. BENTO GRID DE BENEFICIOS (ARCHITECTURAL PASS) */}
+      <section style={{ padding: '12rem 5%', background: '#060B14' }}>
+        <div style={{ textAlign: 'center', marginBottom: '6rem' }}>
+          <h2 style={{ fontSize: '3rem', fontWeight: 900, marginBottom: '1.5rem' }}>Infraestructura de <span style={{ color: '#D4AF37' }}>Grado Militar</span></h2>
+          <p style={{ opacity: 0.4, fontSize: '1.1rem' }}>No es solo IA; es la arquitectura que sostiene el futuro de tu negocio.</p>
+        </div>
+        
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gridAutoRows: '280px', gap: '2rem', maxWidth: '1300px', margin: '0 auto' }}>
+          <div style={{ gridColumn: 'span 2', gridRow: 'span 1', background: 'rgba(212,175,55,0.03)', borderRadius: '35px', padding: '3.5rem', border: '1px solid rgba(212,175,55,0.15)', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+            <FiShield style={{ color: '#D4AF37', fontSize: '2.5rem', marginBottom: '1.5rem' }} />
+            <h3 style={{ fontSize: '1.8rem', fontWeight: 900, marginBottom: '1rem' }}>Seguridad de Aislamiento</h3>
+            <p style={{ opacity: 0.4, fontSize: '1rem', lineHeight: 1.6, maxWidth: '500px' }}>Tus datos empresariales permanecen privados en compartimentos estancos bajo encriptación AES-256 de extremo a extremo.</p>
           </div>
-          <div style={{ gridRow: 'span 2', background: 'rgba(255,255,255,0.02)', borderRadius: '25px', padding: '2rem', border: '1px solid rgba(255,255,255,0.05)' }}>
-            <FiGlobe style={{ color: '#D4AF37', fontSize: '2rem' }} />
-            <h3 style={{ marginTop: '1rem', fontWeight: 800 }}>Políglota Nativo</h3>
-            <p style={{ opacity: 0.5, fontSize: '0.9rem' }}>Atención fluida en más de 50 idiomas sin errores de traducción.</p>
+          
+          <div style={{ gridRow: 'span 2', background: 'rgba(255,255,255,0.01)', borderRadius: '35px', padding: '3.5rem', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', justifyContent: 'center', textAlign: 'center' }}>
+            <FiGlobe style={{ color: '#D4AF37', fontSize: '3rem', margin: '0 auto 2rem' }} />
+            <h3 style={{ fontSize: '1.8rem', fontWeight: 900, marginBottom: '1.5rem' }}>Escalado Global</h3>
+            <p style={{ opacity: 0.4, fontSize: '1rem', lineHeight: 1.8 }}>Opal Logic soporta despliegues en más de 80 regiones, ajustándose automáticamente a la latencia de cada clúster de clientes.</p>
+            <div style={{ marginTop: '2rem', display: 'flex', justifyContent: 'center', gap: '8px' }}>
+              {[1,2,3,4,5].map(i => <div key={i} style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#D4AF37', opacity: 0.2 * i }} />)}
+            </div>
           </div>
-          <div style={{ background: 'rgba(255,255,255,0.02)', borderRadius: '25px', padding: '2rem', border: '1px solid rgba(255,255,255,0.05)' }}>
-            <FiClock style={{ color: '#D4AF37', fontSize: '1.5rem' }} />
-            <h4 style={{ fontWeight: 800 }}>Respuesta Instantánea</h4>
+          
+          <div style={{ background: 'rgba(255,255,255,0.01)', borderRadius: '35px', padding: '2.5rem', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', gap: '2rem' }}>
+            <div style={{ width: '60px', height: '60px', borderRadius: '20px', background: 'rgba(212,175,55,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#D4AF37' }}>
+              <FiClock size={30} />
+            </div>
+            <div>
+              <h4 style={{ fontSize: '1.2rem', fontWeight: 900 }}>Respuesta <br /><span style={{ color: '#D4AF37' }}>&lt; 500ms</span></h4>
+            </div>
           </div>
-          <div style={{ background: 'rgba(212,175,55,0.1)', borderRadius: '25px', padding: '2rem', border: '1px solid #D4AF37' }}>
-            <FiLayers style={{ color: '#000', fontSize: '1.5rem' }} />
-            <h4 style={{ fontWeight: 800, color: '#000' }}>Escalabilidad Infinita</h4>
+          
+          <div style={{ background: '#D4AF37', borderRadius: '35px', padding: '2.5rem', border: '1px solid #D4AF37', display: 'flex', alignItems: 'center', gap: '2rem', color: '#000' }}>
+            <div style={{ width: '60px', height: '60px', borderRadius: '20px', background: 'rgba(0,0,0,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <FiLayers size={30} />
+            </div>
+            <div>
+              <h4 style={{ fontSize: '1.2rem', fontWeight: 900 }}>Conectividad <br />Full Integrada</h4>
+            </div>
           </div>
         </div>
       </section>
-
-      {/* 9. PLANES (LOCALIZED) */}
-      <section id="planes" style={{ padding: '8rem 5%', background: 'rgba(212,175,55,0.02)' }}>
+  
+      {/* 9. PLANES (LOCALIZED & PREMIUM PROPORTIONS) */}
+      <section id="planes" style={{ padding: '12rem 5%', background: '#03070C' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <h2 style={{ textAlign: 'center', fontSize: '3rem', fontWeight: 900, marginBottom: '2rem' }}>Inversión <span style={{ color: '#D4AF37' }}>Estratégica</span></h2>
-          <p style={{ textAlign: 'center', opacity: 0.5, marginBottom: '4rem' }}>Planes escalables diseñados para cada etapa de tu crecimiento.</p>
+          <div style={{ textAlign: 'center', marginBottom: '8rem' }}>
+            <h2 style={{ fontSize: '4rem', fontWeight: 900, marginBottom: '2rem', letterSpacing: '-2px' }}>Inversión <span style={{ color: '#D4AF37' }}>Estratégica</span></h2>
+            <p style={{ fontSize: '1.2rem', opacity: 0.4, maxWidth: '600px', margin: '0 auto' }}>Escalabilidad pura. Sin costos ocultos, solo infraestructura de alto rendimiento.</p>
+          </div>
           
-          {/* CURRENCY TOGGLE (NEW) */}
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1rem', marginBottom: '5.5rem' }}>
-            <span style={{ fontWeight: 700, opacity: currency === 'USD' ? 1 : 0.3 }}>USD</span>
+          {/* CURRENCY TOGGLE (PREMIUM UI) */}
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '2rem', marginBottom: '8rem' }}>
+            <span style={{ fontWeight: 800, fontSize: '0.9rem', opacity: currency === 'USD' ? 1 : 0.2, letterSpacing: '2px' }}>USD</span>
             <div 
               onClick={() => setCurrency(currency === 'USD' ? 'COP' : 'USD')}
-              style={{ width: '60px', height: '30px', background: 'rgba(212,175,55,0.2)', borderRadius: '15px', position: 'relative', cursor: 'pointer', border: '1px solid rgba(212,175,55,0.3)' }}
+              style={{ width: '80px', height: '40px', background: 'rgba(212,175,55,0.1)', borderRadius: '20px', position: 'relative', cursor: 'pointer', border: '1px solid rgba(212,175,55,0.2)', padding: '4px' }}
             >
               <motion.div 
-                animate={{ x: currency === 'USD' ? 2 : 32 }}
-                style={{ width: '26px', height: '26px', background: '#D4AF37', borderRadius: '50%', position: 'absolute', top: '1px' }}
+                animate={{ x: currency === 'USD' ? 0 : 40 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                style={{ width: '30px', height: '30px', background: '#D4AF37', borderRadius: '50%', boxShadow: '0 0 15px rgba(212,175,55,0.4)' }}
               />
             </div>
-            <span style={{ fontWeight: 700, opacity: currency === 'COP' ? 1 : 0.3 }}>COP</span>
+            <span style={{ fontWeight: 800, fontSize: '0.9rem', opacity: currency === 'COP' ? 1 : 0.2, letterSpacing: '2px' }}>COP</span>
           </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '2.5rem' }}>
+ 
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '3rem' }}>
             {PRICING_PLANS.map((plan, i) => (
               <div 
                 key={i} 
                 style={{ 
-                  padding: '4rem 2.5rem', 
-                  borderRadius: '35px', 
-                  border: plan.highlight ? '2px solid #D4AF37' : '1px solid rgba(255,255,255,0.1)', 
+                  padding: '5rem 3.5rem', 
+                  borderRadius: '45px', 
+                  border: plan.highlight ? '2px solid #D4AF37' : '1px solid rgba(255,255,255,0.05)', 
                   background: plan.highlight ? 'rgba(212,175,55,0.03)' : 'rgba(255,255,255,0.01)', 
                   textAlign: 'center',
-                  position: 'relative'
+                  position: 'relative',
+                  backdropFilter: 'blur(10px)',
+                  transition: '0.4s ease'
                 }}
               >
-                {plan.highlight && <div style={{ position: 'absolute', top: '-15px', left: '50%', transform: 'translateX(-50%)', background: '#D4AF37', color: '#000', padding: '5px 20px', borderRadius: '20px', fontSize: '0.75rem', fontWeight: 900 }}>RECOMENDADO</div>}
-                <h3 style={{ marginBottom: '1rem', fontWeight: 800 }}>{plan.name}</h3>
-                <div style={{ fontSize: '3.5rem', fontWeight: 900, marginBottom: '2rem' }}>
-                  <span style={{ fontSize: '1.5rem', verticalAlign: 'middle', marginRight: '5px' }}>{symbol}</span>
+                {plan.highlight && <div style={{ position: 'absolute', top: '-20px', left: '50%', transform: 'translateX(-50%)', background: '#D4AF37', color: '#000', padding: '8px 25px', borderRadius: '30px', fontSize: '0.8rem', fontWeight: 900, letterSpacing: '1px' }}>RECOMENDADO</div>}
+                <h3 style={{ marginBottom: '1.5rem', fontWeight: 900, fontSize: '1.8rem' }}>{plan.name}</h3>
+                <div style={{ fontSize: '4rem', fontWeight: 900, marginBottom: '3rem', letterSpacing: '-2px' }}>
+                  <span style={{ fontSize: '1.5rem', verticalAlign: 'top', marginTop: '10px', display: 'inline-block', marginRight: '5px', opacity: 0.5 }}>{symbol}</span>
                   {(plan.priceUsd * exchangeRate).toLocaleString()}
-                  <span style={{ fontSize: '1rem', opacity: 0.4 }}>/mes</span>
+                  <span style={{ fontSize: '0.9rem', opacity: 0.3, letterSpacing: '1px' }}>/mes</span>
                 </div>
-                <ul style={{ listStyle: 'none', padding: 0, textAlign: 'left', marginBottom: '3rem' }}>
-                  {plan.features.map((f, fi) => <li key={fi} style={{ marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '12px', fontSize: '0.95rem' }}><FiCheck color="#D4AF37" /> {f}</li>)}
+                <ul style={{ listStyle: 'none', padding: 0, textAlign: 'left', marginBottom: '4rem' }}>
+                  {plan.features.map((f, fi) => (
+                    <li key={fi} style={{ marginBottom: '1.2rem', display: 'flex', alignItems: 'flex-start', gap: '15px', fontSize: '1rem', opacity: 0.6 }}>
+                      <FiCheck color="#D4AF37" style={{ marginTop: '4px' }} /> {f}
+                    </li>
+                  ))}
                 </ul>
                 <button 
                   onClick={() => handleCheckout(plan.name.toLowerCase())}
                   style={{ 
                     width: '100%', 
-                    padding: '18px', 
+                    padding: '22px', 
                     backgroundColor: plan.highlight ? '#D4AF37' : 'transparent', 
                     border: '1px solid #D4AF37', 
                     color: plan.highlight ? '#000' : '#D4AF37', 
-                    borderRadius: '15px', 
+                    borderRadius: '18px', 
                     fontWeight: 900, 
                     cursor: 'pointer',
+                    fontSize: '1rem',
                     transition: '0.3s' 
                   }}
                 >
-                  {plan.name === 'Enterprise' ? 'Contactar Ventas' : 'Comenzar Ahora'}
+                  {plan.name === 'Enterprise' ? 'Contactar Estratega' : 'Comenzar Ahora'}
                 </button>
               </div>
             ))}
@@ -636,28 +727,33 @@ export default function LandingPage() {
         </div>
       </section>
   
-      {/* 10. PROPÓSITO, MISIÓN Y VISIÓN */}
-      <section id="proposito" style={{ padding: '8rem 5%', background: 'linear-gradient(to bottom, #060B14, #0B1120)', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-        <div style={{ maxWidth: '900px', margin: '0 auto', textAlign: 'center' }}>
-          <h2 style={{ fontSize: '2.5rem', fontWeight: 900, marginBottom: '2rem' }}>La IA no debería ser un lujo.</h2>
-          <p style={{ fontSize: '1.2rem', opacity: 0.6, lineHeight: 1.8, marginBottom: '5rem' }}>Democratizando tecnología de grado empresarial para el crecimiento global.</p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '4rem', textAlign: 'left' }}>
-            <div>
-              <h4 style={{ color: '#D4AF37', fontWeight: 900, marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '8px' }}><FiGlobe /> VISIÓN STRATIX</h4>
-              <p style={{ fontSize: '0.9rem', opacity: 0.4, lineHeight: 1.7 }}>Eliminamos cuellos de botella operativos para que usted se enfoque en la creatividad. Construimos el aliado estratégico que trabaja 24/7.</p>
+      {/* 10. PROPÓSITO & FILOSOFÍA (ARCHITECTURAL PASS) */}
+      <section id="proposito" style={{ padding: '12rem 5%', background: '#060B14', position: 'relative', overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', bottom: '0', right: '0', width: '500px', height: '500px', background: 'radial-gradient(circle at center, rgba(212,175,55,0.02) 0%, transparent 70%)', zIndex: 0 }} />
+        
+        <div style={{ maxWidth: '1000px', margin: '0 auto', textAlign: 'center', position: 'relative', zIndex: 1 }}>
+          <h2 style={{ fontSize: '3.5rem', fontWeight: 900, marginBottom: '2.5rem', letterSpacing: '-2px' }}>La IA no debería ser solo un lujo.</h2>
+          <p style={{ fontSize: '1.4rem', opacity: 0.4, lineHeight: 1.8, marginBottom: '6rem', maxWidth: '800px', margin: '0 auto 6rem' }}>
+            Democratizamos tecnología de grado empresarial para que el crecimiento no dependa del presupuesto, sino de la visión estratégica.
+          </p>
+          
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '6rem', textAlign: 'left' }}>
+            <div style={{ borderLeft: '2px solid rgba(212,175,55,0.2)', paddingLeft: '2.5rem' }}>
+              <h4 style={{ color: '#D4AF37', fontWeight: 900, marginBottom: '1.5rem', letterSpacing: '2px', textTransform: 'uppercase', fontSize: '0.8rem' }}>VISIÓN STRATIX</h4>
+              <p style={{ fontSize: '1.1rem', opacity: 0.4, lineHeight: 1.8 }}>Eliminamos cuellos de botella operativos para que usted se enfoque en la creatividad. Construimos el aliado que nunca duerme.</p>
             </div>
-            <div>
-              <h4 style={{ color: '#D4AF37', fontWeight: 900, marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '8px' }}><FiBox /> MISIÓN ÉLITE</h4>
-              <p style={{ fontSize: '0.85rem', opacity: 0.4, lineHeight: 1.7 }}>Proveer infraestructura táctica de IA que permita a marcas personales y empresas escalar su impacto sin límites humanos.</p>
+            <div style={{ borderLeft: '2px solid rgba(212,175,55,0.2)', paddingLeft: '2.5rem' }}>
+              <h4 style={{ color: '#D4AF37', fontWeight: 900, marginBottom: '1.5rem', letterSpacing: '2px', textTransform: 'uppercase', fontSize: '0.8rem' }}>MISIÓN ÉLITE</h4>
+              <p style={{ fontSize: '1.1rem', opacity: 0.4, lineHeight: 1.8 }}>Proveer infraestructura táctica de IA que permita a marcas y empresas escalar su impacto sin los límites del agotamiento humano.</p>
             </div>
           </div>
         </div>
       </section>
   
-      {/* 11. FAQ COMPLETO */}
-      <section style={{ padding: '8rem 5%', background: '#060B14' }}>
-        <h2 style={{ textAlign: 'center', fontSize: '2.5rem', fontWeight: 900, marginBottom: '4rem' }}>Preguntas <span style={{ color: '#D4AF37' }}>Frecuentes</span></h2>
-        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+      {/* 11. FAQ COMPLETO (ARCHITECTURAL PASS) */}
+      <section style={{ padding: '12rem 5%', background: '#03070C' }}>
+        <h2 style={{ textAlign: 'center', fontSize: '3.5rem', fontWeight: 900, marginBottom: '6rem', letterSpacing: '-2px' }}>Consultas de <span style={{ color: '#D4AF37' }}>Alto Nivel</span></h2>
+        <div style={{ maxWidth: '850px', margin: '0 auto' }}>
           {[
             { q: "¿Cómo garantiza Stratix el ROI?", a: "Nuestros agentes reducen el costo operativo en un 60% al automatizar tareas repetitivas y aumentar la tasa de conversión mediante respuestas instantáneas 24/7." },
             { q: "¿Se puede integrar con mi CRM actual?", a: "Sí. Stratix se conecta vía webhooks con Salesforce, HubSpot, Zoho y cualquier sistema que permita integraciones API." },
@@ -666,14 +762,22 @@ export default function LandingPage() {
             { q: "¿Cómo funciona la transición de IA a humano?", a: "Si el bot detecta una consulta compleja o una intención de alta prioridad, escala la conversación automáticamente a tu equipo humano." },
             { q: "¿Hay un límite de mensajes?", a: "Nuestros planes escalan contigo. El plan Starter incluye 1,000 interacciones, mientras que el Enterprise es totalmente ilimitado." }
           ].map((item, i) => (
-            <div key={i} onClick={() => setActiveFaq(activeFaq === i ? null : i)} style={{ padding: '1.8rem', borderBottom: '1px solid rgba(255,255,255,0.05)', cursor: 'pointer' }}>
+            <div key={i} onClick={() => setActiveFaq(activeFaq === i ? null : i)} style={{ 
+              padding: '2.5rem', 
+              borderBottom: '1px solid rgba(255,255,255,0.05)', 
+              cursor: 'pointer',
+              transition: '0.3s ease',
+              background: activeFaq === i ? 'rgba(212,175,55,0.02)' : 'transparent'
+            }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <h4 style={{ fontSize: '1.1rem', fontWeight: 700 }}>{item.q}</h4>
+                <h4 style={{ fontSize: '1.2rem', fontWeight: 800, opacity: activeFaq === i ? 1 : 0.6 }}>{item.q}</h4>
                 <FiChevronDown style={{ transform: activeFaq === i ? 'rotate(180deg)' : 'none', transition: '0.3s', color: '#D4AF37' }} />
               </div>
-              <AnimatePresence>
+                  <AnimatePresence>
                 {activeFaq === i && (
-                  <motion.p initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 0.5 }} exit={{ height: 0, opacity: 0 }} style={{ marginTop: '1rem', fontSize: '0.95rem', overflow: 'hidden', lineHeight: 1.6 }}>{item.a}</motion.p>
+                  <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} style={{ overflow: 'hidden' }}>
+                    <p style={{ marginTop: '1.5rem', fontSize: '1.05rem', lineHeight: 1.8, opacity: 0.4 }}>{item.a}</p>
+                  </motion.div>
                 )}
               </AnimatePresence>
             </div>
@@ -681,59 +785,61 @@ export default function LandingPage() {
         </div>
       </section>
   
-      {/* 12. FOOTER CORPORATIVO (REDESIGN) */}
-      <footer style={{ padding: '8rem 5% 4rem', background: '#03070C', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '4rem', marginBottom: '6rem' }}>
+      {/* 12. FOOTER CORPORATIVO (PREMIUM ARCHITECTURE) */}
+      <footer style={{ padding: '12rem 5% 5rem', background: '#020508', borderTop: '1px solid rgba(212,175,55,0.05)' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '5rem', marginBottom: '8rem' }}>
           
-          {/* Logo y Misión */}
           <div style={{ gridColumn: 'span 2' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '1.5rem' }}>
-              <img src="/stratix_shield.svg" alt="Stratix Logo" style={{ height: '32px', width: 'auto' }} />
-              <span style={{ fontSize: '1.5rem', fontWeight: 900, letterSpacing: '-1px' }}>Strat<span style={{ color: '#D4AF37' }}>ix</span> Intelligence</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '2rem' }}>
+              <img src="/stratix_shield.svg" alt="Stratix Logo" style={{ height: '35px', width: 'auto' }} />
+              <span style={{ fontSize: '1.8rem', fontWeight: 900, letterSpacing: '-1.5px' }}>Strat<span style={{ color: '#D4AF37' }}>ix</span> Intelligence</span>
             </div>
-            <p style={{ opacity: 0.4, fontSize: '0.9rem', lineHeight: 1.8, maxWidth: '350px' }}>
-              Redefiniendo el estándar global de inteligencia estratégica para empresas B2B de élite. Automatización pura, resultados exponenciales.
+            <p style={{ opacity: 0.3, fontSize: '1rem', lineHeight: 2, maxWidth: '400px' }}>
+              Redefiniendo el estándar global de inteligencia estratégica. Automatización para empresas que no aceptan límites en su escalabilidad.
             </p>
           </div>
-
-          {/* Columnas de Enlaces */}
+ 
           <div>
-            <h4 style={{ fontSize: '0.8rem', fontWeight: 900, letterSpacing: '2px', color: '#D4AF37', marginBottom: '2rem', textTransform: 'uppercase' }}>Compañía</h4>
-            <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '1rem', fontSize: '0.9rem', opacity: 0.5 }}>
-              <li>Propósito</li>
-              <li>Casos de Uso</li>
-              <li>Blog Estratégico</li>
+            <h4 style={{ fontSize: '0.85rem', fontWeight: 900, letterSpacing: '3px', color: '#D4AF37', marginBottom: '2.5rem', textTransform: 'uppercase' }}>Empresa</h4>
+            <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '1.2rem', fontSize: '1rem', opacity: 0.4 }}>
+              <li>Ecosistema</li>
+              <li>Casos de Éxito</li>
+              <li>Relleno Estratégico</li>
               <li>Prensa</li>
             </ul>
           </div>
-
+ 
           <div>
-            <h4 style={{ fontSize: '0.8rem', fontWeight: 900, letterSpacing: '2px', color: '#D4AF37', marginBottom: '2rem', textTransform: 'uppercase' }}>Producto</h4>
-            <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '1rem', fontSize: '0.9rem', opacity: 0.5 }}>
-              <li>Opal Logic</li>
-              <li>Stitch UI</li>
-              <li>RAG Engine</li>
-              <li>Planes</li>
+            <h4 style={{ fontSize: '0.85rem', fontWeight: 900, letterSpacing: '3px', color: '#D4AF37', marginBottom: '2.5rem', textTransform: 'uppercase' }}>Arquitectura</h4>
+            <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '1.2rem', fontSize: '1rem', opacity: 0.4 }}>
+              <li>Opal Intelligence</li>
+              <li>Stitch Engine</li>
+              <li>API Ilimitada</li>
+              <li>Seguridad</li>
             </ul>
           </div>
-
+ 
           <div>
-            <h4 style={{ fontSize: '0.8rem', fontWeight: 900, letterSpacing: '2px', color: '#D4AF37', marginBottom: '2rem', textTransform: 'uppercase' }}>Soporte</h4>
-            <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '1rem', fontSize: '0.9rem', opacity: 0.5 }}>
-              <li>Documentación</li>
-              <li>Centro de Ayuda</li>
-              <li>Estado del Sistema</li>
-              <li>Contacto</li>
+            <h4 style={{ fontSize: '0.85rem', fontWeight: 900, letterSpacing: '3px', color: '#D4AF37', marginBottom: '2.5rem', textTransform: 'uppercase' }}>Legal</h4>
+            <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '1.2rem', fontSize: '1rem', opacity: 0.4 }}>
+              <li>
+                <Link href="/legal/privacy" style={{ color: 'inherit', textDecoration: 'none' }}>Privacidad</Link>
+              </li>
+              <li>
+                <Link href="/legal/terms" style={{ color: 'inherit', textDecoration: 'none' }}>Términos</Link>
+              </li>
+              <li>Cookies</li>
+              <li>Seguridad</li>
             </ul>
           </div>
         </div>
-
-        <div style={{ maxWidth: '1200px', margin: '0 auto', paddingTop: '3rem', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '2rem' }}>
-          <p style={{ opacity: 0.3, fontSize: '0.8rem' }}>© 2026 Stratix Intelligence — Architectural Strategic Intelligence. Cartagena, CO.</p>
-          <div style={{ display: 'flex', gap: '2rem', opacity: 0.3, fontSize: '0.8rem', fontWeight: 700 }}>
-            <Link href="/legal/privacy" style={{ color: 'inherit', textDecoration: 'none' }}>Privacidad</Link>
-            <Link href="/legal/terms" style={{ color: 'inherit', textDecoration: 'none' }}>Términos</Link>
-            <span>Seguridad</span>
+ 
+        <div style={{ maxWidth: '1200px', margin: '0 auto', paddingTop: '4rem', borderTop: '1px solid rgba(255,255,255,0.03)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '3rem' }}>
+          <p style={{ opacity: 0.2, fontSize: '0.85rem' }}>© 2026 Stratix Intelligence — All Rights Reserved. Cartagena, CO.</p>
+          <div style={{ display: 'flex', gap: '3rem', opacity: 0.3, fontSize: '0.85rem', fontWeight: 700, letterSpacing: '1px' }}>
+            <span>TWITTER / X</span>
+            <span>LINKEDIN</span>
+            <span>INSTAGRAM</span>
           </div>
         </div>
       </footer>
