@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://stratix-intelligence.vercel.app'),
+  metadataBase: new URL('https://antigravity-bay-six.vercel.app'),
   title: 'Stratix Intelligence — El Estándar B2B de IA',
   description: 'Arquitectura de Inteligencia Artificial para empresas de alto rendimiento. Automatiza ventas, soporte y captura leads con tecnología RAG de Élite.',
   keywords: ["inteligencia artificial", "SaaS B2B", "CRM con IA", "Stratix Intelligence", "automatización de ventas", "WhatsApp Bot Inteligente", "RAG B2B", "captador de leads"],
@@ -14,9 +14,14 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Stratix Intelligence | Arquitectura de IA Corporativa',
     description: 'Automatiza tu proceso de ventas y atención omnicanal con nuestra suite integrada de IA. Creado por arquitectos para dueños de negocios exigentes.',
-    images: ['/stratix_shield.svg'], 
+    images: [{
+      url: '/stratix_shield.svg',
+      width: 800,
+      height: 800,
+      alt: 'Stratix Intelligence Logo'
+    }], 
     type: 'website',
-    url: 'https://stratix-intelligence.vercel.app',
+    url: 'https://antigravity-bay-six.vercel.app',
   },
   twitter: {
     card: 'summary_large_image',

@@ -1,12 +1,9 @@
-"use client";
-
-import { useState, useEffect } from "react";
-import Link from "next/link";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   FiArrowRight, FiCheck, FiCpu, FiLayout, FiTarget, FiZap, FiShield, 
   FiChevronDown, FiPlayCircle, FiActivity, FiShoppingCart, 
-  FiDatabase, FiGlobe, FiClock, FiLayers, FiUsers, FiTrendingUp
+  FiDatabase, FiGlobe, FiClock, FiLayers, FiUsers, FiTrendingUp, FiSend
 } from "react-icons/fi";
 import { supabase } from "@/lib/supabase";
 
@@ -22,9 +19,34 @@ export default function LandingPage() {
   const symbol = CURRENCIES[currency].symbol;
 
   const [hasAutoCheckedOut, setHasAutoCheckedOut] = useState(false);
-  const [formData, setFormData] = useState({ name: "", email: "", phone: "" });
+  const [formData, setFormData] = useState({ name: "", email: "", phone: "", honey: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+
+  // Estados para la Demo Interactiva del Hero
+  const [demoMessages, setDemoMessages] = useState([
+    { role: 'bot', text: 'Hola, soy el núcleo Opal. ¿En qué canal quieres automatizar hoy? (WhatsApp, IG, Web)' }
+  ]);
+  const [demoInput, setDemoInput] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
+
+  const handleDemoChat = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!demoInput.trim()) return;
+
+    const userMsg = demoInput;
+    setDemoMessages(prev => [...prev, { role: 'user', text: userMsg }]);
+    setDemoInput("");
+    setIsTyping(true);
+
+    setTimeout(() => {
+      setIsTyping(false);
+      setDemoMessages(prev => [...prev, { 
+        role: 'bot', 
+        text: '¡Entendido! Mi motor de IA procesaría esta solicitud en < 500ms. Para conectar tus datos reales y ver esto en acción con tu empresa, agenda una demo con nuestros arquitectos abajo. ⬇️' 
+      }]);
+    }, 1500);
+  };
 
   const handleDemoSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -87,15 +109,15 @@ export default function LandingPage() {
       {/* 1. NAVEGACIÓN */}
       <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.2rem 5%', background: 'rgba(6, 11, 20, 0.95)', backdropFilter: 'blur(15px)', position: 'sticky', top: 0, zIndex: 100, borderBottom: '1px solid rgba(212, 175, 55, 0.1)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <img src="/stratix_shield.svg" alt="Stratix Logo" style={{ height: '32px', width: 'auto' }} />
+          <Image src="/stratix_shield.svg" alt="Stratix Logo" width={32} height={32} priority />
           <span style={{ fontSize: '1.5rem', fontWeight: 900, letterSpacing: '-1px' }}>Strat<span style={{ color: '#D4AF37' }}>ix</span> Intelligence</span>
         </div>
         <div style={{ display: 'flex', gap: '2rem', alignItems: 'center', fontWeight: 600, fontSize: '0.85rem' }}>
-          <a href="#proposito" style={{ color: 'white', textDecoration: 'none', opacity: 0.6, cursor: 'pointer' }}>Propósito</a>
-          <a href="#labs" style={{ color: 'white', textDecoration: 'none', opacity: 0.6, cursor: 'pointer' }}>Labs</a>
-          <a href="#planes" style={{ color: 'white', textDecoration: 'none', opacity: 0.6, cursor: 'pointer' }}>Planes</a>
-          <Link href="/login" style={{ color: '#D4AF37', textDecoration: 'none' }}>Ingresar</Link>
-          <Link href="/login" style={{ padding: '10px 22px', backgroundColor: '#D4AF37', color: '#000', borderRadius: '8px', textDecoration: 'none', fontWeight: 900 }}>Acceso Élite</Link>
+          <a href="#proposito" style={{ color: 'white', textDecoration: 'none', opacity: 0.6, cursor: 'pointer' }} className="nav-link">Propósito</a>
+          <a href="#labs" style={{ color: 'white', textDecoration: 'none', opacity: 0.6, cursor: 'pointer' }} className="nav-link">Labs</a>
+          <a href="#planes" style={{ color: 'white', textDecoration: 'none', opacity: 0.6, cursor: 'pointer' }} className="nav-link">Planes</a>
+          <Link href="/login" style={{ color: '#D4AF37', textDecoration: 'none', opacity: 0.8 }} className="nav-link">Ingresar</Link>
+          <Link href="/login" style={{ padding: '12px 26px', backgroundColor: '#D4AF37', color: '#000', borderRadius: '10px', textDecoration: 'none', fontWeight: 900, boxShadow: '0 8px 20px rgba(212,175,55,0.2)' }}>Acceso Élite</Link>
         </div>
       </nav>
 
@@ -120,8 +142,8 @@ export default function LandingPage() {
               Stratix Intelligence es la infraestructura de inteligencia que atiende, califica y cierra ventas por ti en WhatsApp, Instagram y Web. <strong>Para todo tipo de empresas.</strong>
             </p>
             <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
-              <Link href="/login" style={{ padding: '20px 42px', backgroundColor: '#D4AF37', color: '#000', borderRadius: '14px', fontWeight: 900, textDecoration: 'none', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '12px', boxShadow: '0 10px 30px rgba(212,175,55,0.2)' }}>Comenzar Ahora <FiArrowRight /></Link>
-              <a href="#demo" style={{ padding: '20px 42px', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '14px', fontWeight: 700, textDecoration: 'none', color: 'white', display: 'flex', alignItems: 'center', gap: '12px', background: 'rgba(255,255,255,0.03)', backdropFilter: 'blur(10px)' }}><FiPlayCircle /> Agendar Demo</a>
+              <Link href="/login" aria-label="Comenzar Ahora con Stratix" style={{ padding: '20px 42px', backgroundColor: '#D4AF37', color: '#000', borderRadius: '14px', fontWeight: 900, textDecoration: 'none', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '12px', boxShadow: '0 10px 30px rgba(212,175,55,0.2)' }}>Comenzar Ahora <FiArrowRight /></Link>
+              <a href="#demo" aria-label="Agendar una demo personalizada" style={{ padding: '20px 42px', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '14px', fontWeight: 700, textDecoration: 'none', color: 'white', display: 'flex', alignItems: 'center', gap: '12px', background: 'rgba(255,255,255,0.03)', backdropFilter: 'blur(10px)' }}><FiPlayCircle /> Agendar Demo</a>
             </div>
           </motion.div>
 
@@ -129,7 +151,7 @@ export default function LandingPage() {
             <div style={{ background: 'rgba(11, 17, 32, 0.7)', backdropFilter: 'blur(20px)', borderRadius: '32px', border: '1px solid rgba(212,175,55,0.2)', padding: '24px', boxShadow: '0 40px 100px rgba(0,0,0,0.5)', overflow: 'hidden' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px', paddingBottom: '15px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
                 <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: '#D4AF37', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <img src="/stratix_shield.svg" style={{ width: '24px', height: '24px' }} />
+                  <Image src="/stratix_shield.svg" alt="Opal Core" width={24} height={24} />
                 </div>
                 <div>
                   <div style={{ fontSize: '0.9rem', fontWeight: 800 }}>Opal Logic Demo</div>
@@ -137,24 +159,51 @@ export default function LandingPage() {
                 </div>
               </div>
               
-              <div style={{ height: '320px', overflowY: 'auto', marginBottom: '20px', display: 'flex', flexDirection: 'column', gap: '15px', padding: '10px' }}>
-                <div style={{ background: 'rgba(255,255,255,0.05)', padding: '12px 16px', borderRadius: '16px', fontSize: '0.9rem', maxWidth: '85%', alignSelf: 'flex-start', borderBottomLeftRadius: '4px' }}>
-                  Hola, soy el núcleo Opal. ¿En qué canal quieres automatizar hoy? (WhatsApp, IG, Web)
-                </div>
-                <div style={{ background: '#D4AF37', color: '#000', padding: '12px 16px', borderRadius: '16px', fontSize: '0.9rem', maxWidth: '85%', alignSelf: 'flex-end', borderBottomRightRadius: '4px', fontWeight: 600 }}>
-                  Quiero escalar mis ventas por WhatsApp.
-                </div>
-                <div style={{ background: 'rgba(255,255,255,0.05)', padding: '12px 16px', borderRadius: '16px', fontSize: '0.9rem', maxWidth: '85%', alignSelf: 'flex-start', borderBottomLeftRadius: '4px' }}>
-                  Entendido. Mi motor de clasificación de leads detectará intenciones calientes y agendará llamadas automáticamente. ¿Te gustaría ver un flujo simulado?
-                </div>
+              <div style={{ height: '320px', overflowY: 'auto', marginBottom: '20px', display: 'flex', flexDirection: 'column', gap: '15px', padding: '10px', scrollbarWidth: 'none' }}>
+                <AnimatePresence initial={false}>
+                  {demoMessages.map((msg, idx) => (
+                    <motion.div 
+                      key={idx}
+                      initial={{ opacity: 0, y: 10, scale: 0.9 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      style={{ 
+                        background: msg.role === 'bot' ? 'rgba(255,255,255,0.05)' : '#D4AF37', 
+                        color: msg.role === 'bot' ? 'white' : '#000',
+                        padding: '12px 16px', 
+                        borderRadius: '16px', 
+                        fontSize: '0.85rem', 
+                        maxWidth: '85%', 
+                        alignSelf: msg.role === 'bot' ? 'flex-start' : 'flex-end', 
+                        borderBottomLeftRadius: msg.role === 'bot' ? '4px' : '16px',
+                        borderBottomRightRadius: msg.role === 'user' ? '4px' : '16px',
+                        fontWeight: msg.role === 'user' ? 600 : 400
+                      }}
+                    >
+                      {msg.text}
+                    </motion.div>
+                  ))}
+                  {isTyping && (
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ padding: '8px 16px', background: 'rgba(255,255,255,0.05)', borderRadius: '12px', alignSelf: 'flex-start', fontSize: '0.8rem', opacity: 0.5 }}>Opal está escribiendo...</motion.div>
+                  )}
+                </AnimatePresence>
               </div>
 
-              <div style={{ background: 'rgba(255,255,255,0.03)', borderRadius: '16px', padding: '10px 15px', display: 'flex', alignItems: 'center', gap: '10px', border: '1px solid rgba(212,175,55,0.1)' }}>
-                <span style={{ fontSize: '0.9rem', opacity: 0.4 }}>Escribe un mensaje...</span>
-                <div style={{ marginLeft: 'auto', width: '35px', height: '35px', borderRadius: '10px', background: '#D4AF37', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <FiArrowRight color="#000" />
-                </div>
-              </div>
+              <form onSubmit={handleDemoChat} style={{ background: 'rgba(255,255,255,0.03)', borderRadius: '16px', padding: '8px 10px', display: 'flex', alignItems: 'center', gap: '10px', border: '1px solid rgba(212,175,55,0.1)' }}>
+                <input 
+                  type="text"
+                  placeholder="Prueba a Opal aquí..."
+                  value={demoInput}
+                  onChange={(e) => setDemoInput(e.target.value)}
+                  style={{ background: 'transparent', border: 'none', color: 'white', fontSize: '0.9rem', outline: 'none', width: '100%', padding: '5px' }}
+                />
+                <button 
+                  type="submit"
+                  aria-label="Enviar mensaje a Opal"
+                  style={{ marginLeft: 'auto', width: '35px', height: '35px', borderRadius: '10px', background: '#D4AF37', display: 'flex', alignItems: 'center', justifyContent: 'center', border: 'none', cursor: 'pointer' }}
+                >
+                  <FiSend color="#000" />
+                </button>
+              </form>
             </div>
 
             <div style={{ position: 'absolute', top: '-20px', right: '-20px', background: 'rgba(212,175,55,0.1)', padding: '10px 20px', borderRadius: '100px', backdropFilter: 'blur(5px)', border: '1px solid rgba(212,175,55,0.3)', fontSize: '0.75rem', fontWeight: 800, color: '#D4AF37' }}>PROBADO POR +500 EMPRESAS</div>
@@ -259,7 +308,7 @@ export default function LandingPage() {
           >
             {[...INTEGRATIONS, ...INTEGRATIONS].map((int, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px', opacity: 0.4 }}>
-                <img src={int.icon} style={{ height: '24px', filter: 'grayscale(1) invert(1)' }} />
+                <img src={int.icon} alt={`${int.name} logo`} style={{ height: '24px', filter: 'grayscale(1) invert(1)' }} />
                 <span style={{ fontWeight: 700, fontSize: '1rem' }}>{int.name}</span>
               </div>
             ))}
@@ -367,7 +416,7 @@ export default function LandingPage() {
             <div style={{ position: 'relative' }}>
               <div style={{ width: '100%', aspectRatio: '1/1', background: 'radial-gradient(circle, rgba(212,175,55,0.1) 0%, transparent 70%)', position: 'absolute', top: '0', left: '0' }} />
               <div style={{ padding: '3rem', background: 'rgba(255,255,255,0.01)', borderRadius: '40px', border: '1px solid rgba(255,255,255,0.05)', backdropFilter: 'blur(20px)' }}>
-                <img src="/stratix_shield.svg" style={{ width: '120px', margin: '0 auto 3rem', filter: 'drop-shadow(0 0 30px rgba(212,175,55,0.3))' }} />
+                <Image src="/stratix_shield.svg" alt="Opal Logic Processing" width={120} height={120} style={{ margin: '0 auto 3rem', filter: 'drop-shadow(0 0 30px rgba(212,175,55,0.3))' }} />
                 <div style={{ textAlign: 'center' }}>
                   <div style={{ fontSize: '1.2rem', fontWeight: 800, marginBottom: '10px' }}>Inyectando Inteligencia...</div>
                   <div style={{ fontSize: '0.9rem', opacity: 0.4 }}>Procesando Base de Conocimientos</div>
@@ -411,6 +460,16 @@ export default function LandingPage() {
               </div>
             ) : (
               <form style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }} onSubmit={handleDemoSubmit}>
+                {/* Honeypot field for bot protection */}
+                <input 
+                  type="text" 
+                  name="honey" 
+                  tabIndex={-1} 
+                  autoComplete="off" 
+                  style={{ display: 'none' }} 
+                  value={formData.honey}
+                  onChange={(e) => setFormData({...formData, honey: e.target.value})}
+                />
                 <div>
                   <label style={{ display: 'block', fontSize: '0.8rem', opacity: 0.5, marginBottom: '0.5rem' }}>Nombre Completo</label>
                   <input 
@@ -447,14 +506,20 @@ export default function LandingPage() {
                 <button 
                   type="submit" 
                   disabled={isSubmitting}
-                  style={{ width: '100%', padding: '20px', background: '#D4AF37', color: '#000', borderRadius: '12px', fontWeight: 900, cursor: isSubmitting ? 'not-allowed' : 'pointer', border: 'none', marginTop: '1rem', fontSize: '1rem', opacity: isSubmitting ? 0.7 : 1 }}
+                  aria-label={isSubmitting ? "Enviando solicitud" : "Solicitar demo gratuita"}
+                  style={{ width: '100%', padding: '20px', background: '#D4AF37', color: '#000', borderRadius: '12px', fontWeight: 900, cursor: isSubmitting ? 'wait' : 'pointer', border: 'none', marginTop: '1rem', fontSize: '1rem', opacity: isSubmitting ? 0.7 : 1, transition: '0.3s' }}
                 >
-                  {isSubmitting ? "ENVIANDO PROTOCOLO..." : "SOLICITAR MI DEMO GRATIS"}
+                  {isSubmitting ? (
+                    <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+                      <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: "linear" }}><FiCpu /></motion.div>
+                      PROCESANDO...
+                    </span>
+                  ) : "SOLICITAR MI DEMO GRATIS"}
                 </button>
               </form>
             )}
             <div style={{ marginTop: '2.5rem', display: 'flex', justifyContent: 'center', gap: '20px', opacity: 0.4, filter: 'grayscale(1)' }}>
-              <img src="/stratix_shield.svg" style={{ height: '24px' }} alt="Protocol" />
+              <Image src="/stratix_shield.svg" alt="Shield Logo" width={24} height={24} />
               <div style={{ fontSize: '0.7rem', fontWeight: 700, letterSpacing: '1px' }}>ENCRIPTACIÓN AES-256</div>
               <div style={{ fontSize: '0.7rem', fontWeight: 700, letterSpacing: '1px' }}>GDPR COMPLIANT</div>
             </div>
@@ -765,7 +830,7 @@ export default function LandingPage() {
           
           <div style={{ gridColumn: 'span 2' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '2rem' }}>
-              <img src="/stratix_shield.svg" alt="Stratix Logo" style={{ height: '35px', width: 'auto' }} />
+              <Image src="/stratix_shield.svg" alt="Stratix Mini Logo" width={35} height={35} />
               <span style={{ fontSize: '1.8rem', fontWeight: 900, letterSpacing: '-1.5px' }}>Strat<span style={{ color: '#D4AF37' }}>ix</span> Intelligence</span>
             </div>
             <p style={{ opacity: 0.3, fontSize: '1rem', lineHeight: 2, maxWidth: '400px' }}>
@@ -776,11 +841,10 @@ export default function LandingPage() {
           <div>
             <h4 style={{ fontSize: '0.85rem', fontWeight: 900, letterSpacing: '3px', color: '#D4AF37', marginBottom: '2.5rem', textTransform: 'uppercase' }}>Empresa</h4>
             <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '1.2rem', fontSize: '1rem', opacity: 0.4 }}>
-              <li style={{ cursor: 'pointer' }}>Ecosistema</li>
-              <li style={{ cursor: 'pointer' }}>Casos de Éxito</li>
-              {/* FIX: "Relleno Estratégico" reemplazado por "Blog" */}
-              <li style={{ cursor: 'pointer' }}>Blog</li>
-              <li style={{ cursor: 'pointer' }}>Prensa</li>
+              <li style={{ cursor: 'pointer' }} className="nav-link">Ecosistema</li>
+              <li style={{ cursor: 'pointer' }} className="nav-link">Casos de Éxito</li>
+              <li style={{ cursor: 'pointer' }} className="nav-link">Contacto Directo</li>
+              <li style={{ cursor: 'pointer' }} className="nav-link">Prensa</li>
             </ul>
           </div>
  
@@ -797,10 +861,8 @@ export default function LandingPage() {
           <div>
             <h4 style={{ fontSize: '0.85rem', fontWeight: 900, letterSpacing: '3px', color: '#D4AF37', marginBottom: '2.5rem', textTransform: 'uppercase' }}>Legal</h4>
             <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '1.2rem', fontSize: '1rem', opacity: 0.4 }}>
-              <li><Link href="/legal/privacy" style={{ color: 'inherit', textDecoration: 'none' }}>Privacidad</Link></li>
-              <li><Link href="/legal/terms" style={{ color: 'inherit', textDecoration: 'none' }}>Términos</Link></li>
-              <li style={{ cursor: 'pointer' }}>Cookies</li>
-              <li style={{ cursor: 'pointer' }}>Seguridad</li>
+              <li><Link href="/legal/privacy" style={{ color: 'inherit', textDecoration: 'none' }} className="nav-link">Privacidad</Link></li>
+              <li><Link href="/legal/terms" style={{ color: 'inherit', textDecoration: 'none' }} className="nav-link">Términos</Link></li>
             </ul>
           </div>
         </div>
