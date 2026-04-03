@@ -645,13 +645,13 @@ export default function LandingPage() {
       </section>
 
       {/* 8. BENTO GRID DE BENEFICIOS */}
-      <section style={{ padding: '12rem 5%', background: '#060B14' }}>
+      <section style={{ padding: '8rem 5%', background: '#060B14' }}>
         <div style={{ textAlign: 'center', marginBottom: '6rem' }}>
-          <h2 style={{ fontSize: '3rem', fontWeight: 900, marginBottom: '1.5rem' }}>Infraestructura de <span style={{ color: '#D4AF37' }}>Grado Militar</span></h2>
-          <p style={{ opacity: 0.4, fontSize: '1.1rem' }}>No es solo IA; es la arquitectura que sostiene el futuro de tu negocio.</p>
+          <h2 style={{ fontSize: '2.5rem', fontWeight: 900, marginBottom: '1.5rem' }}>Infraestructura de <span style={{ color: '#D4AF37' }}>Nivel Empresarial</span></h2>
+          <p style={{ opacity: 0.4, fontSize: '1.1rem' }}>No es solo IA; es la arquitectura sólida que sostiene el futuro de tu negocio.</p>
         </div>
         
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gridAutoRows: '280px', gap: '2rem', maxWidth: '1300px', margin: '0 auto' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gridAutoRows: '240px', gap: '2rem', maxWidth: '1300px', margin: '0 auto' }}>
           <div style={{ gridColumn: 'span 2', gridRow: 'span 1', background: 'rgba(212,175,55,0.03)', borderRadius: '35px', padding: '3.5rem', border: '1px solid rgba(212,175,55,0.15)', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
             <FiShield style={{ color: '#D4AF37', fontSize: '2.5rem', marginBottom: '1.5rem' }} />
             <h3 style={{ fontSize: '1.8rem', fontWeight: 900, marginBottom: '1rem' }}>Seguridad de Aislamiento</h3>
@@ -688,10 +688,10 @@ export default function LandingPage() {
       </section>
   
       {/* 9. PLANES */}
-      <section id="planes" style={{ padding: '12rem 5%', background: '#03070C' }}>
+      <section id="planes" style={{ padding: '8rem 5%', background: '#03070C' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '8rem' }}>
-            <h2 style={{ fontSize: '4rem', fontWeight: 900, marginBottom: '2rem', letterSpacing: '-2px' }}>Inversión <span style={{ color: '#D4AF37' }}>Estratégica</span></h2>
+          <div style={{ textAlign: 'center', marginBottom: '6rem' }}>
+            <h2 style={{ fontSize: '3rem', fontWeight: 900, marginBottom: '2rem', letterSpacing: '-1.5px' }}>Inversión <span style={{ color: '#D4AF37' }}>Estratégica</span></h2>
             <p style={{ fontSize: '1.2rem', opacity: 0.4, maxWidth: '600px', margin: '0 auto' }}>Escalabilidad pura. Sin costos ocultos, solo infraestructura de alto rendimiento.</p>
           </div>
           
@@ -763,12 +763,12 @@ export default function LandingPage() {
       </section>
   
       {/* 10. PROPÓSITO */}
-      <section id="proposito" style={{ padding: '12rem 5%', background: '#060B14', position: 'relative', overflow: 'hidden' }}>
+      <section id="proposito" style={{ padding: '8rem 5%', background: '#060B14', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', bottom: '0', right: '0', width: '500px', height: '500px', background: 'radial-gradient(circle at center, rgba(212,175,55,0.02) 0%, transparent 70%)', zIndex: 0 }} />
         
         <div style={{ maxWidth: '1000px', margin: '0 auto', textAlign: 'center', position: 'relative', zIndex: 1 }}>
-          <h2 style={{ fontSize: '3.5rem', fontWeight: 900, marginBottom: '2.5rem', letterSpacing: '-2px' }}>La IA no debería ser solo un lujo.</h2>
-          <p style={{ fontSize: '1.4rem', opacity: 0.4, lineHeight: 1.8, marginBottom: '6rem', maxWidth: '800px', margin: '0 auto 6rem' }}>
+          <h2 style={{ fontSize: '3rem', fontWeight: 900, marginBottom: '2.5rem', letterSpacing: '-2px' }}>La IA no debería ser solo un lujo.</h2>
+          <p style={{ fontSize: '1.2rem', opacity: 0.4, lineHeight: 1.8, marginBottom: '4rem', maxWidth: '800px', margin: '0 auto 4rem' }}>
             Democratizamos tecnología de grado empresarial para que el crecimiento no dependa del presupuesto, sino de la visión estratégica.
           </p>
           
@@ -786,14 +786,14 @@ export default function LandingPage() {
       </section>
   
       {/* 11. FAQ */}
-      <section style={{ padding: '12rem 5%', background: '#03070C' }}>
-        <h2 style={{ textAlign: 'center', fontSize: '3.5rem', fontWeight: 900, marginBottom: '6rem', letterSpacing: '-2px' }}>Consultas de <span style={{ color: '#D4AF37' }}>Alto Nivel</span></h2>
+      <section style={{ padding: '8rem 5%', background: '#03070C' }}>
+        <h2 style={{ textAlign: 'center', fontSize: '3rem', fontWeight: 900, marginBottom: '5rem', letterSpacing: '-1.5px' }}>Consultas de <span style={{ color: '#D4AF37' }}>Alto Nivel</span></h2>
         <div style={{ maxWidth: '850px', margin: '0 auto' }}>
           {[
             { q: "¿Cómo garantiza Stratix el ROI?", a: "Nuestros agentes reducen el costo operativo en un 60% al automatizar tareas repetitivas y aumentar la tasa de conversión mediante respuestas instantáneas 24/7. Te entregamos un reporte de impacto mensual." },
             { q: "¿Se puede integrar con mi CRM actual?", a: "Sí. Stratix se conecta vía webhooks con Salesforce, HubSpot, Zoho y cualquier sistema que permita integraciones API. La configuración toma menos de 30 minutos." },
             { q: "¿Qué soporte técnico ofrecen?", a: "Todos los planes incluyen soporte vía ticket con respuesta en menos de 12 horas. El plan Enterprise cuenta con un Gerente de Éxito dedicado y soporte prioritario 24/7." },
-            { q: "¿Es segura mi información?", a: "Absolutamente. Usamos encriptación de grado militar AES-256, aislamiento total de datos por cliente y cumplimos con estándares GDPR. Tus datos nunca se comparten ni se usan para entrenar modelos." },
+            { q: "¿Es segura mi información?", a: "Absolutamente. Usamos encriptación de Nivel Bancario AES-256, aislamiento total de datos por cliente y cumplimos con estándares GDPR. Tus datos nunca se comparten ni se usan para entrenar modelos." },
             { q: "¿Cómo funciona la transición de IA a humano?", a: "Si el bot detecta una consulta compleja o una intención de alta prioridad (como una queja o una compra de alto valor), escala la conversación automáticamente a tu equipo humano con todo el contexto del chat." },
             { q: "¿Hay un límite de mensajes?", a: "El plan Starter incluye 500 mensajes/mes, Business Pro incluye 2,500 y el plan Enterprise es ilimitado. Si necesitas más en cualquier plan, puedes adquirir paquetes adicionales sin cambiar de plan." }
           ].map((item, i) => (
@@ -825,8 +825,8 @@ export default function LandingPage() {
       </section>
   
       {/* 12. FOOTER — FIX: "Relleno Estratégico" removido, redes sociales con links reales */}
-      <footer style={{ padding: '12rem 5% 5rem', background: '#020508', borderTop: '1px solid rgba(212,175,55,0.05)' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '5rem', marginBottom: '8rem' }}>
+      <footer style={{ padding: '8rem 5% 5rem', background: '#020508', borderTop: '1px solid rgba(212,175,55,0.05)' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '3rem', marginBottom: '4rem' }}>
           
           <div style={{ gridColumn: 'span 2' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '2rem' }}>
