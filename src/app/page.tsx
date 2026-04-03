@@ -617,6 +617,7 @@ export default function LandingPage() {
                     cursor: pointer;
                   }
                 `}</style>
+                <div style={{ fontSize: '0.75rem', opacity: 0.3, marginTop: '10px', textAlign: 'left' }}>* Basado en un ahorro promedio de $0.80 USD en tiempo operativo por interacción.</div>
               </div>
               
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '3rem' }}>
@@ -624,7 +625,6 @@ export default function LandingPage() {
                   <div style={{ fontSize: '0.8rem', fontWeight: 900, color: '#D4AF37', marginBottom: '1.5rem', letterSpacing: '2px' }}>AHORRO OPERATIVO</div>
                   <div style={{ fontSize: '3rem', fontWeight: 900 }}>
                     <span style={{ fontSize: '1.5rem', verticalAlign: 'top', marginRight: '5px' }}>$</span>
-                    {/* FIX: era leads * 0.8 * 12 (anual), ahora es correcto mensual */}
                     {(leads * 0.8).toLocaleString()}
                   </div>
                   <div style={{ fontSize: '0.75rem', opacity: 0.3, marginTop: '5px' }}>USD ESTIMADO / MES</div>
