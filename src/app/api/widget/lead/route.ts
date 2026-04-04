@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { botId, name, email, whatsapp, phone, sessionId } = body;
+    const { botId, name, email, whatsapp, phone, sessionId, company, ...metadata } = body;
     const finalWhatsApp = whatsapp || phone;
 
     if (!botId) {
@@ -25,7 +25,8 @@ export async function POST(request: NextRequest) {
           name, 
           email, 
           whatsapp: finalWhatsApp,
-          session_id: sessionId
+          session_id: sessionId,
+          metadata: { ...metadata, company: company || body.company }
         }
       ])
       .select();
@@ -53,12 +54,12 @@ export async function POST(request: NextRequest) {
       // 2a. Send Notification to the configured email
       await sendHotLeadAlert({
         to: alertTo,
-        subject: `🎯 NUEVO LEAD CAPTURADO: ${name}`,
+        subject: `🎯 NUEVO LEAD CAPTURADO: ${name} (${company || 'Persona'})`,
         botName: botName,
-        leadName: name,
+        leadName: `${name} [${company || 'Empresa no provista'}]`,
         leadContact: email || finalWhatsApp || 'No provisto',
         intent: 'Lead de Venta (Directo)',
-        summary: 'Este lead acaba de completar el formulario estratégico en la plataforma.'
+        summary: `Este lead acaba de completar el formulario estratégico. Empresa: ${company || 'No provista'}.`
       });
 
       // 2b. Send Lead Welcome Email
