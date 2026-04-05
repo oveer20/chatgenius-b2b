@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { botId, name, email, whatsapp, phone, sessionId, company, ...metadata } = body;
-    const finalWhatsApp = whatsapp || phone;
+    const finalPhone = whatsapp || phone;
 
     if (!botId) {
       return NextResponse.json({ error: "botId is required" }, { status: 400 });
@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
           bot_id: botId, 
           name, 
           email, 
-          whatsapp: finalWhatsApp,
+          phone: finalPhone,
           session_id: sessionId,
           metadata: { ...metadata, company: company || body.company }
         }
