@@ -147,7 +147,7 @@ export default function LandingPage() {
           <header style={{ padding: '12rem 5% 5rem', position: 'relative', overflow: 'hidden' }}>
             <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '140%', height: '130%', background: 'radial-gradient(ellipse at 50% 30%, rgba(212,175,55,0.09) 0%, transparent 60%)', zIndex: 0, filter: 'blur(80px)', pointerEvents: 'none' }} />
             <div style={{ maxWidth: '1400px', margin: '0 auto', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '4rem', position: 'relative', zIndex: 1 }}>
-              <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.7 }} style={{ flex: '1 1 500px' }}>
+              <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.4 }} style={{ flex: '1 1 500px' }}>
                 <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', padding: '7px 18px', background: 'rgba(212,175,55,0.08)', borderRadius: '30px', border: '1px solid rgba(212,175,55,0.2)', marginBottom: '2.5rem' }}>
                   <motion.div animate={{ scale: [1, 1.4, 1] }} transition={{ repeat: Infinity, duration: 2 }} style={{ width: '7px', height: '7px', background: '#D4AF37', borderRadius: '50%' }} />
                   <span style={{ fontSize: '0.72rem', fontWeight: 800, color: '#D4AF37', letterSpacing: '2px', textTransform: 'uppercase' }}>TU NEGOCIO EN PILOTO AUTOMÁTICO</span>
@@ -179,7 +179,7 @@ export default function LandingPage() {
                 </div>
               </motion.div>
 
-              <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 0.2 }} style={{ flex: '1 1 420px', position: 'relative', maxWidth: '500px' }}>
+              <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5, delay: 0.1 }} style={{ flex: '1 1 420px', position: 'relative', maxWidth: '500px' }}>
                 <div style={{ background: 'rgba(11,17,32,0.8)', backdropFilter: 'blur(24px)', borderRadius: '28px', border: '1px solid rgba(212,175,55,0.2)', padding: '22px', boxShadow: '0 40px 120px rgba(0,0,0,0.6)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '18px', paddingBottom: '14px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
                     <div style={{ width: '38px', height: '38px', borderRadius: '11px', background: '#D4AF37', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -357,6 +357,16 @@ export default function LandingPage() {
               </div>
             </div>
           </section>
+          {/* 8. CLOSING CTA */}
+          <section style={{ padding: '6rem 5%', background: 'linear-gradient(135deg, #060B14 0%, #0B1120 100%)', textAlign: 'center', borderTop: '1px solid rgba(212,175,55,0.1)' }}>
+            <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+              <h2 style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', fontWeight: 900, marginBottom: '2rem' }}>El futuro no espera.<br/><span style={{ color: '#D4AF37' }}>Tu competencia tampoco.</span></h2>
+              <p style={{ fontSize: '1.2rem', opacity: 0.5, marginBottom: '3rem' }}>Únete a las empresas que ya están escalando con inteligencia real.</p>
+              <Link href="/login" style={{ padding: '20px 45px', backgroundColor: '#D4AF37', color: '#000', borderRadius: '15px', fontWeight: 900, textDecoration: 'none', fontSize: '1.1rem', display: 'inline-flex', alignItems: 'center', gap: '12px', boxShadow: '0 15px 45px rgba(212,175,55,0.3)' }}>
+                EMPEZAR AHORA <FiArrowRight />
+              </Link>
+            </div>
+          </section>
         </main>
 
         <footer style={{ padding: '7rem 5% 4rem', background: '#020508', borderTop: '1px solid rgba(212,175,55,0.05)' }}>
@@ -370,11 +380,17 @@ export default function LandingPage() {
                 <h4 style={{ fontSize: '0.75rem', fontWeight: 900, color: '#D4AF37', marginBottom: '1.5rem' }}>{cat}</h4>
                 <ul style={{ listStyle: 'none', padding: 0, opacity: 0.3, fontSize: '0.9rem', display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
                   {i === 0 ? (
-                    ['Diagnóstico Gratis', 'Planes Élite', 'Casos de Éxito', 'Partners'].map(l => <li key={l} className="sx-footer-link">{l}</li>)
+                    ['Diagnóstico Gratis', 'Planes Élite', 'Casos de Éxito', 'Partners'].map(l => (
+                      <li key={l}><a href={l === 'Planes Élite' ? '#planes' : '#demo'} className="sx-footer-link" style={{ color: 'inherit', textDecoration: 'none' }}>{l}</a></li>
+                    ))
                   ) : i === 1 ? (
-                    ['Opal Logic', 'Stitch Engine', 'RAG Neural', 'API Docs'].map(l => <li key={l} className="sx-footer-link">{l}</li>)
+                    ['Opal Logic', 'Stitch Engine', 'RAG Neural', 'API Docs'].map(l => (
+                      <li key={l}><a href="#proposito" className="sx-footer-link" style={{ color: 'inherit', textDecoration: 'none' }}>{l}</a></li>
+                    ))
                   ) : (
-                    ['Privacidad', 'Términos', 'Cookies'].map(l => <li key={l} className="sx-footer-link">{l}</li>)
+                    ['Privacidad', 'Términos', 'Cookies'].map(l => (
+                      <li key={l}><a href="#" className="sx-footer-link" style={{ color: 'inherit', textDecoration: 'none' }}>{l}</a></li>
+                    ))
                   )}
                 </ul>
               </div>
