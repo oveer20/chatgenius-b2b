@@ -234,6 +234,34 @@ function LandingContent() {
             </div>
           </header>
 
+          {/* 1.5 EL CUELLO DE BOTELLA */}
+          <section style={{ padding: '8rem 5%', background: '#03070C' }}>
+            <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+              <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
+                <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 900, marginBottom: '1.5rem' }}>El Cuello de <span style={{ color: '#D4AF37' }}>Botella Actual</span></h2>
+                <p style={{ opacity: 0.5, fontSize: '1.2rem' }}>¿Cuánto dinero estás dejando sobre la mesa por procesos manuales?</p>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '3rem' }}>
+                <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ padding: '4rem', background: 'rgba(255, 95, 87, 0.03)', borderRadius: '32px', border: '1px solid rgba(255, 95, 87, 0.1)' }}>
+                  <h3 style={{ color: '#FF5F57', fontSize: '1.8rem', fontWeight: 900, marginBottom: '2.5rem', display: 'flex', alignItems: 'center', gap: '15px' }}><FiClock /> Sin Stratix</h3>
+                  <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '1.5rem', opacity: 0.7 }}>
+                    <li style={{ display: 'flex', alignItems: 'center', gap: '12px' }}><FiX color="#FF5F57" /> Leads perdidos en la madrugada</li>
+                    <li style={{ display: 'flex', alignItems: 'center', gap: '12px' }}><FiX color="#FF5F57" /> Respuestas lentas (&gt; 30 min)</li>
+                    <li style={{ display: 'flex', alignItems: 'center', gap: '12px' }}><FiX color="#FF5F57" /> Equipos saturados y estresados</li>
+                  </ul>
+                </motion.div>
+                <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} style={{ padding: '4rem', background: 'rgba(212, 175, 55, 0.05)', borderRadius: '32px', border: '1px solid rgba(212, 175, 55, 0.2)', boxShadow: '0 20px 60px rgba(212,175,55,0.05)' }}>
+                  <h3 style={{ color: '#D4AF37', fontSize: '1.8rem', fontWeight: 900, marginBottom: '2.5rem', display: 'flex', alignItems: 'center', gap: '15px' }}><FiZap /> Con Stratix</h3>
+                  <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                    <li style={{ display: 'flex', alignItems: 'center', gap: '12px' }}><FiCheck color="#D4AF37" /> Atención 24/7 en milisegundos</li>
+                    <li style={{ display: 'flex', alignItems: 'center', gap: '12px' }}><FiCheck color="#D4AF37" /> Calificación automática</li>
+                    <li style={{ display: 'flex', alignItems: 'center', gap: '12px' }}><FiCheck color="#D4AF37" /> Cierre de ventas en piloto automático</li>
+                  </ul>
+                </motion.div>
+              </div>
+            </div>
+          </section>
+
           {/* 2.5 TRUSTED BY */}
           <section style={{ padding: '2.5rem 5%', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
             <div style={{ maxWidth: '1100px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '1.8rem', alignItems: 'center' }}>
@@ -267,6 +295,30 @@ function LandingContent() {
                   </motion.div>
                 ))}
               </AnimatePresence>
+            </div>
+          </section>
+
+          {/* 3.5 STRATIX LABS (Arquitectura Neuronal) */}
+          <section id="labs" style={{ padding: '8rem 5%', background: '#060B14', position: 'relative' }}>
+            <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '60%', height: '60%', background: 'radial-gradient(circle, rgba(212,175,55,0.03) 0%, transparent 70%)', pointerEvents: 'none' }} />
+            <div style={{ maxWidth: '1200px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
+              <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
+                <div style={{ color: '#D4AF37', fontSize: '0.75rem', fontWeight: 900, letterSpacing: '4px', marginBottom: '1rem', textTransform: 'uppercase' }}>Ingeniería de Escala</div>
+                <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 900 }}>Stratix Labs: <span style={{ color: '#D4AF37' }}>Arquitectura Neuronal</span></h2>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '2rem' }}>
+                {[
+                  { title: 'Opal Logic', desc: 'Motor de procesamiento natural que entiende el contexto y la intención de compra real del cliente.', icon: <FiCpu /> },
+                  { title: 'Stitch Engine', desc: 'Conector universal que sincroniza tu CRM, inventario y pasarelas de pago en tiempo real.', icon: <FiLayers /> },
+                  { title: 'RAG Neural', desc: 'Base de conocimiento dinámica que aprende de tus PDFs, webs y catálogos al instante con IA avanzada.', icon: <FiDatabase /> }
+                ].map((lab, i) => (
+                  <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} style={{ padding: '3.5rem', background: 'rgba(255,255,255,0.01)', borderRadius: '28px', border: '1px solid rgba(212,175,55,0.15)', backdropFilter: 'blur(10px)' }}>
+                    <div style={{ width: '60px', height: '60px', borderRadius: '16px', background: 'rgba(212,175,55,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.8rem', color: '#D4AF37', marginBottom: '2rem' }}>{lab.icon}</div>
+                    <h3 style={{ fontSize: '1.6rem', fontWeight: 800, marginBottom: '1.2rem' }}>{lab.title}</h3>
+                    <p style={{ opacity: 0.5, lineHeight: 1.7, fontSize: '1.05rem' }}>{lab.desc}</p>
+                  </motion.div>
+                ))}
+              </div>
             </div>
           </section>
 
@@ -307,6 +359,31 @@ function LandingContent() {
                   </div>
                 </div>
               </motion.div>
+            </div>
+          </section>
+
+          {/* 5.5 TESTIMONIALS */}
+          <section style={{ padding: '8rem 5%', background: '#060B14' }}>
+            <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+              <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
+                <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 900 }}>Voces de <span style={{ color: '#D4AF37' }}>Liderazgo</span></h2>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '2.5rem' }}>
+                {[
+                  { author: "Director de Operaciones", company: "Vortex Media", text: "Redujimos el costo de adquisición un 35% y ahora cerramos ventas a las 3 AM sin intervención humana." },
+                  { author: "CEO & Founder", company: "Nexus AI Global", text: "Stratix no es un bot, es un arquitecto de ventas. La integración con nuestro CRM fue impecable." },
+                  { author: "Head of Growth", company: "Elevate Group", text: "Pasamos de calificar leads en 24 horas a hacerlo en 400ms. El escalamiento ha sido masivo." }
+                ].map((t, i) => (
+                  <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} style={{ padding: '3rem', background: 'rgba(255,255,255,0.02)', borderRadius: '32px', border: '1px solid rgba(255,255,255,0.04)', backdropFilter: 'blur(20px)' }}>
+                    <div style={{ display: 'flex', gap: '4px', marginBottom: '1.5rem' }}>{[1,2,3,4,5].map(s => <FiStar key={s} size={14} color="#D4AF37" fill="#D4AF37" />)}</div>
+                    <p style={{ fontSize: '1.1rem', fontStyle: 'italic', opacity: 0.8, marginBottom: '2.5rem', lineHeight: 1.6 }}>"{t.text}"</p>
+                    <div>
+                      <div style={{ fontWeight: 900, color: '#D4AF37' }}>{t.author}</div>
+                      <div style={{ fontSize: '0.85rem', opacity: 0.4 }}>{t.company}</div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
             </div>
           </section>
 
