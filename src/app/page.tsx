@@ -7,7 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast, Toaster } from "sonner";
 import { 
-  FiArrowRight, FiCheck, FiCpu, FiLayout, FiTarget, FiZap, FiShield, 
+  FiArrowRight, FiCheck, FiCpu, FiLayout, FiTarget, FiZap, FiShield, FiLock, 
   FiChevronDown, FiPlayCircle, FiActivity, FiShoppingCart, 
   FiDatabase, FiGlobe, FiClock, FiLayers, FiUsers, FiTrendingUp, FiSend, FiMenu, FiX, FiStar
 } from "react-icons/fi";
@@ -21,6 +21,7 @@ function LandingContent() {
   const [currency, setCurrency] = useState<'USD' | 'COP'>('USD');
   const [activeUseCase, setActiveUseCase] = useState('ecommerce');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   useEffect(() => {
     if (mobileMenuOpen) {
@@ -387,6 +388,29 @@ function LandingContent() {
             </div>
           </section>
 
+          {/* 5.7 CÓMO FUNCIONA */}
+          <section id="proposito" style={{ padding: '8rem 5%', background: '#03070C' }}>
+            <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+              <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
+                <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 900 }}>De Cero a <span style={{ color: '#D4AF37' }}>Escalamiento</span></h2>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem', position: 'relative' }}>
+                {[
+                  { step: "01", title: "Integración", desc: "Conecta WhatsApp, IG, Web y CRM en un solo clic con Stitch Engine." },
+                  { step: "02", title: "Entrenamiento", desc: "Opal procesa tus catálogos, PDFs y bases de conocimiento en minutos." },
+                  { step: "03", title: "Despliegue", desc: "Tu IA empieza a cerrar ventas y calificar leads en piloto automático." }
+                ].map((s, i) => (
+                  <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} style={{ padding: '3.5rem 2.5rem', background: 'rgba(255,255,255,0.01)', borderRadius: '28px', border: '1px solid rgba(212,175,55,0.1)', position: 'relative', overflow: 'hidden' }}>
+                    <div style={{ fontSize: '4.5rem', fontWeight: 900, position: 'absolute', top: '-10px', right: '10px', opacity: 0.03, color: '#D4AF37' }}>{s.step}</div>
+                    <div style={{ width: '50px', height: '50px', borderRadius: '50%', background: 'linear-gradient(135deg, #D4AF37 0%, #B8860B 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, color: '#000', marginBottom: '2rem', boxShadow: '0 0 20px rgba(212,175,55,0.3)' }}>{i + 1}</div>
+                    <h3 style={{ fontSize: '1.6rem', fontWeight: 800, marginBottom: '1.2rem' }}>{s.title}</h3>
+                    <p style={{ opacity: 0.5, lineHeight: 1.7, fontSize: '1.05rem' }}>{s.desc}</p>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </section>
+
           {/* 6. PLANES */}
           <section id="planes" style={{ padding: '8rem 5%' }}>
             <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
@@ -417,6 +441,22 @@ function LandingContent() {
                   </motion.div>
                 ))}
               </div>
+            </div>
+          </section>
+
+          {/* 6.5 SEGURIDAD EMPRESARIAL */}
+          <section style={{ padding: '5rem 5%', background: '#020508', borderTop: '1px solid rgba(255,255,255,0.03)' }}>
+            <div style={{ maxWidth: '1100px', margin: '0 auto', display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '4rem', alignItems: 'center', opacity: 0.6 }}>
+              {[
+                { icon: <FiShield />, text: "Encriptación End-to-End" },
+                { icon: <FiLock />, text: "Cumplimiento GDPR" },
+                { icon: <FiDatabase />, text: "Datos Aislados" }
+              ].map((item, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '0.9rem', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase' }}>
+                  <span style={{ color: '#D4AF37', fontSize: '1.3rem' }}>{item.icon}</span>
+                  {item.text}
+                </div>
+              ))}
             </div>
           </section>
 
@@ -458,6 +498,37 @@ function LandingContent() {
               <Link href="/login" style={{ padding: '20px 45px', backgroundColor: '#D4AF37', color: '#000', borderRadius: '15px', fontWeight: 900, textDecoration: 'none', fontSize: '1.1rem', display: 'inline-flex', alignItems: 'center', gap: '12px', boxShadow: '0 15px 45px rgba(212,175,55,0.3)' }}>
                 EMPEZAR AHORA <FiArrowRight />
               </Link>
+            </div>
+          </section>
+
+          {/* 8.5 FAQ */}
+          <section style={{ padding: '8rem 5%', background: '#060B14' }}>
+            <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+              <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
+                <h2 style={{ fontSize: '2.8rem', fontWeight: 900 }}>Preguntas <span style={{ color: '#D4AF37' }}>Frecuentes</span></h2>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                {[
+                  { q: "¿Cuánto tiempo toma la implementación?", a: "Tras el diagnóstico inicial, nuestro equipo de despliegue integra y entrena tu solución personalizada en menos de 48 horas laborables." },
+                  { q: "¿Qué pasa si la IA no sabe responder?", a: "Stratix detecta la incertidumbre y transfiere la conversación sin fricción a un agente humano de tu equipo, entregando todo el contexto previo." },
+                  { q: "¿Es compatible con mi CRM actual?", a: "Absolutamente. Stitch Engine se integra vía API nativa y webhooks con el 99% de los ecosistemas (Salesforce, HubSpot, Pipedrive, etc.)." },
+                  { q: "¿Tengo que firmar contratos a largo plazo?", a: "No. Creemos tanto en la rentabilidad de nuestro motor que todos los planes son de renovación mensual, dándote total libertad estratégica." }
+                ].map((faq, i) => (
+                  <div key={i} style={{ borderRadius: '20px', border: '1px solid rgba(255,255,255,0.05)', background: 'rgba(255,255,255,0.01)', overflow: 'hidden' }}>
+                    <button onClick={() => setOpenFaq(openFaq === i ? null : i)} style={{ width: '100%', padding: '1.8rem 2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'none', border: 'none', color: 'white', cursor: 'pointer', textAlign: 'left' }}>
+                      <span style={{ fontWeight: 800, fontSize: '1.1rem' }}>{faq.q}</span>
+                      <motion.div animate={{ rotate: openFaq === i ? 180 : 0 }}><FiChevronDown color="#D4AF37" /></motion.div>
+                    </button>
+                    <AnimatePresence>
+                      {openFaq === i && (
+                        <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.3 }}>
+                          <div style={{ padding: '0 2rem 2rem', opacity: 0.5, lineHeight: 1.6, fontSize: '1rem' }}>{faq.a}</div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                ))}
+              </div>
             </div>
           </section>
         </main>
