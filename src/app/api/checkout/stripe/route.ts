@@ -1,5 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
+import { PRICING_PLANS } from "@/lib/constants";
+
+/**
+ * STRATIX INTELLIGENCE — STRIPE CHECKOUT (V3.2)
+ * Sistema de pagos internacionales con Stripe para el ecosistema B2B.
+ */
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
   apiVersion: "2023-10-16" as any,
@@ -7,20 +13,35 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
 
 export async function POST(request: NextRequest) {
   try {
+    // 1. Verificación de Configuración
+    if (!process.env.STRIPE_SECRET_KEY) {
+      return NextResponse.json(
+        { error: "Stripe no configurado. Falta STRIPE_SECRET_KEY." },
+        { status: 503 }
+      );
+    }
+
     const body = await request.json();
     const { plan, email, userId } = body;
 
-    const prices: Record<string, { priceId: string; amount: number; name: string }> = {
-      starter: { priceId: process.env.STRIPE_PRICE_STARTER || "", amount: 49, name: "Stratix Pioneer Elite" },
-      pro: { priceId: process.env.STRIPE_PRICE_PRO || "", amount: 99, name: "Stratix Professional" },
-      enterprise: { priceId: process.env.STRIPE_PRICE_ENTERPRISE || "", amount: 249, name: "Stratix Enterprise" },
-    };
-
-    const selected = prices[plan];
-    if (!selected) {
-      return NextResponse.json({ error: "Invalid plan" }, { status: 400 });
+    if (!userId) {
+      return NextResponse.json({ error: "Identificación de usuario (userId) requerida." }, { status: 400 });
     }
 
+    // 2. Mapeo Dinámico desde Constants.ts
+    // Mapeamos los slugs del frontend ('starter', 'pro', 'enterprise') a los objetos de PRICING_PLANS
+    const planSlug = plan?.toLowerCase() || "starter";
+    
+    // Búsqueda del plan en las constantes (Starter, Business Pro, Enterprise)
+    const planConfig = PRICING_PLANS.find(p => 
+      p.name.toLowerCase().includes(planSlug.replace("starter", "starter").replace("pro", "business"))
+    );
+
+    if (!planConfig) {
+      return NextResponse.json({ error: `Plan [${plan}] no encontrado en el ecosistema.` }, { status: 404 });
+    }
+
+    // 3. Creación de la Sesión de Pago de Stripe
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       line_items: [
@@ -28,30 +49,34 @@ export async function POST(request: NextRequest) {
           price_data: {
             currency: "usd",
             product_data: {
-              name: 'Stratix Suite',
-              description: 'Acceso total a la Suite de Estrategia B2B (Pomelli, Stitch, Opal).',
+              name: `Stratix Intelligence — ${planConfig.name}`,
+              description: `Acceso Premium al ecosistema Stratix (${planConfig.name})`,
+              images: ["https://stratix-intelligence.vercel.app/stratix_shield.svg"],
             },
-            unit_amount: selected.amount * 100,
+            unit_amount: planConfig.priceUsd * 100, // Stripe usa centavos
           },
           quantity: 1,
         },
       ],
-      mode: "payment", // Or "subscription" if recurring
-      success_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?success=true`,
-      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?canceled=true`,
+      mode: "payment", // "payment" para pago único, "subscription" para recurrente
+      success_url: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/dashboard?payment=success`,
+      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/pricing?payment=error`,
       customer_email: email,
       client_reference_id: userId,
       metadata: {
-        plan: plan,
+        plan: planSlug,
         userId: userId,
+        planDisplayName: planConfig.name
       },
     });
 
-    return NextResponse.json({ url: session.url });
+    // 4. Retorno de la URL de sesión
+    return NextResponse.json({ url: session.url }, { status: 200 });
+
   } catch (error: any) {
-    console.error("/// STRIPE ERROR ///", error);
+    console.error("/// STRIPE CHECKOUT ERROR ///", error);
     return NextResponse.json(
-      { error: "Error creating Stripe session", details: error.message },
+      { error: "Error en la pasarela de pagos de Stripe", details: error.message },
       { status: 500 }
     );
   }

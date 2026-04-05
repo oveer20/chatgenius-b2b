@@ -1,68 +1,89 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
+import { supabaseAdmin } from "@/lib/supabase-admin";
+
+/**
+ * STRATIX INTELLIGENCE — STRIPE WEBHOOK (V3.3)
+ * Automatización de derechos de acceso tras aprobación de pago internacional.
+ */
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
-  apiVersion: "2026-02-25.clover",
+  apiVersion: "2023-10-16" as any,
 });
 
 export async function POST(request: NextRequest) {
+  const body = await request.text();
+  const sig = request.headers.get("stripe-signature");
+
+  if (!sig || !process.env.STRIPE_WEBHOOK_SECRET) {
+    console.error("/// CONFIG ERROR: Missing stripe-signature or STRIPE_WEBHOOK_SECRET ///");
+    return NextResponse.json({ error: "Missing config" }, { status: 400 });
+  }
+
+  let event: Stripe.Event;
+
   try {
-    const body = await request.text();
-    const sig = request.headers.get("stripe-signature");
-
-    if (!sig || !process.env.STRIPE_WEBHOOK_SECRET) {
-      return NextResponse.json(
-        { error: "Missing signature or webhook secret" },
-        { status: 400 }
-      );
-    }
-
-    const event = stripe.webhooks.constructEvent(
+    // 1. Verificación de la Autenticidad del Evento
+    event = stripe.webhooks.constructEvent(
       body,
       sig,
       process.env.STRIPE_WEBHOOK_SECRET
     );
+  } catch (err: any) {
+    console.error(`/// WEBHOOK SIGNATURE VERIFICATION FAILED: ${err.message} ///`);
+    return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
+  }
 
+  // 2. Procesamiento de Eventos de Stripe
+  try {
     switch (event.type) {
       case "checkout.session.completed": {
         const session = event.data.object as Stripe.Checkout.Session;
         const userId = session.client_reference_id || session.metadata?.userId;
-        const plan = session.metadata?.plan;
+        const planSlug = session.metadata?.plan || "starter";
 
-        if (userId && plan) {
-          const { supabase } = await import("@/lib/supabase");
-          const { error } = await supabase
+        // Mapeo estratégico de planes hacia la base de Datos (Normalización)
+        // constants.ts -> profiles.plan (free, growth, enterprise)
+        const planMapping: Record<string, string> = {
+          "starter": "growth",
+          "pro": "growth",
+          "enterprise": "enterprise"
+        };
+        
+        const finalPlan = planMapping[planSlug.toLowerCase()] || "growth";
+
+        if (userId) {
+          console.log(`/// ACTIVANDO PLAN ${finalPlan.toUpperCase()} PARA USUARIO ${userId} ///`);
+          
+          // Actualización mediante Admin (Service Role) para saltar RLS
+          const { error } = await supabaseAdmin
             .from("profiles")
             .update({ 
-               plan: plan,
-               subscription_status: 'active',
-               updated_at: new Date().toISOString()
+              plan: finalPlan,
+              subscription_status: "active",
+              updated_at: new Date().toISOString()
             })
             .eq("id", userId);
 
-          if (error) console.error("Error updating profile from Stripe:", error);
-          else console.log(`Plan ${plan} activated for user ${userId} via Stripe`);
+          if (error) {
+            console.error("/// DATABASE UPDATE FAILED ///", error);
+            throw error;
+          }
+          
+          console.log(`/// ACCESO STRIPE ACTIVADO ÉXITO: Usuario ${userId} -> Plan ${finalPlan} ///`);
         }
         break;
       }
 
-      case "customer.subscription.deleted": {
-        const subscription = event.data.object as Stripe.Subscription;
-        console.log("Subscription cancelled:", subscription.id);
-        // In production: Downgrade user
-        break;
-      }
-
       default:
-        console.log(`Unhandled event type: ${event.type}`);
+        console.log(`/// EVENTO STRIPE IGNORADO: ${event.type} ///`);
     }
 
-    return NextResponse.json({ received: true });
-  } catch (error) {
-    console.error("Webhook error:", error);
-    return NextResponse.json(
-      { error: "Webhook handler failed" },
-      { status: 400 }
-    );
+    return NextResponse.json({ received: true }, { status: 200 });
+
+  } catch (error: any) {
+    console.error("/// STRIPE WEBHOOK HANDLER ERROR ///", error.message);
+    // Retornamos 400 para que Stripe reintente en caso de fallo real del handler
+    return NextResponse.json({ error: "Webhook failed" }, { status: 400 });
   }
 }
