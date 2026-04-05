@@ -1,9 +1,11 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+import { toast, Toaster } from "sonner";
 import { 
   FiArrowRight, FiCheck, FiCpu, FiLayout, FiTarget, FiZap, FiShield, 
   FiChevronDown, FiPlayCircle, FiActivity, FiShoppingCart, 
@@ -12,12 +14,22 @@ import {
 import { supabase } from "@/lib/supabase";
 import { CURRENCIES, PRICING_PLANS, USE_CASES, INTEGRATIONS } from "@/lib/constants";
 
-export default function LandingPage() {
-  const [activeFaq, setActiveFaq] = useState<number | null>(null);
+function LandingContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [leads, setLeads] = useState(100);
   const [currency, setCurrency] = useState<'USD' | 'COP'>('USD');
   const [activeUseCase, setActiveUseCase] = useState('ecommerce');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+    return () => { document.body.style.overflow = 'auto'; };
+  }, [mobileMenuOpen]);
 
   const exchangeRate = CURRENCIES[currency].rate;
   const symbol = CURRENCIES[currency].symbol;
@@ -68,25 +80,24 @@ export default function LandingPage() {
       if (res.ok) setSubmitted(true);
     } catch (err) {
       console.error("Error enviando lead:", err);
-      alert("Hubo un error. Por favor intenta de nuevo.");
+      toast.error("Hubo un error al procesar tu solicitud. Intenta de nuevo.");
     } finally {
       setIsSubmitting(false);
     }
   };
   
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const planFromUrl = params.get("plan");
+    const planFromUrl = searchParams.get("plan");
     if (planFromUrl && !hasAutoCheckedOut) {
       setHasAutoCheckedOut(true);
       handleCheckout(planFromUrl);
     }
-  }, []);
+  }, [searchParams, hasAutoCheckedOut]);
 
   const handleCheckout = async (planId: string) => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) { window.location.href = `/login?redirect=/&plan=${planId}`; return; }
+      if (!user) { router.push(`/login?redirect=/&plan=${planId}`); return; }
       const response = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -94,9 +105,9 @@ export default function LandingPage() {
       });
       const data = await response.json();
       if (data.url) { window.location.href = data.url; }
-      else { alert("Error al iniciar el pago: " + (data.error || "Desconocido")); }
+      else { toast.error("Error al iniciar el pago: " + (data.error || "Desconocido")); }
     } catch (err: any) {
-      alert("Hubo un problema con la pasarela de pagos.");
+      toast.error("Hubo un problema con la pasarela de pagos.");
     }
   };
 
@@ -124,7 +135,12 @@ export default function LandingPage() {
             <Link href="/login" style={{ padding: '11px 24px', backgroundColor: '#D4AF37', color: '#000', borderRadius: '10px', textDecoration: 'none', fontWeight: 900, letterSpacing: '0.3px', boxShadow: '0 8px 24px rgba(212,175,55,0.25)', transition: '0.2s' }}>Acceso Élite</Link>
           </div>
 
-          <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="sx-mobile-menu-btn" style={{ display: 'none', background: 'none', border: 'none', color: 'white', cursor: 'pointer', fontSize: '1.5rem' }}>
+          <button 
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)} 
+            className="sx-mobile-menu-btn" 
+            aria-label={mobileMenuOpen ? "Cerrar menú de navegación" : "Abrir menú de navegación"}
+            style={{ display: 'none', background: 'none', border: 'none', color: 'white', cursor: 'pointer', fontSize: '1.5rem' }}
+          >
             {mobileMenuOpen ? <FiX /> : <FiMenu />}
           </button>
         </nav>
@@ -211,7 +227,7 @@ export default function LandingPage() {
                   </div>
                   <form onSubmit={handleDemoChat} style={{ background: 'rgba(255,255,255,0.04)', borderRadius: '14px', padding: '8px 10px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <input type="text" placeholder="Prueba a Opal aquí..." value={demoInput} onChange={e => setDemoInput(e.target.value)} style={{ background: 'transparent', border: 'none', color: 'white', fontSize: '0.85rem', outline: 'none', flex: 1 }} />
-                    <button type="submit" style={{ width: '32px', height: '32px', borderRadius: '9px', background: '#D4AF37', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><FiSend color="#000" size={14} /></button>
+                    <button type="submit" aria-label="Enviar mensaje de prueba" style={{ width: '32px', height: '32px', borderRadius: '9px', background: '#D4AF37', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><FiSend color="#000" size={14} /></button>
                   </form>
                 </div>
               </motion.div>
@@ -259,7 +275,7 @@ export default function LandingPage() {
             <motion.div animate={{ x: [0, -1200] }} transition={{ repeat: Infinity, duration: 35, ease: "linear" }} style={{ display: 'flex', gap: '5rem', alignItems: 'center', whiteSpace: 'nowrap' }}>
               {[...INTEGRATIONS, ...INTEGRATIONS].map((int, i) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px', opacity: 0.35 }}>
-                  <img src={int.icon} alt={int.name} style={{ height: '22px', filter: 'grayscale(1) invert(1)' }} />
+                  <Image src={int.icon} alt={int.name} width={22} height={22} style={{ objectFit: 'contain', filter: 'grayscale(1) invert(1)' }} />
                   <span style={{ fontWeight: 700 }}>{int.name}</span>
                 </div>
               ))}
@@ -405,7 +421,16 @@ export default function LandingPage() {
             </div>
           </div>
         </footer>
+        <Toaster theme="dark" richColors position="bottom-right" />
       </div>
     </>
+  );
+}
+
+export default function LandingPage() {
+  return (
+    <Suspense fallback={<div style={{ minHeight: '100vh', background: '#060B14' }} />}>
+      <LandingContent />
+    </Suspense>
   );
 }
