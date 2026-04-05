@@ -52,7 +52,7 @@ function PricingCard({ plan, exchangeRate, symbol, handleCheckout }: any) {
         overflow: 'hidden'
       }}
     >
-      {/* Efecto Flashlight (Glow) */}
+      {/* Efecto Flashlight (Glow) - Intensificado para visibilidad Pro */}
       <div 
         style={{
           position: 'absolute',
@@ -61,14 +61,14 @@ function PricingCard({ plan, exchangeRate, symbol, handleCheckout }: any) {
           right: 0,
           bottom: 0,
           pointerEvents: 'none',
-          background: `radial-gradient(circle at ${mousePos.x}px ${mousePos.y}px, rgba(212,175,55,0.15), transparent 40%)`,
+          background: `radial-gradient(circle at ${mousePos.x}px ${mousePos.y}px, rgba(212,175,55,0.3), transparent 70%)`,
           opacity: opacity,
-          transition: 'opacity 0.3s ease',
-          zIndex: 0
+          transition: 'opacity 0.5s ease',
+          zIndex: 1
         }}
       />
 
-      <div style={{ position: 'relative', zIndex: 1 }}>
+      <div style={{ position: 'relative', zIndex: 10 }}>
         {plan.highlight && <div style={{ position: 'absolute', top: '-18px', left: '50%', transform: 'translateX(-50%)', background: '#D4AF37', color: '#000', padding: '7px 22px', borderRadius: '30px', fontSize: '0.75rem', fontWeight: 900 }}>RECOMENDADO</div>}
         <h3 style={{ marginBottom: '1.2rem', fontWeight: 900, fontSize: '1.6rem' }}>{plan.name}</h3>
         <div style={{ fontSize: '3.5rem', fontWeight: 900, marginBottom: '2.5rem' }}>
@@ -207,13 +207,13 @@ export default function LandingClient() {
           justifyContent: 'space-between', 
           alignItems: 'center', 
           padding: isScrolled ? '1rem 5%' : '1.5rem 5%', 
-          background: isScrolled ? 'rgba(6,11,20,0.96)' : 'transparent', 
-          backdropFilter: isScrolled ? 'blur(20px)' : 'none', 
+          background: isScrolled ? 'rgba(6,11,20,0.98)' : 'rgba(0,0,0,0)', 
+          backdropFilter: isScrolled ? 'blur(20px)' : 'blur(0px)', 
           position: 'sticky', 
           top: 0, 
           zIndex: 100, 
-          borderBottom: isScrolled ? '1px solid rgba(212,175,55,0.1)' : '1px solid transparent',
-          transition: 'all 0.3s ease-in-out'
+          borderBottom: isScrolled ? '1px solid rgba(212,175,55,0.15)' : '1px solid rgba(255,255,255,0)',
+          transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <Image src="/stratix_shield.svg" alt="Stratix Logo" width={32} height={32} priority />

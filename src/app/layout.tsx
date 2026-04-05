@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://antigravity-bay-six.vercel.app'),
-  title: 'Stratix Intelligence — El Estándar B2B de IA',
+  title: 'Stratix Intelligence',
   description: 'Arquitectura de Inteligencia Artificial para empresas de alto rendimiento. Automatiza ventas, soporte y captura leads con tecnología RAG de Élite.',
   keywords: ["inteligencia artificial", "SaaS B2B", "CRM con IA", "Stratix Intelligence", "automatización de ventas", "WhatsApp Bot Inteligente", "RAG B2B", "captador de leads"],
   authors: [{ name: "Stratix Intelligence" }],
