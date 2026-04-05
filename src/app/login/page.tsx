@@ -4,19 +4,20 @@ import { useState, Suspense } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { FiMail, FiLock, FiUser, FiArrowRight, FiShield, FiCheckCircle, FiZap } from "react-icons/fi";
-import { supabase } from "@/lib/supabase";
+import { FiMail, FiLock, FiUser, FiArrowRight, FiShield, FiCheckCircle } from "react-icons/fi";
+import { toast } from "sonner";
+import { createClient } from "@/utils/supabase/client";
 import styles from "./auth.module.css";
 
 function AuthContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const supabase = createClient();
   const [mode, setMode] = useState<"login" | "signup">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
 
   const redirect = searchParams.get("redirect") || "/dashboard";
   const plan = searchParams.get("plan");
@@ -24,7 +25,6 @@ function AuthContent() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setMessage("");
 
     try {
       if (mode === "signup") {
@@ -38,7 +38,7 @@ function AuthContent() {
           },
         });
         if (error) throw error;
-        setMessage("✅ Revisa tu correo para verificar tu cuenta.");
+        toast.success("✅ Protocolo de seguridad iniciado. Revisa tu correo para verificar tu cuenta.");
       } else {
         const { error } = await supabase.auth.signInWithPassword({
           email,
@@ -46,12 +46,15 @@ function AuthContent() {
         });
         if (error) throw error;
         
+        toast.success("✅ Acceso autorizado. Sincronizando ecosistema...");
+        
         // Redirección inteligente tras el login
         const finalRedirect = plan ? `${redirect}?plan=${plan}` : redirect;
         router.push(finalRedirect);
+        router.refresh(); // Asegura que el middleware detecte la nueva sesión
       }
     } catch (error: any) {
-      setMessage(`❌ Error: ${error.message || "Inténtalo de nuevo."}`);
+      toast.error(`❌ Fallo en la autenticación: ${error.message || "Inténtalo de nuevo."}`);
     } finally {
       setLoading(false);
     }
@@ -67,7 +70,6 @@ function AuthContent() {
         style={{ border: '1px solid rgba(212, 175, 55, 0.1)' }}
       >
         <Link href="/" className={styles.logo}>
-          {/* Logo SVG Dorado Implementado */}
           <img src="/stratix_shield.svg" alt="Stratix AI Logo" style={{ height: '32px' }} />
           <span style={{ fontWeight: 800 }}>Strat<span style={{ color: '#D4AF37' }}>ix</span> AI</span>
         </Link>
@@ -119,8 +121,6 @@ function AuthContent() {
             />
           </div>
 
-          {message && <p style={{ fontSize: '0.8rem', margin: '1rem 0', textAlign: 'center' }}>{message}</p>}
-
           <button
             type="submit"
             className="btn-primary"
@@ -145,14 +145,13 @@ function AuthContent() {
         <p className={styles.switchMode} style={{ marginTop: '1.5rem' }}>
           {mode === "login" ? "¿No tienes cuenta?" : "¿Ya tienes cuenta?"}{" "}
           <button
-            onClick={() => { setMode(mode === "login" ? "signup" : "login"); setMessage(""); }}
+            onClick={() => { setMode(mode === "login" ? "signup" : "login"); }}
             style={{ color: '#D4AF37', fontWeight: 'bold', background: 'none', border: 'none', cursor: 'pointer' }}
           >
             {mode === "login" ? "Regístrate aquí" : "Inicia sesión"}
           </button>
         </p>
 
-        {/* Señales de Confianza Refinadas */}
         <div className={styles.trustBox} style={{ borderTop: '1px solid rgba(255,255,255,0.05)', marginTop: '2rem', paddingTop: '1.5rem' }}>
           <div className={styles.trustHeader} style={{ fontSize: '0.8rem', color: '#D4AF37', marginBottom: '1rem' }}>
             <FiShield /> PROTOCOLO DE SEGURIDAD ACTIVADO

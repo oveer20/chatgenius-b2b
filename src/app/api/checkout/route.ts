@@ -1,13 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Preference } from "mercadopago";
 import { client } from "@/lib/mercadopago";
+import { PRICING_PLANS, CURRENCIES } from "@/lib/constants";
+
+/**
+ * STRATIX INTELLIGENCE — CHECKOUT ENGINE (V3.0)
+ * Sistema de pagos unificado con Mercado Pago para B2B.
+ */
 
 export async function POST(request: NextRequest) {
   try {
-    // Check if Mercado Pago is configured
+    // 1. Verificación de Configuración
     if (!process.env.MP_ACCESS_TOKEN || process.env.MP_ACCESS_TOKEN === "APP_USR-placeholder") {
       return NextResponse.json(
-        { error: "Mercado Pago is not configured. Add your MP_ACCESS_TOKEN to .env.local" },
+        { error: "Mercado Pago no configurado. Falta MP_ACCESS_TOKEN." },
         { status: 503 }
       );
     }
@@ -15,50 +21,67 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { plan, email, userId } = body;
 
-    // Plans in COP (Approximate conversion from USD)
-    const prices: Record<string, { amount: number; name: string }> = {
-      starter: { amount: 195000, name: "Stratix Pioneer Elite — Acceso Ecosistema" },
-      pro: { amount: 395000, name: "Stratix Professional — Acceso Ecosistema" },
-      enterprise: { amount: 995000, name: "Stratix Enterprise — Acceso Ecosistema" },
-    };
-
-    const selected = prices[plan];
-    if (!selected) {
-      return NextResponse.json({ error: "Plan inválido" }, { status: 400 });
+    if (!userId) {
+      return NextResponse.json({ error: "Identificación de usuario (userId) requerida." }, { status: 400 });
     }
+
+    // 2. Mapeo Dinámico desde Constants.ts
+    // Mapeamos los slugs del frontend ('starter', 'pro', 'enterprise') a los objetos de PRICING_PLANS
+    const planSlug = plan?.toLowerCase() || "starter";
+    
+    // Búsqueda del plan en las constantes (Starter, Business Pro, Enterprise)
+    const planConfig = PRICING_PLANS.find(p => 
+      p.name.toLowerCase().includes(planSlug.replace("starter", "starter").replace("pro", "business"))
+    );
+
+    if (!planConfig) {
+      return NextResponse.json({ error: `Plan [${plan}] no encontrado en el ecosistema.` }, { status: 404 });
+    }
+
+    // 3. Cálculo de Precio en COP (Tasa 4000 por defecto de CURRENCIES)
+    const COP_RATE = CURRENCIES.COP.rate || 4000;
+    const finalPrice = Math.round(planConfig.priceUsd * COP_RATE);
 
     const preference = new Preference(client);
     
+    // 4. Creación de la Preferencia de Pago
     const result = await preference.create({
       body: {
-        external_reference: userId, // CRITICAL: Link payment to user
+        external_reference: userId, // CRITICAL: Vincula el pago con el usuario local
         items: [
           {
-            id: plan,
-            title: selected.name,
-            unit_price: selected.amount,
+            id: planSlug,
+            title: `Stratix Intelligence — Plan ${planConfig.name}`,
+            unit_price: finalPrice,
             quantity: 1,
             currency_id: "COP",
+            description: `Acceso Premium al ecosistema Stratix (${planConfig.name})`
           },
         ],
         payer: {
-          email: email || "usuario@ejemplo.com",
+          email: email || "usuario@stratix.ai",
         },
         back_urls: {
-          success: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/dashboard?success=true`,
-          failure: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/pricing?error=true`,
-          pending: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/dashboard?pending=true`,
+          success: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/dashboard?payment=success`,
+          failure: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/pricing?payment=error`,
+          pending: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/dashboard?payment=pending`,
         },
         auto_return: "approved",
-        notification_url: `${process.env.NEXT_PUBLIC_APP_URL || ""}/api/webhook/mercadopago`,
+        notification_url: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/api/webhook/mercadopago`,
+        metadata: {
+          plan_name: planConfig.name,
+          user_id: userId
+        }
       },
     });
 
-    return NextResponse.json({ url: result.init_point });
+    // 5. Retorno del Punto de Inicio de Pago
+    return NextResponse.json({ url: result.init_point }, { status: 200 });
+
   } catch (error: any) {
-    console.error("/// MERCADO PAGO ERROR ///", error);
+    console.error("/// MERCADO PAGO CHECKOUT ERROR ///", error);
     return NextResponse.json(
-      { error: "Error al crear la preferencia de pago", details: error.message },
+      { error: "Error en la pasarela de pagos", details: error.message },
       { status: 500 }
     );
   }
