@@ -12,49 +12,6 @@ import {
 import { supabase } from "@/lib/supabase";
 import { CURRENCIES, PRICING_PLANS, USE_CASES, INTEGRATIONS } from "@/lib/constants";
 
-// ─── GLOBAL STYLES ─────────────────────────────────────────────────────────────
-const GLOBAL_CSS = `
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
-
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
-  body { font-family: 'Inter', system-ui, sans-serif; background: #060B14; color: white; }
-
-  .sx-nav-link { transition: opacity 0.2s ease, color 0.2s ease !important; }
-  .sx-nav-link:hover { opacity: 1 !important; color: #D4AF37 !important; }
-
-  .sx-footer-link { transition: opacity 0.2s ease, color 0.2s ease; cursor: pointer; }
-  .sx-footer-link:hover { opacity: 0.8 !important; color: #D4AF37; }
-
-  input::placeholder { color: rgba(255,255,255,0.25); }
-  input:focus { outline: none; border-color: rgba(212,175,55,0.5) !important; }
-  textarea::placeholder { color: rgba(255,255,255,0.25); }
-
-  input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 6px; border-radius: 3px; background: rgba(212,175,55,0.1); cursor: pointer; }
-  input[type=range]::-webkit-slider-thumb {
-    -webkit-appearance: none; height: 24px; width: 24px;
-    border-radius: 50%; background: #D4AF37;
-    box-shadow: 0 0 15px rgba(212,175,55,0.8); cursor: pointer;
-  }
-  input[type=range]::-moz-range-thumb {
-    height: 24px; width: 24px; border-radius: 50%;
-    background: #D4AF37; box-shadow: 0 0 15px rgba(212,175,55,0.8);
-    cursor: pointer; border: none;
-  }
-
-  ::-webkit-scrollbar { width: 4px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: rgba(212,175,55,0.2); border-radius: 2px; }
-
-  .sx-plan-card:hover { transform: translateY(-6px); box-shadow: 0 30px 80px rgba(0,0,0,0.4); }
-  .sx-stars { color: #D4AF37; display: flex; gap: 3px; margin-bottom: 1.2rem; }
-  
-  @media (max-width: 768px) {
-    .sx-desktop-nav { display: none !important; }
-    .sx-mobile-menu-btn { display: flex !important; }
-  }
-`;
-
 export default function LandingPage() {
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
   const [leads, setLeads] = useState(100);
@@ -149,7 +106,6 @@ export default function LandingPage() {
 
   return (
     <>
-      <style dangerouslySetInnerHTML={{ __html: GLOBAL_CSS }} />
 
       <div style={{ backgroundColor: '#060B14', minHeight: '100vh', color: 'white', overflowX: 'hidden' }}>
 
@@ -188,7 +144,7 @@ export default function LandingPage() {
 
         <main>
           {/* 2. HERO */}
-          <header style={{ padding: '8rem 5% 5rem', position: 'relative', overflow: 'hidden' }}>
+          <header style={{ padding: '12rem 5% 5rem', position: 'relative', overflow: 'hidden' }}>
             <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '140%', height: '130%', background: 'radial-gradient(ellipse at 50% 30%, rgba(212,175,55,0.09) 0%, transparent 60%)', zIndex: 0, filter: 'blur(80px)', pointerEvents: 'none' }} />
             <div style={{ maxWidth: '1400px', margin: '0 auto', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '4rem', position: 'relative', zIndex: 1 }}>
               <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.7 }} style={{ flex: '1 1 500px' }}>
@@ -409,13 +365,28 @@ export default function LandingPage() {
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '1.5rem' }}><Image src="/stratix_shield.svg" alt="Logo" width={24} height={24} /><span style={{ fontWeight: 900 }}>Stratix Intelligence</span></div>
               <p style={{ opacity: 0.2, fontSize: '0.85rem' }}>Automatización para empresas que no aceptan límites.</p>
             </div>
-            {['Empresa', 'Arquitectura', 'Legal'].map((cat, i) => (
-              <div key={i}><h4 style={{ fontSize: '0.75rem', fontWeight: 900, color: '#D4AF37', marginBottom: '1.5rem' }}>{cat}</h4><ul style={{ listStyle: 'none', padding: 0, opacity: 0.3, fontSize: '0.9rem', display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>{['Link 1', 'Link 2', 'Link 3'].map(l => <li key={l} className="sx-footer-link">{l}</li>)}</ul></div>
+            {['Empresa', 'Ecosistema', 'Legal'].map((cat, i) => (
+              <div key={i}>
+                <h4 style={{ fontSize: '0.75rem', fontWeight: 900, color: '#D4AF37', marginBottom: '1.5rem' }}>{cat}</h4>
+                <ul style={{ listStyle: 'none', padding: 0, opacity: 0.3, fontSize: '0.9rem', display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
+                  {i === 0 ? (
+                    ['Diagnóstico Gratis', 'Planes Élite', 'Casos de Éxito', 'Partners'].map(l => <li key={l} className="sx-footer-link">{l}</li>)
+                  ) : i === 1 ? (
+                    ['Opal Logic', 'Stitch Engine', 'RAG Neural', 'API Docs'].map(l => <li key={l} className="sx-footer-link">{l}</li>)
+                  ) : (
+                    ['Privacidad', 'Términos', 'Cookies'].map(l => <li key={l} className="sx-footer-link">{l}</li>)
+                  )}
+                </ul>
+              </div>
             ))}
           </div>
           <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', opacity: 0.2, fontSize: '0.75rem' }}>
             <span>© 2026 Stratix Intelligence. Colombia.</span>
-            <div style={{ display: 'flex', gap: '2rem' }}><span>TWITTER / X</span><span>LINKEDIN</span><span>INSTAGRAM</span></div>
+            <div style={{ display: 'flex', gap: '2rem' }}>
+              <a href="https://x.com/stratixai" target="_blank" style={{ color: 'inherit', textDecoration: 'none' }}>TWITTER / X</a>
+              <a href="https://linkedin.com/company/stratix" target="_blank" style={{ color: 'inherit', textDecoration: 'none' }}>LINKEDIN</a>
+              <a href="https://instagram.com/stratixai" target="_blank" style={{ color: 'inherit', textDecoration: 'none' }}>INSTAGRAM</a>
+            </div>
           </div>
         </footer>
       </div>

@@ -450,10 +450,73 @@ ul, ol {
   }
 }
 
-@media (max-width: 480px) {
-  .btn-primary,
-  .btn-secondary {
-    padding: var(--space-3) var(--space-6);
-    font-size: var(--text-sm);
-  }
+
+/* ============================================
+   Stratix V2 — Premium Overlay & Overrides
+   ============================================ */
+
+.sx-nav-link { 
+  transition: opacity 0.2s ease, color 0.2s ease !important; 
+  text-decoration: none;
+}
+.sx-nav-link:hover { 
+  opacity: 1 !important; 
+  color: #D4AF37 !important; 
+}
+
+.sx-footer-link { 
+  transition: opacity 0.2s ease, color 0.2s ease; 
+  cursor: pointer; 
+}
+.sx-footer-link:hover { 
+  opacity: 0.8 !important; 
+  color: #D4AF37; 
+}
+
+input[type=range] { 
+  -webkit-appearance: none; 
+  appearance: none; 
+  width: 100%; 
+  height: 6px; 
+  border-radius: 3px; 
+  background: rgba(212,175,55,0.1); 
+  cursor: pointer; 
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none; 
+  height: 24px; 
+  width: 24px;
+  border-radius: 50%; 
+  background: #D4AF37;
+  box-shadow: 0 0 15px rgba(212,175,55,0.8); 
+  cursor: pointer;
+}
+input[type=range]::-moz-range-thumb {
+  height: 24px; 
+  width: 24px; 
+  border-radius: 50%;
+  background: #D4AF37; 
+  box-shadow: 0 0 15px rgba(212,175,55,0.8);
+  cursor: pointer; 
+  border: none;
+}
+
+.sx-plan-card {
+  transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.3s ease;
+}
+.sx-plan-card:hover { 
+  transform: translateY(-8px) scale(1.01); 
+  box-shadow: 0 40px 100px rgba(0,0,0,0.5); 
+}
+
+.sx-stars { 
+  color: #D4AF37; 
+  display: flex; 
+  gap: 3px; 
+  margin-bottom: 1.2rem; 
+}
+
+@media (max-width: 768px) {
+  .sx-desktop-nav { display: none !important; }
+  .sx-mobile-menu-btn { display: flex !important; }
 }
