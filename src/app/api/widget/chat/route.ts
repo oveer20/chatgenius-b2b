@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
     // 1. Obtención del Activo IA y Perfil del Propietario
     const { data: bot, error: botError } = await supabaseAdmin
       .from("bots")
-      .select("name, system_prompt, knowledge_base, user_id, email_alerts_to")
+      .select("name, system_prompt, knowledge_base, user_id, email_alerts_to, model")
       .eq("id", botId)
       .single();
 
@@ -138,17 +138,30 @@ export async function POST(request: NextRequest) {
       REGLA MAESTRA: Tu conocimiento se limita ESTRICTAMENTE a la base proporcionada. Si no sabes la respuesta, ofrece contactar a un especialista humano.
     `;
 
-    // 4. Procesamiento en el Núcleo Gemini
-    if (!process.env.GOOGLE_GEMINI_API_KEY) {
+    // 4. Orquestación del Núcleo de Inteligencia Dual (V23.0)
+    const engineType = bot.model === 'openai' ? 'OPENAI' : 'GEMINI';
+    console.log(`/// DISPARANDO MOTOR DUAL WIDGET: ${engineType} — Bot: ${bot.name} ///`);
+
+    let responseText = "";
+    try {
+      if (engineType === 'OPENAI') {
+        const { getOpenAIResponse } = await import("@/lib/openai");
+        responseText = await getOpenAIResponse(messages, fullSystemPrompt);
+      } else {
+        const { getGeminiResponse } = await import("@/lib/gemini");
+        responseText = await getGeminiResponse(messages, fullSystemPrompt);
+      }
+    } catch (engineError: any) {
+      console.error(`/// ERROR MOTOR ${engineType} ///`, engineError);
       return NextResponse.json({
         message: {
           role: "assistant",
-          content: "⚠️ ERROR DE NÚCLEO: Clave de IA no configurada. Contacte a Camilo Pascuas."
+          content: "⚠️ INTERRUPCIÓN TÉCNICA: El núcleo de IA no respondió. Por favor intente en unos segundos."
         }
       });
     }
 
-    const text = await getGeminiResponse(messages, fullSystemPrompt);
+    const text = responseText;
 
     // 5. Extracción de Inteligencia Opal
     let intent = "Information";
@@ -185,18 +198,41 @@ export async function POST(request: NextRequest) {
           .select()
           .single();
 
-        // 6.5 Alerta de Lead Caliente (Elite Alert)
-        if (score === 'Hot' && bot.email_alerts_to) {
-           const { sendHotLeadAlert } = await import("@/lib/send-email");
-           await sendHotLeadAlert({
-              to: bot.email_alerts_to,
-              subject: `🔥 LEAD CALIENTE DETECTADO: ${lead?.name || 'Usuario'}`,
-              botName: bot.name,
-              leadName: lead?.name || 'Prospecto Web',
-              leadContact: lead?.email || lead?.phone || sessionId,
-              intent: intent,
-              summary: cleanText.substring(0, 300)
-           });
+        // 6.5 Alerta de Lead Caliente (ELITE ALERT TRIAD: Email + Push V25.0)
+        if (score === 'Hot') {
+           // A. Email Alert
+           if (bot.email_alerts_to) {
+              const { sendHotLeadAlert } = await import("@/lib/send-email");
+              await sendHotLeadAlert({
+                 to: bot.email_alerts_to,
+                 subject: `🔥 WEB LEAD CALIENTE: ${lead?.name || 'Usuario'}`,
+                 botName: bot.name,
+                 leadName: lead?.name || 'Prospecto Web',
+                 leadContact: lead?.email || lead?.phone || sessionId,
+                 intent: intent,
+                 summary: cleanText.substring(0, 300)
+              });
+           }
+
+           // B. Push Notification (FCM V25.0)
+           try {
+              const { data: profile } = await supabaseAdmin
+                .from("profiles")
+                .select("fcm_token")
+                .eq("id", bot.user_id)
+                .single();
+
+              if (profile?.fcm_token) {
+                const { sendPushNotification } = await import("@/lib/firebase-admin");
+                await sendPushNotification(
+                  profile.fcm_token,
+                  `🔥 ¡Lead Hot en la Web!`,
+                  `${lead?.name || 'Un prospecto'} acaba de calificar como Hot.`
+                );
+              }
+           } catch (pError) {
+              console.error("/// FCM WIDGET PUSH ERROR ///", pError);
+           }
         }
       }
     }

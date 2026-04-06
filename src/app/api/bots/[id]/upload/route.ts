@@ -10,6 +10,9 @@ export async function POST(
   const { id: botId } = params;
 
   try {
+    // 0. Feedback de Estado: Iniciando Indexación (V33.0)
+    await supabaseAdmin.from("bots").update({ indexing: true }).eq("id", botId);
+
     const formData = await request.formData();
     const file = formData.get("file") as File;
 
@@ -34,32 +37,29 @@ export async function POST(
       return NextResponse.json({ error: "El PDF parece estar vacío o no contiene texto extraíble." }, { status: 400 });
     }
 
-    // 2. Sincronización Vectorial Automática (RAG)
-    const syncResult = await syncBotKnowledge(botId, fullText, "PDF: " + file.name);
+    // 2. Sincronización Vectorial Estratégica (Neural RAG V21.0)
+    // Prefijar con Contexto de Origen para que la IA sepa de dónde saca el dato
+    const contextualizedText = `FUENTE DEL DOCUMENTO: ${file.name}\n\nCONTENIDO:\n${fullText}`;
+    
+    const syncResult = await syncBotKnowledge(botId, contextualizedText, `FILE: ${file.name}`);
 
-    // 3. Persistencia en la Base de Conocimiento Manual (Para visibilidad del usuario)
-    const { data: currentBot } = await supabaseAdmin
-      .from("bots")
-      .select("knowledge_base")
-      .eq("id", botId)
-      .single();
+    // NOTA: ELIMINADO EL GUARDADO REDUNDANTE EN LA TABLA 'bots' PARA EVITAR BLOAT (V21.0)
+    // El conocimiento ahora vive estructuralmente en la base de datos vectorial (document_chunks).
 
-    const newKnowledge = (currentBot?.knowledge_base || "") + "\n\n--- DOCUMENTO: " + file.name + " ---\n" + fullText;
-
-    await supabaseAdmin
-      .from("bots")
-      .update({ knowledge_base: newKnowledge })
-      .eq("id", botId);
+    // 3. Finalización Exitosa: Liberamos el estado de indexación (V33.0)
+    await supabaseAdmin.from("bots").update({ indexing: false }).eq("id", botId);
 
     return NextResponse.json({ 
       success: true, 
-      text: fullText, 
       chunks: syncResult.chunks,
-      filename: file.name
+      filename: file.name,
+      textSegment: fullText.substring(0, 800) + "..." // Feedback para el Dashboard
     });
 
   } catch (error: any) {
     console.error("/// UPLOAD ERROR ///", error);
+    // 4. Liberación de Estado ante Error Crítico (V33.0)
+    await supabaseAdmin.from("bots").update({ indexing: false }).eq("id", botId);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

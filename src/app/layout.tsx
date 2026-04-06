@@ -1,32 +1,43 @@
 import type { Metadata } from "next";
+import { Outfit, Inter } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "sonner";
+
+const outfit = Outfit({ 
+  subsets: ["latin"], 
+  weight: ["300", "400", "600", "700", "900"],
+  variable: '--font-display',
+  display: 'swap',
+});
+
+const inter = Inter({ 
+  subsets: ["latin"],
+  variable: '--font-sans',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://antigravity-bay-six.vercel.app'),
-  title: 'Stratix Intelligence',
-  description: 'Arquitectura de Inteligencia Artificial para empresas de alto rendimiento. Automatiza ventas, soporte y captura leads con tecnología RAG de Élite.',
-  keywords: ["inteligencia artificial", "SaaS B2B", "CRM con IA", "Stratix Intelligence", "automatización de ventas", "WhatsApp Bot Inteligente", "RAG B2B", "captador de leads"],
-  authors: [{ name: "Stratix Intelligence" }],
-  icons: {
-    icon: "/stratix_shield.svg",
-    apple: "/stratix_shield.svg",
+  metadataBase: new URL('https://stratixintelligence.com'),
+  title: {
+    default: 'Stratix Intelligence | Architectural AI for Enterprise Growth',
+    template: '%s | Stratix Intelligence'
   },
+  description: 'Automatización de ventas y atención al cliente con IA de grado industrial. Stratix implementa Opal Logic y RAG Neuronal para calificar leads y escalar operaciones B2B 24/7.',
+  keywords: ["Stratix Intelligence", "IA B2B", "Opal Logic", "RAG Neural", "Lead Automation", "SaaS Enterprise AI", "AI for Real Estate", "Neural Business Engine"],
+  icons: { icon: "/stratix_shield.svg" },
   openGraph: {
-    title: 'Stratix Intelligence | Arquitectura de IA Corporativa',
-    description: 'Automatiza tu proceso de ventas y atención omnicanal con nuestra suite integrada de IA. Creado por arquitectos para dueños de negocios exigentes.',
-    images: [{
-      url: '/stratix_shield.svg',
-      width: 800,
-      height: 800,
-      alt: 'Stratix Intelligence Logo'
-    }], 
+    title: 'Stratix Intelligence | Neural Business Infrastructure',
+    description: 'Transforma tu atención al cliente en una máquina de ventas autónoma con Stratix Intelligence.',
+    url: 'https://stratixintelligence.com',
+    siteName: 'Stratix Intelligence',
+    images: [{ url: '/stratix_shield.svg', width: 1200, height: 630, alt: 'Stratix Intelligence S-Shield' }], 
     type: 'website',
-    url: 'https://antigravity-bay-six.vercel.app',
+    locale: 'es_CO',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Stratix Intelligence | La Suite de IA Corporativa',
-    description: 'Escala tus operaciones con inteligencia estratégica y captura leads 24/7.',
+    title: 'Stratix Intelligence | Venta Autónoma de Élite',
+    description: 'La infraestructura de IA más avanzada para el sector B2B de alto impacto.',
     images: ['/stratix_shield.svg'],
   }
 };
@@ -37,35 +48,43 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es">
+    <html lang="es" className={`${outfit.variable} ${inter.variable}`}>
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
+        {/* Analytics Dashboard Sync (V38.0) */}
+        {process.env.NEXT_PUBLIC_GA_ID && (
+          <>
+            <script async src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`} />
+            <script dangerouslySetInnerHTML={{
+              __html: `
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');
+              `
+            }} />
+          </>
+        )}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "SoftwareApplication",
-              name: "Stratix AI",
+              name: "Stratix Intelligence",
               applicationCategory: "BusinessApplication",
+              operatingSystem: "Cloud",
               offers: {
                 "@type": "Offer",
                 price: "49.00",
                 priceCurrency: "USD",
-              },
-              description:
-                "El ecosistema definitivo de IA para empresas. Automatiza tu atención al cliente con tecnología avanzada de Google Labs.",
+              }
             }),
           }}
         />
       </head>
-      <body>
+      <body style={{ margin: 0, padding: 0, backgroundColor: '#060B14', color: '#F8F9FA' }}>
         {children}
+        <Toaster theme="dark" richColors position="top-center" />
         <script src="/widget.js" data-bot-id="demo" defer></script>
       </body>
     </html>

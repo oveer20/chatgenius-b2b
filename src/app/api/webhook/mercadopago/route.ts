@@ -30,23 +30,35 @@ export async function POST(request: NextRequest) {
 
       // 2. Si el pago está aprobado, activamos el plan premium
       if (paymentDetails.status === "approved") {
-        const userId = paymentDetails.external_reference; // Vinculación vía externa
-        const mpPlanId = paymentDetails.additional_info?.items?.[0]?.id || "starter";
+        // TOKEN COMPUESTO V30.0 (userId:planSlug)
+        const reference = paymentDetails.external_reference || "";
+        const [userId, planSlug] = reference.split(":");
+        
+        // Prioridad: 1. Token de referencia | 2. Item ID | 3. Default
+        const mpPlanId = planSlug || paymentDetails.additional_info?.items?.[0]?.id || "starter";
 
-        // Mapeo estratégico de planes hacia la base de Datos (Normalización)
-        // constants.ts -> profiles.plan (free, growth, enterprise)
+        // Mapeo estratégico de planes hacia la base de Datos (Normalización V39.0)
         const planMapping: Record<string, string> = {
           "starter": "growth",
-          "pro": "growth",
+          "pro": "growth", 
+          "professional": "growth",
           "enterprise": "enterprise"
         };
         
         const finalPlan = planMapping[mpPlanId.toLowerCase()] || "growth";
+        const emailPlanName = mpPlanId.toLowerCase() === "enterprise" ? "Enterprise" : "Professional Pro";
 
         if (userId) {
           console.log(`/// ACTIVANDO PLAN ${finalPlan.toUpperCase()} PARA USUARIO ${userId} ///`);
           
-          // Actualización mediante Admin (Service Role)
+          // 3. Verificación de Perfil y Obtención de Datos de Onboarding
+          const { data: profile } = await supabaseAdmin
+            .from("profiles")
+            .select("email, full_name")
+            .eq("id", userId)
+            .single();
+
+          // 4. Actualización mediante Admin (Service Role)
           const { error } = await supabaseAdmin
             .from("profiles")
             .update({ 
@@ -60,8 +72,21 @@ export async function POST(request: NextRequest) {
             console.error("/// DATABASE UPDATE FAILED ///", error);
             throw error;
           }
+
+          // 5. Registro de Auditoría de Pago (Élite Tracking)
+          await supabaseAdmin.from("audit_logs").insert([{
+            user_id: userId,
+            action: "PAYMENT_SUCCESS",
+            details: { payment_id: paymentId, gateway: "mercadopago", plan: finalPlan, amount: paymentDetails.transaction_amount }
+          }]);
           
-          console.log("/// ACCESO PREMUIM ACTIVADO CON ÉXITO ///");
+          // 6. Envío de Email de Bienvenida Premium (PULSE V36.0)
+          if (profile?.email) {
+            const { sendWelcomeEmail } = await import("@/lib/resend");
+            await sendWelcomeEmail(profile.email, profile.full_name || "Líder Stratix", emailPlanName);
+          }
+          
+          console.log("/// ACCESO PREMUIM ACTIVADO CON ÉXITO — MP SYNC ///");
         }
       }
     }

@@ -7,11 +7,12 @@ import { useParams, useRouter } from "next/navigation";
 import {
   FiArrowLeft, FiSave, FiPlay, FiDatabase, FiSettings, FiCpu, FiRefreshCw,
   FiSend, FiZap, FiCode, FiGlobe, FiStar, FiLayout, FiShield, FiInfo,
-  FiBarChart2, FiUsers, FiMail, FiPhone, FiCalendar, FiMessageCircle, FiPlus, FiDownload
+  FiBarChart2, FiUsers, FiMail, FiPhone, FiCalendar, FiMessageCircle, FiPlus, FiDownload, FiActivity
 } from "react-icons/fi";
 import styles from "../../dashboard.module.css";
 import { supabase } from "@/lib/supabase";
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { Toaster } from 'sonner';
 
 export default function BotEditor() {
   const { id } = useParams();
@@ -23,7 +24,7 @@ export default function BotEditor() {
     description: "",
     systemPrompt: "",
     temperature: 0.7,
-    model: "gpt-4o", // Modelo Elite por defecto
+    model: "gpt-4o",
     whatsappPhoneNumber: "",
     whatsappPhoneId: "",
     whatsappToken: "",
@@ -39,7 +40,7 @@ export default function BotEditor() {
   const [isSaving, setIsSaving] = useState(false);
   const [knowledgeBase, setKnowledgeBase] = useState("");
   const [isSyncing, setIsSyncing] = useState(false);
-  const [activeTab, setActiveTab] = useState<'config' | 'analytics' | 'integrations'>('config');
+  const [activeTab, setActiveTab] = useState<'identidad' | 'cerebro' | 'entrenamiento' | 'despliegue'>('identidad');
   const [leads, setLeads] = useState<any[]>([]);
   const [isLoadingLeads, setIsLoadingLeads] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -79,7 +80,7 @@ export default function BotEditor() {
 
   useEffect(() => {
     async function loadLeads() {
-      if (isNew || activeTab !== 'analytics') return;
+      if (isNew) return;
       setIsLoadingLeads(true);
       try {
         const { data } = await supabase
@@ -96,7 +97,7 @@ export default function BotEditor() {
       }
     }
     loadLeads();
-  }, [id, isNew, activeTab]);
+  }, [id, isNew]);
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -198,7 +199,7 @@ export default function BotEditor() {
         if (data.textSegment) {
           setKnowledgeBase(prev => prev + `\n\n--- SITE: ${crawlerUrl} ---\n` + data.textSegment + "\n[...]");
         }
-        setCrawlerUrl(""); // Limpiar
+        setCrawlerUrl(""); 
       } else {
         throw new Error(data.error);
       }
@@ -259,401 +260,269 @@ export default function BotEditor() {
   };
 
   return (
-    <div style={{ backgroundColor: '#0B1120', height: '100vh', display: 'flex', flexDirection: 'column', color: 'white' }}>
-      {/* Status Bar Elite */}
-      <div style={{ background: '#060B14', padding: '0.5rem 2rem', display: 'flex', gap: '2rem', borderBottom: '1px solid rgba(212,175,55,0.1)', fontSize: '0.7rem' }}>
-        <div style={{ color: '#D4AF37', fontWeight: 800 }}><FiZap /> ECOSISTEMA STRATIX ACTIVO</div>
-        <div style={{ opacity: 0.6 }}>Opal Logic: <span style={{ color: '#10b981' }}>Estable</span></div>
-        <div style={{ opacity: 0.6 }}>Sincronización RAG: <span style={{ color: '#10b981' }}>100%</span></div>
+    <div style={{ backgroundColor: '#060B14', height: '100vh', display: 'flex', flexDirection: 'column', color: 'white', fontFamily: 'Inter, sans-serif' }}>
+      {/* Status Bar Elite (V50.0) */}
+      <div style={{ background: 'rgba(0,0,0,0.4)', padding: '0.6rem 2.5rem', display: 'flex', gap: '2.5rem', borderBottom: '1px solid rgba(212,175,55,0.08)', fontSize: '0.65rem', letterSpacing: '1px' }}>
+        <div style={{ color: '#D4AF37', fontWeight: 900, display: 'flex', alignItems: 'center', gap: '6px' }}><FiZap /> NÚCLEO STRATIX ACTIVADO</div>
+        <div style={{ opacity: 0.5 }}>OPAL LOGIC: <span style={{ color: '#10b981', fontWeight: 800 }}>ESTABLE</span></div>
+        <div style={{ opacity: 0.5 }}>LATENCIA NEURAL: <span style={{ color: '#10b981', fontWeight: 800 }}>18ms</span></div>
+        <div style={{ marginLeft: 'auto', opacity: 0.4 }}>V50.0 GOLDEN RELEASE</div>
       </div>
-      {/* Header del Editor */}
-      <header style={{ padding: '1rem 2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#0B1120', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <button onClick={() => router.push("/dashboard")} style={{ background: 'none', border: '1px solid rgba(255,255,255,0.1)', color: 'white', padding: '8px', borderRadius: '8px', cursor: 'pointer' }}>
-            <FiArrowLeft />
+
+      {/* Header del Editor Elite */}
+      <header style={{ padding: '1.5rem 2.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(6,11,20,0.8)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(255,255,255,0.03)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+          <button onClick={() => router.push("/dashboard")} className="card-elite" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', padding: '10px', borderRadius: '12px', cursor: 'pointer', transition: 'all 0.3s' }}>
+            <FiArrowLeft size={18} />
           </button>
           <div>
-            <h2 style={{ fontSize: '1.2rem', fontWeight: 900 }}>{isNew ? "Nuevo Activo IA" : botData.name}</h2>
-            <span style={{ fontSize: '0.7rem', color: '#D4AF37', fontWeight: 800 }}>ID: {id}</span>
+            <h2 className="text-cinematic" style={{ fontSize: '1.5rem', margin: 0 }}>{isNew ? "Nueva Entidad de IA" : botData.name}</h2>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '4px' }}>
+              <span style={{ fontSize: '0.65rem', color: '#D4AF37', fontWeight: 900, background: 'rgba(212,175,55,0.1)', padding: '2px 8px', borderRadius: '4px', letterSpacing: '1px' }}>ID: {id}</span>
+              <span style={{ fontSize: '0.65rem', opacity: 0.4, fontWeight: 700 }}>Protocolo de Inteligencia Activo</span>
+            </div>
           </div>
         </div>
-        <button onClick={handleSave} className="btn-primary" style={{ background: '#D4AF37', color: '#000', padding: '10px 20px', borderRadius: '8px', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          {isSaving ? <FiRefreshCw className="spin" /> : <FiSave />} {isSaving ? "Sincronizando..." : "Guardar Cambios"}
+        <button 
+          onClick={handleSave} 
+          className="card-elite glow-gold" 
+          style={{ background: '#D4AF37', color: '#000', padding: '12px 28px', borderRadius: '14px', fontWeight: 900, fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '10px', border: 'none', cursor: 'pointer', transition: 'all 0.4s' }}
+        >
+          {isSaving ? <FiRefreshCw className="spin" /> : <FiSave />} 
+          {isSaving ? "Sincronizando..." : "Sincronizar Arquitectura"}
         </button>
       </header>
 
-      {/* Selector de Pestañas (NUEVO) */}
-      <div style={{ background: '#0B1120', display: 'flex', gap: '2rem', padding: '0 2rem', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-        <button 
-          onClick={() => setActiveTab('config')}
-          style={{ 
-            padding: '1rem 0', 
-            background: 'none', 
-            border: 'none', 
-            color: activeTab === 'config' ? '#D4AF37' : 'white', 
-            fontWeight: 800, 
-            fontSize: '0.8rem', 
-            cursor: 'pointer', 
-            borderBottom: activeTab === 'config' ? '2px solid #D4AF37' : '2px solid transparent',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            opacity: activeTab === 'config' ? 1 : 0.5
-          }}
-        >
-          <FiSettings /> CONFIGURACIÓN TÁCTICA
-        </button>
-        <button 
-          onClick={() => setActiveTab('analytics')}
-          style={{ 
-            padding: '1rem 0', 
-            background: 'none', 
-            border: 'none', 
-            color: activeTab === 'analytics' ? '#D4AF37' : 'white', 
-            fontWeight: 800, 
-            fontSize: '0.8rem', 
-            cursor: 'pointer', 
-            borderBottom: activeTab === 'analytics' ? '2px solid #D4AF37' : '2px solid transparent',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            opacity: activeTab === 'analytics' ? 1 : 0.5
-          }}
-        >
-          <FiBarChart2 /> ANALÍTICAS DE LEADS
-        </button>
+      {/* Selector de Pestañas Elite (V50.0) */}
+      <div style={{ background: 'rgba(6,11,20,0.5)', display: 'flex', gap: '3.5rem', padding: '0 3.5rem', borderBottom: '1px solid rgba(255,255,255,0.03)', overflowX: 'auto' }}>
+        {[
+          { id: 'identidad', label: 'IDENTIDAD', icon: <FiStar /> },
+          { id: 'cerebro', label: 'MODULARIDAD AI', icon: <FiCpu /> },
+          { id: 'entrenamiento', label: 'BASE DE CONOCIMIENTO', icon: <FiDatabase /> },
+          { id: 'despliegue', label: 'CANALES & CÓDIGO', icon: <FiCode /> }
+        ].map((tab) => (
+          <button 
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id as any)}
+            style={{ 
+              padding: '1.5rem 0', background: 'none', border: 'none', 
+              color: activeTab === tab.id ? '#D4AF37' : 'rgba(255,255,255,0.3)', 
+              fontWeight: 900, fontSize: '0.7rem', cursor: 'pointer', letterSpacing: '2px',
+              borderBottom: activeTab === tab.id ? '2px solid #D4AF37' : '2px solid transparent',
+              display: 'flex', alignItems: 'center', gap: '10px', transition: 'all 0.4s',
+              opacity: activeTab === tab.id ? 1 : 0.6
+            }}
+          >
+            {tab.icon} {tab.label}
+          </button>
+        ))}
       </div>
 
-      {/* Área de Trabajo Split Screen */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 450px', flex: 1, overflow: 'hidden' }}>
+      {/* Área de Trabajo Split Screen (V50.0) */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 500px', flex: 1, overflow: 'hidden' }}>
 
         {/* Panel de Contenido Principal (Scrollable) */}
-        <div style={{ padding: '2.5rem', overflowY: 'auto', borderRight: '1px solid rgba(255,255,255,0.05)' }}>
-          <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+        <div style={{ padding: '3.5rem', overflowY: 'auto', background: 'radial-gradient(circle at top left, rgba(212,175,55,0.03) 0%, transparent 70%)' }}>
+          <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
 
-            {activeTab === 'config' ? (
-              <>
-                {/* Configuración de IA */}
-                <section style={{ marginBottom: '3rem' }}>
-                  <h3 style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '10px', fontSize: '1.1rem', color: '#D4AF37' }}>
-                    <FiCpu /> Arquitectura Cognitiva
-                  </h3>
-                  <div style={{ background: 'rgba(255,255,255,0.02)', padding: '2rem', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+            {/* PESTAÑA 1: IDENTIDAD ESTRATÉGICA */}
+            {activeTab === 'identidad' && (
+              <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
+                <h3 className="text-cinematic" style={{ fontSize: '2rem', marginBottom: '2.5rem' }}>Perfil de la Entidad</h3>
+                <div className="card-elite" style={{ padding: '3rem', display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2.5rem' }}>
                     <div>
-                      <label style={{ display: 'block', fontSize: '0.8rem', opacity: 0.6, marginBottom: '0.5rem' }}>Instrucciones Maestras (System Prompt)</label>
-                      <textarea
-                        value={botData.systemPrompt}
-                        onChange={e => setBotData({ ...botData, systemPrompt: e.target.value })}
-                        style={{ width: '100%', minHeight: '150px', padding: '12px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', color: 'white', lineHeight: '1.6' }}
-                        placeholder="Ej: Eres un asistente experto en ventas de lujo..."
+                      <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 900, opacity: 0.4, marginBottom: '1rem', letterSpacing: '1.5px' }}>IDENTIFICADOR DEL AGENTE</label>
+                      <input 
+                        value={botData.name} onChange={e => setBotData({...botData, name: e.target.value})}
+                        style={{ width: '100%', padding: '18px', background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '15px', color: 'white', fontSize: '1.1rem', fontWeight: 600, outline: 'none' }} 
                       />
                     </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
-                      <div>
-                        <label style={{ display: 'block', fontSize: '0.8rem', opacity: 0.6, marginBottom: '0.5rem' }}>Modelo de Inteligencia</label>
-                        <select
-                          value={botData.model}
-                          onChange={e => setBotData({ ...botData, model: e.target.value })}
-                          style={{ width: '100%', padding: '12px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', color: 'white' }}
-                        >
-                          <option value="gpt-4o">GPT-4o (Elite)</option>
-                          <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label style={{ display: 'block', fontSize: '0.8rem', opacity: 0.6, marginBottom: '0.5rem' }}>Correo para Alertas Hot Leads 📧</label>
-                        <input
-                          type="email"
-                          value={botData.emailAlertsTo}
-                          onChange={e => setBotData({ ...botData, emailAlertsTo: e.target.value })}
-                          placeholder="ej: alertas@tuempresa.com"
-                          style={{ width: '100%', padding: '12px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', color: 'white' }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </section>
-
-                {/* Base de Conocimiento (RAG) */}
-                <section style={{ marginBottom: '3rem' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                    <h3 style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '1.1rem', color: '#D4AF37' }}>
-                      <FiDatabase /> Base de Conocimiento Estratégico (RAG)
-                    </h3>
-                    <button 
-                      onClick={handleSyncKnowledge}
-                      disabled={isSyncing || !knowledgeBase}
-                      style={{ 
-                        padding: '8px 16px', 
-                        background: isSyncing ? 'rgba(212,175,55,0.1)' : 'rgba(212,175,55,0.2)', 
-                        color: '#D4AF37', 
-                        border: '1px solid rgba(212,175,55,0.3)', 
-                        borderRadius: '8px', 
-                        fontSize: '0.8rem', 
-                        fontWeight: 800,
-                        cursor: (isSyncing || !knowledgeBase) ? 'not-allowed' : 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px'
-                      }}
-                    >
-                      {isSyncing ? <FiRefreshCw className="spin" /> : <FiZap />} {isSyncing ? "Sincronizando..." : "Sincronizar Núcleo"}
-                    </button>
-                  </div>
-                  
-                  <div style={{ background: 'rgba(255,255,255,0.02)', padding: '2rem', borderRadius: '20px', border: '1px dashed rgba(212,175,55,0.3)', position: 'relative' }}>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 200px', gap: '2rem', marginBottom: '2rem' }}>
-                      <p style={{ fontSize: '0.75rem', opacity: 0.4 }}>
-                        <FiInfo style={{ verticalAlign: 'middle', marginRight: '5px' }} /> 
-                        Al sincronizar, convertimos tu texto o documentos en vectores matemáticos de alta densidad para una búsqueda semántica ultrarrápida.
-                      </p>
-                      <label style={{ 
-                        padding: '10px', 
-                        background: isUploading ? 'rgba(255,255,255,0.05)' : 'rgba(212,175,55,0.1)', 
-                        border: '1px solid rgba(212,175,55,0.3)', 
-                        borderRadius: '10px', 
-                        cursor: isUploading ? 'not-allowed' : 'pointer',
-                        textAlign: 'center',
-                        fontSize: '0.7rem',
-                        fontWeight: 900,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: '8px',
-                        color: '#D4AF37'
-                      }}>
-                        {isUploading ? <FiRefreshCw className="spin" /> : <FiPlus />}
-                        {isUploading ? "SUBIENDO..." : "SUBIR PDF PRO"}
-                        <input type="file" accept=".pdf" onChange={handleFileUpload} style={{ display: 'none' }} disabled={isUploading} />
-                      </label>
-                    </div>
-
-                    <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem' }}>
-                      <input
-                        type="url"
-                        value={crawlerUrl}
-                        onChange={e => setCrawlerUrl(e.target.value)}
-                        placeholder="https://www.tu-empresa.com"
-                        style={{ flex: 1, padding: '12px', background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(212,175,55,0.3)', borderRadius: '10px', color: 'white', fontSize: '0.85rem' }}
-                        disabled={isCrawling}
+                    <div>
+                      <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 900, opacity: 0.4, marginBottom: '1rem', letterSpacing: '1.5px' }}>ROL OPERATIVO</label>
+                      <input 
+                        value={botData.description} onChange={e => setBotData({...botData, description: e.target.value})}
+                        placeholder="Ej: Arquitecto de Ventas Elite"
+                        style={{ width: '100%', padding: '18px', background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '15px', color: 'white', fontSize: '1rem', outline: 'none' }} 
                       />
-                      <button
-                        onClick={handleCrawlUrl}
-                        disabled={isCrawling || !crawlerUrl}
-                        style={{ padding: '0 20px', background: 'rgba(212,175,55,0.1)', color: '#D4AF37', border: '1px solid rgba(212,175,55,0.3)', borderRadius: '10px', fontSize: '0.8rem', fontWeight: 900, cursor: (isCrawling || !crawlerUrl) ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}
-                      >
-                        {isCrawling ? <FiRefreshCw className="spin" /> : <FiGlobe />}
-                        {isCrawling ? "ESCANEANDO..." : "ABSORBER WEB"}
-                      </button>
                     </div>
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 900, opacity: 0.4, marginBottom: '1rem', letterSpacing: '1.5px' }}>CENTRO DE ALERTAS (EMAIL)</label>
+                    <input 
+                      type="email" value={botData.emailAlertsTo} onChange={e => setBotData({...botData, emailAlertsTo: e.target.value})}
+                      placeholder="alertas@tudominio.ai"
+                      style={{ width: '100%', padding: '18px', background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '15px', color: 'white', fontSize: '1rem', outline: 'none' }} 
+                    />
+                    <p style={{ marginTop: '1rem', fontSize: '0.75rem', opacity: 0.4 }}>Stratix enviará una Alerta Elite cada vez que se detecte un lead HOT.</p>
+                  </div>
+                </div>
 
-                    <textarea
-                      value={knowledgeBase}
-                      onChange={e => setKnowledgeBase(e.target.value)}
-                      style={{ width: '100%', minHeight: '180px', background: 'transparent', border: 'none', color: 'white', outline: 'none', fontSize: '0.9rem', lineHeight: '1.6' }}
-                      placeholder="Pega aquí manuales, precios o información técnica para entrenar al bot..."
+                {/* Sección de Leads Integrada */}
+                {leads.length > 0 && (
+                  <div style={{ marginTop: '4rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem' }}>
+                      <h3 className="text-cinematic" style={{ fontSize: '1.5rem' }}>Análisis de Conversión</h3>
+                      <button onClick={handleExportCSV} className="card-elite" style={{ padding: '8px 16px', fontSize: '0.8rem', background: 'rgba(16, 185, 129, 0.1)', color: '#10b981', border: '1px solid rgba(16, 185, 129, 0.2)', borderRadius: '8px', cursor: 'pointer', fontWeight: 800 }}>EXPORTAR CSV</button>
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '2rem' }}>
+                        <div className="card-elite" style={{ padding: '2rem', background: 'rgba(0,0,0,0.2)', height: '250px' }}>
+                           <ResponsiveContainer width="100%" height="100%">
+                              <PieChart>
+                                <Pie data={[
+                                  { name: 'Hot', value: leads.filter(l => l.score === 'Hot').length, color: '#D4AF37' },
+                                  { name: 'Warm', value: leads.filter(l => l.score === 'Warm').length, color: '#FCD34D' },
+                                  { name: 'Cold', value: leads.filter(l => l.score === 'Cold').length, color: '#9CA3AF' }
+                                ]} dataKey="value" cx="50%" cy="50%" innerRadius={60} outerRadius={80}>
+                                   <Cell fill="#D4AF37" /><Cell fill="#FCD34D" /><Cell fill="#9CA3AF" />
+                                </Pie>
+                                <Tooltip contentStyle={{ background: '#0B1120', border: '1px solid rgba(212,175,55,0.3)' }} />
+                              </PieChart>
+                           </ResponsiveContainer>
+                        </div>
+                        <div className="card-elite" style={{ padding: '1.5rem', overflowY: 'auto', maxHeight: '250px' }}>
+                            <table style={{ width: '100%', fontSize: '0.8rem', borderCollapse: 'collapse' }}>
+                               <thead><tr style={{ opacity: 0.4 }}><th>NOMBRE</th><th>SCORE</th></tr></thead>
+                               <tbody>
+                                  {leads.slice(0, 10).map(l => (
+                                    <tr key={l.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                                      <td style={{ padding: '10px 0' }}>{l.name}</td>
+                                      <td><span style={{ color: l.score === 'Hot' ? '#D4AF37' : 'inherit' }}>{l.score}</span></td>
+                                    </tr>
+                                  ))}
+                               </tbody>
+                            </table>
+                        </div>
+                    </div>
+                  </div>
+                )}
+              </motion.div>
+            )}
+
+            {/* PESTAÑA 2: MODULARIDAD AI (CEREBRO) */}
+            {activeTab === 'cerebro' && (
+              <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
+                <h3 className="text-cinematic" style={{ fontSize: '2rem', marginBottom: '2.5rem' }}>Arquitectura Cognitiva</h3>
+                <div className="card-elite" style={{ padding: '3rem', display: 'flex', flexDirection: 'column', gap: '3rem' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 900, opacity: 0.4, marginBottom: '1.2rem', letterSpacing: '1.5px' }}>NÚCLEO DE PERSONALIDAD (SYSTEM PROMPT)</label>
+                    <textarea 
+                      value={botData.systemPrompt} onChange={e => setBotData({...botData, systemPrompt: e.target.value})}
+                      style={{ width: '100%', minHeight: '300px', padding: '25px', background: 'rgba(0,0,0,0.5)', border: '1px solid rgba(212,175,55,0.15)', borderRadius: '20px', color: 'white', lineHeight: '1.8', fontSize: '1.05rem', outline: 'none' }}
                     />
                   </div>
-                </section>
-
-                {/* Instalación */}
-                {!isNew && (
-                  <section>
-                    <h3 style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '10px', fontSize: '1.1rem', color: '#D4AF37' }}>
-                      <FiCode /> Despliegue en Sitio Web
-                    </h3>
-                    <div style={{ background: '#060B14', padding: '1.5rem', borderRadius: '15px', border: '1px solid rgba(212,175,55,0.1)' }}>
-                      <code style={{ fontSize: '0.8rem', color: '#10b981' }}>
-                        {`<script src="/widget.js" data-bot-id="${id}"></script>`}
-                      </code>
-                    </div>
-                  </section>
-                )}
-              </>
-            ) : (
-              <section>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem' }}>
-                  <h3 style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '1.5rem', fontWeight: 900 }}>
-                    <FiUsers color="#D4AF37" /> Prospectos Capturados
-                  </h3>
-                  <div style={{ display: 'flex', gap: '10px' }}>
-                    <div style={{ padding: '10px 20px', background: 'rgba(212,175,55,0.1)', borderRadius: '12px', border: '1px solid rgba(212,175,55,0.2)', fontSize: '0.9rem' }}>
-                      Total: <strong style={{ color: '#D4AF37' }}>{leads.length}</strong>
-                    </div>
-                    {leads.length > 0 && (
-                      <button 
-                        onClick={handleExportCSV}
-                        style={{ padding: '10px 20px', background: 'rgba(16, 185, 129, 0.1)', color: '#10b981', border: '1px solid rgba(16, 185, 129, 0.3)', borderRadius: '12px', cursor: 'pointer', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '8px' }}
+                  <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '3rem' }}>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 900, opacity: 0.4, marginBottom: '1.2rem', letterSpacing: '1.5px' }}>MOTOR DE INTELIGENCIA</label>
+                      <select 
+                        value={botData.model} onChange={e => setBotData({...botData, model: e.target.value})}
+                        style={{ width: '100%', padding: '16px', background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', color: '#D4AF37', fontWeight: 900 }}
                       >
-                        <FiDownload /> Exportar a Excel
-                      </button>
-                    )}
+                        <option value="gpt-4o">GPT-4o (Elite)</option>
+                        <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
+                        <option value="gpt-4o-mini">GPT-4o Mini</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 900, opacity: 0.4, marginBottom: '1.5rem', letterSpacing: '1.5px' }}>TEMPERATURA</label>
+                      <input 
+                        type="range" min="0" max="1" step="0.1" value={botData.temperature}
+                        onChange={e => setBotData({...botData, temperature: parseFloat(e.target.value)})}
+                        style={{ width: '100%', accentColor: '#D4AF37' }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
+            {/* PESTAÑA 3: ENTRENAMIENTO (RAG) */}
+            {activeTab === 'entrenamiento' && (
+              <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem' }}>
+                  <h3 className="text-cinematic" style={{ fontSize: '2rem' }}>Memoria Profunda (RAG)</h3>
+                  <button onClick={handleSyncKnowledge} className="card-elite glow-gold" style={{ padding: '12px 24px', background: '#D4AF37', color: '#000', borderRadius: '12px', fontWeight: 900, border: 'none' }}>
+                    {isSyncing ? "PROCESANDO..." : "SINCRONIZAR NÚCLEO"}
+                  </button>
+                </div>
+                
+                <div className="card-elite" style={{ padding: '2.5rem', marginBottom: '3rem', background: 'rgba(212,175,55,0.03)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '1.5rem' }}>
+                    <FiActivity color="#D4AF37" />
+                    <span style={{ fontSize: '0.75rem', fontWeight: 900, letterSpacing: '1px' }}>NIVELES DE CONSCIENCIA NEURAL</span>
+                  </div>
+                  <div style={{ height: '8px', background: 'rgba(255,255,255,0.05)', borderRadius: '10px', overflow: 'hidden' }}>
+                    <div style={{ width: knowledgeBase ? '100%' : '15%', height: '100%', background: '#D4AF37' }} />
                   </div>
                 </div>
 
-                {/* Dashboard Analítico Visual - Recharts */}
-                {leads.length > 0 && (
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '3rem' }}>
-                    <div style={{ background: 'rgba(255,255,255,0.02)', padding: '1.5rem', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                      <h4 style={{ fontSize: '0.85rem', color: '#D4AF37', marginBottom: '1.5rem', fontWeight: 800, textAlign: 'center' }}>TEMPERATURA DEL PIPELINE</h4>
-                      <div style={{ height: '200px' }}>
-                        <ResponsiveContainer width="100%" height="100%">
-                          <PieChart>
-                            <Pie 
-                              data={[
-                                { name: 'Hot', value: leads.filter(l => l.score === 'Hot').length, color: '#D4AF37' },
-                                { name: 'Warm', value: leads.filter(l => l.score === 'Warm').length, color: '#FCD34D' },
-                                { name: 'Cold', value: leads.filter(l => l.score === 'Cold').length, color: '#9CA3AF' }
-                              ].filter(d => d.value > 0)} 
-                              cx="50%" cy="50%" innerRadius={60} outerRadius={80} paddingAngle={5} dataKey="value"
-                            >
-                              {[
-                                { name: 'Hot', value: leads.filter(l => l.score === 'Hot').length, color: '#D4AF37' },
-                                { name: 'Warm', value: leads.filter(l => l.score === 'Warm').length, color: '#FCD34D' },
-                                { name: 'Cold', value: leads.filter(l => l.score === 'Cold').length, color: '#9CA3AF' }
-                              ].filter(d => d.value > 0).map((entry, index) => (
-                                <Cell key={`cell-${index}`} fill={entry.color} />
-                              ))}
-                            </Pie>
-                            <Tooltip contentStyle={{ background: '#0B1120', border: '1px solid rgba(212,175,55,0.3)', borderRadius: '8px' }} itemStyle={{ color: '#D4AF37' }} />
-                          </PieChart>
-                        </ResponsiveContainer>
-                      </div>
-                    </div>
-
-                    <div style={{ background: 'rgba(255,255,255,0.02)', padding: '1.5rem', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                      <h4 style={{ fontSize: '0.85rem', color: '#D4AF37', marginBottom: '1.5rem', fontWeight: 800, textAlign: 'center' }}>INTENCIÓN DE COMPRA</h4>
-                      <div style={{ height: '200px' }}>
-                        <ResponsiveContainer width="100%" height="100%">
-                          <BarChart data={Object.keys(leads.reduce((acc, l) => {
-                            const intent = l.intent || 'Unknown';
-                            acc[intent] = (acc[intent] || 0) + 1;
-                            return acc;
-                          }, {} as Record<string, number>)).map(key => ({
-                            name: key.length > 10 ? key.substring(0,10)+'...' : key,
-                            count: leads.reduce((acc, l) => {
-                                const intent = l.intent || 'Unknown';
-                                acc[intent] = (acc[intent] || 0) + 1;
-                                return acc;
-                            }, {} as Record<string, number>)[key]
-                          }))}>
-                            <XAxis dataKey="name" stroke="rgba(255,255,255,0.3)" fontSize={11} tickLine={false} axisLine={false} />
-                            <Tooltip cursor={{ fill: 'rgba(255,255,255,0.05)' }} contentStyle={{ background: '#0B1120', border: '1px solid rgba(212,175,55,0.3)', borderRadius: '8px' }} />
-                            <Bar dataKey="count" fill="#D4AF37" radius={[4, 4, 0, 0]} />
-                          </BarChart>
-                        </ResponsiveContainer>
-                      </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2.5rem', marginBottom: '3rem' }}>
+                  <div className="card-elite" style={{ padding: '2rem' }}>
+                    <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 900, opacity: 0.4, marginBottom: '1rem' }}>URL DE ABSORCIÓN</label>
+                    <div style={{ display: 'flex', gap: '10px' }}>
+                      <input value={crawlerUrl} onChange={e => setCrawlerUrl(e.target.value)} style={{ flex: 1, padding: '12px', background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '8px', color: 'white' }} />
+                      <button onClick={handleCrawlUrl} style={{ background: '#D4AF37', border: 'none', borderRadius: '8px', padding: '0 15px' }}><FiGlobe /></button>
                     </div>
                   </div>
-                )}
-
-                <div style={{ background: 'rgba(255,255,255,0.02)', borderRadius: '24px', border: '1px solid rgba(255,255,255,0.05)', overflow: 'hidden' }}>
-                  {isLoadingLeads ? (
-                    <div style={{ padding: '4rem', textAlign: 'center', opacity: 0.5 }}>Cargando analíticas...</div>
-                  ) : leads.length === 0 ? (
-                    <div style={{ padding: '4rem', textAlign: 'center' }}>
-                      <FiUsers style={{ fontSize: '3rem', opacity: 0.1, marginBottom: '1rem' }} />
-                      <div style={{ opacity: 0.4 }}>Aún no se han capturado leads para este activo.</div>
-                    </div>
-                  ) : (
-                    <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-                      <thead>
-                        <tr style={{ background: 'rgba(0,0,0,0.2)', fontSize: '0.75rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '1px' }}>
-                          <th style={{ padding: '1.2rem 1.5rem', opacity: 0.5 }}>Nombre</th>
-                          <th style={{ padding: '1.2rem 1.5rem', opacity: 0.5 }}>Contacto</th>
-                          <th style={{ padding: '1.2rem 1.5rem', opacity: 0.5 }}>Intención AI</th>
-                          <th style={{ padding: '1.2rem 1.5rem', opacity: 0.5 }}>Calificación</th>
-                          <th style={{ padding: '1.2rem 1.5rem', opacity: 0.5 }}>Fecha</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {leads.map((lead, i) => (
-                          <tr key={lead.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.03)', transition: '0.3s' }}>
-                            <td style={{ padding: '1.2rem 1.5rem', fontWeight: 700 }}>{lead.name}</td>
-                            <td style={{ padding: '1.2rem 1.5rem' }}>
-                              <div style={{ fontSize: '0.9rem' }}><FiMail style={{ marginRight: '5px', opacity: 0.5 }} /> {lead.email || '-'}</div>
-                              <div style={{ fontSize: '0.8rem', opacity: 0.5 }}><FiPhone style={{ marginRight: '5px', opacity: 0.5 }} /> {lead.phone || '-'}</div>
-                            </td>
-                            <td style={{ padding: '1.2rem 1.5rem' }}>
-                              <span style={{ 
-                                padding: '4px 10px', 
-                                background: lead.intent === 'Sales' ? 'rgba(16,185,129,0.1)' : 'rgba(255,255,255,0.05)', 
-                                color: lead.intent === 'Sales' ? '#10b981' : '#fff', 
-                                borderRadius: '6px', 
-                                fontSize: '0.75rem', 
-                                fontWeight: 800,
-                                border: `1px solid ${lead.intent === 'Sales' ? 'rgba(16,185,129,0.2)' : 'rgba(255,255,255,0.1)'}`
-                              }}>
-                                {lead.intent || 'Analizando...'}
-                              </span>
-                            </td>
-                            <td style={{ padding: '1.2rem 1.5rem' }}>
-                              <span style={{ 
-                                padding: '4px 10px', 
-                                background: lead.score === 'Hot' ? 'rgba(212,175,55,0.2)' : 'rgba(255,255,255,0.05)', 
-                                color: lead.score === 'Hot' ? '#D4AF37' : '#fff', 
-                                borderRadius: '6px', 
-                                fontSize: '0.75rem', 
-                                fontWeight: 800,
-                                border: `1px solid ${lead.score === 'Hot' ? 'rgba(212,175,55,0.3)' : 'rgba(255,255,255,0.1)'}`
-                              }}>
-                                {lead.score || 'Cold'}
-                              </span>
-                            </td>
-                            <td style={{ padding: '1.2rem 1.5rem', fontSize: '0.85rem', opacity: 0.6 }}>
-                              <FiCalendar style={{ marginRight: '5px' }} /> {new Date(lead.created_at).toLocaleDateString()}
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  )}
+                  <div className="card-elite" style={{ padding: '2rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                     <label style={{ cursor: 'pointer', color: '#D4AF37', fontWeight: 900 }}><FiPlus /> SUBIR PDF CORPORATIVO <input type="file" onChange={handleFileUpload} style={{ display: 'none' }} /></label>
+                  </div>
                 </div>
-              </section>
+
+                <div className="card-elite" style={{ padding: '2rem' }}>
+                  <textarea 
+                    value={knowledgeBase} onChange={e => setKnowledgeBase(e.target.value)}
+                    style={{ width: '100%', minHeight: '300px', background: 'transparent', border: 'none', color: 'white', outline: 'none', fontSize: '1rem', lineHeight: '1.8' }}
+                  />
+                </div>
+              </motion.div>
+            )}
+
+            {/* PESTAÑA 4: DESPLIEGUE */}
+            {activeTab === 'despliegue' && (
+              <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
+                <h3 className="text-cinematic" style={{ fontSize: '2rem', marginBottom: '3rem' }}>Protocolos de Salida</h3>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem' }}>
+                  <div className="card-elite" style={{ padding: '3rem', border: '1px solid rgba(37,211,102,0.2)' }}>
+                    <FiMessageCircle size={30} color="#25D366" style={{ marginBottom: '1.5rem' }} />
+                    <h4 style={{ fontWeight: 900 }}>WHATSAPP API</h4>
+                    <div style={{ marginTop: '2rem' }}>
+                      <label style={{ fontSize: '0.65rem', opacity: 0.4 }}>PHONE NUMBER ID</label>
+                      <input value={botData.whatsappPhoneId} onChange={e => setBotData({...botData, whatsappPhoneId: e.target.value})} style={{ width: '100%', padding: '12px', background: 'rgba(0,0,0,0.3)', border: 'none', borderRadius: '8px', color: 'white', marginTop: '5px' }} />
+                    </div>
+                  </div>
+                  <div className="card-elite" style={{ padding: '3rem', border: '1px solid rgba(212,175,55,0.2)' }}>
+                    <FiLayout size={30} color="#D4AF37" style={{ marginBottom: '1.5rem' }} />
+                    <h4 style={{ fontWeight: 900 }}>WIDGET WEB</h4>
+                    <code style={{ display: 'block', background: '#000', padding: '1rem', borderRadius: '8px', marginTop: '2rem', fontSize: '0.75rem', color: '#D4AF37' }}>
+                      {`<script src="/widget.js" data-bot-id="${id}"></script>`}
+                    </code>
+                  </div>
+                </div>
+              </motion.div>
             )}
           </div>
         </div>
 
-        {/* Playground (Vista Previa en Tiempo Real) */}
-        <div style={{ background: '#060B14', display: 'flex', flexDirection: 'column' }}>
-          <div style={{ padding: '1.25rem', borderBottom: '1px solid rgba(255,255,255,0.05)', background: '#0B1120', display: 'flex', justifyContent: 'space-between' }}>
-            <span style={{ fontSize: '0.8rem', fontWeight: 800, color: '#D4AF37' }}>PLAYGROUND / PRUEBA DE NÚCLEO</span>
-            <FiShield style={{ opacity: 0.5 }} />
-          </div>
-
-          {/* Área de Chat */}
-          <div ref={scrollRef} style={{ flex: 1, padding: '1.5rem', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            {chatMessages.map((msg, i) => (
-              <div key={i} style={{
-                alignSelf: msg.role === "user" ? "flex-end" : "flex-start",
-                background: msg.role === "user" ? "#D4AF37" : "rgba(255,255,255,0.05)",
-                color: msg.role === "user" ? "#000" : "white",
-                padding: '0.8rem 1.2rem',
-                borderRadius: '15px',
-                fontSize: '0.9rem',
-                maxWidth: '85%',
-                fontWeight: msg.role === "user" ? 600 : 400
-              }}>
-                {msg.content}
-              </div>
-            ))}
-            {isTyping && <div style={{ fontSize: '0.7rem', opacity: 0.5 }}>Stratix está procesando...</div>}
-          </div>
-
-          {/* Input del Chat */}
-          <form onSubmit={handleSendMessage} style={{ padding: '1.5rem', background: '#0B1120', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', gap: '10px' }}>
-            <input
-              value={inputMessage}
-              onChange={e => setInputMessage(e.target.value)}
-              placeholder="Escribe un mensaje de prueba..."
-              style={{ flex: 1, padding: '12px', background: 'rgba(255,255,255,0.05)', border: 'none', borderRadius: '10px', color: 'white' }}
-            />
-            <button type="submit" style={{ background: '#D4AF37', border: 'none', padding: '10px 15px', borderRadius: '10px', cursor: 'pointer' }}>
-              <FiSend color="#000" />
-            </button>
-          </form>
+        {/* Playground */}
+        <div style={{ background: '#03070E', display: 'flex', flexDirection: 'column', borderLeft: '1px solid rgba(255,255,255,0.05)' }}>
+           <div style={{ padding: '1.5rem', background: 'rgba(6,11,20,0.8)', borderBottom: '1px solid rgba(255,255,255,0.03)', display: 'flex', justifyContent: 'space-between' }}>
+              <span style={{ fontSize: '0.75rem', fontWeight: 900, color: '#D4AF37', letterSpacing: '2px' }}>NEURAL PLAYGROUND</span>
+              <FiShield size={16} style={{ opacity: 0.3 }} />
+           </div>
+           <div ref={scrollRef} style={{ flex: 1, padding: '2rem', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+              {chatMessages.map((msg, i) => (
+                <div key={i} style={{ alignSelf: msg.role === "user" ? "flex-end" : "flex-start", background: msg.role === "user" ? "#D4AF37" : "rgba(255,255,255,0.05)", color: msg.role === "user" ? "#000" : "white", padding: '1rem 1.5rem', borderRadius: '15px' }}>{msg.content}</div>
+              ))}
+              {isTyping && <div style={{ fontSize: '0.7rem', opacity: 0.4 }}>Stratix procesando...</div>}
+           </div>
+           <form onSubmit={handleSendMessage} style={{ padding: '2rem', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', gap: '15px' }}>
+              <input value={inputMessage} onChange={e => setInputMessage(e.target.value)} placeholder="Inyectar mensaje..." style={{ flex: 1, padding: '15px', background: 'rgba(255,255,255,0.03)', border: 'none', borderRadius: '12px', color: 'white' }} />
+              <button type="submit" style={{ background: '#D4AF37', border: 'none', borderRadius: '12px', padding: '0 20px' }}><FiSend color="#000" /></button>
+           </form>
         </div>
       </div>
+      <Toaster theme="dark" richColors />
     </div>
   );
 }

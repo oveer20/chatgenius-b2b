@@ -1,18 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import { supabaseAdmin } from "@/lib/supabase";
 import { sendHotLeadAlert } from "@/lib/send-email";
 
 /**
- * STRATIX INTELLIGENCE — LEAD GENERATION ENGINE (V6.5)
- * Implementación de captura estratégica con protección de grado empresarial.
+ * STRATIX INTELLIGENCE — LEAD GENERATION ENGINE (V6.5.1)
+ * Captura estratégica con blindaje total via Service Role.
  */
 
 export async function POST(request: NextRequest) {
-  // 1. Instanciación de Cliente con Service Role (Bypass RLS)
-  const supabaseAdmin = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL || "",
-    process.env.SUPABASE_SERVICE_ROLE_KEY || ""
-  );
 
   try {
     const body = await request.json();
@@ -55,10 +50,15 @@ export async function POST(request: NextRequest) {
       throw error;
     }
 
-    // 4. Alerting System (Email de Alerta al Admin)
+    // 4. Multi-Channel Alerting System (Email & Firebase Pulse V41.0)
     try {
       const adminEmail = process.env.ADMIN_EMAIL || "josega95@gmail.com";
       
+      // A. Alert Pulse (Push via Firebase)
+      const { sendHotLeadAlert: sendFirebasePush } = await import("@/lib/firebase-admin");
+      await sendFirebasePush(name, company || "Web Prospect", "HOT");
+
+      // B. Email Alert (Resend)
       await sendHotLeadAlert({
         to: adminEmail,
         subject: `🎯 NUEVO LEAD CALIENTE: ${name} (${company || 'S/E'})`,
@@ -68,9 +68,8 @@ export async function POST(request: NextRequest) {
         intent: "Consulta Directa desde Landing",
         summary: `El prospecto ${name} ha mostrado interés directo en Stratix. Empresa: ${company || 'N/A'}.`
       });
-    } catch (emailErr) {
-      console.error("/// ALERT EMAIL SYSTEM ERROR ///", emailErr);
-      // No bloqueamos la respuesta exitosa por un fallo en el envío de alerta
+    } catch (alertErr) {
+      console.error("/// ALERT SYSTEM ERROR ///", alertErr);
     }
 
     // 5. Respuesta Exitosa para el Frontend (Dispara Toast de Éxito)

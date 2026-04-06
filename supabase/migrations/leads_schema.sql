@@ -6,9 +6,15 @@ create table if not exists leads (
   name text not null,
   email text,
   phone text,
+  whatsapp text, -- Paridad con formulario landing
+  company text, -- Para leads B2B
   status text default 'Nuevo', -- Nuevo, Contactado, Cerrado, etc.
   intent text, -- Ventas, Soporte, Info, etc. (Opal Logic)
   score text, -- Cold, Warm, Hot (Opal Logic)
+  utm_source text, -- Fuente (Google, FB, LinkedIn)
+  utm_medium text, -- Medio (CPC, Orgánico, Social)
+  utm_campaign text, -- Campaña (Lanzamiento_2026)
+  page_url text, -- URL donde se capturó el lead
   metadata jsonb default '{}'::jsonb,
   created_at timestamp with time zone default now()
 );

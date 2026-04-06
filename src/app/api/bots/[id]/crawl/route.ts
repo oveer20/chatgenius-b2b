@@ -42,35 +42,65 @@ export async function POST(
       return NextResponse.json({ success: false, error: `No se pudo acceder a la página. Posible bloqueo anti-bot: ${e.message}` }, { status: 400 });
     }
 
-    // 2. Extraer texto limpio con Cheerio
+    // 2. Extraer texto limpio y Enlaces Internos (DEEP CRAWL V36.0)
     const $ = cheerio.load(html);
+    const domain = new URL(url).hostname;
+    const internalLinks: string[] = [];
 
-    // Remover elementos que no aportan conocimiento
-    $('script, style, noscript, nav, footer, iframe, svg, img, form, button, [role="navigation"], [role="banner"]').remove();
+    // Descubrimiento de Enlaces (Limitado a 5 adicionales para evitar abusos)
+    $('a[href]').each((_, el) => {
+      try {
+        const href = $(el).attr('href');
+        if (!href) return;
+        const absoluteUrl = new URL(href, url).href;
+        if (new URL(absoluteUrl).hostname === domain && !internalLinks.includes(absoluteUrl) && absoluteUrl !== url) {
+          if (internalLinks.length < 5) internalLinks.push(absoluteUrl);
+        }
+      } catch (e) {}
+    });
 
-    // Extraer texto y limpiar espacios
-    let textContent = $('body').text();
-    
-    // Limpieza agresiva de strings: múltiples espacios, tabulaciones y saltos de línea vacíos
-    textContent = textContent.replace(/\s+/g, ' ').trim();
+    const pagesToCrawl = [url, ...internalLinks];
+    let totalChunks = 0;
+    const crawledTitles: string[] = [];
 
-    if (!textContent || textContent.length < 50) {
-      return NextResponse.json({ success: false, error: "La página no contiene texto suficiente o bloqueó el scraper." }, { status: 400 });
+    console.log(`/// DEEP CRAWL: Procesando ${pagesToCrawl.length} páginas del dominio ${domain} ///`);
+
+    for (const pageUrl of pagesToCrawl) {
+      try {
+        const pResponse = await fetch(pageUrl, { headers: { 'User-Agent': 'StratixAI/1.0' } });
+        if (!pResponse.ok) continue;
+        const pHtml = await pResponse.text();
+        const $p = cheerio.load(pHtml);
+
+        const pTitle = $p('title').text() || pageUrl;
+        const pDesc = $p('meta[name="description"]').attr('content') || "";
+        
+        $p('script, style, nav, footer, iframe, .cookie-banner').remove();
+        let pText = $p('body').text().replace(/\s+/g, ' ').trim();
+
+        if (pText.length > 100) {
+          const cText = `URL: ${pageUrl}\nTÍTULO: ${pTitle}\nDESCRIPCIÓN: ${pDesc}\nCONTENIDO:\n${pText}`;
+          const syncResult = await syncBotKnowledge(botId, cText, `URL: ${pageUrl} | ${pTitle}`);
+          if (syncResult.success) {
+            totalChunks += syncResult.chunks;
+            crawledTitles.push(pTitle);
+          }
+        }
+      } catch (e) {
+        console.error(`/// ERROR RASTREANDO SUBPÁGINA: ${pageUrl} ///`, e);
+      }
     }
 
-    console.log(`/// CRAWLER SUCCESS: Extraídos ${textContent.length} caracteres de ${url}. Iniciando Sincronización RAG ///`);
-
-    // 3. Sincronización RAG (Vectorización)
-    const syncResult = await syncBotKnowledge(botId, textContent, `URL: ${url}`);
-
-    if (syncResult.success && syncResult.chunks > 0) {
+    if (totalChunks > 0) {
       return NextResponse.json({ 
         success: true, 
-        chunks: syncResult.chunks,
-        textSegment: textContent.substring(0, 500) + "..." // Solo una muestra para el UI
+        chunks: totalChunks,
+        pagesCrawled: pagesToCrawl.length,
+        titles: crawledTitles,
+        message: `Se han mapeado ${totalChunks} segmentos de conocimiento de ${pagesToCrawl.length} páginas.`
       });
     } else {
-      return NextResponse.json({ success: false, error: "El texto fue extraído pero falló la generación de vectores (Embeddings)." }, { status: 500 });
+      return NextResponse.json({ success: false, error: "El rastreo profundo no pudo extraer conocimiento válido del dominio." }, { status: 500 });
     }
 
   } catch (error: any) {

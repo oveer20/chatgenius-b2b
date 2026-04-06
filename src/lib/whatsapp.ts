@@ -1,3 +1,6 @@
+import { getGeminiResponse } from "./gemini";
+import { supabaseAdmin } from "./supabase";
+
 export async function sendWhatsAppMessage(
   phoneId: string,
   token: string,
@@ -25,14 +28,65 @@ export async function sendWhatsAppMessage(
     });
 
     const data = await response.json();
-    if (!response.ok) {
-      console.error("/// WHATSAPP SEND ERROR ///", JSON.stringify(data, null, 2));
-      throw new Error("Fallo al enviar mensaje a Meta");
-    }
-
     return data;
   } catch (error) {
-    console.error("/// WHATSAPP SERVICE CRITICAL ///", error);
+    console.error("/// WHATSAPP SEND ERROR ///", error);
     throw error;
+  }
+}
+
+/**
+ * WHATSAPP NEURAL RELAY (V47.0)
+ * Procesa mensajes entrantes, consulta RAG y califica leads.
+ */
+export async function handleWhatsAppWebhook(
+  phoneId: string, 
+  token: string, 
+  from: string, 
+  msg: string, 
+  botId: string
+) {
+  try {
+    // 1. Obtener contexto del Bot
+    const { data: bot } = await supabaseAdmin
+      .from('bots')
+      .select('*')
+      .eq('id', botId)
+      .single();
+
+    if (!bot) return;
+
+    // 2. Ejecutar Lógica Neural de Stratix
+    const userPrompt = `Mensaje de WhatsApp de ${from}: "${msg}"`;
+    const systemPrompt = `
+      ${bot.system_prompt}
+      ESTILO WHATSAPP: Sé corto, usa emojis estratégicos, no hagas listas largas.
+      TU OBJETIVO: Cerrar una cita o capturar el interés total.
+    `;
+
+    const aiResponse = await getGeminiResponse([{ role: "user", content: userPrompt }], systemPrompt);
+
+    // 3. Enviar Respuesta
+    await sendWhatsAppMessage(phoneId, token, from, aiResponse);
+
+    // 4. Opal Lead Scoring (Análisis de intención rápido)
+    if (msg.length > 10) {
+      const intentCheck = await getGeminiResponse(
+        [{ role: "user", content: `Analiza este mensaje: "${msg}". ¿Hay intención de compra? Responde solo: HOT, WARM o COLD.` }],
+        "Eres un analista de intención de ventas B2B infalible."
+      );
+
+      // Sincronizar Lead en Supabase
+      await supabaseAdmin.from('leads').upsert({
+        whatsapp: from,
+        bot_id: botId,
+        score: intentCheck.trim().replace('.', ''),
+        intent: msg.substring(0, 100),
+        source: 'whatsapp'
+      }, { onConflict: 'whatsapp,bot_id' });
+    }
+
+  } catch (error) {
+    console.error("/// WHATSAPP NEURAL RELAY FAIL ///", error);
   }
 }

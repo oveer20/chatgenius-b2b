@@ -41,7 +41,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: `Plan [${plan}] no encontrado en el ecosistema.` }, { status: 404 });
     }
 
-    // 3. Creación de la Sesión de Pago de Stripe
+    // 3. Auditoría de Intención de Compra (V34.0)
+    const { supabaseAdmin } = await import("@/lib/supabase-admin");
+    await supabaseAdmin.from("audit_logs").insert([{
+      user_id: userId,
+      action: "CHECKOUT_STARTED",
+      details: { platform: "stripe", plan: planSlug, amount: planConfig.priceUsd }
+    }]);
+
+    // 4. Creación de la Sesión de Pago de Stripe
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       line_items: [
@@ -51,18 +59,18 @@ export async function POST(request: NextRequest) {
             product_data: {
               name: `Stratix Intelligence — ${planConfig.name}`,
               description: `Acceso Premium al ecosistema Stratix (${planConfig.name})`,
-              images: ["https://stratix-intelligence.vercel.app/stratix_shield.svg"],
+              images: ["https://stratixintelligence.com/stratix_shield.svg"],
             },
             unit_amount: planConfig.priceUsd * 100, // Stripe usa centavos
           },
           quantity: 1,
         },
       ],
-      mode: "payment", // "payment" para pago único, "subscription" para recurrente
+      mode: "payment", 
       success_url: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/dashboard?payment=success`,
       cancel_url: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/pricing?payment=error`,
       customer_email: email,
-      client_reference_id: userId,
+      client_reference_id: `${userId}:${planSlug}`, // TOKEN COMPUESTO V30+
       metadata: {
         plan: planSlug,
         userId: userId,

@@ -2,15 +2,23 @@ import { getEmbeddings } from "@/lib/gemini";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
 /**
- * Fragmenta y vectoriza el conocimiento para un bot específico.
+ * Fragmenta y vectoriza el conocimiento para un bot específico (V43.0).
  */
-export async function syncBotKnowledge(botId: string, content: string, source: string = "Manual Input") {
+export async function syncBotKnowledge(botId: string, content: string, source: string = "Manual Input", sourceType: string = "document") {
   if (!content || !content.trim()) return { success: false, chunks: 0 };
 
-  // 1. Fragmentación Inteligente (Chunking)
-  const chunks = chunkText(content, 1000, 100);
+  // 1. Limpieza Neural de Ruido (V43.0)
+  // Eliminamos redundancias y espacios excesivos para optimizar el almacenamiento vectorial
+  const cleanContent = content
+    .replace(/\s+/g, " ")
+    .replace(/\n+/g, " ")
+    .trim();
 
-  // 2. Procesamiento Vectorial
+  // 2. Fragmentación Estratégica (Neural Chunking V19.2)
+  // 1200 chars / 150 chars overlap para mayor contexto entre ideas.
+  const chunks = chunkText(cleanContent, 1200, 150);
+
+  // 3. Procesamiento Vectorial
   const processedChunks = await Promise.all(
     chunks.map(async (text, index) => {
       const embedding = await getEmbeddings(text);
@@ -20,6 +28,7 @@ export async function syncBotKnowledge(botId: string, content: string, source: s
         embedding: embedding,
         metadata: {
           source: source,
+          source_type: sourceType, // V42.0 Sync: Permite filtrado por tipo
           chunk_index: index,
           processed_at: new Date().toISOString()
         }
@@ -27,7 +36,7 @@ export async function syncBotKnowledge(botId: string, content: string, source: s
     })
   );
 
-  // 3. Almacenamiento Seguro (Bypassing RLS)
+  // 4. Almacenamiento Seguro (Bypassing RLS)
   const { error } = await supabaseAdmin.from("document_chunks").insert(processedChunks);
 
   if (error) {

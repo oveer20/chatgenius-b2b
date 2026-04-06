@@ -8,21 +8,27 @@ export const CURRENCIES = {
 export const PRICING_PLANS = [
   { 
     name: "Starter", 
-    priceUsd: 19, 
-    features: ["1 Agente IA", "500 Mensajes", "Integración Web", "Soporte Mail"] 
+    priceUsd: 29, 
+    features: ["1 Agente IA Neural", "1,000 Mensajes/mes", "Deep Crawl (10 páginas)", "Soporte Mail Élite"] 
   },
   { 
-    name: "Business Pro", 
-    priceUsd: 49, 
-    features: ["3 Agentes IA", "2,500 Mensajes", "WhatsApp + Instagram", "Lead Scoring Predictivo"],
+    name: "Professional Pro", 
+    priceUsd: 79, 
+    features: ["5 Agentes IA Neural", "5,000 Mensajes/mes", "Deep Crawl (50 páginas)", "WhatsApp Cloud Native", "Opal Logic v2.5 (Scoring)"],
     highlight: true 
   },
   { 
-    name: "Enterprise", 
-    priceUsd: 199, 
-    features: ["Agentes Ilimitados", "Custom CRM Sync", "Soporte 24/7 Dedicado", "Entrenamiento RAG Pro"] 
+    name: "Enterprise Elite", 
+    priceUsd: 249, 
+    features: ["Agentes Ilimitados", "Mensajes Ilimitados*", "Deep Crawl (500 páginas)", "API Neural Relay", "Custom Fine-Tuning Support"] 
   }
 ];
+
+export const STRATIX_LIMITS = {
+  CRAWL_PAGES: { starter: 10, pro: 50, enterprise: 500 },
+  MANUAL_INGEST_TOKENS: { starter: 20000, pro: 100000, enterprise: 1000000 },
+  OUTREACH_SCRIPTS: { starter: 15, pro: 100, enterprise: 5000 }
+};
 
 export const USE_CASES = [
   {

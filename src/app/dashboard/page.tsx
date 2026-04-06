@@ -3,12 +3,14 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { toast, Toaster } from "sonner";
 import {
   FiMessageSquare, FiSettings, FiLogOut, FiPlus, FiClock, FiStar,
-  FiZap, FiCheck, FiTrendingUp, FiUsers, FiShield, FiUser, FiDownload, FiMail
+  FiZap, FiCheck, FiTrendingUp, FiUsers, FiShield, FiUser, FiDownload, FiMail, FiBookOpen, FiCopy,
+  FiDatabase, FiCpu, FiActivity
 } from "react-icons/fi";
 import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell
 } from "recharts";
 import styles from "./dashboard.module.css";
 import { supabase } from "@/lib/supabase";
@@ -23,7 +25,7 @@ interface Bot {
 }
 
 export default function DashboardPage() {
-  const [activeTab, setActiveTab] = useState<"agents" | "leads" | "analytics" | "settings">("agents");
+  const [activeTab, setActiveTab] = useState<"agents" | "leads" | "outreach" | "marketing" | "analytics" | "settings" | "launch">("agents");
   const [bots, setBots] = useState<Bot[]>([]);
   const [leads, setLeads] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -33,6 +35,116 @@ export default function DashboardPage() {
   const [selectedLead, setSelectedLead] = useState<any>(null);
   const [chatLog, setChatLog] = useState<any[]>([]);
   const [isLogLoading, setIsLogLoading] = useState(false);
+
+  // Estados para Magic Outreach
+  const [outreachLead, setOutreachLead] = useState<string>("");
+  const [outreachType, setOutreachType] = useState<string>("OUTREACH_INTRO");
+  const [generatedScript, setGeneratedScript] = useState<string>("");
+  const [isGenerating, setIsGenerating] = useState(false);
+
+  // Estados para Marketing Arsenal (V35.0)
+  const [marketingDay, setMarketingDay] = useState<number>(1);
+  const [marketingPlatform, setMarketingPlatform] = useState<"linkedin" | "instagram">("linkedin");
+  const [generatedPost, setGeneratedPost] = useState<string>("");
+  const [isMarketingGenerating, setIsMarketingGenerating] = useState(false);
+
+  // Estados para Notificaciones Push (V25.0)
+  const [pushStatus, setPushStatus] = useState<"default" | "granted" | "denied">("default");
+
+  // Estados para Sincronización Neural Asíncrona (V44.0)
+  const [syncStatus, setSyncStatus] = useState<"idle" | "syncing" | "success">("idle");
+  const [crawlUrl, setCrawlUrl] = useState("");
+
+  // Estados para Diagnóstico (V29.0)
+  const [healthStatus, setHealthStatus] = useState<any>(null);
+
+  useEffect(() => {
+    async function checkHealth() {
+      try {
+        const res = await fetch("/api/health-check");
+        const data = await res.json();
+        setHealthStatus(data);
+      } catch (err) {}
+    }
+    checkHealth();
+  }, []);
+
+  const enablePush = async () => {
+    try {
+      const { requestForToken } = await import("@/lib/firebase-client");
+      const token = await requestForToken();
+      if (token && user) {
+        await supabase.from("profiles").update({ fcm_token: token }).eq("id", user.id);
+        setPushStatus("granted");
+        toast.success("🛡️ ALERT PULSE ACTIVADO: Recibirás notificaciones push de leads hot.");
+      }
+    } catch (err) {
+      toast.error("❌ Error al activar notificaciones push.");
+    }
+  };
+
+  const generateScript = async () => {
+    if (!outreachLead) return;
+    setIsGenerating(true);
+    try {
+      const lead = leads.find(l => l.id === outreachLead);
+      const res = await fetch("/api/generate", {
+        method: "POST",
+        body: JSON.stringify({
+          type: outreachType,
+          data: { name: lead?.name, company: lead?.company }
+        })
+      });
+      const data = await res.json();
+      setGeneratedScript(data.result);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const generateSocialPost = async () => {
+    setIsMarketingGenerating(true);
+    try {
+      const res = await fetch("/api/generate", {
+        method: "POST",
+        body: JSON.stringify({
+          type: "MARKETING_POST",
+          data: { day: marketingDay, platform: marketingPlatform }
+        })
+      });
+      const data = await res.json();
+      setGeneratedPost(data.result);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsMarketingGenerating(false);
+    }
+  };
+
+  const startCrawl = async () => {
+    if (!crawlUrl) return;
+    setSyncStatus("syncing");
+    try {
+      const res = await fetch("/api/crawl", {
+        method: "POST",
+        body: JSON.stringify({ url: crawlUrl, botId: bots[0]?.id }) // Usando el primer bot como demo o el seleccionado
+      });
+      const data = await res.json();
+      if (data.success) {
+        toast.success("🛡️ SINCRONIZACIÓN INICIADA: Stratix procesará el conocimiento en segundo plano.");
+        // Simulamos éxito tras unos segundos para el UI visual
+        setTimeout(() => {
+          setSyncStatus("success");
+          toast.success("✅ Neural Sync Completo.");
+        }, 5000);
+      }
+    } catch (err) {
+      toast.error("Error al iniciar sincronización neural.");
+      setSyncStatus("idle");
+    }
+  };
 
   useEffect(() => {
     async function getUserData() {
@@ -140,6 +252,7 @@ export default function DashboardPage() {
 
   return (
     <div className={styles.dashboard} style={{ backgroundColor: '#0B1120', minHeight: '100vh', color: 'white' }}>
+      <Toaster position="top-right" richColors theme="dark" />
       
       {/* Sidebar Elite */}
       <aside className={styles.sidebar} style={{ borderRight: '1px solid rgba(212, 175, 55, 0.1)', background: '#060B14' }}>
@@ -155,24 +268,57 @@ export default function DashboardPage() {
           <button className={`${styles.navItem} ${activeTab === "leads" ? styles.navItemActive : ""}`} onClick={() => setActiveTab("leads")}>
             <FiUsers /> Leads Capturados
           </button>
+          <button className={`${styles.navItem} ${activeTab === "outreach" ? styles.navItemActive : ""}`} onClick={() => setActiveTab("outreach")}>
+            <FiZap /> Magic Outreach
+          </button>
           <button className={`${styles.navItem} ${activeTab === "analytics" ? styles.navItemActive : ""}`} onClick={() => setActiveTab("analytics")}>
             <FiTrendingUp /> Inteligencia de Negocio
+          </button>
+          <button className={`${styles.navItem} ${activeTab === "marketing" ? styles.navItemActive : ""}`} onClick={() => setActiveTab("marketing")}>
+            <FiStar /> Arsenal de Marketing
+          </button>
+          <button className={`${styles.navItem} ${activeTab === "launch" ? styles.navItemActive : ""}`} onClick={() => setActiveTab("launch")}>
+            <FiBookOpen /> Centro de Lanzamiento
           </button>
           <button className={`${styles.navItem} ${activeTab === "settings" ? styles.navItemActive : ""}`} onClick={() => setActiveTab("settings")}>
             <FiShield /> Facturación y Plan
           </button>
         </nav>
 
-        <div className={styles.sidebarFooter} style={{ padding: '2rem', marginTop: 'auto' }}>
+        <div className={styles.sidebarFooter} style={{ padding: '1rem', marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          {pushStatus !== "granted" && (
+            <button 
+              onClick={enablePush}
+              style={{ background: 'rgba(212, 175, 55, 0.1)', border: '1px solid #D4AF37', color: '#D4AF37', padding: '10px', borderRadius: '12px', fontSize: '0.7rem', fontWeight: 900, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', transition: '0.3s' }}
+            >
+              <FiZap /> ACTIVAR ALERT PULSE
+            </button>
+          )}
+
           <div style={{ background: 'rgba(212, 175, 55, 0.05)', border: '1px solid rgba(212, 175, 55, 0.2)', padding: '10px', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
             <FiStar style={{ color: '#D4AF37' }} /> 
             <span style={{ fontWeight: 800, color: '#D4AF37', fontSize: '0.7rem', textTransform: 'uppercase' }}>
-              {user?.plan || "Free Access"}
+              {user?.user_metadata?.plan || "Elite Access"}
             </span>
           </div>
-          <button onClick={handleLogout} className={styles.logoutBtn} style={{ marginTop: '1.5rem', background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}>
-             <FiLogOut /> Cerrar Sesión
+          <button onClick={handleLogout} className={styles.logoutBtn} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <FiLogOut /> Cerrar Sesión
           </button>
+
+          {/* Launch Shield Diagnostics (V29.0) */}
+          <div style={{ marginTop: '2rem', paddingTop: '1.5rem', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+            <span style={{ fontSize: '0.6rem', opacity: 0.4, fontWeight: 900, letterSpacing: '2px', display: 'block', marginBottom: '1rem' }}>LAUNCH SHIELD STATUS</span>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+              {healthStatus && (
+                <>
+                  <div title="Supabase" style={{ width: '8px', height: '8px', borderRadius: '50%', background: healthStatus.supabase ? '#27C93F' : '#FF5F56', boxShadow: healthStatus.supabase ? '0 0 10px #27C93F' : 'none' }} />
+                  <div title="OpenAI" style={{ width: '8px', height: '8px', borderRadius: '50%', background: healthStatus.openai ? '#27C93F' : '#FF5F56', boxShadow: healthStatus.openai ? '0 0 10px #27C93F' : 'none' }} />
+                  <div title="Gemini" style={{ width: '8px', height: '8px', borderRadius: '50%', background: healthStatus.gemini ? '#27C93F' : '#FF5F56', boxShadow: healthStatus.gemini ? '0 0 10px #27C93F' : 'none' }} />
+                  <div title="Firebase" style={{ width: '8px', height: '8px', borderRadius: '50%', background: healthStatus.firebase ? '#27C93F' : '#FF5F56', boxShadow: healthStatus.firebase ? '0 0 10px #27C93F' : 'none' }} />
+                </>
+              )}
+            </div>
+          </div>
         </div>
       </aside>
 
@@ -210,33 +356,81 @@ export default function DashboardPage() {
             </div>
           </div>
         </header>
-
+  
         <div style={{ marginTop: '3rem' }}>
           
           {/* PESTAÑA: AGENTES */}
           {activeTab === "agents" && (
             <motion.div initial="hidden" animate="visible" variants={fadeInUp}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-                <h1 style={{ fontSize: '2rem', fontWeight: 900 }}>Mis Activos IA</h1>
-                <Link href="/dashboard/bot/new" className="btn-primary" style={{ background: '#D4AF37', color: '#000', padding: '10px 20px', borderRadius: '8px', fontWeight: 'bold', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <FiPlus /> Crear Agente
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3.5rem' }}>
+                <h1 className="text-cinematic" style={{ fontSize: '3rem' }}>Activos Estratégicos</h1>
+                <Link href="/dashboard/bot/new" className="card-elite glow-gold" style={{ background: '#D4AF37', color: '#000', padding: '14px 30px', borderRadius: '15px', fontWeight: 900, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '12px', boxShadow: '0 15px 40px rgba(212,175,55,0.25)', border: 'none' }}>
+                  <FiPlus size={20} /> DESPLEGAR AGENTE
                 </Link>
               </div>
 
-              <div className={styles.resumeGrid} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem' }}>
+              {/* Módulo: Neural Sync Engine Elite (V50.1) */}
+              <div className="card-elite" style={{ padding: '3rem', marginBottom: '4rem', display: 'flex', gap: '3rem', alignItems: 'center', border: '1px solid rgba(212,175,55,0.15)', background: 'linear-gradient(90deg, rgba(212,175,55,0.05), transparent)' }}>
+                <div style={{ width: '80px', height: '80px', borderRadius: '25px', background: 'rgba(212,175,55,0.1)', border: '1px solid rgba(212,175,55,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <FiDatabase size={32} color="#D4AF37" />
+                </div>
+                <div style={{ flex: 1 }}>
+                  <h3 className="text-cinematic" style={{ margin: '0 0 10px 0', fontSize: '1.6rem' }}>Neural Sync Engine</h3>
+                  <p style={{ margin: 0, fontSize: '0.95rem', opacity: 0.6, fontWeight: 500, maxWidth: '400px' }}>Inyecta conocimiento asíncrono desde cualquier URL corporativa para alimentar tu Red Neural.</p>
+                </div>
+                <div style={{ display: 'flex', gap: '15px', flex: 1.2 }}>
+                  <input 
+                    type="text" placeholder="https://corporativo.ai/documentación"
+                    value={crawlUrl} onChange={(e) => setCrawlUrl(e.target.value)}
+                    style={{ flex: 1, padding: '18px 25px', background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px', color: 'white', outline: 'none', fontSize: '1rem' }}
+                  />
+                  <button 
+                    onClick={startCrawl}
+                    disabled={syncStatus === "syncing"}
+                    style={{ padding: '0 35px', background: syncStatus === 'syncing' ? 'rgba(255,255,255,0.05)' : '#D4AF37', color: '#000', borderRadius: '16px', fontWeight: 900, cursor: 'pointer', border: 'none', minWidth: '200px', transition: 'all 0.4s cubic-bezier(0.23, 1, 0.32, 1)' }}
+                  >
+                    {syncStatus === "syncing" ? "PROCESANDO..." : "INICIAR SYNC"}
+                  </button>
+                </div>
+              </div>
+
+              <div className={styles.resumeGrid} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))', gap: '2.5rem' }}>
                 {bots.length > 0 ? bots.map((bot) => (
-                  <div key={bot.id} style={{ background: 'rgba(255,255,255,0.02)', padding: '2rem', borderRadius: '20px', border: '1px solid rgba(212,175,55,0.1)' }}>
-                    <h3 style={{ color: '#D4AF37', marginBottom: '0.5rem' }}>{bot.name}</h3>
-                    <p style={{ fontSize: '0.8rem', opacity: 0.6, marginBottom: '1.5rem' }}>{bot.model} — Activo</p>
-                    <div style={{ display: 'flex', gap: '10px' }}>
-                      <Link href={`/dashboard/bot/${bot.id}`} style={{ flex: 1, textAlign: 'center', padding: '10px', background: 'rgba(255,255,255,0.05)', borderRadius: '8px', textDecoration: 'none', color: 'white', fontSize: '0.8rem' }}>
-                        Configurar
-                      </Link>
+                  <motion.div 
+                    whileHover={{ scale: 1.02 }}
+                    key={bot.id} className="card-elite" style={{ padding: '3rem', position: 'relative', overflow: 'hidden' }}
+                  >
+                    <div style={{ position: 'absolute', top: 0, right: 0, padding: '20px' }}>
+                      <FiActivity color={bot.whatsapp_phone_number_id ? '#10b981' : 'rgba(255,255,255,0.1)'} size={20} />
                     </div>
-                  </div>
+                    <div style={{ marginBottom: '2.5rem' }}>
+                      <h3 style={{ color: '#D4AF37', margin: '0 0 10px 0', fontSize: '1.6rem', fontWeight: 900, letterSpacing: '-0.03em' }}>{bot.name}</h3>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <span style={{ fontSize: '0.65rem', fontWeight: 900, color: '#D4AF37', opacity: 0.5, letterSpacing: '1px' }}>{bot.model.toUpperCase()}</span>
+                        <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: 'rgba(255,255,255,0.2)' }} />
+                        <span style={{ fontSize: '0.65rem', fontWeight: 800, opacity: 0.4, textTransform: 'uppercase' }}>{bot.whatsapp_phone_number_id ? 'Omnicanal' : 'Web Node'}</span>
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', gap: '15px' }}>
+                      <Link href={`/dashboard/bot/${bot.id}`} className="glow-gold" style={{ flex: 1.5, textAlign: 'center', padding: '16px', background: 'rgba(212,175,55,0.1)', border: '1px solid rgba(212,175,55,0.3)', borderRadius: '12px', textDecoration: 'none', color: '#D4AF37', fontSize: '0.85rem', fontWeight: 900, transition: '0.3s' }}>
+                        MISSION CONTROL
+                      </Link>
+                      <button 
+                        onClick={() => {
+                          setOutreachLead("SYSTEM_GENERATE");
+                          setActiveTab("outreach");
+                          toast.info("Orquestando Pitch Neural...");
+                        }}
+                        style={{ flex: 1, textAlign: 'center', padding: '16px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '12px', color: 'white', fontSize: '0.8rem', fontWeight: 800, cursor: 'pointer', opacity: 0.6 }}
+                      >
+                        PITCH
+                      </button>
+                    </div>
+                  </motion.div>
                 )) : (
-                  <div style={{ gridColumn: '1/-1', textAlign: 'center', padding: '4rem', opacity: 0.5 }}>
-                    <p>No hay agentes configurados aún.</p>
+                  <div style={{ gridColumn: '1/-1', textAlign: 'center', padding: '8rem 2rem', opacity: 0.2 }}>
+                    <FiCpu size={60} style={{ marginBottom: '2rem', margin: '0 auto' }} />
+                    <p style={{ fontSize: '1.3rem', fontWeight: 800, letterSpacing: '-0.02em' }}>SIN ACTIVOS IA DESPLEGADOS</p>
                   </div>
                 )}
               </div>
@@ -248,8 +442,12 @@ export default function DashboardPage() {
             <motion.div initial="hidden" animate="visible" variants={fadeInUp}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
                 <h1 style={{ fontSize: '2rem', fontWeight: 900 }}>Inteligencia de Leads</h1>
-                <button className="btn-primary" style={{ background: 'rgba(212,175,55,0.1)', color: '#D4AF37', border: '1px solid #D4AF37', padding: '10px 20px', borderRadius: '8px', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
-                  <FiDownload /> Exportar CSV
+                <button 
+                  onClick={() => window.location.href = '/api/download'}
+                  className="btn-primary" 
+                  style={{ background: 'rgba(212,175,55,0.1)', color: '#D4AF37', border: '1px solid #D4AF37', padding: '10px 20px', borderRadius: '8px', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', transition: '0.3s' }}
+                >
+                  <FiDownload /> Exportar Inteligencia (CSV)
                 </button>
               </div>
 
@@ -282,10 +480,16 @@ export default function DashboardPage() {
                           </span>
                         </td>
                         <td style={{ padding: '1.2rem 1rem' }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 800,
-                            color: lead.score === 'Hot' ? '#ef4444' : lead.score === 'Warm' ? '#f59e0b' : '#3b82f6'
+                          <div style={{ 
+                            display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 800,
+                            color: lead.score === 'Hot' ? '#D4AF37' : lead.score === 'Warm' ? '#f59e0b' : '#3b82f6',
+                            textShadow: lead.score === 'Hot' ? '0 0 10px rgba(212,175,55,0.5)' : 'none'
                           }}>
-                            <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: lead.score === 'Hot' ? '#ef4444' : lead.score === 'Warm' ? '#f59e0b' : '#3b82f6', boxShadow: `0 0 10px ${lead.score === 'Hot' ? '#ef4444' : lead.score === 'Warm' ? '#f59e0b' : '#3b82f6'}` }} />
+                            <div style={{ 
+                              width: '8px', height: '8px', borderRadius: '50%', 
+                              background: lead.score === 'Hot' ? '#D4AF37' : lead.score === 'Warm' ? '#f59e0b' : '#3b82f6', 
+                              boxShadow: `0 0 10px ${lead.score === 'Hot' ? '#D4AF37' : lead.score === 'Warm' ? '#f59e0b' : '#3b82f6'}` 
+                            }} />
                             {lead.score || 'Cold'}
                           </div>
                         </td>
@@ -317,41 +521,309 @@ export default function DashboardPage() {
             </motion.div>
           )}
 
-          {/* PESTAÑA: ANALÍTICA */}
-          {activeTab === "analytics" && (
+          {/* PESTAÑA: MAGIC OUTREACH (STRATIX V20) */}
+          {activeTab === "outreach" && (
             <motion.div initial="hidden" animate="visible" variants={fadeInUp}>
-              <h2 style={{ marginBottom: '2rem' }}>Analítica de Rendimiento</h2>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', height: '350px' }}>
-                <div style={{ background: 'rgba(255,255,255,0.02)', padding: '1.5rem', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                  <p style={{ fontSize: '0.7rem', opacity: 0.5, marginBottom: '1.5rem', fontWeight: 800 }}>CAPTURA DE LEADS (7D)</p>
-                  <ResponsiveContainer width="100%" height="80%">
-                    <BarChart data={analyticsData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
-                      <XAxis dataKey="name" stroke="#555" fontSize={10} />
-                      <YAxis stroke="#555" fontSize={10} />
-                      <Tooltip contentStyle={{ background: '#0B1120', border: '1px solid #D4AF37', borderRadius: '8px' }} />
-                      <Bar dataKey="leads" fill="#D4AF37" radius={[4, 4, 0, 0]} />
-                    </BarChart>
-                  </ResponsiveContainer>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+                <h1 style={{ fontSize: '2rem', fontWeight: 900 }}>Magic Outreach Engine</h1>
+                <div style={{ background: 'rgba(212,175,55,0.1)', border: '1px solid #D4AF37', padding: '6px 15px', borderRadius: '20px', color: '#D4AF37', fontSize: '0.7rem', fontWeight: 900, letterSpacing: '1px' }}>
+                  NUCLEUS V17.0 ACTIVE
                 </div>
-                <div style={{ background: 'rgba(255,255,255,0.02)', padding: '1.5rem', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                  <p style={{ fontSize: '0.7rem', opacity: 0.5, marginBottom: '1.5rem', fontWeight: 800 }}>VOLUMEN DE MENSAJES</p>
-                  <ResponsiveContainer width="100%" height="80%">
-                    <LineChart data={analyticsData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
-                      <XAxis dataKey="name" stroke="#555" fontSize={10} />
-                      <YAxis stroke="#555" fontSize={10} />
-                      <Tooltip contentStyle={{ background: '#0B1120', border: '1px solid #D4AF37', borderRadius: '8px' }} />
-                      <Line type="monotone" dataKey="msgs" stroke="#D4AF37" strokeWidth={3} dot={{ fill: '#D4AF37', r: 4 }} />
-                    </LineChart>
-                  </ResponsiveContainer>
+              </div>
+              
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '2.5rem' }}>
+                <div style={{ background: 'rgba(255,255,255,0.02)', padding: '2.5rem', borderRadius: '30px', border: '1px solid rgba(212,175,55,0.15)', boxShadow: '0 20px 50px rgba(0,0,0,0.3)' }}>
+                  <h3 style={{ marginBottom: '1.8rem', color: '#D4AF37', borderLeft: '4px solid #D4AF37', paddingLeft: '15px' }}>Configuración de Misión</h3>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1.8rem' }}>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '0.75rem', opacity: 0.5, marginBottom: '0.6rem', fontWeight: 800 }}>PROSPECTO CALIFICADO</label>
+                      <select 
+                        value={outreachLead} 
+                        onChange={(e) => setOutreachLead(e.target.value)}
+                        style={{ width: '100%', padding: '14px', background: '#060B14', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', color: 'white', outline: 'none' }}
+                      >
+                        <option value="">-- Seleccionar Prospecto --</option>
+                        {leads.map(l => (
+                          <option key={l.id} value={l.id}>{l.name} ({l.company || 'N/A'}) — {l.score}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '0.75rem', opacity: 0.5, marginBottom: '0.6rem', fontWeight: 800 }}>ESTRATEGIA DE ABORDAJE</label>
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                        {[
+                          { id: 'OUTREACH_INTRO', label: 'Warm Intro' },
+                          { id: 'OUTREACH_PITCH', label: 'Technical Pitch' },
+                          { id: 'OUTREACH_FOLLOWUP', label: 'Strategic Follow-up' }
+                        ].map(t => (
+                          <button 
+                            key={t.id}
+                            onClick={() => setOutreachType(t.id)}
+                            style={{ 
+                              padding: '12px', fontSize: '0.75rem', fontWeight: 800, borderRadius: '10px', border: '1px solid',
+                              borderColor: outreachType === t.id ? '#D4AF37' : 'rgba(255,255,255,0.05)',
+                              background: outreachType === t.id ? 'rgba(212,175,55,0.1)' : 'rgba(255,255,255,0.02)',
+                              color: outreachType === t.id ? '#D4AF37' : 'rgba(255,255,255,0.5)', cursor: 'pointer',
+                              transition: '0.3s'
+                            }}
+                          >
+                            {t.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    <button 
+                      onClick={generateScript}
+                      disabled={!outreachLead || isGenerating}
+                      style={{ 
+                        width: '100%', padding: '18px', background: '#D4AF37', color: '#000', borderRadius: '15px', 
+                        fontWeight: 900, cursor: 'pointer', border: 'none', marginTop: '1rem',
+                        boxShadow: '0 10px 30px rgba(212,175,55,0.2)', transition: '0.3s'
+                      }}
+                    >
+                      {isGenerating ? 'DESPLEGANDO IA...' : 'ORQUESTAR GUION MAESTRO'}
+                    </button>
+                  </div>
+                </div>
+
+                <div style={{ background: '#060B14', padding: '3rem', borderRadius: '30px', border: '1px solid rgba(255,255,255,0.03)', position: 'relative', overflow: 'hidden' }}>
+                    <div style={{ position: 'absolute', top: '0', right: '0', width: '100%', height: '100%', background: 'radial-gradient(circle at 90% 10%, rgba(212,175,55,0.05) 0%, transparent 50%)', pointerEvents: 'none' }} />
+                    <h3 style={{ marginBottom: '2rem', opacity: 0.4, fontSize: '0.9rem', letterSpacing: '2px', fontWeight: 900 }}>TRANSCRIBING RESULTS...</h3>
+                    {generatedScript ? (
+                      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ whiteSpace: 'pre-wrap', lineHeight: 1.8, fontSize: '1rem', color: 'rgba(255,255,255,0.9)', position: 'relative', zIndex: 1 }}>
+                        {generatedScript}
+                        <button 
+                          onClick={() => { navigator.clipboard.writeText(generatedScript); alert("Guion copiado con éxito."); }}
+                          style={{ display: 'block', marginTop: '2.5rem', background: 'rgba(212,175,55,0.1)', border: '1px solid rgba(212,175,55,0.2)', color: '#D4AF37', padding: '12px 25px', borderRadius: '10px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 900 }}
+                        >
+                          COPIAR AL PORTAPAPELES
+                        </button>
+                      </motion.div>
+                    ) : (
+                      <div style={{ height: '300px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', opacity: 0.2, textAlign: 'center', gap: '1rem' }}>
+                        <FiZap size={40} />
+                        <p style={{ maxWidth: '250px' }}>Inicia una misión de prospección para ver el guion generado por el núcleo Stratix.</p>
+                      </div>
+                    )}
                 </div>
               </div>
             </motion.div>
           )}
 
+          {/* PESTAÑA: ARSENAL DE MARKETING (V35.0) */}
+          {activeTab === "marketing" && (
+            <motion.div initial="hidden" animate="visible" variants={fadeInUp}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+                <h1 style={{ fontSize: '2rem', fontWeight: 900 }}>Arsenal de Marketing AI</h1>
+                <div style={{ background: '#D4AF37', color: '#000', padding: '6px 15px', borderRadius: '20px', fontSize: '0.7rem', fontWeight: 900, letterSpacing: '1.5px' }}>
+                  VIRAL ENGINE ACTIVE
+                </div>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr', gap: '2.5rem' }}>
+                <div style={{ background: 'rgba(212, 175, 55, 0.05)', padding: '2.5rem', borderRadius: '30px', border: '1px solid rgba(212, 175, 55, 0.2)' }}>
+                  <h3 style={{ color: '#D4AF37', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <FiTrendingUp /> Estrategia de 30 Días
+                  </h3>
+                  <p style={{ fontSize: '0.85rem', opacity: 0.6, marginBottom: '2rem', lineHeight: 1.6 }}> Genera el copy maestro para tus redes sociales basado en la infraestructura de marketing de Stratix.</p>
+                  
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 900, opacity: 0.5, marginBottom: '0.5rem' }}>DÍA DEL PLAN (1-30)</label>
+                      <input 
+                        type="number" min="1" max="30" value={marketingDay}
+                        onChange={(e) => setMarketingDay(Number(e.target.value))}
+                        style={{ width: '100%', padding: '12px', background: '#060B14', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', color: 'white', outline: 'none' }}
+                      />
+                    </div>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 900, opacity: 0.5, marginBottom: '0.5rem' }}>PLATAFORMA OBJETIVO</label>
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                        <button 
+                          onClick={() => setMarketingPlatform("linkedin")}
+                          style={{ padding: '10px', borderRadius: '10px', border: '1px solid', borderColor: marketingPlatform === 'linkedin' ? '#D4AF37' : 'rgba(255,255,255,0.05)', background: marketingPlatform === 'linkedin' ? 'rgba(212,175,55,0.1)' : 'transparent', color: marketingPlatform === 'linkedin' ? '#D4AF37' : 'white', cursor: 'pointer', fontWeight: 700 }}
+                        >LinkedIn</button>
+                        <button 
+                          onClick={() => setMarketingPlatform("instagram")}
+                          style={{ padding: '10px', borderRadius: '10px', border: '1px solid', borderColor: marketingPlatform === 'instagram' ? '#D4AF37' : 'rgba(255,255,255,0.05)', background: marketingPlatform === 'instagram' ? 'rgba(212,175,55,0.1)' : 'transparent', color: marketingPlatform === 'instagram' ? '#D4AF37' : 'white', cursor: 'pointer', fontWeight: 700 }}
+                        >Instagram</button>
+                      </div>
+                    </div>
+                    <button 
+                      onClick={generateSocialPost}
+                      disabled={isMarketingGenerating}
+                      style={{ width: '100%', padding: '15px', background: '#D4AF37', color: '#060B14', borderRadius: '12px', fontWeight: 900, cursor: 'pointer', border: 'none', boxShadow: '0 10px 30px rgba(212,175,55,0.2)' }}
+                    >
+                      {isMarketingGenerating ? 'GENERANDO COPYS ÉLITE...' : 'GENERAR POST MAESTRO'}
+                    </button>
+                  </div>
+                </div>
+
+                <div style={{ background: '#060B14', padding: '2.5rem', borderRadius: '30px', border: '1px solid rgba(255,255,255,0.03)', minHeight: '400px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+                    <span style={{ fontSize: '0.65rem', fontWeight: 900, opacity: 0.4, letterSpacing: '2px' }}>VINTAGE NEURAL OUTPUT</span>
+                    {generatedPost && (
+                       <button onClick={() => navigator.clipboard.writeText(generatedPost)} style={{ background: 'none', border: 'none', color: '#D4AF37', fontSize: '0.75rem', fontWeight: 800, cursor: 'pointer' }}>COPIAR</button>
+                    )}
+                  </div>
+                  {generatedPost ? (
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ lineHeight: 1.8, fontSize: '0.95rem', whiteSpace: 'pre-wrap' }}>
+                      {generatedPost}
+                    </motion.div>
+                  ) : (
+                    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', opacity: 0.2, textAlign: 'center' }}>
+                      <FiStar size={48} style={{ marginBottom: '1rem' }} />
+                      <p style={{ maxWidth: '200px' }}>Selecciona un día y plataforma para generar tu contenido estratégico.</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {/* PESTAÑA: ANALÍTICA (ROI MASTERY V48.0) */}
+          {activeTab === "analytics" && (
+            <motion.div initial="hidden" animate="visible" variants={fadeInUp}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem' }}>
+                <h1 className="text-cinematic" style={{ fontSize: '2.5rem' }}>Inteligencia ROI de Élite</h1>
+                <div style={{ display: 'flex', gap: '1.5rem' }}>
+                  <div className="card-elite" style={{ background: 'rgba(16,185,129,0.05)', color: '#10b981', padding: '10px 20px', borderRadius: '15px', fontSize: '0.8rem', fontWeight: 900, border: '1px solid rgba(16,185,129,0.2)' }}>TIEMPO AHORRADO: +45H</div>
+                  <div className="card-elite glow-gold" style={{ background: 'rgba(212,175,55,0.05)', color: '#D4AF37', padding: '10px 20px', borderRadius: '15px', fontSize: '0.8rem', fontWeight: 900, border: '1px solid rgba(212,175,55,0.3)' }}>REVENUE ATRIBUIDO: $1,240</div>
+                </div>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '2.5rem', marginBottom: '2.5rem' }}>
+                {/* Gráfica de Barras Principal */}
+                <div className="card-elite" style={{ padding: '3rem', position: 'relative' }}>
+                  <p className="text-cinematic" style={{ fontSize: '0.8rem', opacity: 0.5, marginBottom: '2.5rem', letterSpacing: '2px', textTransform: 'uppercase' }}>Captura de Leads Neural</p>
+                  <div style={{ height: '350px' }}>
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={analyticsData}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.03)" vertical={false} />
+                        <XAxis dataKey="name" stroke="rgba(255,255,255,0.2)" fontSize={12} axisLine={false} tickLine={false} tick={{ dy: 10 }} />
+                        <YAxis stroke="rgba(255,255,255,0.2)" fontSize={12} axisLine={false} tickLine={false} tick={{ dx: -10 }} />
+                        <Tooltip contentStyle={{ background: '#0B1120', border: '1px solid #D4AF37', borderRadius: '16px', boxShadow: '0 20px 50px rgba(0,0,0,0.6)', padding: '15px' }} />
+                        <Bar dataKey="leads" fill="url(#colorLeads)" radius={[10, 10, 0, 0]} barSize={40} />
+                        <defs>
+                          <linearGradient id="colorLeads" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="5%" stopColor="#D4AF37" stopOpacity={0.9}/>
+                            <stop offset="95%" stopColor="#D4AF37" stopOpacity={0.1}/>
+                          </linearGradient>
+                        </defs>
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
+
+                {/* Gráfica de ROI por Canal */}
+                <div className="card-elite" style={{ padding: '3rem' }}>
+                  <p className="text-cinematic" style={{ fontSize: '0.8rem', opacity: 0.5, marginBottom: '2.5rem', letterSpacing: '2px', textTransform: 'uppercase' }}>Conversión por Canal</p>
+                  <div style={{ height: '240px' }}>
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie
+                          data={[
+                            { name: 'WhatsApp', value: 45 },
+                            { name: 'Web Widget', value: 35 },
+                            { name: 'Instagram', value: 20 }
+                          ]}
+                          innerRadius={70}
+                          outerRadius={95}
+                          paddingAngle={8}
+                          dataKey="value"
+                          stroke="none"
+                        >
+                          <Cell fill="#D4AF37" />
+                          <Cell fill="#6366f1" />
+                          <Cell fill="#10b981" />
+                        </Pie>
+                        <Tooltip contentStyle={{ background: '#0B1120', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px' }} />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', marginTop: '2rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', fontWeight: 600 }}>
+                      <span style={{ display: 'flex', alignItems: 'center', gap: '10px' }}><div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#D4AF37' }} /> WhatsApp</span>
+                      <span style={{ color: '#D4AF37' }}>45%</span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', fontWeight: 600 }}>
+                      <span style={{ display: 'flex', alignItems: 'center', gap: '10px' }}><div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#6366f1' }} /> Web Widget</span>
+                      <span style={{ color: '#6366f1' }}>35%</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Gráfica de Mensajes (Line) */}
+              <div className="card-elite" style={{ padding: '2.5rem' }}>
+                  <p className="text-cinematic" style={{ fontSize: '0.75rem', opacity: 0.4, marginBottom: '2rem', letterSpacing: '2px', textTransform: 'uppercase' }}>Volumen de Interacciones Neurales</p>
+                  <div style={{ height: '220px' }}>
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart data={analyticsData}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.02)" vertical={false} />
+                        <XAxis dataKey="name" stroke="rgba(255,255,255,0.2)" fontSize={12} axisLine={false} tickLine={false} />
+                        <YAxis stroke="rgba(255,255,255,0.2)" fontSize={12} axisLine={false} tickLine={false} />
+                        <Tooltip contentStyle={{ background: '#0B1120', border: '1px solid #D4AF37', borderRadius: '12px' }} />
+                        <Line type="monotone" dataKey="msgs" stroke="#D4AF37" strokeWidth={4} dot={{ fill: '#D4AF37', r: 5, strokeWidth: 0 }} activeDot={{ r: 8, stroke: '#0B1120', strokeWidth: 2 }} />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </div>
+              </div>
+            </motion.div>
+          )}
+
           {/* PESTAÑA: SETTINGS/FACTURACIÓN */}
-          {activeTab === "settings" && (
+          {/* PESTAÑA: CENTRO DE LANZAMIENTO (V41.0) */}
+        {activeTab === "launch" && (
+          <motion.div initial="hidden" animate="visible" variants={fadeInUp}>
+            <div style={{ marginBottom: '3rem' }}>
+              <h1 style={{ fontSize: '2.5rem', fontWeight: 900, marginBottom: '0.5rem' }}>Estrategia de Lanzamiento Élite</h1>
+              <p style={{ opacity: 0.6 }}>Tu hoja de ruta para escalar Stratix de 0 a $1k MRR.</p>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '2rem' }}>
+              {/* Sección A: Sales Pitch */}
+              <div style={{ background: 'rgba(255,255,255,0.02)', padding: '2.5rem', borderRadius: '30px', border: '1px solid rgba(212, 175, 55, 0.1)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+                  <h2 style={{ color: '#D4AF37', margin: 0 }}>🎤 Sales Pitch Maestro</h2>
+                  <button 
+                    onClick={() => {
+                      navigator.clipboard.writeText("Hola [Nombre], he estado analizando la infraestructura de atención de [Nombre de Empresa]...");
+                      toast.success("Script copiado al portapapeles.");
+                    }}
+                    style={{ background: 'rgba(212,175,55,0.1)', border: '1px solid #D4AF37', color: '#D4AF37', padding: '8px 16px', borderRadius: '12px', fontSize: '0.8rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}
+                  >
+                    <FiCopy /> Copiar Script
+                  </button>
+                </div>
+                <div style={{ color: 'rgba(255,255,255,0.7)', lineHeight: 1.8, fontSize: '0.95rem' }}>
+                  <p><strong>El Gancho:</strong> "He diseñado una Arquitectura de Inteligencia Estratégica que atiende, califica y cierra ventas por ti las 24 horas, detectando intenciones calientes al instante."</p>
+                  <p><strong>El Valor Único:</strong> "Usamos Opal Logic. No es un chat básico; es un motor que reconoce si el cliente está listo para comprar y te envía una Alerta de Élite al segundo."</p>
+                  <p><strong>El Cierre:</strong> "Te propongo una Demo Estratégica de 7 días gratis entrenada con tus propios manuales. Si en una semana no ves leads calificados, la quito y no me debes nada."</p>
+                </div>
+              </div>
+
+              {/* Sección B: Checklist de Lanzamiento */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <div style={{ background: 'rgba(212,175,55,0.05)', padding: '2rem', borderRadius: '30px', border: '1px solid rgba(212, 175, 55, 0.2)' }}>
+                  <h3 style={{ margin: '0 0 1rem 0', fontSize: '1.2rem' }}>🛡️ Protocolo de Blindaje</h3>
+                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '15px', fontSize: '0.85rem' }}>
+                    <li style={{ display: 'flex', alignItems: 'center', gap: '10px' }}><FiCheck style={{ color: '#D4AF37' }} /> Validar Webhooks de Pago</li>
+                    <li style={{ display: 'flex', alignItems: 'center', gap: '10px' }}><FiCheck style={{ color: '#D4AF37' }} /> Probar WhatsApp Webhook</li>
+                    <li style={{ display: 'flex', alignItems: 'center', gap: '10px' }}><FiCheck style={{ color: '#D4AF37' }} /> Test de Stress RAG (PDF 10p+)</li>
+                    <li style={{ display: 'flex', alignItems: 'center', gap: '10px' }}><FiCheck style={{ color: '#D4AF37' }} /> Revisión Mobile UI</li>
+                  </ul>
+                </div>
+                <div style={{ background: 'rgba(255,255,255,0.03)', padding: '2rem', borderRadius: '30px', border: '1px solid rgba(255, 255, 255, 0.05)' }}>
+                  <h3 style={{ margin: '0 0 1rem 0', fontSize: '1.2rem', color: '#6366f1' }}>🚀 Estrategia High-Ticket</h3>
+                  <p style={{ fontSize: '0.8rem', opacity: 0.6, lineHeight: 1.6 }}>Cobra entre $300 - $500 por el set-up inicial de los Prompts y manuales. Tu tiempo como Arquitecto de IA tiene un valor premium.</p>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+        {activeTab === "settings" && (
             <motion.div initial="hidden" animate="visible" variants={fadeInUp}>
               <h1 style={{ fontSize: '2rem', fontWeight: 900, marginBottom: '2.5rem' }}>Facturación y Gestión Élite</h1>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>

@@ -1,86 +1,54 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
-import { getEmbeddings } from "@/lib/gemini";
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || "",
-  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ""
-);
+import { syncBotKnowledge } from "@/lib/rag";
 
 /**
- * API de Ingestión Estratégica (RAG)
- * Procesa texto plano, lo divide en fragmentos y genera vectores de alta densidad.
+ * STRATIX INTELLIGENCE — UNIFIED INGESTION ENGINE (V9.0)
+ * Procesa y vectoriza conocimiento manual directamente en el Núcleo RAG.
  */
+
 export async function POST(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  const { id: botId } = params;
+
   try {
-    const { id } = params;
     const body = await request.json();
     const { content, source } = body;
 
-    if (!content) {
-      return NextResponse.json({ error: "No se proporcionó contenido para indexar" }, { status: 400 });
+    // 1. Verificación Estratégica de Integridad
+    if (!content || !content.trim()) {
+      return NextResponse.json({ error: "Contenido de entrenamiento vacío." }, { status: 400 });
     }
 
-    // 1. Fragmentación Inteligente (Chunking)
-    // Dividimos por párrafos o bloques de ~1000 caracteres con solapamiento
-    const chunks = chunkText(content, 1000, 100);
+    console.log(`/// INICIANDO INGESTIÓN RAG [Bot: ${botId}] ///`);
 
-    console.log(`/// Ingestión Iniciada: ${chunks.length} fragmentos detectados para el bot ${id}`);
+    // 2. Sincronización Estratégica con el Núcleo Vectorial (Neural RAG V24.0)
+    const contextualizedContent = `FUENTE (INGRESO MANUAL): ${source || "Nota Directa"}\n\nCONTENIDO:\n${content}`;
 
-    // 2. Procesamiento Vectorial
-    const processedChunks = await Promise.all(
-      chunks.map(async (text, index) => {
-        const embedding = await getEmbeddings(text);
-        return {
-          bot_id: id,
-          content: text,
-          embedding: embedding,
-          metadata: {
-            source: source || "Manual Input",
-            chunk_index: index,
-          }
-        };
-      })
+    const result = await syncBotKnowledge(
+      botId, 
+      contextualizedContent, 
+      `MANUAL: ${source || "Nota Directa"}`
     );
 
-    // 3. Inserción Masiva en Supabase
-    const { error: dbError } = await supabase
-      .from("knowledge")
-      .insert(processedChunks);
-
-    if (dbError) {
-      console.error("/// ERROR PERSISTIENDO CONOCIMIENTO ///", dbError);
-      throw dbError;
+    if (!result.success) {
+      throw new Error("Fallo en la sincronización del núcleo vectorial.");
     }
 
+    // 3. Respuesta de Confirmación Élite
     return NextResponse.json({
       success: true,
-      message: `¡Núcleo de conocimiento actualizado! ${chunks.length} fragmentos sincronizados.`,
-      chunks_count: chunks.length
+      message: "Inteligencia consolidada con éxito.",
+      chunks: result.chunks,
+      timestamp: new Date().toISOString()
     });
 
   } catch (error: any) {
-    console.error("/// FALLO CRÍTICO EN INGESTIÓN ///", error);
-    return NextResponse.json({ error: "Fallo en el motor de ingestión estratétegica" }, { status: 500 });
+    console.error("/// FALLO CRÍTICO EN PIPELINE RAG ///", error);
+    return NextResponse.json(
+      { error: "Error en el motor de sincronización de conocimiento.", details: error.message },
+      { status: 500 }
+    );
   }
-}
-
-/**
- * Función de segmentación de texto con solapamiento
- */
-function chunkText(text: string, size: number, overlap: number): string[] {
-  const chunks: string[] = [];
-  let index = 0;
-
-  while (index < text.length) {
-    const chunk = text.slice(index, index + size);
-    chunks.push(chunk);
-    index += (size - overlap);
-    if (index >= text.length) break;
-  }
-
-  return chunks;
 }

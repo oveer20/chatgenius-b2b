@@ -3,11 +3,29 @@ import { Metadata } from "next";
 import LandingClient from "./LandingClient";
 
 export const metadata: Metadata = {
-  title: 'Stratix Intelligence | Tu negocio en piloto automático',
-  description: 'Atiende, califica y cierra ventas 24/7 con el estándar de IA para empresas B2B. Tecnología Opal Logic y RAG Neuronal.',
+  title: 'Stratix Intelligence | Arquitectura de IA Estratégica B2B',
+  description: 'Vende más, duerme mejor. Stratix implementa Opal Logic y RAG Neuronal para automatizar ventas, calificar leads y cerrar negocios 24/7 con infalibilidad estratégica.',
+  keywords: ['IA para Inmobiliarias', 'Automatización de Ventas B2B', 'Opal Logic', 'RAG Neuronal', 'SaaS Inteligencia Artificial', 'Stratix Intelligence Bogotá Medellín'],
   openGraph: {
     title: 'Stratix Intelligence | Arquitectura de IA Corporativa',
-    description: 'Vende más, duerme mejor. Automatización omnicanal de Élite.',
+    description: 'Vende más, duerme mejor. Automatización omnicanal de Élite para negocios de alto impacto.',
+    url: 'https://www.stratix.la',
+    siteName: 'Stratix Intelligence',
+    images: [
+      {
+        url: '/stratix_shield.svg',
+        width: 800,
+        height: 600,
+        alt: 'Stratix Intelligence S-Shield Architecture',
+      },
+    ],
+    locale: 'es_CO',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Stratix Intelligence | Venta Autónoma de Élite',
+    description: 'La infraestructura de IA más avanzada para el sector B2B e Inmobiliario.',
     images: ['/stratix_shield.svg'],
   }
 };

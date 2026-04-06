@@ -63,20 +63,11 @@ export async function POST(request: NextRequest) {
       IMPORTANTE: No menciones que eres una IA a menos que se te pregunte directamente. Responde con la precisión que un usuario de iPhone 16 Pro Max esperaría.
     `;
 
-    // Verificación de Seguridad de la Llave
-    if (!process.env.GOOGLE_GEMINI_API_KEY) {
-      return NextResponse.json({
-        message: {
-          role: "assistant",
-          content: "⚠️ Sincronización fallida: Falta la llave maestra de Google en el servidor. Contacta a Camilo Pascuas."
-        }
-      });
-    }
+    // 2. Orquestación Estratégica Golden (V50.5: AI Orchestrator Unificado)
+    const { getResilientChatResponse } = await import("@/lib/ai-orchestrator");
+    const { text, provider } = await getResilientChatResponse(messages, fullSystemPrompt, model || "gemini");
 
-    const { getGeminiResponse } = await import("@/lib/gemini");
-    const text = await getGeminiResponse(messages, fullSystemPrompt);
-
-    // Extracción de Metadatos Opal Logic
+    // 3. Extracción de Metadatos Opal Logic (V50.0)
     let intent = "Information";
     let score = "Cold";
     let cleanText = text;
@@ -84,29 +75,32 @@ export async function POST(request: NextRequest) {
     const metaMatch = text.match(/\[\[META:([\s\S]*?)\]\]/);
     if (metaMatch) {
       try {
-        const meta = JSON.parse(metaMatch[1]);
+        const meta = JSON.parse(metaMatch[1].trim());
         intent = meta.intent || intent;
         score = meta.score || score;
         cleanText = text.replace(/\[\[META:[\s\S]*?\]\]/, "").trim();
       } catch (e) {
-        console.error("Error en el parseo de Opal Meta:", e);
+        // Fallback robust para fallos de parseo de JSON inyectado por IA
+        console.warn("/// ERROR PARSEO METADATOS — LÓGICA DE EMERGENCIA ACTIVA ///");
+        if (text.toLowerCase().includes("vender") || text.toLowerCase().includes("comprar")) {
+          intent = "Sales";
+          score = "Hot";
+        }
       }
     }
 
     return NextResponse.json({
-      message: {
-        role: "assistant",
-        content: cleanText
-      },
+      message: { role: "assistant", content: cleanText },
       analysis: {
         intent,
         score,
+        provider,
         timestamp: new Date().toISOString()
       }
     });
 
   } catch (error: any) {
-    console.error("/// CRITICAL STRATIX API ERROR ///");
+    console.error("/// CRITICAL STRATIX API ERROR ///", error);
 
     const isQuotaExceeded = error.message?.includes("429") || error.message?.includes("quota") || error.toString().includes("429");
 
@@ -114,13 +108,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({
         message: {
           role: "assistant",
-          content: "🤖 El núcleo de procesamiento está al máximo de su capacidad. Por favor, espera 10 segundos mientras reequilibramos la carga estratégica."
+          content: "🛡️ NÚCLEO EN SOBRECARGA: Estamos reequilibrando el procesamieto neural. Por favor, intenta en 5 segundos."
         }
       });
     }
 
     return NextResponse.json(
-      { error: "El motor de IA está en mantenimiento preventivo. Intenta en un momento." },
+      { error: "Sincronización Fallida: El motor de IA está en mantenimiento preventivo." },
       { status: 500 }
     );
   }

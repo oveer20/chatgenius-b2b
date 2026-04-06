@@ -44,10 +44,18 @@ export async function POST(request: NextRequest) {
 
     const preference = new Preference(client);
     
-    // 4. Creación de la Preferencia de Pago
+    // 4. Registro de Auditoría: Intención de Compra (V30.0)
+    const { supabaseAdmin } = await import("@/lib/supabase-admin");
+    await supabaseAdmin.from("audit_logs").insert([{
+      user_id: userId,
+      action: "CHECKOUT_STARTED",
+      details: { plan: planSlug, amount: finalPrice }
+    }]);
+
+    // 5. Creación de la Preferencia de Pago con Tokenizado
     const result = await preference.create({
       body: {
-        external_reference: userId, // CRITICAL: Vincula el pago con el usuario local
+        external_reference: `${userId}:${planSlug}`, // TOKEN COMPUESTO COMPATIBLE V30.0
         items: [
           {
             id: planSlug,
@@ -75,7 +83,7 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // 5. Retorno del Punto de Inicio de Pago
+    // 6. Retorno del Punto de Inicio de Pago
     return NextResponse.json({ url: result.init_point }, { status: 200 });
 
   } catch (error: any) {

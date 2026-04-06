@@ -38,7 +38,7 @@ function AuthContent() {
           },
         });
         if (error) throw error;
-        toast.success("✅ Protocolo de seguridad iniciado. Revisa tu correo para verificar tu cuenta.");
+        toast.success("✅ Protocolo iniciado. Revisa tu correo para verificar tu cuenta.");
       } else {
         const { error } = await supabase.auth.signInWithPassword({
           email,
@@ -48,121 +48,98 @@ function AuthContent() {
         
         toast.success("✅ Acceso autorizado. Sincronizando ecosistema...");
         
-        // Redirección inteligente tras el login
         const finalRedirect = plan ? `${redirect}?plan=${plan}` : redirect;
         router.push(finalRedirect);
-        router.refresh(); // Asegura que el middleware detecte la nueva sesión
+        router.refresh();
       }
     } catch (error: any) {
-      toast.error(`❌ Fallo en la autenticación: ${error.message || "Inténtalo de nuevo."}`);
+      toast.error(`❌ Error: ${error.message || "Fallo en la autenticación."}`);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className={styles.authPage} style={{ backgroundColor: '#0B1120' }}>
-      <div className={styles.authGlow} style={{ background: 'radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, transparent 70%)' }} />
+    <div className={styles.authPage}>
+      <div className={styles.authGlow} />
       <motion.div
         className={styles.authCard}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        style={{ border: '1px solid rgba(212, 175, 55, 0.1)' }}
+        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.6, cubicBezier: [0.16, 1, 0.3, 1] }}
       >
         <Link href="/" className={styles.logo}>
-          <img src="/stratix_shield.svg" alt="Stratix AI Logo" style={{ height: '32px' }} />
-          <span style={{ fontWeight: 800 }}>Strat<span style={{ color: '#D4AF37' }}>ix</span> AI</span>
+          <img src="/stratix_shield.svg" alt="Stratix Logo" style={{ height: '32px' }} />
+          <span>Strat<span style={{ color: '#D4AF37' }}>ix</span> Intelligence</span>
         </Link>
 
-        <h1 style={{ fontSize: '1.8rem', fontWeight: 900 }}>{mode === "login" ? "Acceso de Élite" : "Crea tu Cuenta Elite"}</h1>
+        <h1>{mode === "login" ? "Acceso de Élite" : "Registro de Élite"}</h1>
         <p className={styles.authSubtitle}>
           {mode === "login"
-            ? "Ingresa a tu ecosistema estratégico para continuar"
-            : "Comienza a escalar tu empresa con inteligencia arquitectónica"}
+            ? "Ingreso seguro al núcleo de inteligencia estratégica"
+            : "Crea tu infraestructura de IA en menos de 60 segundos"}
         </p>
 
         <form onSubmit={handleSubmit} className={styles.authForm}>
           {mode === "signup" && (
             <div className={styles.inputGroup}>
-              <FiUser className={styles.inputIcon} style={{ color: '#D4AF37' }} />
+              <FiUser className={styles.inputIcon} />
               <input
-                className="input"
-                placeholder="Nombre completo"
+                placeholder="Nombre Completo"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
-                style={{ paddingLeft: "3rem", background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)' }}
               />
             </div>
           )}
           <div className={styles.inputGroup}>
-            <FiMail className={styles.inputIcon} style={{ color: '#D4AF37' }} />
+            <FiMail className={styles.inputIcon} />
             <input
-              className="input"
               type="email"
               placeholder="tu@empresa.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              style={{ paddingLeft: "3rem", background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)' }}
             />
           </div>
           <div className={styles.inputGroup}>
-            <FiLock className={styles.inputIcon} style={{ color: '#D4AF37' }} />
+            <FiLock className={styles.inputIcon} />
             <input
-              className="input"
               type="password"
-              placeholder="Contraseña"
+              placeholder="Contraseña de Seguridad"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
               minLength={6}
-              style={{ paddingLeft: "3rem", background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)' }}
             />
           </div>
 
           <button
             type="submit"
-            className="btn-primary"
+            className={styles.submitBtn}
             disabled={loading}
-            style={{
-              width: "100%",
-              padding: "1rem",
-              background: '#D4AF37',
-              color: '#000',
-              fontWeight: 'bold',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '10px'
-            }}
           >
-            {loading ? "Procesando..." : mode === "login" ? "Iniciar Sesión de Élite" : "Crear Cuenta Gratis"}
-            <FiArrowRight />
+            {loading ? "Sincronizando..." : mode === "login" ? "Iniciar Sesión" : "Crear Infraestructura IA"}
+            {!loading && <FiArrowRight />}
           </button>
         </form>
 
-        <p className={styles.switchMode} style={{ marginTop: '1.5rem' }}>
-          {mode === "login" ? "¿No tienes cuenta?" : "¿Ya tienes cuenta?"}{" "}
-          <button
-            onClick={() => { setMode(mode === "login" ? "signup" : "login"); }}
-            style={{ color: '#D4AF37', fontWeight: 'bold', background: 'none', border: 'none', cursor: 'pointer' }}
-          >
+        <div className={styles.switchMode}>
+          {mode === "login" ? "¿No tienes cuenta?" : "¿Ya eres miembro de élite?"}
+          <button onClick={() => setMode(mode === "login" ? "signup" : "login")}>
             {mode === "login" ? "Regístrate aquí" : "Inicia sesión"}
           </button>
-        </p>
+        </div>
 
-        <div className={styles.trustBox} style={{ borderTop: '1px solid rgba(255,255,255,0.05)', marginTop: '2rem', paddingTop: '1.5rem' }}>
-          <div className={styles.trustHeader} style={{ fontSize: '0.8rem', color: '#D4AF37', marginBottom: '1rem' }}>
-            <FiShield /> PROTOCOLO DE SEGURIDAD ACTIVADO
+        <div className={styles.trustBox}>
+          <div className={styles.trustHeader}>
+            <FiShield /> Ecosistema Zero-Trust v4.0
           </div>
-          <div className={styles.trustList} style={{ fontSize: '0.75rem', opacity: 0.6, display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <FiCheckCircle style={{ color: '#10b981' }} /> Encriptación AES-256 de grado bancario
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <FiCheckCircle style={{ color: '#10b981' }} /> Infraestructura Zero-Trust
-            </div>
+          <div className={styles.trustItem}>
+            <FiCheckCircle /> Encriptación AES-256 de Grado Bancario
+          </div>
+          <div className={styles.trustItem}>
+            <FiCheckCircle /> Autenticación via Supabase Auth
           </div>
         </div>
       </motion.div>

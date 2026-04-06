@@ -1,32 +1,29 @@
 import { NextRequest, NextResponse } from "next/server";
-
-import { supabase } from "@/lib/supabase";
+import { supabaseAdmin } from "@/lib/supabase-admin";
 
 /**
- * WhatsApp Webhook for Stratix AI
- * This endpoint handles Meta (Facebook) webhook verification (GET)
- * and incoming messages (POST).
+ * STRATIX INTELLIGENCE — WHATSAPP STRATEGIC HUB (V13.0)
+ * Unificación de RAG, Memoria, Scoring y CRM para WhatsApp Business.
  */
 
-// Meta Webhook Verification (GET)
+// 1. Meta Webhook Verification (GET)
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const mode = searchParams.get("hub.mode");
   const token = searchParams.get("hub.verify_token");
   const challenge = searchParams.get("hub.challenge");
 
-  // This should match the 'Verify Token' you set in the Meta Developer Portal
   const VERIFY_TOKEN = process.env.WHATSAPP_VERIFY_TOKEN || "stratix_secret_token";
 
   if (mode === "subscribe" && token === VERIFY_TOKEN) {
-    console.log("WhatsApp Webhook Verified!");
+    console.log("/// WHATSAPP WEBHOOK VERIFIED ///");
     return new NextResponse(challenge, { status: 200 });
   }
 
   return new NextResponse("Forbidden", { status: 403 });
 }
 
-// Handle Incoming Messages (POST)
+// 2. Handle Incoming Messages (POST)
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -35,91 +32,229 @@ export async function POST(request: NextRequest) {
       const entry = body.entry?.[0];
       const changes = entry?.changes?.[0];
       const value = changes?.value;
-      const message = value?.messages?.[0];
+      const messages = value?.messages;
 
-      if (message) {
-        const from = message.from; 
-        const text = message.text?.body;
-        const businessPhoneNumber = value.metadata?.display_phone_number;
+      // Ignorar actualizaciones de estado (leído, entregado)
+      if (value?.statuses) return NextResponse.json({ status: "ignored_status" });
 
-        if (text) {
-          // 1. Fetch bot by display phone number
-          const { data: bot } = await supabase
-            .from("bots")
-            .select("*")
-            .eq("whatsapp_phone_number", businessPhoneNumber)
+      if (messages && messages.length > 0) {
+        const message = messages[0];
+        const fromNumber = message.from; 
+        const userName = value.contacts?.[0]?.profile?.name || "Cliente WP";
+        const messageText = message.text?.body;
+        const phoneNumberId = value.metadata?.phone_number_id;
+
+        if (!messageText || !phoneNumberId) return NextResponse.json({ status: "ignored_no_content" });
+
+        // A. Identificar Bot por Número Receptor (Phone ID)
+        const { data: bot } = await supabaseAdmin
+          .from("bots")
+          .select("*")
+          .eq("whatsapp_phone_number_id", phoneNumberId)
+          .single();
+
+        if (!bot) {
+          console.error(`/// BOT NOT FOUND FOR PHONE ID: ${phoneNumberId} ///`);
+          return NextResponse.json({ status: "bot_not_found" });
+        }
+
+        console.log(`/// WP ENTRANTE [Bot: ${bot.name} | De: ${fromNumber}] ///`);
+
+        // A.1. Detección de Identidad Omnicanal (V36.0)
+        let resolvedName = userName;
+        let webLeadId: string | null = null;
+        const idMatch = messageText.match(/\[STRATIX-ID:([\s\S]*?)\]/);
+        
+        if (idMatch) {
+          const webSessionId = idMatch[1];
+          const { data: webLead } = await supabaseAdmin
+            .from("leads")
+            .select("id, name, email, company")
+            .eq("session_id", webSessionId)
             .single();
-
-          if (!bot) {
-             console.error(`No bot found for WhatsApp phone: ${businessPhoneNumber}`);
-             return NextResponse.json({ status: "bot_not_found" });
-          }
-
-          // 2. Build AI Context (Opal Intelligence)
-          const systemPrompt = `
-            Eres un asistente de IA para la empresa: ${bot.name}.
-            ---
-            ${bot.system_prompt || "Responde de forma concisa."}
-            ---
-            INSTRUCCIONES DE ANALÍTICA (OPAL):
-            Detecta el INTENTO del usuario: Sales, Support, Information, or Complaint.
-            Detecta el SCORE (Interés): Cold, Warm, Hot.
-            Al final de tu respuesta, SIEMPRE incluye: [[META:{"intent": "detected", "score": "detected"}]]
-          `;
-
-          const { getGeminiResponse } = await import("@/lib/gemini");
-          const aiRawResponse = await getGeminiResponse([{ role: "user", content: text }], systemPrompt);
-
-          // 3. Extract Meta & Clean Response
-          let cleanText = aiRawResponse;
-          let intent = "Information";
-          let score = "Cold";
-
-          const metaMatch = aiRawResponse.match(/\[\[META:([\s\S]*?)\]\]/);
-          if (metaMatch) {
-            try {
-              const meta = JSON.parse(metaMatch[1]);
-              intent = meta.intent || intent;
-              score = meta.score || score;
-              cleanText = aiRawResponse.replace(/\[\[META:[\s\S]*?\]\]/, "").trim();
-            } catch (e) {}
-          }
-
-          // 4. Save Lead Intelligence
-          await supabase.from("leads").upsert([{
-            bot_id: bot.id,
-            name: `WA_${from}`,
-            whatsapp: from,
-            intent,
-            score
-          }], { onConflict: 'whatsapp' });
-
-          // 5. Send back to WhatsApp
-          const WHATSAPP_TOKEN = process.env.WHATSAPP_ACCESS_TOKEN;
-          const PHONE_NUMBER_ID = value.metadata?.phone_number_id;
-
-          if (WHATSAPP_TOKEN && PHONE_NUMBER_ID) {
-            await fetch(`https://graph.facebook.com/v17.0/${PHONE_NUMBER_ID}/messages`, {
-              method: "POST",
-              headers: {
-                "Authorization": `Bearer ${WHATSAPP_TOKEN}`,
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                messaging_product: "whatsapp",
-                to: from,
-                type: "text",
-                text: { body: cleanText },
-              }),
-            });
+          
+          if (webLead) {
+            resolvedName = webLead.name || resolvedName;
+            webLeadId = webLead.id;
+            // VÍNCULO ESTRATÉGICO: Asociamos el número de WhatsApp al lead capturado en la web
+            await supabaseAdmin.from("leads").update({ whatsapp: fromNumber }).eq("id", webLead.id);
+            console.log(`/// IDENTIDAD OMNICANAL VINCULADA: Lead ${webLead.id} ahora tiene WP ${fromNumber} ///`);
           }
         }
+
+        // B. Persistencia de Historial (Memoria de Misión)
+        let chatId: string | null = null;
+        let chatHistory: any[] = [];
+        
+        const { data: existingChat } = await supabaseAdmin
+          .from("chats")
+          .select("id")
+          .eq("session_id", fromNumber)
+          .eq("bot_id", bot.id)
+          .single();
+
+        if (existingChat) {
+          chatId = existingChat.id;
+          const { data: history } = await supabaseAdmin
+            .from("messages")
+            .select("role, content")
+            .eq("chat_id", chatId)
+            .order("created_at", { ascending: true })
+            .limit(10);
+          if (history) chatHistory = history;
+        } else {
+          const { data: newChat } = await supabaseAdmin
+            .from("chats")
+            .insert([{ session_id: fromNumber, bot_id: bot.id }])
+            .select()
+            .single();
+          if (newChat) chatId = newChat.id;
+        }
+
+        if (chatId) await supabaseAdmin.from("messages").insert([{ chat_id: chatId, role: 'user', content: messageText }]);
+        chatHistory.push({ role: "user", content: messageText });
+
+        // C. Búsqueda de Inteligencia (RAG Core)
+        let knowledgeContext = "";
+        try {
+          const { getEmbeddings } = await import("@/lib/gemini");
+          const queryEmbedding = await getEmbeddings(messageText);
+
+          const { data: chunks } = await supabaseAdmin.rpc("match_document_chunks", {
+            query_embedding: queryEmbedding,
+            match_threshold: 0.5,
+            match_count: 5,
+            p_bot_id: bot.id
+          });
+
+          if (chunks) knowledgeContext = chunks.map((c: any) => c.content).join("\n\n");
+        } catch (err) {
+          console.error("/// FALLO MOTOR RAG (WhatsApp) ///", err);
+        }
+
+        // D. Arquitectura del Prompt Corporativo
+        const fullSystemPrompt = `
+          NÚCLEO ESTRATÉGICO: Eres el asesor experto de la empresa: ${bot.name}.
+          CANAL: Estás respondiendo vía WhatsApp. Sé cortés pero directo.
+          
+          ADN DE MARCA:
+          ---
+          ${bot.system_prompt || "Responde de forma profesional."}
+          ---
+          
+          CONOCIMIENTO RELEVANTE (RAG):
+          ${knowledgeContext || "No se encontró información técnica específica."}
+
+          DATOS ADICIONALES:
+          ${bot.knowledge_base || ""}
+
+          PROTOCOLOS OPAL LOGIC:
+          1. ANALIZA AL PROSPECTO: Cold (Informativo), Warm (Interés), Hot (Venta).
+          2. DETECTA EL INTENTO: Venta, Soporte, Info.
+          3. METADATA: Obligatorio incluir al final: [[META:{"intent": "detected", "score": "detected"}]]
+        `;
+
+        // E. Generación IA & Extracción de Metadatos (V50.5: AI Orchestrator Unificado)
+        const { getResilientChatResponse } = await import("@/lib/ai-orchestrator");
+        const { text: rawAiResponse } = await getResilientChatResponse(chatHistory, fullSystemPrompt, bot.model || "gemini");
+
+        let intent = "Information";
+        let score = "Cold";
+        let cleanResponse = rawAiResponse;
+
+        const metaMatch = rawAiResponse.match(/\[\[META:([\s\S]*?)\]\]/);
+        if (metaMatch) {
+          try {
+            const meta = JSON.parse(metaMatch[1]);
+            intent = meta.intent || intent;
+            score = meta.score || score;
+            cleanResponse = rawAiResponse.replace(/\[\[META:[\s\S]*?\]\]/, "").trim();
+          } catch (e) {}
+        }
+
+        // F. Sincronización CRM (Leads System)
+        if (chatId) {
+          await supabaseAdmin.from("messages").insert([{ chat_id: chatId, role: 'assistant', content: cleanResponse }]);
+          
+          // SINCRO CRM EXTREMA: Intentamos buscar por Id de Sesión Web vinculada si no existe el número
+          const { data: existingLead } = await supabaseAdmin
+            .from("leads")
+            .select("id")
+            .or(`whatsapp.eq.${fromNumber},id.eq.${webLeadId || '00000000-0000-0000-0000-000000000000'}`)
+            .eq("bot_id", bot.id)
+            .single();
+
+          if (existingLead) {
+            await supabaseAdmin.from("leads").update({ 
+              intent, 
+              score, 
+              name: resolvedName, 
+              whatsapp: fromNumber, // Aseguramos el número
+              updated_at: new Date().toISOString() 
+            }).eq("id", existingLead.id);
+          } else {
+            await supabaseAdmin.from("leads").insert([{ 
+              bot_id: bot.id, 
+              session_id: fromNumber, 
+              name: resolvedName, 
+              whatsapp: fromNumber, 
+              intent, 
+              score 
+            }]);
+          }
+
+          // Alerta Hot Lead vía Resend + Firebase Push
+          if (score === 'Hot') {
+            // A. Email Alert
+            if (bot.email_alerts_to) {
+              const { sendHotLeadAlert } = await import("@/lib/send-email");
+              await sendHotLeadAlert({
+                to: bot.email_alerts_to,
+                subject: `🔥 WP LEAD CALIENTE: ${resolvedName}`,
+                botName: bot.name,
+                leadName: resolvedName,
+                leadContact: fromNumber,
+                intent: intent,
+                summary: cleanResponse.substring(0, 300)
+              });
+            }
+
+            // B. Push Notification (FCM V25.0)
+            try {
+              const { data: profile } = await supabaseAdmin
+                .from("profiles")
+                .select("fcm_token")
+                .eq("id", bot.user_id)
+                .single();
+
+              if (profile?.fcm_token) {
+                const { sendPushNotification } = await import("@/lib/firebase-admin");
+                await sendPushNotification(
+                  profile.fcm_token,
+                  `🔥 ¡Lead Hot en WhatsApp!`,
+                  `${resolvedName} de ${fromNumber} está listo para cerrar.`
+                );
+              }
+            } catch (pError) {
+              console.error("/// FCM PUSH ERROR ///", pError);
+            }
+          }
+        }
+
+        // G. Respuesta vía Meta Graph API
+        const { sendWhatsAppMessage } = await import("@/lib/whatsapp");
+        const botToken = bot.whatsapp_token || process.env.WHATSAPP_ACCESS_TOKEN;
+        
+        if (botToken) {
+           await sendWhatsAppMessage(phoneNumberId, botToken, fromNumber, cleanResponse);
+        }
+
+        return NextResponse.json({ status: "success" });
       }
-      return NextResponse.json({ status: "success" });
     }
     return NextResponse.json({ status: "ignored" });
   } catch (error: any) {
-    console.error("WhatsApp Webhook Error:", error);
+    console.error("/// WHATSAPP WEBHOOK CRITICAL ERROR ///", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

@@ -36,8 +36,8 @@
 
 .logoIcon {
   font-size: var(--text-2xl);
-  color: var(--accent-blue);
-  text-shadow: 0 0 20px rgba(0, 112, 255, 0.3);
+  color: var(--accent-gold);
+  text-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
 }
 
 .logoImage {
@@ -67,14 +67,14 @@
 }
 
 .navItem:hover {
-  color: var(--accent-blue);
+  color: var(--accent-gold);
   background: rgba(255, 255, 255, 0.05);
 }
 
 .navItemActive {
   color: white;
-  background: var(--accent-blue);
-  box-shadow: 0 4px 20px rgba(0, 112, 255, 0.4);
+  background: var(--accent-gold);
+  box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4);
 }
  Broadway 
 .sidebarFooter {
@@ -152,7 +152,7 @@
   letter-spacing: 0.05em;
   padding: 6px 12px;
   background: rgba(59, 130, 246, 0.1);
-  color: var(--accent-blue);
+  color: var(--accent-gold);
   border-radius: 100px;
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
@@ -178,7 +178,7 @@
 
 .resumeCard:hover {
   transform: translateY(-5px);
-  border-color: var(--accent-blue);
+  border-color: var(--accent-gold);
   background: var(--bg-card-hover);
   box-shadow: var(--shadow-glow);
 }
@@ -225,7 +225,7 @@
   border-radius: var(--radius-full);
   font-size: var(--text-xs);
   font-weight: 700;
-  color: var(--accent-blue);
+  color: var(--accent-gold);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -255,8 +255,8 @@
 }
 
 .addCard:hover {
-  border-color: var(--accent-blue);
-  color: var(--accent-blue);
+  border-color: var(--accent-gold);
+  color: var(--accent-gold);
   background: var(--bg-secondary);
 }
 
@@ -374,6 +374,13 @@
 
   .resumeGrid {
     grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+
+  .main {
+    margin-left: 0;
+    margin-bottom: 80px;
+    padding: 1.5rem 1rem;
   }
 }
 
@@ -395,8 +402,8 @@
 
 .miniActionBtn:hover {
   background: var(--bg-secondary);
-  color: var(--accent-blue);
-  border-color: var(--accent-blue);
+  color: var(--accent-gold);
+  border-color: var(--accent-gold);
 }
 
 .contactBtnWhatsapp {
@@ -449,12 +456,27 @@
   cursor: pointer;
   transition: all var(--transition-base);
   color: var(--text-primary);
-  border: none;
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  background: var(--bg-tertiary);
+  position: relative;
+  overflow: hidden;
 }
 
 .labsTool:hover {
-  filter: brightness(1.2);
+  filter: brightness(1.1);
   transform: translateY(-2px);
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.15);
+}
+
+.labsToolGold {
+  background: var(--accent-gradient);
+  color: #060B14;
+  border: none;
+}
+
+.labsToolGold:hover {
+  box-shadow: 0 10px 30px rgba(212, 175, 55, 0.4);
 }
 /* Modals & Loaders */
 .modalOverlay {
