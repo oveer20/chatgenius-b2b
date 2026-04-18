@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Outfit, Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
+import ChatWidget from "@/components/ChatWidget";
 
 const outfit = Outfit({ 
   subsets: ["latin"], 
@@ -17,7 +18,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://stratixintelligence.com'),
+  metadataBase: new URL('https://stratix-intelligence.vercel.app'),
   title: {
     default: 'Stratix Intelligence | Architectural AI for Enterprise Growth',
     template: '%s | Stratix Intelligence'
@@ -51,19 +52,6 @@ export default function RootLayout({
     <html lang="es" className={`${outfit.variable} ${inter.variable}`}>
       <head>
         {/* Analytics Dashboard Sync (V38.0) */}
-        {process.env.NEXT_PUBLIC_GA_ID && (
-          <>
-            <script async src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`} />
-            <script dangerouslySetInnerHTML={{
-              __html: `
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-                gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');
-              `
-            }} />
-          </>
-        )}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -84,9 +72,7 @@ export default function RootLayout({
       </head>
       <body style={{ margin: 0, padding: 0, backgroundColor: '#060B14', color: '#F8F9FA' }}>
         {children}
-        <Toaster theme="dark" richColors position="top-center" />
-        <script src="/widget.js" data-bot-id="demo" defer></script>
       </body>
-    </html>
+</html>
   );
 }

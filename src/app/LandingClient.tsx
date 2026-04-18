@@ -1,110 +1,80 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
-import { toast, Toaster } from "sonner";
-import { 
-  FiArrowRight, FiCheck, FiCpu, FiLayout, FiTarget, FiZap, FiShield, FiLock, 
-  FiChevronDown, FiPlayCircle, FiActivity, FiShoppingCart, 
-  FiDatabase, FiGlobe, FiClock, FiLayers, FiUsers, FiTrendingUp, FiSend, FiMenu, FiX, FiStar
-} from "react-icons/fi";
-import PricingCard from "@/components/landing/PricingCard";
+import { Toaster, toast } from "sonner";
+import { FiMenu, FiX } from "react-icons/fi";
+
 import { supabase } from "@/lib/supabase";
-import { CURRENCIES, PRICING_PLANS, USE_CASES, INTEGRATIONS } from "@/lib/constants";
+import ChatWidget from "@/components/ChatWidget";
+
+// Sub-componentes Atómicos
+import LandingHero from "@/components/landing/LandingHero";
+import LandingFeatures from "@/components/landing/LandingFeatures";
+import LandingPricing from "@/components/landing/LandingPricing";
+import LandingROI from "@/components/landing/LandingROI";
+import LandingFAQ from "@/components/landing/LandingFAQ";
+
+/**
+ * SearchParamsHandler (V50.31)
+ * Aísla totalmente el uso de searchParams para evitar de-opts fatales en Next.js 15.
+ */
+function SearchParamsHandler({ onCheckout }: { onCheckout: (plan: string) => void }) {
+  const searchParams = useSearchParams();
+  const [hasAutoCheckedOut, setHasAutoCheckedOut] = useState(false);
+
+  useEffect(() => {
+    try {
+      const planFromUrl = searchParams.get("plan");
+      if (planFromUrl && !hasAutoCheckedOut) {
+        setHasAutoCheckedOut(true);
+        onCheckout(planFromUrl);
+      }
+    } catch (e) {
+      console.warn("🛡️ Stratix: SearchParams isolation protected a hydration skip.");
+    }
+  }, [searchParams, hasAutoCheckedOut, onCheckout]);
+
+  return null;
+}
 
 export default function LandingClient() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const [leads, setLeads] = useState(100);
-  const [currency, setCurrency] = useState<'USD' | 'COP'>('COP');
-  const [activeUseCase, setActiveUseCase] = useState('ecommerce');
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
-  // Efecto para detectar scroll
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    setIsMounted(true);
+    console.log("🚀 Stratix Intelligence V50.31 - Survival Shield Loaded");
+  }, []);
+
+  // Hydration Shield Crítico
+  if (!isMounted) return <div style={{ minHeight: '100vh', background: '#060B14' }} />;
+
+  return (
+    <Suspense fallback={<div style={{ minHeight: '100vh', background: '#060B14' }} />}>
+      <LandingClientContent />
+    </Suspense>
+  );
+}
+
+function LandingClientContent() {
+  const [innerMounted, setInnerMounted] = useState(false);
+  const router = useRouter();
+  const [currency, setCurrency] = useState<'USD' | 'COP'>('COP');
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    setInnerMounted(true);
   }, []);
 
   useEffect(() => {
-    if (mobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'auto';
-    }
-    return () => { document.body.style.overflow = 'auto'; };
-  }, [mobileMenuOpen]);
-
-  const exchangeRate = CURRENCIES[currency].rate;
-  const symbol = CURRENCIES[currency].symbol;
-
-  const [hasAutoCheckedOut, setHasAutoCheckedOut] = useState(false);
-  const [formData, setFormData] = useState({ name: "", email: "", phone: "", company: "", honey: "" });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-
-  // Demo chat
-  const [demoMessages, setDemoMessages] = useState([
-    { role: 'bot', text: 'Hola, soy el núcleo Opal. ¿En qué canal quieres automatizar hoy? (WhatsApp, IG, Web)' }
-  ]);
-  const [demoInput, setDemoInput] = useState("");
-  const [isTyping, setIsTyping] = useState(false);
-  const chatEndRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [demoMessages, isTyping]);
-
-  const handleDemoChat = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!demoInput.trim()) return;
-    const userMsg = demoInput;
-    setDemoMessages(prev => [...prev, { role: 'user', text: userMsg }]);
-    setDemoInput("");
-    setIsTyping(true);
-    setTimeout(() => {
-      setIsTyping(false);
-      setDemoMessages(prev => [...prev, { 
-        role: 'bot', 
-        text: '¡Entendido! Mi motor procesaría esto en < 500ms. Para ver esto con los datos de tu empresa, agenda una demo abajo. ⬇️' 
-      }]);
-    }, 1500);
-  };
-
-  const handleDemoSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (formData.honey) return;
-    setIsSubmitting(true);
-    try {
-      const res = await fetch("/api/widget/lead", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ botId: "demo", name: formData.name, email: formData.email, phone: formData.phone, company: formData.company })
-      });
-      if (res.ok) setSubmitted(true);
-    } catch (err) {
-      console.error("Error enviando lead:", err);
-      toast.error("Hubo un error al procesar tu solicitud. Intenta de nuevo.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-  
-  useEffect(() => {
-    const planFromUrl = searchParams.get("plan");
-    if (planFromUrl && !hasAutoCheckedOut) {
-      setHasAutoCheckedOut(true);
-      handleCheckout(planFromUrl);
-    }
-  }, [searchParams, hasAutoCheckedOut]);
+    if (!innerMounted) return;
+    const handleScroll = () => setIsScrolled(window.scrollY > 50);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [innerMounted]);
 
   const handleCheckout = async (planId: string) => {
     try {
@@ -113,576 +83,74 @@ export default function LandingClient() {
         router.push(`/login?redirect=/&plan=${planId}`); 
         return; 
       }
-
-      // 🛡️ PRIORIDAD MERCADO PAGO (V14.1)
       const endpoint = currency === 'COP' ? "/api/checkout" : "/api/checkout/stripe";
-      
       const response = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          plan: planId, 
-          email: user.email, 
-          userId: user.id 
-        })
+        body: JSON.stringify({ plan: planId, email: user.email, userId: user.id })
       });
-
       const data = await response.json();
-      if (data.url) { 
-        window.location.href = data.url; 
-      } else { 
-        toast.error("Error al iniciar el pago: " + (data.error || "Desconocido")); 
-      }
-    } catch (err: any) {
-      toast.error("Hubo un problema con la pasarela de pagos.");
+      if (data.url) window.location.href = data.url;
+      else if (innerMounted) toast.error("Error al iniciar el pago: " + (data.error || "Desconocido"));
+    } catch (err) {
+      if (innerMounted) toast.error("Hubo un problema con la pasarela de pagos.");
     }
   };
 
-  const savedPerInteraction = 9.6;
-  const savingsMonthly = Math.round(leads * savedPerInteraction * 0.8);
-  const hoursSaved = Math.round(leads * 0.25);
-
   return (
-    <>
-      <div style={{ backgroundColor: '#060B14', minHeight: '100vh', color: 'white', overflowX: 'hidden' }}>
+    <div style={{ backgroundColor: '#060B14', minHeight: '100vh', color: 'white', overflowX: 'hidden' }}>
+      
+      {/* Search Shield Isolated */}
+      <Suspense fallback={null}>
+        <SearchParamsHandler onCheckout={handleCheckout} />
+      </Suspense>
 
-        {/* 1. NAVEGACIÓN DINÁMICA */}
-        <nav style={{ 
-          display: 'flex', 
-          justifyContent: 'space-between', 
-          alignItems: 'center', 
-          padding: isScrolled ? '1rem 5%' : '1.5rem 5%', 
-          background: isScrolled ? 'rgba(6,11,20,0.98)' : 'rgba(0,0,0,0)', 
-          backdropFilter: isScrolled ? 'blur(20px)' : 'blur(0px)', 
-          position: 'sticky', 
-          top: 0, 
-          zIndex: 100, 
-          borderBottom: isScrolled ? '1px solid rgba(212,175,55,0.15)' : '1px solid rgba(255,255,255,0)',
-          transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <Image src="/stratix_shield.svg" alt="Stratix Logo" width={32} height={32} priority />
-            <span style={{ fontSize: '1.4rem', fontWeight: 900, letterSpacing: '-0.5px' }}>Strat<span style={{ color: '#D4AF37' }}>ix</span> Intelligence</span>
-          </div>
+      {/* NAVEGACIÓN */}
+      <nav style={{ 
+        display: 'flex', justifyContent: 'space-between', alignItems: 'center', 
+        padding: isScrolled ? '1rem 5%' : '1.5rem 5%', 
+        background: isScrolled ? 'rgba(6,11,20,0.98)' : 'transparent', 
+        backdropFilter: isScrolled ? 'blur(20px)' : 'none', 
+        position: 'sticky', top: 0, zIndex: 100, 
+        borderBottom: isScrolled ? '1px solid rgba(212,175,55,0.15)' : 'none',
+        transition: 'all 0.4s ease'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <Image src="/stratix_shield.svg" alt="Logo" width={32} height={32} />
+          <span style={{ fontSize: '1.4rem', fontWeight: 900 }}>Stratix Intelligence</span>
+        </div>
+        <div className="sx-desktop-nav" style={{ display: 'flex', gap: '2rem', alignItems: 'center', fontWeight: 600, fontSize: '0.85rem' }}>
+          <a href="#roi" style={{ color: 'white', textDecoration: 'none', opacity: 0.5 }}>ROI</a>
+          <a href="#planes" style={{ color: 'white', textDecoration: 'none', opacity: 0.5 }}>Planes</a>
+          <Link href="/login" style={{ padding: '11px 24px', backgroundColor: '#D4AF37', color: '#000', borderRadius: '10px', textDecoration: 'none', fontWeight: 900 }}>Acceso Élite</Link>
+        </div>
+      </nav>
 
-          <div className="sx-desktop-nav" style={{ display: 'flex', gap: '2rem', alignItems: 'center', fontWeight: 600, fontSize: '0.85rem' }}>
-            <a href="#proposito" className="sx-nav-link" style={{ color: 'white', textDecoration: 'none', opacity: 0.5 }}>Propósito</a>
-            <a href="#labs" className="sx-nav-link" style={{ color: 'white', textDecoration: 'none', opacity: 0.5 }}>Labs</a>
-            <a href="#planes" className="sx-nav-link" style={{ color: 'white', textDecoration: 'none', opacity: 0.5 }}>Planes</a>
-            <Link href="/login" className="sx-nav-link" style={{ color: '#D4AF37', textDecoration: 'none', opacity: 0.8 }}>Ingresar</Link>
-            <Link href="/login" style={{ padding: '11px 24px', backgroundColor: '#D4AF37', color: '#000', borderRadius: '10px', textDecoration: 'none', fontWeight: 900, letterSpacing: '0.3px', boxShadow: '0 8px 24px rgba(212,175,55,0.25)', transition: '0.2s' }}>Acceso Élite</Link>
-          </div>
+      <main>
+        {innerMounted ? (
+          <>
+            <LandingHero />
+            <LandingFeatures />
+            <LandingPricing handleCheckout={handleCheckout} currency={currency} setCurrency={setCurrency} />
+            <LandingROI />
+            <LandingFAQ />
+          </>
+        ) : (
+          <div style={{ minHeight: '100vh', background: '#060B14' }} />
+        )}
+      </main>
 
-          <button 
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)} 
-            className="sx-mobile-menu-btn" 
-            aria-label={mobileMenuOpen ? "Cerrar menú de navegación" : "Abrir menú de navegación"}
-            style={{ display: 'none', background: 'none', border: 'none', color: 'white', cursor: 'pointer', fontSize: '1.5rem' }}
-          >
-            {mobileMenuOpen ? <FiX /> : <FiMenu />}
-          </button>
-        </nav>
+      <footer style={{ padding: '7rem 5% 4rem', background: '#020508', borderTop: '1px solid rgba(212,175,55,0.05)', textAlign: 'center' }}>
+        <p style={{ opacity: 0.2, fontSize: '0.85rem' }}>© 2026 Stratix Intelligence. Colombia. 🛡️ (V50.31)</p>
+      </footer>
 
-        <AnimatePresence>
-          {mobileMenuOpen && (
-            <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} style={{ position: 'fixed', top: '68px', left: 0, right: 0, zIndex: 99, background: 'rgba(6,11,20,0.98)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(212,175,55,0.1)', padding: '1.5rem 5%', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-              {['#proposito', '#labs', '#planes'].map((href, i) => (
-                <a key={i} href={href} onClick={() => setMobileMenuOpen(false)} style={{ color: 'white', textDecoration: 'none', fontWeight: 700, fontSize: '1.1rem', opacity: 0.7, padding: '0.5rem 0', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                  {href === '#proposito' ? 'Propósito' : href === '#labs' ? 'Labs' : 'Planes'}
-                </a>
-              ))}
-              <Link href="/login" style={{ padding: '16px', backgroundColor: '#D4AF37', color: '#000', borderRadius: '12px', textDecoration: 'none', fontWeight: 900, textAlign: 'center' }}>Acceso Élite</Link>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        <main>
-          {/* 2. HERO */}
-          <header style={{ padding: '12rem 5% 5rem', position: 'relative', overflow: 'hidden' }}>
-            <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '140%', height: '130%', background: 'radial-gradient(ellipse at 50% 30%, rgba(212,175,55,0.09) 0%, transparent 60%)', zIndex: 0, filter: 'blur(80px)', pointerEvents: 'none' }} />
-            <div style={{ maxWidth: '1400px', margin: '0 auto', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '4rem', position: 'relative', zIndex: 1 }}>
-              <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.4 }} style={{ flex: '1 1 500px' }}>
-                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', padding: '7px 18px', background: 'rgba(212,175,55,0.08)', borderRadius: '30px', border: '1px solid rgba(212,175,55,0.2)', marginBottom: '2.5rem' }}>
-                  <motion.div animate={{ scale: [1, 1.4, 1] }} transition={{ repeat: Infinity, duration: 2 }} style={{ width: '7px', height: '7px', background: '#D4AF37', borderRadius: '50%' }} />
-                  <span style={{ fontSize: '0.72rem', fontWeight: 800, color: '#D4AF37', letterSpacing: '2px', textTransform: 'uppercase' }}>TU NEGOCIO EN PILOTO AUTOMÁTICO</span>
-                </div>
-                <h1 style={{ fontSize: 'clamp(2.8rem, 7vw, 5.5rem)', fontWeight: 900, lineHeight: 0.95, marginBottom: '2.5rem', letterSpacing: '-3px' }}>
-                  Vende Más,<br /><span style={{ color: '#D4AF37' }}>Duerme Mejor.</span>
-                </h1>
-                <p style={{ fontSize: '1.2rem', opacity: 0.6, lineHeight: 1.7, marginBottom: '3.5rem', maxWidth: '520px' }}>
-                  Stratix Intelligence atiende, califica y cierra ventas por ti en WhatsApp, Instagram y Web — 24/7, sin intervención humana.
-                </p>
-                <div style={{ display: 'flex', gap: '1.2rem', flexWrap: 'wrap' }}>
-                  <Link href="/login" style={{ padding: '18px 38px', backgroundColor: '#D4AF37', color: '#000', borderRadius: '14px', fontWeight: 900, textDecoration: 'none', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '10px', boxShadow: '0 12px 35px rgba(212,175,55,0.25)' }}>
-                    Comenzar Ahora <FiArrowRight />
-                  </Link>
-                  <a href="#demo" style={{ padding: '18px 38px', border: '1px solid rgba(255,255,255,0.12)', borderRadius: '14px', fontWeight: 700, textDecoration: 'none', color: 'white', display: 'flex', alignItems: 'center', gap: '10px', background: 'rgba(255,255,255,0.03)', backdropFilter: 'blur(10px)' }}>
-                    <FiPlayCircle /> Ver Demo
-                  </a>
-                </div>
-                <div style={{ marginTop: '3rem', display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
-                  <div style={{ display: 'flex' }}>
-                    {[1,2,3,4].map(i => (
-                      <div key={i} style={{ width: '32px', height: '32px', borderRadius: '50%', border: '2px solid #060B14', background: `hsl(${i * 40}, 60%, 50%)`, marginLeft: i === 1 ? 0 : '-10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.7rem', fontWeight: 700 }}>{['JR','MC','AP','SB'][i-1]}</div>
-                    ))}
-                  </div>
-                  <div>
-                    <div style={{ display: 'flex', gap: '2px', marginBottom: '2px' }}>{[1,2,3,4,5].map(i => <FiStar key={i} size={12} color="#D4AF37" fill="#D4AF37" />)}</div>
-                    <span style={{ fontSize: '0.8rem', opacity: 0.5, fontWeight: 600 }}>+500 empresas activas</span>
-                  </div>
-                </div>
-              </motion.div>
-
-              <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5, delay: 0.1 }} style={{ flex: '1 1 420px', position: 'relative', maxWidth: '500px' }}>
-                <div style={{ background: 'rgba(11,17,32,0.8)', backdropFilter: 'blur(24px)', borderRadius: '28px', border: '1px solid rgba(212,175,55,0.2)', padding: '22px', boxShadow: '0 40px 120px rgba(0,0,0,0.6)' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '18px', paddingBottom: '14px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                    <div style={{ width: '38px', height: '38px', borderRadius: '11px', background: '#D4AF37', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <Image src="/stratix_shield.svg" alt="Opal" width={22} height={22} />
-                    </div>
-                    <div style={{ flex: 1 }}>
-                      <div style={{ fontSize: '0.85rem', fontWeight: 800 }}>Opal Logic Demo</div>
-                      <div style={{ fontSize: '0.68rem', opacity: 0.4, display: 'flex', alignItems: 'center', gap: '5px' }}>
-                        <motion.div animate={{ opacity: [1, 0.3, 1] }} transition={{ repeat: Infinity, duration: 2 }} style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#27C93F' }} />
-                        Activo Ahora
-                      </div>
-                    </div>
-                    <div style={{ display: 'flex', gap: '5px' }}>{['#FF5F57','#FEBC2E','#28C840'].map(c => <div key={c} style={{ width: '10px', height: '10px', borderRadius: '50%', background: c }} />)}</div>
-                  </div>
-                  <div style={{ height: '280px', overflowY: 'auto', marginBottom: '16px', display: 'flex', flexDirection: 'column', gap: '12px', padding: '4px' }}>
-                    <AnimatePresence initial={false}>
-                      {demoMessages.map((msg, idx) => (
-                        <motion.div key={idx} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
-                          style={{ background: msg.role === 'bot' ? 'rgba(255,255,255,0.06)' : '#D4AF37', color: msg.role === 'bot' ? 'white' : '#000', padding: '10px 14px', borderRadius: '14px', fontSize: '0.83rem', maxWidth: '88%', alignSelf: msg.role === 'bot' ? 'flex-start' : 'flex-end' }}
-                        >{msg.text}</motion.div>
-                      ))}
-                      {isTyping && (
-                        <div style={{ padding: '10px 14px', background: 'rgba(255,255,255,0.05)', borderRadius: '14px', alignSelf: 'flex-start', display: 'flex', gap: '5px' }}>
-                          {[0,1,2].map(i => <motion.div key={i} animate={{ y: [0, -4, 0] }} transition={{ repeat: Infinity, duration: 0.8, delay: i * 0.15 }} style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#D4AF37' }} />)}
-                        </div>
-                      )}
-                    </AnimatePresence>
-                    <div ref={chatEndRef} />
-                  </div>
-                  <form onSubmit={handleDemoChat} style={{ background: 'rgba(255,255,255,0.04)', borderRadius: '14px', padding: '8px 10px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <input type="text" placeholder="Prueba a Opal aquí..." value={demoInput} onChange={e => setDemoInput(e.target.value)} style={{ background: 'transparent', border: 'none', color: 'white', fontSize: '0.85rem', outline: 'none', flex: 1 }} />
-                    <button type="submit" aria-label="Enviar mensaje de prueba" style={{ width: '32px', height: '32px', borderRadius: '9px', background: '#D4AF37', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><FiSend color="#000" size={14} /></button>
-                  </form>
-                </div>
-              </motion.div>
-            </div>
-          </header>
-
-          {/* 1.5 EL CUELLO DE BOTELLA */}
-          <section style={{ padding: '8rem 5%', background: '#03070C' }}>
-            <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-              <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
-                <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 900, marginBottom: '1.5rem' }}>El Cuello de <span style={{ color: '#D4AF37' }}>Botella Actual</span></h2>
-                <p style={{ opacity: 0.5, fontSize: '1.2rem' }}>¿Cuánto dinero estás dejando sobre la mesa por procesos manuales?</p>
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '3rem' }}>
-                <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ padding: '4rem', background: 'rgba(255, 95, 87, 0.03)', borderRadius: '32px', border: '1px solid rgba(255, 95, 87, 0.1)' }}>
-                  <h3 style={{ color: '#FF5F57', fontSize: '1.8rem', fontWeight: 900, marginBottom: '2.5rem', display: 'flex', alignItems: 'center', gap: '15px' }}><FiClock /> Sin Stratix</h3>
-                  <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '1.5rem', opacity: 0.7 }}>
-                    <li style={{ display: 'flex', alignItems: 'center', gap: '12px' }}><FiX color="#FF5F57" /> Leads perdidos en la madrugada</li>
-                    <li style={{ display: 'flex', alignItems: 'center', gap: '12px' }}><FiX color="#FF5F57" /> Respuestas lentas (&gt; 30 min)</li>
-                    <li style={{ display: 'flex', alignItems: 'center', gap: '12px' }}><FiX color="#FF5F57" /> Equipos saturados y estresados</li>
-                  </ul>
-                </motion.div>
-                <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} style={{ padding: '4rem', background: 'rgba(212, 175, 55, 0.05)', borderRadius: '32px', border: '1px solid rgba(212, 175, 55, 0.2)', boxShadow: '0 20px 60px rgba(212,175,55,0.05)' }}>
-                  <h3 style={{ color: '#D4AF37', fontSize: '1.8rem', fontWeight: 900, marginBottom: '2.5rem', display: 'flex', alignItems: 'center', gap: '15px' }}><FiZap /> Con Stratix</h3>
-                  <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                    <li style={{ display: 'flex', alignItems: 'center', gap: '12px' }}><FiCheck color="#D4AF37" /> Atención 24/7 en milisegundos</li>
-                    <li style={{ display: 'flex', alignItems: 'center', gap: '12px' }}><FiCheck color="#D4AF37" /> Calificación automática</li>
-                    <li style={{ display: 'flex', alignItems: 'center', gap: '12px' }}><FiCheck color="#D4AF37" /> Cierre de ventas en piloto automático</li>
-                  </ul>
-                </motion.div>
-              </div>
-            </div>
-          </section>
-
-          {/* 2.5 TRUSTED BY: NEURAL INNOVATORS (V46.0) */}
-          <section style={{ padding: '4rem 5%', borderBottom: '1px solid rgba(255,255,255,0.05)', background: 'linear-gradient(to right, transparent, rgba(212,175,55,0.02), transparent)' }}>
-            <div style={{ maxWidth: '1200px', margin: '0 auto', textAlign: 'center' }}>
-              <motion.span 
-                initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}
-                style={{ fontSize: '0.7rem', fontWeight: 900, opacity: 0.3, letterSpacing: '4px', textTransform: 'uppercase', display: 'block', marginBottom: '2.5rem' }}
-              >
-                Líderes en Automatización Neural
-              </motion.span>
-              <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '5rem', alignItems: 'center' }}>
-                {['STELLAR·LABS','VORTEX·MEDIA','OXIGEN·CORP','NEXUS·AI','ELEVATE·GROUP'].map((name, i) => (
-                  <motion.div 
-                    key={name}
-                    initial={{ opacity: 0, y: 10 }}
-                    whileInView={{ opacity: 0.4, y: 0 }}
-                    whileHover={{ opacity: 1, scale: 1.1, color: '#D4AF37' }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.1 }}
-                    style={{ fontSize: '1.2rem', fontWeight: 900, cursor: 'default', transition: 'all 0.3s ease', letterSpacing: '-1px' }}
-                  >
-                    {name}
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          {/* 3. CASOS DE USO */}
-          <section style={{ padding: '8rem 5%' }}>
-            <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-              <h2 style={{ textAlign: 'center', fontSize: 'clamp(2rem, 4vw, 2.8rem)', fontWeight: 900, marginBottom: '4rem' }}>Una Solución para <span style={{ color: '#D4AF37' }}>Cada Industria</span></h2>
-              <div style={{ display: 'flex', justifyContent: 'center', gap: '0.8rem', marginBottom: '3.5rem', flexWrap: 'wrap' }}>
-                {USE_CASES.map(uc => (
-                  <button key={uc.id} onClick={() => setActiveUseCase(uc.id)} style={{ padding: '11px 22px', borderRadius: '12px', border: '1px solid', borderColor: activeUseCase === uc.id ? '#D4AF37' : 'rgba(255,255,255,0.1)', background: activeUseCase === uc.id ? 'rgba(212,175,55,0.1)' : 'transparent', color: activeUseCase === uc.id ? '#D4AF37' : 'rgba(255,255,255,0.6)', fontWeight: 700, cursor: 'pointer' }}>{uc.title}</button>
-                ))}
-              </div>
-              <AnimatePresence mode="wait">
-                {USE_CASES.filter(uc => uc.id === activeUseCase).map(uc => (
-                  <motion.div key={uc.id} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} style={{ background: 'rgba(255,255,255,0.02)', borderRadius: '28px', padding: '3.5rem', border: '1px solid rgba(212,175,55,0.1)', display: 'flex', alignItems: 'center', gap: '4rem', flexWrap: 'wrap' }}>
-                    <div style={{ flex: '1 1 380px' }}>
-                      <div style={{ fontSize: '2.5rem', color: '#D4AF37', marginBottom: '1.8rem' }}>{uc.id === 'ecommerce' ? <FiShoppingCart /> : uc.id === 'realestate' ? <FiLayout /> : uc.id === 'health' ? <FiActivity /> : <FiCpu />}</div>
-                       <h3 style={{ fontSize: '1.9rem', fontWeight: 800, marginBottom: '1.2rem' }}>{uc.title} Inteligente</h3>
-                      <p style={{ opacity: 0.6, fontSize: '1.05rem', lineHeight: 1.8, marginBottom: '2rem' }}>{uc.description}</p>
-                      <div style={{ padding: '13px 22px', background: 'rgba(212,175,55,0.08)', borderRadius: '12px', border: '1px solid rgba(212,175,55,0.2)', display: 'inline-flex', alignItems: 'center', gap: '10px' }}>
-                        <FiTrendingUp color="#D4AF37" /> <span style={{ fontWeight: 800, color: '#D4AF37' }}>Impacto: {uc.impact}</span>
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </AnimatePresence>
-            </div>
-          </section>
-
-          {/* 3.5 STRATIX LABS (Arquitectura Neuronal) */}
-          <section id="labs" style={{ padding: '8rem 5%', background: '#060B14', position: 'relative' }}>
-            <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '60%', height: '60%', background: 'radial-gradient(circle, rgba(212,175,55,0.03) 0%, transparent 70%)', pointerEvents: 'none' }} />
-            <div style={{ maxWidth: '1200px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
-              <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
-                <div style={{ color: '#D4AF37', fontSize: '0.75rem', fontWeight: 900, letterSpacing: '4px', marginBottom: '1rem', textTransform: 'uppercase' }}>Ingeniería de Escala</div>
-                <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 900 }}>Stratix Labs: <span style={{ color: '#D4AF37' }}>Arquitectura Neuronal</span></h2>
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '2rem' }}>
-                {[
-                  { title: 'Opal Logic', desc: 'Motor de procesamiento natural que entiende el contexto y la intención de compra real del cliente.', icon: <FiCpu /> },
-                  { title: 'Stitch Engine', desc: 'Conector universal que sincroniza tu CRM, inventario y pasarelas de pago en tiempo real.', icon: <FiLayers /> },
-                  { title: 'RAG Neural', desc: 'Base de conocimiento dinámica que aprende de tus PDFs, webs y catálogos al instante con IA avanzada.', icon: <FiDatabase /> }
-                ].map((lab, i) => (
-                  <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} style={{ padding: '3.5rem', background: 'rgba(255,255,255,0.01)', borderRadius: '28px', border: '1px solid rgba(212,175,55,0.15)', backdropFilter: 'blur(10px)' }}>
-                    <div style={{ width: '60px', height: '60px', borderRadius: '16px', background: 'rgba(212,175,55,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.8rem', color: '#D4AF37', marginBottom: '2rem' }}>{lab.icon}</div>
-                    <h3 style={{ fontSize: '1.6rem', fontWeight: 800, marginBottom: '1.2rem' }}>{lab.title}</h3>
-                    <p style={{ opacity: 0.5, lineHeight: 1.7, fontSize: '1.05rem' }}>{lab.desc}</p>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          {/* 4. INTEGRATIONS CLOUD */}
-          <section style={{ padding: '4rem 0', background: 'rgba(255,255,255,0.008)', borderTop: '1px solid rgba(255,255,255,0.05)', borderBottom: '1px solid rgba(255,255,255,0.05)', overflow: 'hidden' }}>
-            <motion.div animate={{ x: [0, -1200] }} transition={{ repeat: Infinity, duration: 35, ease: "linear" }} style={{ display: 'flex', gap: '5rem', alignItems: 'center', whiteSpace: 'nowrap' }}>
-              {[...INTEGRATIONS, ...INTEGRATIONS].map((int, i) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px', opacity: 0.35 }}>
-                  <Image src={int.icon} alt={int.name} width={22} height={22} style={{ objectFit: 'contain', filter: 'grayscale(1) invert(1)' }} />
-                  <span style={{ fontWeight: 700 }}>{int.name}</span>
-                </div>
-              ))}
-            </motion.div>
-          </section>
-
-          {/* 5. ROI CALCULATOR — V18 ENHANCED */}
-          <section id="roi" style={{ padding: '12rem 5%', background: '#03070C', position: 'relative' }}>
-            <div style={{ position: 'absolute', top: '0', left: '0', width: '100%', height: '100%', background: 'radial-gradient(circle at 10% 90%, rgba(212,175,55,0.03) 0%, transparent 40%)', zIndex: 0 }} />
-            
-            <div style={{ maxWidth: '1100px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
-              <div style={{ 
-                background: 'rgba(255,255,255,0.01)', 
-                backdropFilter: 'blur(30px)', 
-                borderRadius: '50px', 
-                border: '1px solid rgba(212,175,55,0.15)', 
-                padding: '6rem 4rem', 
-                textAlign: 'center',
-                boxShadow: '0 40px 100px rgba(0,0,0,0.4)'
-              }}>
-                <h2 style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', fontWeight: 900, marginBottom: '1.5rem', letterSpacing: '-2px' }}>Calcula tu <span style={{ color: '#D4AF37' }}>Retorno de Inversión</span></h2>
-                <p style={{ opacity: 0.4, marginBottom: '5rem', fontSize: '1.1rem' }}>Saca cuentas claras: Cuánto le cuesta a tu empresa NO tener un motor de Stratix operando.</p>
-                
-                <div style={{ maxWidth: '700px', margin: '0 auto' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '2rem', fontWeight: 800 }}>
-                    <span style={{ fontSize: '1.2rem' }}>Interacciones Mensuales</span>
-                    <span style={{ color: '#D4AF37', fontSize: '1.8rem' }}>{leads.toLocaleString()}</span>
-                  </div>
-                  
-                  <div style={{ position: 'relative', marginBottom: '6rem' }}>
-                    <input 
-                      type="range" 
-                      min="10" 
-                      max="5000" 
-                      step="10"
-                      value={leads} 
-                      onChange={(e) => setLeads(parseInt(e.target.value))}
-                      style={{ 
-                        width: '100%', 
-                        height: '8px',
-                        borderRadius: '5px',
-                        background: 'rgba(212,175,55,0.1)',
-                        outline: 'none',
-                        appearance: 'none',
-                        WebkitAppearance: 'none',
-                        cursor: 'pointer'
-                      }}
-                    />
-                  </div>
-                  
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '3rem' }}>
-                    <div style={{ padding: '3.5rem', background: 'rgba(212,175,55,0.05)', borderRadius: '35px', border: '1px solid rgba(212,175,55,0.2)', transition: '0.3s' }}>
-                      <div style={{ fontSize: '0.8rem', fontWeight: 900, color: '#D4AF37', marginBottom: '1.5rem', letterSpacing: '2px' }}>AHORRO OPERATIVO</div>
-                      <div style={{ fontSize: '3.5rem', fontWeight: 900 }}>
-                        <span style={{ fontSize: '1.5rem', verticalAlign: 'top', marginRight: '5px' }}>$</span>
-                        {(leads * 0.8).toLocaleString()}
-                      </div>
-                      <div style={{ fontSize: '0.75rem', opacity: 0.3, marginTop: '5px' }}>USD ESTIMADO / MES</div>
-                    </div>
-                    
-                    <div style={{ padding: '3.5rem', background: 'rgba(255,255,255,0.02)', borderRadius: '35px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                      <div style={{ fontSize: '0.8rem', fontWeight: 900, opacity: 0.4, marginBottom: '1.5rem', letterSpacing: '2px' }}>TIEMPO RECUPERADO</div>
-                      <div style={{ fontSize: '3.5rem', fontWeight: 900, color: '#D4AF37' }}>
-                        {Math.round(leads * 0.25)}
-                        <span style={{ fontSize: '1.5rem', color: 'white', marginLeft: '5px' }}>hrs</span>
-                      </div>
-                      <div style={{ fontSize: '0.75rem', opacity: 0.3, marginTop: '5px' }}>TUYO PARA CRECER / MES</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* 5.5 TESTIMONIALS */}
-          <section style={{ padding: '8rem 5%', background: '#060B14' }}>
-            <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-              <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
-                <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 900 }}>Voces de <span style={{ color: '#D4AF37' }}>Liderazgo</span></h2>
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '2.5rem' }}>
-                {[
-                  { author: "Director de Operaciones", company: "Vortex Media", text: "Redujimos el costo de adquisición un 35% y ahora cerramos ventas a las 3 AM sin intervención humana." },
-                  { author: "CEO & Founder", company: "Nexus AI Global", text: "Stratix no es un bot, es un arquitecto de ventas. La integración con nuestro CRM fue impecable." },
-                  { author: "Head of Growth", company: "Elevate Group", text: "Pasamos de calificar leads en 24 horas a hacerlo en 400ms. El escalamiento ha sido masivo." }
-                ].map((t, i) => (
-                  <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} style={{ padding: '3rem', background: 'rgba(255,255,255,0.02)', borderRadius: '32px', border: '1px solid rgba(255,255,255,0.04)', backdropFilter: 'blur(20px)' }}>
-                    <div style={{ display: 'flex', gap: '4px', marginBottom: '1.5rem' }}>{[1,2,3,4,5].map(s => <FiStar key={s} size={14} color="#D4AF37" fill="#D4AF37" />)}</div>
-                    <p style={{ fontSize: '1.1rem', fontStyle: 'italic', opacity: 0.8, marginBottom: '2.5rem', lineHeight: 1.6 }}>"{t.text}"</p>
-                    <div>
-                      <div style={{ fontWeight: 900, color: '#D4AF37' }}>{t.author}</div>
-                      <div style={{ fontSize: '0.85rem', opacity: 0.4 }}>{t.company}</div>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          {/* 5.7 BENTO GRID — INFRAESTRUCTURA DE GRADO MILITAR */}
-          <section style={{ padding: '12rem 5%', background: '#060B14' }}>
-            <div style={{ textAlign: 'center', marginBottom: '6rem' }}>
-              <h2 style={{ fontSize: ' clamp(2.5rem, 5vw, 4rem)', fontWeight: 900, marginBottom: '1.5rem' }}>Infraestructura de <span style={{ color: '#D4AF37' }}>Grado Militar</span></h2>
-              <p style={{ opacity: 0.4, fontSize: '1.1rem' }}>No es solo IA; es la arquitectura que sostiene el futuro de tu negocio.</p>
-            </div>
-            
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gridAutoRows: '280px', gap: '2rem', maxWidth: '1300px', margin: '0 auto' }}>
-              <div style={{ gridColumn: 'span 2', gridRow: 'span 1', background: 'rgba(212,175,55,0.03)', borderRadius: '35px', padding: '3.5rem', border: '1px solid rgba(212,175,55,0.15)', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                <FiShield style={{ color: '#D4AF37', fontSize: '2.5rem', marginBottom: '1.5rem' }} />
-                <h3 style={{ fontSize: '1.8rem', fontWeight: 900, marginBottom: '1rem' }}>Seguridad de Aislamiento</h3>
-                <p style={{ opacity: 0.4, fontSize: '1rem', lineHeight: 1.6, maxWidth: '500px' }}>Tus datos empresariales permanecen privados en compartimentos estancos bajo encriptación AES-256 de extremo a extremo.</p>
-              </div>
-              
-              <div style={{ gridRow: 'span 2', background: 'rgba(255,255,255,0.01)', borderRadius: '35px', padding: '3.5rem', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', justifyContent: 'center', textAlign: 'center' }}>
-                <FiGlobe style={{ color: '#D4AF37', fontSize: '3rem', margin: '0 auto 2rem' }} />
-                <h3 style={{ fontSize: '1.8rem', fontWeight: 900, marginBottom: '1.5rem' }}>Escalado Global</h3>
-                <p style={{ opacity: 0.4, fontSize: '1rem', lineHeight: 1.8 }}>Opal Logic soporta despliegues en más de 80 regiones, ajustándose automáticamente a la latencia de cada clúster de clientes.</p>
-                <div style={{ marginTop: '2rem', display: 'flex', justifyContent: 'center', gap: '8px' }}>
-                  {[1,2,3,4,5].map(i => <div key={i} style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#D4AF37', opacity: 0.2 * i }} />)}
-                </div>
-              </div>
-              
-              <div style={{ background: 'rgba(255,255,255,0.01)', borderRadius: '35px', padding: '2.5rem', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', gap: '2rem' }}>
-                <div style={{ width: '60px', height: '60px', borderRadius: '20px', background: 'rgba(212,175,55,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#D4AF37' }}>
-                  <FiClock size={30} />
-                </div>
-                <div>
-                  <h4 style={{ fontSize: '1.2rem', fontWeight: 900 }}>Respuesta <br /><span style={{ color: '#D4AF37' }}>&lt; 500ms</span></h4>
-                </div>
-              </div>
-              
-              <div style={{ background: '#D4AF37', borderRadius: '35px', padding: '2.5rem', border: '1px solid #D4AF37', display: 'flex', alignItems: 'center', gap: '2rem', color: '#000' }}>
-                <div style={{ width: '60px', height: '60px', borderRadius: '20px', background: 'rgba(0,0,0,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <FiLayers size={30} />
-                </div>
-                <div>
-                  <h4 style={{ fontSize: '1.2rem', fontWeight: 900 }}>Conectividad <br />Full Integrada</h4>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* 6. PLANES */}
-          <section id="planes" style={{ padding: '8rem 5%' }}>
-            <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-              <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
-                <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 900 }}>Inversión <span style={{ color: '#D4AF37' }}>Estratégica</span></h2>
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1.5rem', marginTop: '3rem' }}>
-                  <span style={{ fontWeight: 800, opacity: currency === 'USD' ? 1 : 0.25 }}>USD</span>
-                  <div onClick={() => setCurrency(currency === 'USD' ? 'COP' : 'USD')} style={{ width: '60px', height: '30px', background: 'rgba(212,175,55,0.1)', borderRadius: '15px', position: 'relative', cursor: 'pointer' }}>
-                    <motion.div animate={{ x: currency === 'USD' ? 4 : 30 }} transition={{ type: 'spring' }} style={{ width: '22px', height: '22px', background: '#D4AF37', borderRadius: '50%', marginTop: '4px' }} />
-                  </div>
-                  <span style={{ fontWeight: 800, opacity: currency === 'COP' ? 1 : 0.25 }}>COP</span>
-                </div>
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '2.5rem' }}>
-                {PRICING_PLANS.map((plan: any, i: number) => (
-                  <PricingCard 
-                    key={i} 
-                    plan={plan} 
-                    exchangeRate={exchangeRate} 
-                    symbol={symbol} 
-                    handleCheckout={handleCheckout} 
-                  />
-                ))}
-              </div>
-            </div>
-          </section>
-
-          {/* 6.5 SEGURIDAD EMPRESARIAL */}
-          <section style={{ padding: '5rem 5%', background: '#020508', borderTop: '1px solid rgba(255,255,255,0.03)' }}>
-            <div style={{ maxWidth: '1100px', margin: '0 auto', display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '4rem', alignItems: 'center', opacity: 0.6 }}>
-              {[
-                { icon: <FiShield />, text: "Encriptación End-to-End" },
-                { icon: <FiLock />, text: "Cumplimiento GDPR" },
-                { icon: <FiDatabase />, text: "Datos Aislados" }
-              ].map((item, i) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '0.9rem', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase' }}>
-                  <span style={{ color: '#D4AF37', fontSize: '1.3rem' }}>{item.icon}</span>
-                  {item.text}
-                </div>
-              ))}
-            </div>
-          </section>
-
-          {/* 7. DEMO FORM */}
-          <section id="demo" style={{ padding: '8rem 5%', background: '#0B1120' }}>
-            <div style={{ maxWidth: '1100px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '4rem', alignItems: 'center' }}>
-              <div>
-                <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 900, marginBottom: '1.8rem' }}>¿Listo para escalar <span style={{ color: '#D4AF37' }}>sin límites?</span></h2>
-                <p style={{ opacity: 0.55, fontSize: '1.05rem', lineHeight: 1.7, marginBottom: '2.5rem' }}>Deja tus datos y un arquitecto de IA diseñará tu solución en menos de 24 horas.</p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
-                  {['Diagnóstico Gratis', 'ROI Proyectado', 'Sin Compromiso'].map(b => (
-                    <div key={b} style={{ display: 'flex', alignItems: 'center', gap: '14px' }}><FiCheck color="#D4AF37" /> <span style={{ fontWeight: 600 }}>{b}</span></div>
-                  ))}
-                </div>
-              </div>
-              <div style={{ background: 'rgba(255,255,255,0.02)', padding: '2.8rem', borderRadius: '28px', border: '1px solid rgba(212,175,55,0.2)' }}>
-                {submitted ? (
-                  <div style={{ textAlign: 'center' }}><h3>¡Solicitud Enviada!</h3><p>Te contactaremos pronto.</p></div>
-                ) : (
-                  <form onSubmit={handleDemoSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.3rem' }}>
-                    <input type="text" name="honey" style={{ display: 'none' }} value={formData.honey} onChange={e => setFormData({...formData, honey: e.target.value})} />
-                    {[{ label: 'Nombre', key: 'name', type: 'text' }, { label: 'Empresa', key: 'company', type: 'text' }, { label: 'Email Corporativo', key: 'email', type: 'email' }, { label: 'WhatsApp', key: 'phone', type: 'tel' }].map(f => (
-                      <div key={f.key}>
-                        <label style={{ display: 'block', fontSize: '0.75rem', opacity: 0.45, marginBottom: '0.4rem' }}>{f.label}</label>
-                        <input required type={f.type} value={formData[f.key as keyof typeof formData]} onChange={e => setFormData({...formData, [f.key]: e.target.value})} style={{ width: '100%', padding: '14px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', color: 'white' }} />
-                      </div>
-                    ))}
-                    <button type="submit" disabled={isSubmitting} style={{ width: '100%', padding: '18px', background: '#D4AF37', color: '#000', borderRadius: '12px', fontWeight: 900, cursor: 'pointer', border: 'none' }}>{isSubmitting ? 'PROCESANDO...' : 'SOLICITAR DEMO'}</button>
-                  </form>
-                )}
-              </div>
-            </div>
-          </section>
-          {/* 8. CLOSING CTA */}
-          <section style={{ padding: '6rem 5%', background: 'linear-gradient(135deg, #060B14 0%, #0B1120 100%)', textAlign: 'center', borderTop: '1px solid rgba(212,175,55,0.1)' }}>
-            <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-              <h2 style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', fontWeight: 900, marginBottom: '2rem' }}>El futuro no espera.<br/><span style={{ color: '#D4AF37' }}>Tu competencia tampoco.</span></h2>
-              <p style={{ fontSize: '1.2rem', opacity: 0.5, marginBottom: '3rem' }}>Únete a las empresas que ya están escalando con inteligencia real.</p>
-              <Link href="/login" style={{ padding: '20px 45px', backgroundColor: '#D4AF37', color: '#000', borderRadius: '15px', fontWeight: 900, textDecoration: 'none', fontSize: '1.1rem', display: 'inline-flex', alignItems: 'center', gap: '12px', boxShadow: '0 15px 45px rgba(212,175,55,0.3)' }}>
-                EMPEZAR AHORA <FiArrowRight />
-              </Link>
-            </div>
-          </section>
-
-          {/* 8.5 FAQ — EXPANDED ELITE */}
-          <section style={{ padding: '12rem 5%', background: '#03070C' }}>
-            <h2 style={{ textAlign: 'center', fontSize: '3.5rem', fontWeight: 900, marginBottom: '6rem', letterSpacing: '-2px' }}>Consultas de <span style={{ color: '#D4AF37' }}>Alto Nivel</span></h2>
-            <div style={{ maxWidth: '850px', margin: '0 auto' }}>
-              {[
-                { q: "¿Cómo garantiza Stratix el ROI?", a: "Nuestros agentes reducen el costo operativo en un 60% al automatizar tareas repetitivas y aumentar la tasa de conversión mediante respuestas instantáneas 24/7. Te entregamos un reporte de impacto mensual." },
-                { q: "¿Se puede integrar con mi CRM actual?", a: "Sí. Stratix se conecta vía webhooks con Salesforce, HubSpot, Zoho y cualquier sistema que permita integraciones API. La configuración toma menos de 30 minutos." },
-                { q: "¿Qué soporte técnico ofrecen?", a: "Todos los planes incluyen soporte vía ticket con respuesta en menos de 12 horas. El plan Enterprise cuenta con un Gerente de Éxito dedicado y soporte prioritario 24/7." },
-                { q: "¿Es segura mi información?", a: "Absolutamente. Usamos encriptación de grado militar AES-256, aislamiento total de datos por cliente y cumplimos con estándares GDPR. Tus datos nunca se comparten ni se usan para entrenar modelos." },
-                { q: "¿Cómo funciona la transición de IA a humano?", a: "Si el bot detecta una consulta compleja o una intención de alta prioridad (como una queja o una compra de alto valor), escala la conversación automáticamente a tu equipo humano con todo el contexto del chat." },
-                { q: "¿Hay un límite de mensajes?", a: "El plan Starter incluye 500 mensajes/mes, Business Pro incluye 2,500 y el plan Enterprise es ilimitado. Si necesitas más en cualquier plan, puedes adquirir paquetes adicionales sin cambiar de plan." }
-              ].map((faq, i) => (
-                <div key={i} style={{ borderRadius: '20px', border: '1px solid rgba(255,255,255,0.05)', background: 'rgba(255,255,255,0.01)', overflow: 'hidden', marginBottom: '1rem' }}>
-                  <button onClick={() => setOpenFaq(openFaq === i ? null : i)} style={{ width: '100%', padding: '1.8rem 2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'none', border: 'none', color: 'white', cursor: 'pointer', textAlign: 'left' }}>
-                    <span style={{ fontWeight: 800, fontSize: '1.1rem' }}>{faq.q}</span>
-                    <motion.div animate={{ rotate: openFaq === i ? 180 : 0 }}><FiChevronDown color="#D4AF37" /></motion.div>
-                  </button>
-                  <AnimatePresence>
-                    {openFaq === i && (
-                      <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.3 }}>
-                        <div style={{ padding: '0 2rem 2rem', opacity: 0.5, lineHeight: 1.6, fontSize: '1rem' }}>{faq.a}</div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              ))}
-            </div>
-          </section>
-        </main>
-
-        <footer style={{ padding: '7rem 5% 4rem', background: '#020508', borderTop: '1px solid rgba(212,175,55,0.05)' }}>
-          <div style={{ maxWidth: '1200px', margin: '0 auto', borderBottom: '1px solid rgba(255,255,255,0.03)', paddingBottom: '3rem', marginBottom: '3rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '4rem' }}>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '1.5rem' }}><Image src="/stratix_shield.svg" alt="Logo" width={24} height={24} /><span style={{ fontWeight: 900 }}>Stratix Intelligence</span></div>
-              <p style={{ opacity: 0.2, fontSize: '0.85rem' }}>Automatización para empresas que no aceptan límites.</p>
-            </div>
-            {['Empresa', 'Ecosistema', 'Legal'].map((cat, i) => (
-              <div key={i}>
-                <h4 style={{ fontSize: '0.75rem', fontWeight: 900, color: '#D4AF37', marginBottom: '1.5rem' }}>{cat}</h4>
-                <ul style={{ listStyle: 'none', padding: 0, opacity: 0.3, fontSize: '0.9rem', display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
-                  {i === 0 ? (
-                    ['Diagnóstico Gratis', 'Planes Élite', 'Casos de Éxito', 'Partners'].map(l => (
-                      <li key={l}><a href={l === 'Planes Élite' ? '#planes' : '#demo'} className="sx-footer-link" style={{ color: 'inherit', textDecoration: 'none' }}>{l}</a></li>
-                    ))
-                  ) : i === 1 ? (
-                    ['Opal Logic', 'Stitch Engine', 'RAG Neural', 'API Docs'].map(l => (
-                      <li key={l}><a href="#proposito" className="sx-footer-link" style={{ color: 'inherit', textDecoration: 'none' }}>{l}</a></li>
-                    ))
-                  ) : (
-                    ['Privacidad', 'Términos', 'Cookies'].map(l => (
-                      <li key={l}><a href="#" className="sx-footer-link" style={{ color: 'inherit', textDecoration: 'none' }}>{l}</a></li>
-                    ))
-                  )}
-                </ul>
-              </div>
-            ))}
-          </div>
-          <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', opacity: 0.2, fontSize: '0.75rem' }}>
-            <span>© 2026 Stratix Intelligence. Colombia.</span>
-            <div style={{ display: 'flex', gap: '2rem' }}>
-              <a href="https://x.com/stratixai" target="_blank" style={{ color: 'inherit', textDecoration: 'none' }}>TWITTER / X</a>
-              <a href="https://linkedin.com/company/stratix" target="_blank" style={{ color: 'inherit', textDecoration: 'none' }}>LINKEDIN</a>
-              <a href="https://instagram.com/stratixai" target="_blank" style={{ color: 'inherit', textDecoration: 'none' }}>INSTAGRAM</a>
-            </div>
-          </div>
-        </footer>
-        <Toaster theme="dark" richColors position="bottom-right" />
-      </div>
-
-      <style jsx global>{`
-        .sx-plan-card {
-          transition: border 0.3s ease, background 0.3s ease;
-        }
-      `}</style>
-    </>
+      {/* UI SEGURA TRAS HIDRATACIÓN */}
+      {innerMounted && (
+        <>
+          <Toaster theme="dark" richColors position="top-center" />
+          <ChatWidget />
+        </>
+      )}
+    </div>
   );
 }

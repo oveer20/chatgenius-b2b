@@ -1,5 +1,5 @@
 import { getGeminiResponse } from "./gemini";
-import { supabaseAdmin } from "./supabase";
+import { supabaseAdmin } from "./supabase-admin";
 
 export async function sendWhatsAppMessage(
   phoneId: string,
