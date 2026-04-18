@@ -78,6 +78,10 @@ function LandingClientContent() {
 
   const handleCheckout = async (planId: string) => {
     try {
+      if (!supabase) {
+        toast.error("Configuración incompleta: Supabase no detectado.");
+        return;
+      }
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) { 
         router.push(`/login?redirect=/&plan=${planId}`); 
