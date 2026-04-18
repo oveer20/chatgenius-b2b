@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Toaster, toast } from "sonner";
 import { FiMenu, FiX } from "react-icons/fi";
 
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/utils/supabase/client";
 import ChatWidget from "@/components/ChatWidget";
 
 // Sub-componentes Atómicos
@@ -59,6 +59,7 @@ export default function LandingClient() {
 function LandingClientContent() {
   const [innerMounted, setInnerMounted] = useState(false);
   const router = useRouter();
+  const supabase = createClient();
   const [currency, setCurrency] = useState<'USD' | 'COP'>('COP');
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);

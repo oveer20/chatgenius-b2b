@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, Suspense } from "react";
 import { FiSend, FiMessageSquare, FiX, FiUser, FiMail, FiBriefcase, FiArrowRight, FiShield } from "react-icons/fi";
 import { useSearchParams } from "next/navigation";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/utils/supabase/client";
 import { toast, Toaster } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -15,6 +15,7 @@ import { motion, AnimatePresence } from "framer-motion";
 function ChatWidgetContent() {
   const searchParams = useSearchParams();
   const botId = searchParams.get("bot-id");
+  const supabase = createClient();
 
   // Estados de Interfaz
   const [isOpen, setIsOpen] = useState(false);
@@ -36,7 +37,7 @@ function ChatWidgetContent() {
   // 1. Cargar Configuración del Bot
   useEffect(() => {
     async function loadBot() {
-      if (!botId) return;
+      if (!botId || !supabase) return;
       const { data } = await supabase.from("bots").select("*").eq("id", botId).single();
       if (data) {
         setBotConfig(data);
