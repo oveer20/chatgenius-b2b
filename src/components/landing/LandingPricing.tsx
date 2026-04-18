@@ -14,14 +14,15 @@ interface LandingPricingProps {
 
 export default function LandingPricing({ handleCheckout, currency, setCurrency }: LandingPricingProps) {
   const [mounted, setMounted] = useState(false);
-  const exchangeRate = CURRENCIES[currency].rate;
-  const symbol = CURRENCIES[currency].symbol;
-
+  
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  if (!mounted) return null;
+  if (!mounted) return <div style={{ minHeight: '400px' }} />;
+
+  const exchangeRate = CURRENCIES[currency]?.rate || 1;
+  const symbol = CURRENCIES[currency]?.symbol || '$';
 
   return (
     <>

@@ -1,7 +1,6 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import Image from "next/image";
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 import { FiArrowRight, FiPlayCircle, FiStar, FiSend } from "react-icons/fi";
@@ -82,7 +81,7 @@ export default function LandingHero() {
           <div style={{ background: 'rgba(11,17,32,0.8)', backdropFilter: 'blur(24px)', borderRadius: '28px', border: '1px solid rgba(212,175,55,0.2)', padding: '22px', boxShadow: '0 40px 120px rgba(0,0,0,0.6)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '18px', paddingBottom: '14px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
               <div style={{ width: '38px', height: '38px', borderRadius: '11px', background: '#D4AF37', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Image src="/stratix_shield.svg" alt="Opal" width={22} height={22} />
+                <img src="/stratix_shield.svg" alt="Opal" style={{ width: '22px', height: '22px' }} />
               </div>
               <div style={{ flex: 1 }}>
                 <div style={{ fontSize: '0.85rem', fontWeight: 800 }}>Opal Logic Demo</div>

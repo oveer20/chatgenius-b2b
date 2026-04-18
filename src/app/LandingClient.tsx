@@ -1,8 +1,6 @@
 "use client";
 
 import { useState, useEffect, Suspense } from "react";
-import Image from "next/image";
-import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Toaster, toast } from "sonner";
 import { FiMenu, FiX } from "react-icons/fi";
@@ -120,7 +118,7 @@ function LandingClientContent() {
         transition: 'all 0.4s ease'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <Image src="/stratix_shield.svg" alt="Logo" width={32} height={32} />
+          <img src="/stratix_shield.svg" alt="Logo" style={{ width: '32px', height: '32px' }} />
           <span style={{ fontSize: '1.4rem', fontWeight: 900 }}>Stratix Intelligence</span>
         </div>
         <div className="sx-desktop-nav" style={{ display: 'flex', gap: '2rem', alignItems: 'center', fontWeight: 600, fontSize: '0.85rem' }}>

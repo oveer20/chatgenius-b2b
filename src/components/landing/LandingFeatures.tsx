@@ -2,7 +2,6 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
-import Image from "next/image";
 import { FiShoppingCart, FiLayout, FiActivity, FiCpu, FiTrendingUp, FiLayers, FiDatabase } from "react-icons/fi";
 import { USE_CASES, INTEGRATIONS } from "@/lib/constants";
 
