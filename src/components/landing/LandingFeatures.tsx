@@ -13,7 +13,7 @@ export default function LandingFeatures() {
     setMounted(true);
   }, []);
 
-  if (!mounted) return null;
+  if (!mounted) return <div style={{ minHeight: '400px' }} />;
 
   return (
     <>

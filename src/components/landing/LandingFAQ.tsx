@@ -16,7 +16,7 @@ export default function LandingFAQ() {
     setMounted(true);
   }, []);
 
-  if (!mounted) return null;
+  if (!mounted) return <div style={{ minHeight: '400px' }} />;
 
   const handleDemoSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -57,7 +57,7 @@ export default function LandingClient() {
 }
 
 function LandingClientContent() {
-  const [innerMounted, setInnerMounted] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const router = useRouter();
   const supabase = createClient();
   const [currency, setCurrency] = useState<'USD' | 'COP'>('COP');
@@ -65,15 +65,13 @@ function LandingClientContent() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    setInnerMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (!innerMounted) return;
+    setMounted(true);
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [innerMounted]);
+  }, []);
+
+  if (!mounted) return <div style={{ minHeight: '100vh', background: '#060B14' }} />;
 
   const handleCheckout = async (planId: string) => {
     try {
@@ -94,9 +92,9 @@ function LandingClientContent() {
       });
       const data = await response.json();
       if (data.url) window.location.href = data.url;
-      else if (innerMounted) toast.error("Error al iniciar el pago: " + (data.error || "Desconocido"));
+      else if (mounted) toast.error("Error al iniciar el pago: " + (data.error || "Desconocido"));
     } catch (err) {
-      if (innerMounted) toast.error("Hubo un problema con la pasarela de pagos.");
+      if (mounted) toast.error("Hubo un problema con la pasarela de pagos.");
     }
   };
 
@@ -130,17 +128,11 @@ function LandingClientContent() {
       </nav>
 
       <main>
-        {innerMounted ? (
-          <>
-            <LandingHero />
-            <LandingFeatures />
-            <LandingPricing handleCheckout={handleCheckout} currency={currency} setCurrency={setCurrency} />
-            <LandingROI />
-            <LandingFAQ />
-          </>
-        ) : (
-          <div style={{ minHeight: '100vh', background: '#060B14' }} />
-        )}
+        <LandingHero />
+        <LandingFeatures />
+        <LandingPricing handleCheckout={handleCheckout} currency={currency} setCurrency={setCurrency} />
+        <LandingROI />
+        <LandingFAQ />
       </main>
 
       <footer style={{ padding: '7rem 5% 4rem', background: '#020508', borderTop: '1px solid rgba(212,175,55,0.05)', textAlign: 'center' }}>
@@ -148,12 +140,8 @@ function LandingClientContent() {
       </footer>
 
       {/* UI SEGURA TRAS HIDRATACIÓN */}
-      {innerMounted && (
-        <>
-          <Toaster theme="dark" richColors position="top-center" />
-          <ChatWidget />
-        </>
-      )}
+      <Toaster theme="dark" richColors position="top-center" />
+      <ChatWidget />
     </div>
   );
 }
