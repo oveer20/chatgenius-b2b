@@ -57,7 +57,6 @@ export default function LandingClient() {
 }
 
 function LandingClientContent() {
-  const [mounted, setMounted] = useState(false);
   const router = useRouter();
   const supabase = createClient();
   const [currency, setCurrency] = useState<'USD' | 'COP'>('COP');
@@ -65,13 +64,10 @@ function LandingClientContent() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  if (!mounted) return <div style={{ minHeight: '100vh', background: '#060B14' }} />;
 
   const handleCheckout = async (planId: string) => {
     try {
@@ -92,9 +88,9 @@ function LandingClientContent() {
       });
       const data = await response.json();
       if (data.url) window.location.href = data.url;
-      else if (mounted) toast.error("Error al iniciar el pago: " + (data.error || "Desconocido"));
+      else toast.error("Error al iniciar el pago: " + (data.error || "Desconocido"));
     } catch (err) {
-      if (mounted) toast.error("Hubo un problema con la pasarela de pagos.");
+      toast.error("Hubo un problema con la pasarela de pagos.");
     }
   };
 

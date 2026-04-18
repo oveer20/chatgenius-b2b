@@ -23,7 +23,7 @@ export default function LandingHero() {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [demoMessages, isTyping, mounted]);
 
-  if (!mounted) return null;
+  if (!mounted) return <div style={{ minHeight: '800px' }} />;
 
   const handleDemoChat = (e: React.FormEvent) => {
     e.preventDefault();
