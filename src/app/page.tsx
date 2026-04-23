@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { Metadata } from "next";
 import LandingClient from "./LandingClient";
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 export const metadata: Metadata = {
   title: 'Stratix Intelligence | Arquitectura de IA Estratégica B2B',
@@ -32,8 +33,10 @@ export const metadata: Metadata = {
 
 export default function LandingPage() {
   return (
-    <Suspense fallback={<div style={{ minHeight: '100vh', background: '#060B14' }} />}>
-      <LandingClient />
-    </Suspense>
+    <ErrorBoundary>
+      <Suspense fallback={<div style={{ minHeight: '100vh', background: '#060B14' }} />}>
+        <LandingClient />
+      </Suspense>
+    </ErrorBoundary>
   );
 }
