@@ -93,8 +93,8 @@ function AIModelCard({ model, index }: { model: typeof AI_MODELS[0]; index: numb
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
         <span style={{ fontSize: '1.6rem' }}>{model.icon}</span>
         <div>
-          <div style={{ fontFamily: 'var(--font-sans)', fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.95rem' }}>{model.name}</div>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--text-secondary)' }}>{model.provider}</div>
+          <div style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.95rem' }}>{model.name}</div>
+          <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{model.provider}</div>
         </div>
       </div>
 
@@ -107,15 +107,13 @@ function AIModelCard({ model, index }: { model: typeof AI_MODELS[0]; index: numb
         fontSize: '0.7rem',
         fontWeight: 600,
         marginBottom: '16px',
-        fontFamily: 'var(--font-mono)',
-        letterSpacing: '0.05em'
       }}>
         {model.badge}
       </span>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
         {model.features.map((f, j) => (
-          <div key={j} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontFamily: 'var(--font-sans)', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+          <div key={j} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
             <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: model.color }} />
             {f}
           </div>
@@ -153,7 +151,6 @@ export default function AIModelsSection() {
           fontWeight: 600,
           letterSpacing: '0.15em',
           marginBottom: '2rem',
-          fontFamily: 'var(--font-mono)',
         }}>
           ✦ {t.badge}
         </span>
@@ -169,7 +166,6 @@ export default function AIModelsSection() {
         </h2>
 
         <p style={{
-          fontFamily: 'var(--font-sans)',
           fontSize: '1.1rem',
           color: 'var(--text-secondary)',
           maxWidth: '600px',
@@ -208,10 +204,10 @@ export default function AIModelsSection() {
             margin: '4rem auto 0'
           }}
         >
-          <p style={{ fontFamily: 'var(--font-sans)', color: 'var(--accent)', fontWeight: 600, marginBottom: '0.5rem', fontSize: '0.9rem' }}>
+          <p style={{ color: 'var(--accent)', fontWeight: 600, marginBottom: '0.5rem', fontSize: '0.9rem' }}>
             {t.failoverTitle}
           </p>
-          <p style={{ fontFamily: 'var(--font-sans)', color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.6 }}>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.6 }}>
             {t.failoverDesc}
           </p>
         </motion.div>
