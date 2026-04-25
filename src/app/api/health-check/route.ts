@@ -1,41 +1,37 @@
 import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase-admin";
-import OpenAI from "openai";
-import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export async function GET() {
-  const status = {
-    supabase: false,
-    openai: false,
-    gemini: false,
-    firebase: false,
-    timestamp: new Date().toISOString()
+  const status: any = {
+    status: "ok",
+    timestamp: new Date().toISOString(),
+    services: {}
   };
 
   try {
-    // 1. Supabase Check
-    const { data: { user } } = await supabaseAdmin.auth.getUser();
-    status.supabase = true;
+    // Check Supabase
+    const { data: bots, error } = await supabaseAdmin
+      .from("bots")
+      .select("id")
+      .limit(1);
+    status.services.supabase = !error ? "ok" : "error";
 
-    // 2. OpenAI Check
-    if (process.env.OPENAI_API_KEY) {
-      const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-      // No mandamos chat real por costo, solo verificamos objeto
-      status.openai = !!openai;
-    }
+    // Check Gemini API Key exists
+    status.services.gemini = process.env.GOOGLE_GEMINI_API_KEY ? "ok" : "missing";
 
-    // 3. Gemini Check
-    if (process.env.GOOGLE_GEMINI_API_KEY) {
-      const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY);
-      status.gemini = !!genAI;
-    }
+    // Check WhatsApp
+    status.services.whatsapp = process.env.WHATSAPP_ACCESS_TOKEN ? "ok" : "missing";
 
-    // 4. Firebase Check (Admin apps length)
-    const admin = await import("firebase-admin");
-    status.firebase = admin.apps.length > 0;
+    // Check MercadoPago
+    status.services.mercadopago = process.env.MP_ACCESS_TOKEN ? "ok" : "missing";
 
-    return NextResponse.json(status);
+    // Check Firebase config
+    status.services.firebase = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID ? "ok" : "missing";
+
   } catch (error) {
-    return NextResponse.json({ ...status, error: "Error en el sistema de autodiagnóstico" }, { status: 500 });
+    console.error("/// HEALTH CHECK ERROR ///", error);
+    status.status = "error";
   }
+
+  return NextResponse.json(status);
 }

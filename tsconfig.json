@@ -37,6 +37,10 @@
     "**/*.mts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "archive",
+    "docs",
+    "scripts",
+    ".vercel"
   ]
 }

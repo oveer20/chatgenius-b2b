@@ -1,119 +1,111 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { useState, useRef, useEffect } from "react";
-import { FiArrowRight, FiPlayCircle, FiStar, FiSend } from "react-icons/fi";
+import { useState, useEffect } from "react";
+
+const DEMO_MESSAGES = [
+  { role: 'user', text: '¿Cuánto cuesta el apartamento en zona norte?', avatar: 'TU' },
+  { role: 'bot', text: 'Tenemos opciones desde $480M hasta $850M en la zona norte. ¿Te interesa alguna gama en particular?', avatar: 'AI' },
+  { role: 'user', text: 'Algo alrededor de $500 millones', avatar: 'TU' },
+  { role: 'bot', text: 'Perfecto, hay varios apartamentos de $480-520M en Chapinero y Cedro Bolívar. ¿Te agendo una visita esta semana?', avatar: 'AI' },
+];
 
 export default function LandingHero() {
-  const [mounted, setMounted] = useState(false);
-  const [demoMessages, setDemoMessages] = useState([
-    { role: 'bot', text: 'Hola, soy el núcleo Opal (V50.30). ¿En qué canal quieres automatizar hoy? (WhatsApp, IG, Web)' }
-  ]);
-  const [demoInput, setDemoInput] = useState("");
-  const [isTyping, setIsTyping] = useState(false);
-  const chatEndRef = useRef<HTMLDivElement>(null);
+  const [messages, setMessages] = useState<typeof DEMO_MESSAGES>([]);
+  const [showTyping, setShowTyping] = useState(true);
 
   useEffect(() => {
-    setMounted(true);
+    let i = 0;
+    const interval = setInterval(() => {
+      if (i < DEMO_MESSAGES.length) {
+        setMessages(prev => [...prev, DEMO_MESSAGES[i]]);
+        i++;
+      } else {
+        clearInterval(interval);
+      }
+    }, 1500);
+    return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    if (!mounted) return;
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [demoMessages, isTyping, mounted]);
-
-  if (!mounted) return <div style={{ minHeight: '800px' }} />;
-
-  const handleDemoChat = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!demoInput.trim()) return;
-    const userMsg = demoInput;
-    setDemoMessages(prev => [...prev, { role: 'user', text: userMsg }]);
-    setDemoInput("");
-    setIsTyping(true);
-    setTimeout(() => {
-      setIsTyping(false);
-      setDemoMessages(prev => [...prev, { 
-        role: 'bot', 
-        text: '¡Entendido! Mi motor procesaría esto en < 500ms. Para ver esto con los datos de tu empresa, agenda una demo abajo. ⬇️' 
-      }]);
-    }, 1500);
-  };
-
   return (
-    <header style={{ padding: '12rem 5% 5rem', position: 'relative', overflow: 'hidden' }}>
-      <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '140%', height: '130%', background: 'radial-gradient(ellipse at 50% 30%, rgba(212,175,55,0.09) 0%, transparent 60%)', zIndex: 0, filter: 'blur(80px)', pointerEvents: 'none' }} />
-      <div style={{ maxWidth: '1400px', margin: '0 auto', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '4rem', position: 'relative', zIndex: 1 }}>
-        <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.4 }} style={{ flex: '1 1 500px' }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', padding: '7px 18px', background: 'rgba(212,175,55,0.08)', borderRadius: '30px', border: '1px solid rgba(212,175,55,0.2)', marginBottom: '2.5rem' }}>
-            <motion.div animate={{ scale: [1, 1.4, 1] }} transition={{ repeat: Infinity, duration: 2 }} style={{ width: '7px', height: '7px', background: '#D4AF37', borderRadius: '50%' }} />
-            <span style={{ fontSize: '0.72rem', fontWeight: 800, color: '#D4AF37', letterSpacing: '2px', textTransform: 'uppercase' }}>TU NEGOCIO EN PILOTO AUTOMÁTICO</span>
-          </div>
-          <h1 style={{ fontSize: 'clamp(2.8rem, 7vw, 5.5rem)', fontWeight: 900, lineHeight: 0.95, marginBottom: '2.5rem', letterSpacing: '-3px' }}>
-            Vende Más,<br /><span style={{ color: '#D4AF37' }}>Duerme Mejor.</span>
-          </h1>
-          <p style={{ fontSize: '1.2rem', opacity: 0.6, lineHeight: 1.7, marginBottom: '3.5rem', maxWidth: '520px' }}>
-            Stratix Intelligence atiende, califica y cierra ventas por ti en WhatsApp, Instagram y Web — 24/7, sin intervención humana.
-          </p>
-          <div style={{ display: 'flex', gap: '1.2rem', flexWrap: 'wrap' }}>
-            <Link href="/login" style={{ padding: '18px 38px', backgroundColor: '#D4AF37', color: '#000', borderRadius: '14px', fontWeight: 900, textDecoration: 'none', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '10px', boxShadow: '0 12px 35px rgba(212,175,55,0.25)' }}>
-              Comenzar Ahora <FiArrowRight />
-            </Link>
-            <a href="#demo" style={{ padding: '18px 38px', border: '1px solid rgba(255,255,255,0.12)', borderRadius: '14px', fontWeight: 700, textDecoration: 'none', color: 'white', display: 'flex', alignItems: 'center', gap: '10px', background: 'rgba(255,255,255,0.03)', backdropFilter: 'blur(10px)' }}>
-              <FiPlayCircle /> Ver Demo
-            </a>
-          </div>
-          <div style={{ marginTop: '3rem', display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
-            <div style={{ display: 'flex' }}>
-              {[1,2,3,4].map(i => (
-                <div key={i} style={{ width: '32px', height: '32px', borderRadius: '50%', border: '2px solid #060B14', background: `hsl(${i * 40}, 60%, 50%)`, marginLeft: i === 1 ? 0 : '-10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.7rem', fontWeight: 700 }}>{['JR','MC','AP','SB'][i-1]}</div>
-              ))}
-            </div>
-            <div>
-              <div style={{ display: 'flex', gap: '2px', marginBottom: '2px' }}>{[1,2,3,4,5].map(i => <FiStar key={i} size={12} color="#D4AF37" fill="#D4AF37" />)}</div>
-              <span style={{ fontSize: '0.8rem', opacity: 0.5, fontWeight: 600 }}>+500 empresas activas</span>
-            </div>
-          </div>
-        </motion.div>
+    <section style={{ position: 'relative', zIndex: 2, minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '120px clamp(1.5rem, 5vw, 4rem) 80px', overflow: 'hidden' }}>
+      <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 60% 40% at 50% 20%, rgba(212,175,55,0.12) 0%, transparent 70%)' }} />
 
-        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5, delay: 0.1 }} style={{ flex: '1 1 420px', position: 'relative', maxWidth: '500px' }}>
-          <div style={{ background: 'rgba(11,17,32,0.8)', backdropFilter: 'blur(24px)', borderRadius: '28px', border: '1px solid rgba(212,175,55,0.2)', padding: '22px', boxShadow: '0 40px 120px rgba(0,0,0,0.6)' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '18px', paddingBottom: '14px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-              <div style={{ width: '38px', height: '38px', borderRadius: '11px', background: '#D4AF37', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <img src="/stratix_shield.svg" alt="Opal" style={{ width: '22px', height: '22px' }} />
-              </div>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontSize: '0.85rem', fontWeight: 800 }}>Opal Logic Demo</div>
-                <div style={{ fontSize: '0.68rem', opacity: 0.4, display: 'flex', alignItems: 'center', gap: '5px' }}>
-                  <motion.div animate={{ opacity: [1, 0.3, 1] }} transition={{ repeat: Infinity, duration: 2 }} style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#27C93F' }} />
-                  Activo Ahora
-                </div>
-              </div>
-              <div style={{ display: 'flex', gap: '5px' }}>{['#FF5F57','#FEBC2E','#28C840'].map(c => <div key={c} style={{ width: '10px', height: '10px', borderRadius: '50%', background: c }} />)}</div>
+      <div style={{ position: 'absolute', top: '15%', left: '10%', width: '300px', height: '300px', background: 'radial-gradient(circle, rgba(212,175,55,0.08) 0%, transparent 70%)', filter: 'blur(60px)' }} />
+
+      <div style={{ position: 'relative', zIndex: 1, maxWidth: '900px', opacity: 0, animation: 'fadeUp 0.8s ease forwards 0.2s' }}>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', border: '1px solid rgba(212,175,55,0.25)', background: 'rgba(212,175,55,0.06)', color: '#D4AF37', fontFamily: 'var(--font-mono)', fontSize: '0.72rem', letterSpacing: '0.08em', padding: '6px 14px', borderRadius: '100px', marginBottom: '2.5rem' }}>
+          ✦ Gemini 2.0 Flash · Nuevo
+        </div>
+
+        <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(3rem, 8vw, 6rem)', lineHeight: 1.05, letterSpacing: '-0.03em', marginBottom: '2rem', color: '#f0f2f8' }}>
+          Tu agente IA que<br />
+          <span style={{ color: '#D4AF37', fontStyle: 'italic' }}>vende 24/7</span>
+        </h1>
+
+        <p style={{ fontSize: 'clamp(1rem, 2vw, 1.2rem)', color: '#8892a4', maxWidth: '580px', lineHeight: 1.7, marginBottom: '3rem', fontWeight: 300 }}>
+          Automatiza tu atención en WhatsApp, Web e Instagram. Califica leads, agenda citas y cierra ventas mientras duermes.
+        </p>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '4rem', opacity: 0, animation: 'fadeUp 0.8s ease forwards 0.6s' }}>
+          <Link href="/login" style={{ background: '#D4AF37', color: '#030a05', fontSize: '0.95rem', fontWeight: 600, padding: '14px 32px', borderRadius: '16px', textDecoration: 'none', boxShadow: '0 0 30px rgba(212,175,55,0.3)' }}>Probar gratis 14 días →</Link>
+          <Link href="/widget" style={{ padding: '13px 28px', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '16px', fontWeight: 500, textDecoration: 'none', color: '#f0f2f8', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.2"/><path d="M6.5 5.5L10.5 8L6.5 10.5V5.5Z" fill="currentColor"/></svg>
+            Ver demo en vivo
+          </Link>
+        </div>
+
+        <div style={{ position: 'relative', maxWidth: '700px', margin: '0 auto', opacity: 0, animation: 'fadeUp 0.8s ease forwards 0.8s' }}>
+          <div style={{ position: 'absolute', inset: '-40px', background: 'radial-gradient(ellipse 60% 40% at 50% 80%, rgba(212,175,55,0.1) 0%, transparent 70%)', filter: 'blur(20px)', pointerEvents: 'none' }} />
+
+          <div style={{ background: '#111520', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '20px', overflow: 'hidden', boxShadow: '0 40px 120px rgba(0,0,0,0.8)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '14px 18px', borderBottom: '1px solid rgba(255,255,255,0.07)', background: 'rgba(255,255,255,0.02)' }}>
+              <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#ff5f57' }} />
+              <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#febc2e' }} />
+              <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#28c840' }} />
+              <div style={{ marginLeft: '12px', fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: '#4a5568', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', padding: '3px 12px', borderRadius: '6px' }}>Stratix · Agente Demo</div>
             </div>
-            <div style={{ height: '280px', overflowY: 'auto', marginBottom: '16px', display: 'flex', flexDirection: 'column', gap: '12px', padding: '4px' }}>
-              <AnimatePresence initial={false}>
-                {demoMessages.map((msg, idx) => (
-                  <motion.div key={idx} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
-                    style={{ background: msg.role === 'bot' ? 'rgba(255,255,255,0.06)' : '#D4AF37', color: msg.role === 'bot' ? 'white' : '#000', padding: '10px 14px', borderRadius: '14px', fontSize: '0.83rem', maxWidth: '88%', alignSelf: msg.role === 'bot' ? 'flex-start' : 'flex-end' }}
-                  >{msg.text}</motion.div>
-                ))}
-                {isTyping && (
-                  <div style={{ padding: '10px 14px', background: 'rgba(255,255,255,0.05)', borderRadius: '14px', alignSelf: 'flex-start', display: 'flex', gap: '5px' }}>
-                    {[0,1,2].map(i => <motion.div key={i} animate={{ y: [0, -4, 0] }} transition={{ repeat: Infinity, duration: 0.8, delay: i * 0.15 }} style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#D4AF37' }} />)}
+
+            <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem', minHeight: '260px' }}>
+              {messages.map((msg, i) => (
+                <div key={i} style={{ display: 'flex', gap: '10px', alignItems: 'flex-start', flexDirection: msg.role === 'user' ? 'row-reverse' : 'row' }}>
+                  <div style={{ width: '30px', height: '30px', borderRadius: '50%', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.65rem', fontWeight: 600, fontFamily: 'var(--font-mono)', background: msg.role === 'bot' ? 'linear-gradient(135deg, #D4AF37, #B8860B)' : 'rgba(255,255,255,0.1)', border: msg.role === 'user' ? '1px solid rgba(255,255,255,0.07)' : 'none', color: msg.role === 'bot' ? '#000' : '#8892a4' }}>
+                    {msg.avatar}
                   </div>
-                )}
-              </AnimatePresence>
-              <div ref={chatEndRef} />
+                  <div style={{ maxWidth: '75%', padding: '10px 14px', borderRadius: '14px', fontSize: '0.85rem', lineHeight: 1.55, background: msg.role === 'bot' ? 'rgba(212,175,55,0.08)' : 'rgba(255,255,255,0.06)', border: msg.role === 'bot' ? '1px solid rgba(212,175,55,0.15)' : '1px solid rgba(255,255,255,0.07)', color: '#f0f2f8', borderBottomLeftRadius: msg.role === 'bot' ? '4px' : '14px', borderBottomRightRadius: msg.role === 'user' ? '4px' : '14px' }}>
+                    {msg.text}
+                  </div>
+                </div>
+              ))}
+              {showTyping && messages.length < DEMO_MESSAGES.length && (
+                <div style={{ display: 'flex', gap: '4px', alignItems: 'center', padding: '4px 0' }}>
+                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#D4AF37', animation: 'bounce 1.2s ease-in-out infinite' }} />
+                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#D4AF37', animation: 'bounce 1.2s ease-in-out infinite 0.2s' }} />
+                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#D4AF37', animation: 'bounce 1.2s ease-in-out infinite 0.4s' }} />
+                </div>
+              )}
             </div>
-            <form onSubmit={handleDemoChat} style={{ background: 'rgba(255,255,255,0.04)', borderRadius: '14px', padding: '8px 10px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <input type="text" placeholder="Prueba a Opal aquí..." value={demoInput} onChange={e => setDemoInput(e.target.value)} style={{ background: 'transparent', border: 'none', color: 'white', fontSize: '0.85rem', outline: 'none', flex: 1 }} />
-              <button type="submit" aria-label="Enviar mensaje de prueba" style={{ width: '32px', height: '32px', borderRadius: '9px', background: '#D4AF37', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><FiSend color="#000" size={14} /></button>
-            </form>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '0.75rem 1rem', borderTop: '1px solid rgba(255,255,255,0.07)', background: 'rgba(255,255,255,0.02)' }}>
+              <div style={{ flex: 1, background: 'none', border: 'none', outline: 'none', color: '#8892a4', fontFamily: 'var(--font-sans)', fontSize: '0.82rem' }}>Escribe tu pregunta...</div>
+              <div style={{ width: '28px', height: '28px', background: '#D4AF37', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M8 2l5 5-5 5" stroke="#000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              </div>
+            </div>
           </div>
-        </motion.div>
+        </div>
       </div>
-    </header>
+
+      <style>{`
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(24px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes bounce {
+          0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+          30% { transform: translateY(-5px); opacity: 1; }
+        }
+      `}</style>
+    </section>
   );
 }

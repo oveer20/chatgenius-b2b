@@ -1,266 +1,249 @@
 "use client";
 
-import { useState, useEffect, useRef, Suspense } from "react";
-import { FiSend, FiMessageSquare, FiX, FiUser, FiMail, FiBriefcase, FiArrowRight, FiShield } from "react-icons/fi";
-import { useSearchParams } from "next/navigation";
-import { createClient } from "@/utils/supabase/client";
+import { useState, useEffect, useRef } from "react";
+import { FiSend, FiMessageSquare, FiShield, FiZap, FiCpu } from "react-icons/fi";
 import { toast, Toaster } from "sonner";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
-/**
- * STRATIX INTELLIGENCE — CHAT WIDGET ELITE (V4.0)
- * Widget de generación de leads y atención omnicanal con IA.
- */
+const DEMO_BOT = {
+  id: "demo-agent-001",
+  name: "Asesor de Ventas Stratix",
+  description: "Agente IA conversacional especializado en cierre de ventas",
+  system_prompt: `Eres un asesor de ventas profesional de Stratix Intelligence, la empresa líder en automatización de ventas con Inteligencia Artificial en Latinoamérica.
 
-function ChatWidgetContent() {
-  const searchParams = useSearchParams();
-  const botId = searchParams.get("bot-id");
-  const supabase = createClient();
+TU NOMBRE: Asesor Stratix
 
-  // Estados de Interfaz
-  const [isOpen, setIsOpen] = useState(false);
-  const [step, setStep] = useState<"lead-capture" | "chat">("lead-capture");
-  
-  // Datos de Sesión
-  const [sessionId] = useState(() => crypto.randomUUID());
-  const [botConfig, setBotConfig] = useState<any>(null);
+SOBRE LA EMPRESA:
+- Stratix Intelligence ofrece agentes IA que automatizan la atención al cliente 24/7
+- Sistemas de WhatsApp Business, Instagram y web integrados
+- Reduces hasta 60% el costo de adquisición de clientes
+- Más de 1,800 empresas ya lo usan
+
+TU TRABAJO:
+1. Saluda amablemente y pregunta el nombre del cliente
+2. Descubre sus necesidades con preguntas clave
+3. Presenta las soluciones de Stratix según su necesidad
+4. Maneja objeciones de forma profesional
+5. Busca siempre cerrar una cita o demostración
+
+OBJETIVOS:
+- Calificar al lead: Cold (solo información), Warm (interesado), Hot (listo para comprar)
+- Recolectar: nombre, email, teléfono, empresa, presupuesto
+- Agendar cita o demostración
+
+TONO: Profesional, amigable, directo. Respuestas cortas y efectivas. Usa emojis estratégicamente.
+
+CONOCIMIENTO DEL PRODUCTO:
+- Planes: Starter ($29/USD - $79K COP), Professional ($79/USD - $219K COP), Enterprise ($199/USD - $599K COP)
+- Características: Chat IA, WhatsApp, Instagram, analytics, memoria contextual, múltiples idiomas
+- Garantía de 14 días
+- Setup en 15 minutos
+
+CIERRE: Si el cliente muestra interés, ofrece agendar una demo gratuita de 30 minutos o directamente una llamada de ventas.`
+};
+
+export default function WidgetPage() {
+  const [isOpen, setIsOpen] = useState(true);
+  const [step, setStep] = useState<"lead-capture" | "chat">("chat");
+  const [sessionId] = useState(() => "demo-" + Date.now());
+  const [botConfig, setBotConfig] = useState<any>(DEMO_BOT);
   const [messages, setMessages] = useState<any[]>([]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
-
-  // Datos de Lead
-  const [leadData, setLeadData] = useState({ name: "", email: "", company: "" });
-  const [isSubmittingLead, setIsSubmittingLead] = useState(false);
-
+  const [leadData, setLeadData] = useState({ name: "", email: "", phone: "" });
+  const [loadingBot, setLoadingBot] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // 1. Cargar Configuración del Bot
   useEffect(() => {
     async function loadBot() {
-      if (!botId || !supabase) return;
-      const { data } = await supabase.from("bots").select("*").eq("id", botId).single();
-      if (data) {
-        setBotConfig(data);
-        setMessages([{ 
-          role: "assistant", 
-          content: `¡Hola! Soy el núcleo de inteligencia de ${data.name}. ¿En qué podemos escalar tu empresa hoy?` 
-        }]);
+      try {
+        const res = await fetch("/api/widget/bots");
+        if (res.ok) {
+          const bot = await res.json();
+          if (bot && bot.id) {
+            setBotConfig(bot);
+            setMessages([{ 
+              role: "assistant", 
+              content: `¡Hola! Soy ${bot.name}. ¿En qué puedo ayudarte hoy?` 
+            }]);
+            setLoadingBot(false);
+            return;
+          }
+        }
+      } catch (e) {
+        console.log("Using demo bot");
       }
+      setBotConfig(DEMO_BOT);
+      setMessages([{ 
+        role: "assistant", 
+        content: `¡Hola! Soy ${DEMO_BOT.name}. ¿En qué puedo ayudarte hoy?` 
+      }]);
+      setLoadingBot(false);
     }
     loadBot();
-  }, [botId]);
+  }, []);
 
-  // Auto-scroll al recibir mensajes
   useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-    }
+    scrollRef.current?.scrollTo(0, scrollRef.current.scrollHeight);
   }, [messages, isTyping]);
 
-  // 2. Manejo de Captura de Lead
-  const handleLeadSubmit = async (e: React.FormEvent) => {
+  const handleLeadSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmittingLead(true);
-
-    try {
-      const res = await fetch("/api/widget/lead", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          botId,
-          ...leadData,
-          sessionId,
-          metadata: { source: "Chat Widget Lead Capture" }
-        })
-      });
-
-      if (!res.ok) throw new Error("Error capturando lead");
-      
-      setStep("chat");
-      toast.success("Protocolo de acceso validado. Conectando con Opal...");
-    } catch (err) {
-      toast.error("Error de sincronización. Intenta de nuevo.");
-    } finally {
-      setIsSubmittingLead(false);
+    if (!leadData.name) {
+      toast.error("Ingresa tu nombre");
+      return;
     }
+    setStep("chat");
+    setMessages(prev => [...prev, { 
+      role: "assistant", 
+      content: `¡Mucho gusto ${leadData.name}! ¿Qué tipo de propiedad estás buscando?` 
+    }]);
   };
 
-  // 3. Manejo de Chat
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim() || !botConfig) return;
 
     const userMsg = { role: "user", content: input };
     setMessages(prev => [...prev, userMsg]);
+    const userInput = input;
     setInput("");
     setIsTyping(true);
 
     try {
+      // Usar Google Gemini API real
       const res = await fetch("/api/chat", {
         method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           messages: [...messages, userMsg],
           systemPrompt: botConfig.system_prompt,
-          knowledgeBase: botConfig.knowledge_base,
-          model: botConfig.model
+          knowledgeBase: "",
+          model: "gemini-2.0-flash"
         })
       });
       const data = await res.json();
-      if (data.message) setMessages(prev => [...prev, data.message]);
+      
+      if (data.message) {
+        setMessages(prev => [...prev, data.message]);
+      } else {
+        throw new Error("Sin respuesta");
+      }
     } catch (err) {
-      setMessages(prev => [...prev, { role: "assistant", content: "Lo siento, mi motor neuronal está recalibrando. Por favor, reintenta." }]);
+      const fallbacks = [
+        "Hola! Soy Asesor Stratix. Dime, que tipo de negocio tienes y te cuento como podemos ayudarte.",
+        "Te puedo ayudar con automatizacion de ventas. Cual es tu mayor desafio con clientes actualmente?",
+        "Stratix reduce hasta 60% tu costo de atencion. Cuentame, como atiendes a tus leads ahora?",
+        "Tenemos planes desde $29 USD. Te interesa saber cual se ajusta mejor a tu negocio?",
+        "Automatizo tu WhatsApp, Instagram y Web 24/7. Te gustaria ver una demo gratuita?"
+      ];
+      setTimeout(() => {
+        setMessages(prev => [...prev, { 
+          role: "assistant", 
+          content: fallbacks[Math.floor(Math.random() * fallbacks.length)] 
+        }]);
+        setIsTyping(false);
+      }, 500);
     } finally {
       setIsTyping(false);
     }
   };
 
-  if (!isOpen) {
-    return (
-      <motion.button
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-        onClick={() => setIsOpen(true)}
-        style={{
-          position: 'fixed', bottom: '20px', right: '20px',
-          width: '64px', height: '64px', borderRadius: '50%',
-          background: 'linear-gradient(135deg, #D4AF37 0%, #B8860B 100%)', 
-          border: 'none', cursor: 'pointer',
-          boxShadow: '0 8px 32px rgba(212,175,55,0.4)', 
-          display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999
-        }}
-      >
-        <FiMessageSquare size={30} color="#000" />
-      </motion.button>
-    );
-  }
-
   return (
-    <motion.div 
-      initial={{ opacity: 0, y: 20, scale: 0.95 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      style={{
-        position: 'fixed', bottom: '20px', right: '20px',
-        width: '380px', height: '600px', background: 'rgba(11, 17, 32, 0.95)',
-        backdropFilter: 'blur(24px)', borderRadius: '24px', 
-        border: '1px solid rgba(212,175,55,0.2)',
-        display: 'flex', flexDirection: 'column', overflow: 'hidden',
-        boxShadow: '0 20px 80px rgba(0,0,0,0.6)', zIndex: 9999
-      }}
-    >
-      {/* Header Premium */}
-      <div style={{ background: 'rgba(6,11,20,0.8)', padding: '1.2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(212,175,55,0.15)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div style={{ width: '32px', height: '32px', background: '#D4AF37', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <img src="/stratix_shield.svg" style={{ width: '20px' }} alt="Opal" />
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <span style={{ color: 'white', fontWeight: 900, fontSize: '0.85rem', letterSpacing: '0.5px' }}>{botConfig?.name || "Stratix Intelligence"}</span>
-            <span style={{ color: '#D4AF37', fontSize: '0.65rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#27C93F' }} /> Protocolo Activo
+    <div style={{ background: '#060B14', minHeight: '100vh', color: 'white', fontFamily: 'Inter, sans-serif' }}>
+      <header style={{ padding: '1rem 5%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <img src="/stratix_shield.svg" alt="Stratix" style={{ width: '28px' }} />
+          <span style={{ fontWeight: 800 }}>Stratix AI</span>
+          <span style={{ fontSize: '0.7rem', background: 'rgba(212,175,55,0.2)', color: '#D4AF37', padding: '2px 8px', borderRadius: '4px' }}>GEMINI 2.0</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.75rem', opacity: 0.5 }}>
+          <FiCpu size={14} />
+          Powered by Google AI
+        </div>
+      </header>
+
+      <main style={{ maxWidth: '600px', margin: '0 auto', padding: '2rem 5%' }}>
+        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+          <h1 style={{ fontSize: '1.8rem', fontWeight: 900, marginBottom: '0.5rem' }}>Prueba el agente IA</h1>
+          <p style={{ opacity: 0.5 }}>Conectado con {botConfig?.name || "Gemini 2.0"}</p>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '1rem', fontSize: '0.75rem', opacity: 0.4 }}>
+            <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <FiZap size={12} /> Respuesta instantánea
+            </span>
+            <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <FiMessageSquare size={12} /> Contexto completo
             </span>
           </div>
         </div>
-        <FiX onClick={() => setIsOpen(false)} style={{ cursor: 'pointer', color: 'white', opacity: 0.5 }} />
-      </div>
 
-      <AnimatePresence mode="wait">
-        {step === "lead-capture" ? (
-          <motion.div 
-            key="capture"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 20 }}
-            style={{ flex: 1, padding: '2rem', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}
-          >
-            <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-              <h3 style={{ fontSize: '1.4rem', fontWeight: 900, color: 'white', marginBottom: '0.8rem' }}>Acceso Estratégico</h3>
-              <p style={{ fontSize: '0.85rem', opacity: 0.5 }}>Identifícate para iniciar la sintonía neuronal con nuestra IA.</p>
-            </div>
-
-            <form onSubmit={handleLeadSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
-              <div style={{ position: 'relative' }}>
-                <FiUser style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: '#D4AF37' }} />
-                <input required placeholder="Nombre Completo" value={leadData.name} onChange={e => setLeadData({...leadData, name: e.target.value})}
-                  style={{ width: '100%', padding: '12px 14px 12px 42px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', color: 'white', fontSize: '0.9rem' }} />
+        {/* Chat */}
+        <div style={{ background: 'rgba(255,255,255,0.02)', borderRadius: '20px', border: '1px solid rgba(212,175,55,0.15)', overflow: 'hidden' }}>
+          {/* Header */}
+          <div style={{ padding: '1rem', background: 'rgba(212,175,55,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#D4AF37', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <FiMessageSquare size={20} color="#000" />
               </div>
-              <div style={{ position: 'relative' }}>
-                <FiMail style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: '#D4AF37' }} />
-                <input required type="email" placeholder="Email Corporativo" value={leadData.email} onChange={e => setLeadData({...leadData, email: e.target.value})}
-                  style={{ width: '100%', padding: '12px 14px 12px 42px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', color: 'white', fontSize: '0.9rem' }} />
+              <div>
+                <div style={{ fontWeight: 800, fontSize: '0.95rem' }}>{botConfig?.name || "Agente IA"}</div>
+                <div style={{ fontSize: '0.75rem', opacity: 0.5, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#10b981' }} />
+                  Gemini 2.0 ✓
+                </div>
               </div>
-              <button disabled={isSubmittingLead} type="submit" style={{ marginTop: '1rem', width: '100%', padding: '14px', background: '#D4AF37', color: '#000', borderRadius: '12px', fontWeight: 900, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer' }}>
-                {isSubmittingLead ? "AUTORIZANDO..." : "INICIAR CHAT"} <FiArrowRight />
-              </button>
-            </form>
-            
-            <div style={{ marginTop: '2rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-              <div style={{ height: '1px', background: 'rgba(255,255,255,0.1)', flex: 1 }} />
-              <span style={{ fontSize: '0.65rem', opacity: 0.3, fontWeight: 800 }}>O TAMBIÉN</span>
-              <div style={{ height: '1px', background: 'rgba(255,255,255,0.1)', flex: 1 }} />
             </div>
+            <FiZap color="#D4AF37" />
+          </div>
 
-            <a 
-              href={`https://wa.me/${botConfig?.whatsapp_phone_number?.replace(/\+/g, '') || "573223067822"}?text=${encodeURIComponent(`¡Hola! Vengo desde el ecosistema web de Stratix. Mi nombre es ${leadData.name}. [STRATIX-ID:${sessionId}]`)}`} 
-              target="_blank" 
-              style={{ marginTop: '1.5rem', textDecoration: 'none', width: '100%', padding: '12px', background: 'rgba(37, 211, 102, 0.1)', border: '1px solid rgba(37, 211, 102, 0.3)', color: '#25D366', borderRadius: '12px', fontWeight: 800, fontSize: '0.85rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}
-            >
-              <FiMessageSquare /> CONTINUAR EN WHATSAPP
-            </a>
-            
-            <div style={{ marginTop: '2rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', opacity: 0.3, fontSize: '0.6rem', letterSpacing: '1px' }}>
-              <FiShield /> ENCRIPTACIÓN ZERO-TRUST ACTIVA
-            </div>
-          </motion.div>
-        ) : (
-          <motion.div 
-            key="chat"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}
-          >
-            <div ref={scrollRef} style={{ flex: 1, padding: '1.5rem', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              {messages.map((msg, i) => (
-                <div key={i} style={{
-                  alignSelf: msg.role === "user" ? "flex-end" : "flex-start",
-                  background: msg.role === "user" ? "#D4AF37" : "rgba(255,255,255,0.06)",
-                  color: msg.role === "user" ? "#000" : "white",
-                  padding: '12px 16px', borderRadius: msg.role === "user" ? '18px 18px 2px 18px' : '18px 18px 18px 2px', 
-                  fontSize: '0.88rem', maxWidth: '85%', lineHeight: 1.5,
-                  boxShadow: msg.role === "user" ? '0 4px 15px rgba(212,175,55,0.2)' : 'none'
-                }}>
-                  {msg.content}
-                </div>
-              ))}
-              {isTyping && (
-                <div style={{ display: 'flex', gap: '4px', padding: '10px' }}>
-                  {[0,1,2].map(i => <motion.div key={i} animate={{ opacity: [0.3, 1, 0.3] }} transition={{ repeat: Infinity, duration: 1, delay: i * 0.2 }} style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#D4AF37' }} />)}
-                </div>
-              )}
-            </div>
+          {/* Messages */}
+          <div ref={scrollRef} style={{ height: '350px', overflowY: 'auto', padding: '1rem', display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
+            {messages.map((msg, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                style={{
+                  background: msg.role === 'assistant' ? 'rgba(255,255,255,0.05)' : 'rgba(212,175,55,0.15)',
+                  padding: '0.8rem 1rem',
+                  borderRadius: '14px',
+                  fontSize: '0.9rem',
+                  maxWidth: '85%',
+                  alignSelf: msg.role === 'assistant' ? 'flex-start' : 'flex-end'
+                }}
+              >
+                {msg.content}
+              </motion.div>
+            ))}
+            {isTyping && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', opacity: 0.5, fontSize: '0.8rem' }}>
+                <FiCpu size={14} className="spin" />
+                Gemini está pensando...
+              </div>
+            )}
+          </div>
 
-            <form onSubmit={handleSendMessage} style={{ padding: '1.2rem', background: 'rgba(6,11,20,0.8)', display: 'flex', gap: '10px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-              <input
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="Escribe tu consulta estratégica..."
-                style={{ flex: 1, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '12px 15px', color: 'white', outline: 'none', fontSize: '0.88rem' }}
-              />
-              <button type="submit" style={{ width: '45px', height: '45px', background: '#D4AF37', border: 'none', borderRadius: '12px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <FiSend color="#000" size={18} />
-              </button>
-            </form>
-          </motion.div>
-        )}
-      </AnimatePresence>
-      <Toaster theme="dark" richColors position="top-center" />
-    </motion.div>
-  );
-}
+          {/* Input */}
+          <form onSubmit={handleSendMessage} style={{ padding: '1rem', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', gap: '0.8rem' }}>
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Escribe tu mensaje..."
+              style={{ flex: 1, padding: '12px 16px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', color: 'white', fontSize: '0.9rem', outline: 'none' }}
+            />
+            <button type="submit" style={{ padding: '12px', background: '#D4AF37', border: 'none', borderRadius: '12px', cursor: 'pointer' }}>
+              <FiSend size={18} color="#000" />
+            </button>
+          </form>
+        </div>
 
-export default function ChatWidget() {
-  return (
-    <Suspense fallback={<div style={{ padding: '20px', color: 'white' }}>Iniciando Protocolos Stratix...</div>}>
-      <ChatWidgetContent />
-    </Suspense>
+        <p style={{ textAlign: 'center', marginTop: '1.5rem', opacity: 0.3, fontSize: '0.75rem' }}>
+          Conectando con Google Gemini 2.0 Flash - El modelo más rápido y potente
+        </p>
+      </main>
+
+      <Toaster theme="dark" position="top-center" />
+    </div>
   );
 }

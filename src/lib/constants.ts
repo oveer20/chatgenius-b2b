@@ -1,5 +1,3 @@
-"use client";
-
 export const CURRENCIES = {
   USD: { symbol: '$', code: 'USD', rate: 1 },
   COP: { symbol: 'Col$', code: 'COP', rate: 4000 }, 
@@ -9,18 +7,24 @@ export const PRICING_PLANS = [
   { 
     name: "Starter", 
     priceUsd: 29, 
-    features: ["1 Agente IA Neural", "1,000 Mensajes/mes", "Deep Crawl (10 páginas)", "Soporte Mail Élite"] 
+    description: "Para negocios que inician con IA",
+    features: ["1 Agente IA", "1,000 Msgs/mes", "Soporte Email", "WhatsApp + IG"],
+    highlight: false 
   },
   { 
-    name: "Professional Pro", 
+    name: "Professional", 
     priceUsd: 79, 
-    features: ["5 Agentes IA Neural", "5,000 Mensajes/mes", "Deep Crawl (50 páginas)", "WhatsApp Cloud Native", "Opal Logic v2.5 (Scoring)"],
-    highlight: true 
+    description: "El más elegido por empresas",
+    features: ["5 Agentes IA", "5,000 Msgs/mes", "Prioridad Alta", "Opal Scoring", "API Access"],
+    highlight: true,
+    popular: true
   },
   { 
-    name: "Enterprise Elite", 
+    name: "Enterprise", 
     priceUsd: 249, 
-    features: ["Agentes Ilimitados", "Mensajes Ilimitados*", "Deep Crawl (500 páginas)", "API Neural Relay", "Custom Fine-Tuning Support"] 
+    description: "Para equipos que necesitan escala",
+    features: ["Agentes Unlimited", "Msgs Unlimited", "Custom Training", "Account Manager", "SLA Garantizado"],
+    highlight: false 
   }
 ];
 
@@ -61,11 +65,11 @@ export const USE_CASES = [
   }
 ];
 
-export const INTEGRATIONS = [
-  { name: "WhatsApp", icon: "https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" },
-  { name: "Instagram", icon: "https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" },
-  { name: "Shopify", icon: "https://upload.wikimedia.org/wikipedia/commons/0/0e/Shopify_logo_2018.svg" },
-  { name: "Zapier", icon: "https://upload.wikimedia.org/wikipedia/commons/e/ed/Zapier_logo.svg" },
-  { name: "Mercado Pago", icon: "https://seeklogo.com/images/M/mercado-pago-logo-453F772D1E-seeklogo.com.png" },
-  { name: "Slack", icon: "https://upload.wikimedia.org/wikipedia/commons/d/d5/Slack_icon_2019.svg" }
+export const TRUST_LOGOS = [
+  { name: "Google Gemini", color: "#8AB4F8" },
+  { name: "Supabase", color: "#3ECF8E" },
+  { name: "Vercel", color: "#fff" },
+  { name: "WhatsApp", color: "#25D366" },
+  { name: "OpenAI", color: "#10A37F" },
+  { name: "Stripe", color: "#635BFF" },
 ];

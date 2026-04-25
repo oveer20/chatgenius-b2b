@@ -4,7 +4,11 @@ import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { FiCheck } from "react-icons/fi";
 
-export default function PricingCard({ plan, exchangeRate, symbol, handleCheckout }: any) {
+export default function PricingCard({ plan, exchangeRate = 1, symbol = '$', handleCheckout }: any) {
+  if (!plan || !plan.features || !Array.isArray(plan.features)) {
+    return null;
+  }
+  
   const cardRef = useRef<HTMLDivElement>(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [opacity, setOpacity] = useState(0);
@@ -30,63 +34,50 @@ export default function PricingCard({ plan, exchangeRate, symbol, handleCheckout
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      className={`card-elite ${plan.highlight ? 'glow-gold' : ''}`} 
       style={{ 
-        padding: '4.5rem 3rem', 
+        padding: '3rem 2rem', 
         textAlign: 'center', 
         position: 'relative',
         overflow: 'hidden',
-        border: plan.highlight ? '1px solid #D4AF37' : '1px solid rgba(255,255,255,0.06)',
+        border: plan.highlight ? '1px solid #6366f1' : '1px solid rgba(255,255,255,0.06)',
+        background: plan.highlight ? 'linear-gradient(135deg, rgba(99,102,241,0.08) 0%, rgba(79,70,229,0.04) 100%)' : 'rgba(255,255,255,0.02)',
+        borderRadius: '24px',
+        boxShadow: plan.highlight ? '0 0 60px rgba(99,102,241,0.2)' : 'none'
       }}
     >
-      {/* Efecto Flashlight (Glow) */}
-      <div 
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          pointerEvents: 'none',
-          background: `radial-gradient(circle at ${mousePos.x}px ${mousePos.y}px, rgba(212,175,55,0.2), transparent 70%)`,
-          opacity: opacity,
-          transition: 'opacity 0.5s ease',
-          zIndex: 1
-        }}
-      />
-
-      <div style={{ position: 'relative', zIndex: 10 }}>
-        {plan.highlight && (
-          <div style={{ 
-            position: 'absolute', 
-            top: '-25px', 
-            left: '50%', 
-            transform: 'translateX(-50%)', 
-            background: '#D4AF37', 
-            color: '#000', 
-            padding: '8px 25px', 
-            borderRadius: '30px', 
-            fontSize: '0.7rem', 
-            fontWeight: 900,
-            letterSpacing: '2px',
-            boxShadow: '0 10px 25px rgba(212,175,55,0.3)'
-          }}>
-            RECOMENDADO
-          </div>
-        )}
+      {plan.popular && (
+        <div style={{ 
+          position: 'absolute', 
+          top: '-20px', 
+          left: '50%', 
+          transform: 'translateX(-50%)', 
+          background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)', 
+          color: '#fff', 
+          padding: '6px 20px', 
+          borderRadius: '20px', 
+          fontSize: '0.65rem', 
+          fontWeight: 800,
+          letterSpacing: '1px',
+          boxShadow: '0 4px 15px rgba(99,102,241,0.4)'
+        }}>
+          MÁS VENDIDO
+        </div>
+      )}
+      
+      <div style={{ marginTop: plan.popular ? '1.5rem' : '0' }}>
+        <h3 style={{ fontSize: '1.4rem', fontWeight: 800, marginBottom: '0.5rem' }}>{plan.name}</h3>
+        <p style={{ fontSize: '0.8rem', opacity: 0.4, marginBottom: '1.5rem' }}>{plan.description}</p>
         
-        <h3 className="text-cinematic" style={{ marginBottom: '1.5rem', fontSize: '1.8rem' }}>{plan.name}</h3>
-        
-        <div style={{ fontSize: '3.8rem', fontWeight: 900, marginBottom: '2.5rem', letterSpacing: '-2px' }}>
-          <span style={{ fontSize: '1.2rem', opacity: 0.5, marginRight: '5px' }}>{symbol}</span>
+        <div style={{ fontSize: '2.8rem', fontWeight: 900, marginBottom: '1.5rem', letterSpacing: '-1px' }}>
+          <span style={{ fontSize: '0.9rem', opacity: 0.5 }}>{symbol}</span>
           {(plan.priceUsd * exchangeRate).toLocaleString()}
-          <span style={{ fontSize: '0.85rem', opacity: 0.3, marginLeft: '5px' }}>/mes</span>
+          <span style={{ fontSize: '0.7rem', opacity: 0.3, marginLeft: '3px' }}>/mes</span>
         </div>
 
-        <ul style={{ listStyle: 'none', padding: 0, textAlign: 'left', marginBottom: '3.5rem' }}>
+        <ul style={{ listStyle: 'none', padding: 0, textAlign: 'left', marginBottom: '2rem' }}>
           {plan.features.map((f: string, fi: number) => (
-            <li key={fi} style={{ marginBottom: '1.2rem', display: 'flex', gap: '15px', fontSize: '0.95rem', opacity: 0.8, lineHeight: 1.4 }}>
-              <FiCheck color="#D4AF37" style={{ flexShrink: 0, marginTop: '3px' }} /> <span>{f}</span>
+            <li key={fi} style={{ marginBottom: '0.8rem', display: 'flex', gap: '10px', fontSize: '0.85rem', opacity: 0.7 }}>
+              <FiCheck color="#818cf8" style={{ flexShrink: 0, marginTop: '2px' }} /> <span>{f}</span>
             </li>
           ))}
         </ul>
@@ -97,21 +88,20 @@ export default function PricingCard({ plan, exchangeRate, symbol, handleCheckout
             const slug = name.includes('enterprise') || name.includes('elite') ? 'enterprise' : (name.includes('professional') || name.includes('pro') ? 'pro' : 'starter');
             handleCheckout(slug);
           }} 
-          className={plan.highlight ? "glow-gold" : ""}
           style={{ 
             width: '100%', 
-            padding: '20px', 
-            background: plan.highlight ? '#D4AF37' : 'transparent', 
-            border: '2px solid #D4AF37', 
-            color: plan.highlight ? '#000' : '#D4AF37', 
-            borderRadius: '16px', 
-            fontWeight: 900, 
+            padding: '14px', 
+            background: plan.highlight ? 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)' : 'transparent', 
+            border: plan.highlight ? 'none' : '1px solid rgba(255,255,255,0.15)', 
+            color: '#fff', 
+            borderRadius: '12px', 
+            fontWeight: 700, 
             cursor: 'pointer',
-            transition: 'all 0.3s ease',
-            fontSize: '1rem'
+            fontSize: '0.9rem',
+            transition: 'all 0.3s ease'
           }}
         >
-          {plan.name.toLowerCase().includes('enterprise') ? 'CONTACTAR ÉLITE' : 'COMENZAR AHORA'}
+          {plan.name.toLowerCase().includes('enterprise') ? 'Contactar Ventas' : 'Comenzar Ahora'}
         </button>
       </div>
     </motion.div>

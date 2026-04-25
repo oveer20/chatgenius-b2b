@@ -64,17 +64,19 @@ export async function handleWhatsAppWebhook(
       TU OBJETIVO: Cerrar una cita o capturar el interés total.
     `;
 
-    const aiResponse = await getGeminiResponse([{ role: "user", content: userPrompt }], systemPrompt);
+    const aiResponseRaw = await getGeminiResponse([{ role: "user", content: userPrompt }], systemPrompt);
+    const aiResponse = typeof aiResponseRaw === 'string' ? aiResponseRaw : JSON.stringify(aiResponseRaw);
 
     // 3. Enviar Respuesta
     await sendWhatsAppMessage(phoneId, token, from, aiResponse);
 
     // 4. Opal Lead Scoring (Análisis de intención rápido)
     if (msg.length > 10) {
-      const intentCheck = await getGeminiResponse(
+      const intentRaw = await getGeminiResponse(
         [{ role: "user", content: `Analiza este mensaje: "${msg}". ¿Hay intención de compra? Responde solo: HOT, WARM o COLD.` }],
         "Eres un analista de intención de ventas B2B infalible."
       );
+      const intentCheck = typeof intentRaw === 'string' ? intentRaw : JSON.stringify(intentRaw);
 
       // Sincronizar Lead en Supabase
       await supabaseAdmin.from('leads').upsert({

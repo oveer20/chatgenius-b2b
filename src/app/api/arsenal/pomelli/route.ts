@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import genAI from "@/lib/gemini";
+import { getGeminiResponse } from "@/lib/gemini";
 
 export async function POST(req: Request) {
   try {
@@ -9,25 +9,19 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "URL is required" }, { status: 400 });
     }
 
-    // 1. Fetch the content (Simulated for robustness/speed in demo, but basic fetch works)
     let content = "";
     try {
       const response = await fetch(url);
       content = await response.text();
-      // Basic cleaning
       content = content.replace(/<script\b[^>]*>([\s\S]*?)<\/script>/gi, "");
       content = content.replace(/<style\b[^>]*>([\s\S]*?)<\/style>/gi, "");
       content = content.replace(/<[^>]*>/g, " ");
-      content = content.slice(0, 10000); // Limit to 10k chars
+      content = content.slice(0, 10000);
     } catch (err) {
       console.error("Fetch error:", err);
-      // Fallback: If fetch fails, ask Gemini to reason based on the URL alone 
-      // (Gemini often has knowledge of popular brands or can infer from URL structure)
       content = `Extracting branding for: ${url}`;
     }
 
-    // 2. Use Gemini to analyze DNA
-    const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
     const prompt = `
       Eres una IA experta en branding y marketing estratégico de Google Labs (Pomelli).
       Analiza el siguiente contenido web (o URL) y extrae el ADN de la marca.
@@ -44,18 +38,12 @@ export async function POST(req: Request) {
       Solo devuelve el JSON, sin texto adicional.
     `;
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    let text = response.text();
-    
-    // Improved JSON extraction
-    const jsonMatch = text.match(/\{[\s\S]*\}/);
-    if (jsonMatch) {
-      text = jsonMatch[0];
-    } else {
-      text = text.replace(/```json|```/g, "").trim();
-    }
-    
+    const result = await getGeminiResponse([{ role: "user", content: prompt }], "Eres un asistente JSON.");
+
+    const resultText = typeof result === 'string' ? result : JSON.stringify(result);
+    const jsonMatch = resultText.match(/\{[\s\S]*\}/);
+    let text = jsonMatch ? jsonMatch[0] : resultText;
+
     return NextResponse.json(JSON.parse(text));
   } catch (err: any) {
     console.error("Pomelli API Error:", err);

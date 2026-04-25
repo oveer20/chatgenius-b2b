@@ -149,7 +149,8 @@ export async function POST(request: NextRequest) {
         responseText = await getOpenAIResponse(messages, fullSystemPrompt);
       } else {
         const { getGeminiResponse } = await import("@/lib/gemini");
-        responseText = await getGeminiResponse(messages, fullSystemPrompt);
+        const result = await getGeminiResponse(messages, fullSystemPrompt);
+        responseText = typeof result === 'string' ? result : JSON.stringify(result);
       }
     } catch (engineError: any) {
       console.error(`/// ERROR MOTOR ${engineType} ///`, engineError);

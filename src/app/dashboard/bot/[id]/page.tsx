@@ -418,10 +418,14 @@ export default function BotEditor() {
                         value={botData.model} onChange={e => setBotData({...botData, model: e.target.value})}
                         style={{ width: '100%', padding: '16px', background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', color: '#D4AF37', fontWeight: 900 }}
                       >
-                        <option value="gpt-4o">GPT-4o (Elite)</option>
-                        <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
-                        <option value="gpt-4o-mini">GPT-4o Mini</option>
+                        <option value="gemini">Gemini 2.0 Flash (Principal)</option>
+                        <option value="gpt">GPT-3.5 Turbo (Backup)</option>
+                        <option value="groq">Llama 3.1 8B - Groq (GRATIS)</option>
+                        <option value="mistral">Mistral Small (GRATIS)</option>
                       </select>
+                      <p style={{ fontSize: '0.7rem', opacity: 0.5, marginTop: '0.5rem' }}>
+                        Si falla uno, automáticamente responde otro
+                      </p>
                     </div>
                     <div>
                       <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 900, opacity: 0.4, marginBottom: '1.5rem', letterSpacing: '1.5px' }}>TEMPERATURA</label>

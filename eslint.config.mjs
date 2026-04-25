@@ -7,8 +7,7 @@ const eslintConfig = defineConfig([
       "out/**",
       "build/**",
       "next-env.d.ts",
-      "**/*.js",
-      "**/*.mjs"
+      "public/widget.js"  // Widget público puede permanecer ignorado
     ]
   }
 ]);

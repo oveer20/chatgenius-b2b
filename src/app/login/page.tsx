@@ -4,56 +4,38 @@ import { useState, Suspense } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { FiMail, FiLock, FiUser, FiArrowRight, FiShield, FiCheckCircle } from "react-icons/fi";
-import { toast } from "sonner";
-import { createClient } from "@/utils/supabase/client";
+import { FiMail, FiLock, FiArrowRight, FiUserPlus } from "react-icons/fi";
+import { toast, Toaster } from "sonner";
 import styles from "./auth.module.css";
+import { supabase } from "@/lib/supabase";
 
 function AuthContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const supabase = createClient();
-  const [mode, setMode] = useState<"login" | "signup">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isSignUp, setIsSignUp] = useState(false);
 
   const redirect = searchParams.get("redirect") || "/dashboard";
-  const plan = searchParams.get("plan");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      if (mode === "signup") {
-        const { error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            data: {
-              full_name: name,
-            },
-          },
-        });
+      if (isSignUp) {
+        const { error } = await supabase.auth.signUp({ email, password });
         if (error) throw error;
-        toast.success("✅ Protocolo iniciado. Revisa tu correo para verificar tu cuenta.");
+        toast.success("¡Cuenta creada! Revisa tu email para confirmar.");
       } else {
-        const { error } = await supabase.auth.signInWithPassword({
-          email,
-          password,
-        });
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
-        
-        toast.success("✅ Acceso autorizado. Sincronizando ecosistema...");
-        
-        const finalRedirect = plan ? `${redirect}?plan=${plan}` : redirect;
-        router.push(finalRedirect);
-        router.refresh();
+        toast.success("¡Bienvenido de vuelta!");
+        router.push(redirect);
       }
-    } catch (error: any) {
-      toast.error(`❌ Error: ${error.message || "Fallo en la autenticación."}`);
+    } catch (err: any) {
+      toast.error(err.message || "Error de autenticación");
     } finally {
       setLoading(false);
     }
@@ -66,37 +48,24 @@ function AuthContent() {
         className={styles.authCard}
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ duration: 0.6, cubicBezier: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 0.6 }}
       >
         <Link href="/" className={styles.logo}>
-          <img src="/stratix_shield.svg" alt="Stratix Logo" style={{ height: '32px' }} />
-          <span>Strat<span style={{ color: '#D4AF37' }}>ix</span> Intelligence</span>
+          <img src="/stratix_shield.svg" alt="Stratix" style={{ height: '28px' }} />
+          <span style={{ fontFamily: "'DM Mono', monospace" }}>Stratix <span style={{ color: '#D4AF37' }}>Intelligence</span></span>
         </Link>
 
-        <h1>{mode === "login" ? "Acceso de Élite" : "Registro de Élite"}</h1>
+        <h1>{isSignUp ? "Crear cuenta" : "Ingresa a tu cuenta"}</h1>
         <p className={styles.authSubtitle}>
-          {mode === "login"
-            ? "Ingreso seguro al núcleo de inteligencia estratégica"
-            : "Crea tu infraestructura de IA en menos de 60 segundos"}
+          {isSignUp ? "Crea tu cuenta para empezar" : "Accede a tu centro de control IA"}
         </p>
 
         <form onSubmit={handleSubmit} className={styles.authForm}>
-          {mode === "signup" && (
-            <div className={styles.inputGroup}>
-              <FiUser className={styles.inputIcon} />
-              <input
-                placeholder="Nombre Completo"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-              />
-            </div>
-          )}
           <div className={styles.inputGroup}>
             <FiMail className={styles.inputIcon} />
             <input
               type="email"
-              placeholder="tu@empresa.com"
+              placeholder="tu@email.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -106,7 +75,7 @@ function AuthContent() {
             <FiLock className={styles.inputIcon} />
             <input
               type="password"
-              placeholder="Contraseña de Seguridad"
+              placeholder="Contraseña (mín. 6 caracteres)"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -114,42 +83,47 @@ function AuthContent() {
             />
           </div>
 
-          <button
-            type="submit"
-            className={styles.submitBtn}
-            disabled={loading}
-          >
-            {loading ? "Sincronizando..." : mode === "login" ? "Iniciar Sesión" : "Crear Infraestructura IA"}
+          <button type="submit" className={styles.submitBtn} disabled={loading}>
+            {loading ? "Procesando..." : isSignUp ? "Crear cuenta" : "Entrar"}
             {!loading && <FiArrowRight />}
           </button>
         </form>
 
-        <div className={styles.switchMode}>
-          {mode === "login" ? "¿No tienes cuenta?" : "¿Ya eres miembro de élite?"}
-          <button onClick={() => setMode(mode === "login" ? "signup" : "login")}>
-            {mode === "login" ? "Regístrate aquí" : "Inicia sesión"}
-          </button>
-        </div>
+        <button
+          onClick={() => setIsSignUp(!isSignUp)}
+          style={{
+            marginTop: '1.5rem',
+            width: '100%',
+            padding: '12px',
+            background: 'transparent',
+            border: '1px solid rgba(212,175,55,0.3)',
+            borderRadius: '12px',
+            color: '#D4AF37',
+            cursor: 'pointer',
+            fontSize: '0.85rem',
+            fontWeight: 700,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '8px',
+          }}
+        >
+          <FiUserPlus />
+          {isSignUp ? "¿Ya tienes cuenta? Inicia sesión" : "¿No tienes cuenta? Regístrate"}
+        </button>
 
-        <div className={styles.trustBox}>
-          <div className={styles.trustHeader}>
-            <FiShield /> Ecosistema Zero-Trust v4.0
-          </div>
-          <div className={styles.trustItem}>
-            <FiCheckCircle /> Encriptación AES-256 de Grado Bancario
-          </div>
-          <div className={styles.trustItem}>
-            <FiCheckCircle /> Autenticación via Supabase Auth
-          </div>
-        </div>
+        <Link href="/" style={{ display: 'block', textAlign: 'center', marginTop: '1.5rem', fontSize: '0.85rem', opacity: 0.5, textDecoration: 'none' }}>
+          ← Volver al inicio
+        </Link>
       </motion.div>
+      <Toaster theme="dark" richColors position="top-center" />
     </div>
   );
 }
 
 export default function AuthPage() {
   return (
-    <Suspense fallback={<div style={{ minHeight: '100vh', backgroundColor: '#0B1120', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#D4AF37' }}>Cargando Protocolo de Seguridad...</div>}>
+    <Suspense fallback={<div style={{ minHeight: '100vh', backgroundColor: '#0B1120', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#D4AF37' }}>Cargando...</div>}>
       <AuthContent />
     </Suspense>
   );

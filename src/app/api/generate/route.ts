@@ -87,8 +87,9 @@ export async function POST(request: NextRequest) {
 
     // Usamos Gemini para velocidad y autoridad en español
     const result = await getGeminiResponse([{ role: "user", content: userPrompt }], systemPrompt);
+    const resultText = typeof result === 'string' ? result : JSON.stringify(result);
 
-    return NextResponse.json({ result: result.trim() });
+    return NextResponse.json({ result: resultText.trim() });
   } catch (error) {
     console.error("/// FALLO MOTOR OUTREACH ///", error);
     return NextResponse.json({ error: "Fallo en el motor de generación estratégica." }, { status: 500 });

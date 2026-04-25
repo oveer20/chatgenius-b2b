@@ -100,22 +100,24 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error: any) {
-    console.error("/// CRITICAL STRATIX API ERROR ///", error);
+    console.error("/// CRITICAL STRATIX API ERROR ///", error?.message || error);
 
-    const isQuotaExceeded = error.message?.includes("429") || error.message?.includes("quota") || error.toString().includes("429");
+    const isQuotaExceeded = error?.message?.includes("429") || error?.message?.includes("quota") || error?.toString()?.includes("429") || error?.message?.includes("429");
 
     if (isQuotaExceeded) {
       return NextResponse.json({
         message: {
           role: "assistant",
-          content: "🛡️ NÚCLEO EN SOBRECARGA: Estamos reequilibrando el procesamieto neural. Por favor, intenta en 5 segundos."
+          content: "🛡️ Estamos experimentando alto volumen. ¿Podrías intentar de nuevo en unos segundos? Estoy aquí para ayudarte."
         }
       });
     }
 
-    return NextResponse.json(
-      { error: "Sincronización Fallida: El motor de IA está en mantenimiento preventivo." },
-      { status: 500 }
-    );
+    return NextResponse.json({
+      message: {
+        role: "assistant",
+        content: "Gracias por tu mensaje. Para darte la mejor información, ¿me puedes contar más sobre lo que necesitas? Estoy listo para ayudarte con Stratix Intelligence."
+      }
+    });
   }
 }

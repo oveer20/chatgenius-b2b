@@ -5,9 +5,9 @@ import { extractText } from "unpdf";
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id: botId } = params;
+  const { id: botId } = await params;
 
   try {
     // 0. Feedback de Estado: Iniciando Indexación (V33.0)
