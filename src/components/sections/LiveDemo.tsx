@@ -262,8 +262,8 @@ ESTILO: Amiga, profesional, respuestas cortas en español colombiano. Usa emojis
           marginTop: '16px' 
         }}>
           {lang === "es" 
-            ? "Powered by Google Gemini 2.0 • Sin registro necesario"
-            : "Powered by Google Gemini 2.0 • No registration needed"}
+            ? "Multi-Engine IA · Sin registro necesario"
+            : "Multi-Engine AI · No registration needed"}
         </p>
       </motion.div>
     </section>

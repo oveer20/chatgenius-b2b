@@ -166,7 +166,7 @@ export default function WidgetPage() {
       <main style={{ maxWidth: '600px', margin: '0 auto', padding: '2rem 5%' }}>
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
           <h1 style={{ fontSize: '1.8rem', fontWeight: 900, marginBottom: '0.5rem' }}>Prueba el agente IA</h1>
-          <p style={{ opacity: 0.5 }}>Conectado con {botConfig?.name || "Gemini 2.0"}</p>
+          <p style={{ opacity: 0.5 }}>Conectado con {botConfig?.name || "Multi-Motor IA"}</p>
           <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '1rem', fontSize: '0.75rem', opacity: 0.4 }}>
             <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
               <FiZap size={12} /> Respuesta instantánea
@@ -189,7 +189,7 @@ export default function WidgetPage() {
                 <div style={{ fontWeight: 800, fontSize: '0.95rem' }}>{botConfig?.name || "Agente IA"}</div>
                 <div style={{ fontSize: '0.75rem', opacity: 0.5, display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#10b981' }} />
-                  Gemini 2.0 ✓
+                  Multi-Motor IA ✓
                 </div>
               </div>
             </div>
@@ -239,7 +239,7 @@ export default function WidgetPage() {
         </div>
 
         <p style={{ textAlign: 'center', marginTop: '1.5rem', opacity: 0.3, fontSize: '0.75rem' }}>
-          Conectando con Google Gemini 2.0 Flash - El modelo más rápido y potente
+          Conectando con Multi-Motor IA - El sistema más robusto con 4 engines activos
         </p>
       </main>
 
