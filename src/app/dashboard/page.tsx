@@ -219,7 +219,7 @@ export default function DashboardPage() {
         {/* Info de IAs */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
           style={{ padding: '2rem', background: 'rgba(13,16,23,0.6)', border: '1px solid var(--border)', borderRadius: '20px' }}>
-          <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.3rem', marginBottom: '1.5rem', color: 'var(--accent)' }}>🤖 Motores de IA Disponibles</h3>
+          <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.3rem', marginBottom: '1.5rem', color: 'var(--accent)' }}>Motores de IA Disponibles</h3>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
             {Object.entries(AI_PROVIDERS).map(([key, info]) => (
               <div key={key} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '12px', background: 'var(--surface)', borderRadius: '10px' }}>

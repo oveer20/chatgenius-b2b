@@ -10,7 +10,6 @@ const AI_MODELS = [
     provider: "Google",
     badge: "Principal",
     color: "#4285F4",
-    icon: "🎯",
     features: ["Ultra rápido", "Multimodal", "Contexto largo"]
   },
   {
@@ -18,7 +17,6 @@ const AI_MODELS = [
     provider: "OpenAI",
     badge: "Backup",
     color: "#10A37F",
-    icon: "⚡",
     features: ["Muy estable", "Conversacional", "Escalable"]
   },
   {
@@ -26,7 +24,6 @@ const AI_MODELS = [
     provider: "Groq",
     badge: "GRATIS",
     color: "#FF6B35",
-    icon: "🚀",
     features: ["1000 tok/seg", "Gratis", "Ultra rápido"]
   },
   {
@@ -34,7 +31,6 @@ const AI_MODELS = [
     provider: "Mistral AI",
     badge: "GRATIS",
     color: "#9F7AEA",
-    icon: "💨",
     features: ["Eficiente", "Versátil", "Bajo costo"]
   }
 ];
@@ -44,14 +40,14 @@ const TRANSLATIONS = {
     badge: "MÚLTIPLES MOTORES DE IA",
     title: "No dependés de una sola IA",
     subtitle: "Stratix combina los mejores modelos de IA. Si uno falla, otro responde automáticamente. Siempre online, siempre disponible.",
-    failoverTitle: "🔄 Failover Automático",
+    failoverTitle: "Failover Automático",
     failoverDesc: "Si Gemini falla → OpenAI responde. Si ambos fallan → Groq toma el control. Si todos fallan → Respuestas instantáneas locales. Tu agente siempre está online."
   },
   en: {
     badge: "MULTIPLE AI ENGINES",
     title: "Don't rely on a single AI",
     subtitle: "Stratix combines the best AI models. If one fails, another responds automatically. Always online, always available.",
-    failoverTitle: "🔄 Automatic Failover",
+    failoverTitle: "Automatic Failover",
     failoverDesc: "If Gemini fails → OpenAI responds. If both fail → Groq takes control. If all fail → Instant local responses. Your agent is always online."
   }
 };
@@ -91,7 +87,9 @@ function AIModelCard({ model, index }: { model: typeof AI_MODELS[0]; index: numb
       )}
 
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-        <span style={{ fontSize: '1.6rem' }}>{model.icon}</span>
+        <div style={{ width: 40, height: 40, borderRadius: 10, background: model.color, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 700, fontSize: '0.8rem' }}>
+          {model.name.charAt(0)}
+        </div>
         <div>
           <div style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.95rem' }}>{model.name}</div>
           <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{model.provider}</div>
