@@ -35,7 +35,7 @@ export default function LandingHero() {
 
       <div style={{ position: 'relative', zIndex: 1, maxWidth: '900px', opacity: 0, animation: 'fadeUp 0.8s ease forwards 0.2s' }}>
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', border: '1px solid rgba(212,175,55,0.25)', background: 'rgba(212,175,55,0.06)', color: '#D4AF37', fontFamily: 'var(--font-mono)', fontSize: '0.72rem', letterSpacing: '0.08em', padding: '6px 14px', borderRadius: '100px', marginBottom: '2.5rem' }}>
-          ✦ Gemini 2.0 Flash · Nuevo
+          ✦ Multi-Motor IA · 4 engines activos
         </div>
 
         <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(3rem, 8vw, 6rem)', lineHeight: 1.05, letterSpacing: '-0.03em', marginBottom: '2rem', color: '#f0f2f8' }}>

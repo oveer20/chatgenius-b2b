@@ -78,7 +78,7 @@ const translations: Record<"es" | "en", Translations> = {
       entrar: "Entrar",
     },
     hero: {
-      badge: "Gemini 2.0 Flash · Modelo más avanzado de Google",
+      badge: "Multi-Motor IA · 4 engines activos",
       titleLine1: "Tu agente IA que",
       titleLine2: "vende 24/7",
       subtitle: "Automatiza tu atención en WhatsApp, Instagram y Web. Califica leads, agenda citas y cierra ventas mientras duermes.",
@@ -141,7 +141,7 @@ const translations: Record<"es" | "en", Translations> = {
       entrar: "Sign in",
     },
     hero: {
-      badge: "Gemini 2.0 Flash · Google's most advanced model",
+      badge: "Multi-Engine AI · 4 active engines",
       titleLine1: "Your AI agent that",
       titleLine2: "sells 24/7",
       subtitle: "Automate your support on WhatsApp, Instagram and Web. Qualify leads, schedule appointments and close sales while you sleep.",
