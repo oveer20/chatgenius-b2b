@@ -10,12 +10,14 @@ declare global {
   }
 }
 
+const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_ID || "G-XXXXXXXXXX";
+
 export default function Analytics() {
   const pathname = usePathname();
 
   useEffect(() => {
     if (typeof window.gtag !== "undefined") {
-      window.gtag("config", "G-GTMPropertyID", {
+      window.gtag("config", GA_MEASUREMENT_ID, {
         page_path: pathname,
       });
     }
@@ -24,10 +26,11 @@ export default function Analytics() {
   useEffect(() => {
     const handleLeadSubmit = (e: CustomEvent) => {
       if (typeof window.gtag !== "undefined") {
-        window.gtag("event", "lead_submit", {
+        window.gtag("event", "generate_lead", {
           event_category: "conversion",
           event_label: e.detail?.source || "landing_page",
-          value: 1,
+          value: 100,
+          currency: "USD",
         });
       }
     };
@@ -41,12 +44,23 @@ export default function Analytics() {
       }
     };
 
+    const handleSchedule = (e: CustomEvent) => {
+      if (typeof window.gtag !== "undefined") {
+        window.gtag("event", "schedule_demo", {
+          event_category: "conversion",
+          event_label: "calendly",
+        });
+      }
+    };
+
     window.addEventListener("stratix:lead", handleLeadSubmit as EventListener);
     window.addEventListener("stratix:cta", handleCtaClick as EventListener);
+    window.addEventListener("stratix:schedule", handleSchedule as EventListener);
 
     return () => {
       window.removeEventListener("stratix:lead", handleLeadSubmit as EventListener);
       window.removeEventListener("stratix:cta", handleCtaClick as EventListener);
+      window.removeEventListener("stratix:schedule", handleSchedule as EventListener);
     };
   }, []);
 
@@ -54,15 +68,13 @@ export default function Analytics() {
 }
 
 export function trackLead(source: string) {
-  const event = new CustomEvent("stratix:lead", {
-    detail: { source },
-  });
-  window.dispatchEvent(event);
+  window.dispatchEvent(new CustomEvent("stratix:lead", { detail: { source } }));
 }
 
 export function trackCta(ctaName: string) {
-  const event = new CustomEvent("stratix:cta", {
-    detail: { cta: ctaName },
-  });
-  window.dispatchEvent(event);
+  window.dispatchEvent(new CustomEvent("stratix:cta", { detail: { cta: ctaName } }));
+}
+
+export function trackSchedule() {
+  window.dispatchEvent(new CustomEvent("stratix:schedule", {}));
 }

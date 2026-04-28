@@ -1,0 +1,1 @@
+{"object":"whatsapp_business_account","entry":[{"id":"test","changes":[{"value":{"messages":[{"from":"573155555555","type":"text","text":{"body":"Hola quiero info"}}],"metadata":{"phone_number_id":"123456789"},"contacts":[{"profile":{"name":"Test User"}}]}]}]}

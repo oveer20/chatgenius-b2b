@@ -31,22 +31,46 @@ export const metadata: Metadata = {
     template: '%s | Stratix Intelligence'
   },
   description: 'El agente de ventas más avanzado de LATAM. Automatiza WhatsApp, Instagram y Web 24/7. +1,800 empresas ya lo usan. Reduces costo de adquisición hasta 60%.',
-  keywords: ["IA ventas automatizadas", "WhatsApp Business IA", "automatización ventas Colombia", "Stratix Intelligence", "chatbot ventas", "agente IA inmobiliario", "RAG neuronal", "automatización B2B"],
+  keywords: ["IA ventas automatizadas", "WhatsApp Business IA", "automatización ventas Colombia", "Stratix Intelligence", "chatbot ventas", "agente IA inmobiliario", "RAG neuronal", "automatización B2B", "inteligencia artificial ventas", "asistente virtual ventas", "Lead qualification AI", "Colombia IA negocio"],
+  authors: [{ name: 'Stratix Intelligence' }],
+  creator: 'Stratix Intelligence',
+  publisher: 'Stratix Intelligence',
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+ alternates: {
+    canonical: 'https://stratix.la',
+    languages: {
+      'es': 'https://stratix.la',
+      'en': 'https://stratix.la?lang=en',
+    },
+  },
+  verification: {
+    google: 'GTM-T8VQKWXX',
+  },
   icons: { icon: "/stratix_shield.svg" },
   openGraph: {
     title: 'Stratix Intelligence | IA que Cierra Ventas 24/7',
     description: '+1,800 empresas en LATAM usan Stratix para automatizar ventas mientras duermen.',
     url: 'https://stratix.la',
     siteName: 'Stratix Intelligence',
-    images: [{ url: '/stratix_shield.svg', width: 1200, height: 630, alt: 'Stratix Intelligence' }], 
+    images: [
+      { url: '/stratix_shield.svg', width: 1200, height: 630, alt: 'Stratix Intelligence' },
+      { url: 'https://stratix.la/og-image.png', width: 1200, height: 630 },
+    ],
     type: 'website',
     locale: 'es_CO',
+    alternateLocale: 'en_US',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Stratix | IA que Cierra Ventas 24/7',
     description: '+1,800 empresas en LATAM usan Stratix para automatizar ventas.',
     images: ['/stratix_shield.svg'],
+    creator: '@stratix',
+    site: '@stratix',
   },
   robots: {
     index: true,

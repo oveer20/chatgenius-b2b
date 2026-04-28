@@ -1,0 +1,5 @@
+#!/bin/bash
+# Update WhatsApp Access Token
+NEW_TOKEN="EAANgrbEmQskBRUB5cZCDplKDukBIZBf3bO0tdanV5z6wVOeswZCFq8zcSkKanqWUgUr2XZA03sVbBkbb2k6QPPYfrHtZBRlRTLPVDBZCzjUtAWv2ZBpEMQ4jkNgIJnKzsnlwfumeo3BUbtVxTqUfIAQqGpGQG9fLZBbgDZCifjcdMwkzZCXw03sZCC8OqI3mi89pYPKVQE1towePGIdnnW6zrz0PuuLzq6RZC2vFUk6ZAwQVhV2F7xMHzsqiejqt9Br1afTNqHqqmhnQ63ww3s0FlpihZCDK3W1yLoYHFCK6kZD"
+
+echo "$NEW_TOKEN" | npx vercel env update WHATSAPP_ACCESS_TOKEN production --yes 2>&1
