@@ -8,6 +8,7 @@ import WhatsAppStickyMobile from "@/components/WhatsAppStickyMobile";
 import ScarcityPopup from "@/components/ScarcityPopup";
 import CalendlyWidget from "@/components/CalendlyWidget";
 import CookieConsent from "@/components/CookieConsent";
+import ThemeEffect from "@/components/ThemeEffect";
 import { ThemeProvider } from "@/components/ThemeContext";
 
 const outfit = Outfit({ 
@@ -183,7 +184,9 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body style={{ margin: 0, padding: 0, backgroundColor: '#060B14', color: '#F8F9FA' }}>
+      <body style={{ margin: 0, padding: 0 }}>
+        <ThemeProvider>
+          <ThemeEffect />
         {/* Google Tag Manager noscript */}
         <noscript dangerouslySetInnerHTML={{
           __html: `<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T8VQKWXX" height="0" width="0" style="display:none;visibility:hidden"></iframe>`,
@@ -194,6 +197,7 @@ export default function RootLayout({
         <ScarcityPopup />
         <CalendlyWidget />
         <CookieConsent />
+        </ThemeProvider>
       </body>
     </html>
   );

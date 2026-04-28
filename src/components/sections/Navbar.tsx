@@ -135,10 +135,10 @@ export default function Navbar() {
             width: '36px',
             height: '36px',
             borderRadius: '8px',
-            background: 'rgba(255,255,255,0.05)',
+            background: theme === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
             border: 'none',
             cursor: 'pointer',
-            color: '#8892a4',
+            color: theme === 'dark' ? '#8892a4' : '#1a1a1a',
             fontSize: '16px',
             transition: 'all 0.2s ease',
           }}

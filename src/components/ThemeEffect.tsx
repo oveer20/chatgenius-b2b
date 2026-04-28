@@ -8,8 +8,14 @@ export default function ThemeEffect() {
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
-    document.body.style.background = theme === "dark" ? "#070910" : "#f5f5f5";
-    document.body.style.color = theme === "dark" ? "#f0f2f8" : "#1a1a1a";
+    
+    if (theme === "light") {
+      document.body.style.background = "#f0f0f0";
+      document.body.style.color = "#1a1a1a";
+    } else {
+      document.body.style.background = "#070910";
+      document.body.style.color = "#f0f2f8";
+    }
   }, [theme]);
 
   return null;
