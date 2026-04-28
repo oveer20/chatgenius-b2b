@@ -2,10 +2,12 @@
 
 import Link from "next/link";
 import { useLang } from "@/components/LangContext";
+import { useTheme } from "@/components/ThemeContext";
 import { useState } from "react";
 
 export default function Navbar() {
   const { lang, setLang, showUSD, setShowUSD } = useLang();
+  const { theme, toggleTheme } = useTheme();
   const [hovered, setHovered] = useState<string | null>(null);
 
   const navItems = [
@@ -65,7 +67,6 @@ export default function Navbar() {
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '4px', background: 'rgba(255,255,255,0.05)', borderRadius: '8px' }}>
           <button 
             onClick={() => setLang("es")} 
-            onMouseEnter={() => {}}
             style={{ 
               padding: '6px 12px', 
               borderRadius: '6px', 
@@ -124,6 +125,27 @@ export default function Navbar() {
             }}
           >USD</button>
         </div>
+
+        <button 
+          onClick={toggleTheme}
+          style={{ 
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '36px',
+            height: '36px',
+            borderRadius: '8px',
+            background: 'rgba(255,255,255,0.05)',
+            border: 'none',
+            cursor: 'pointer',
+            color: '#8892a4',
+            fontSize: '16px',
+            transition: 'all 0.2s ease',
+          }}
+          title={theme === "dark" ? "Modo claro" : "Modo oscuro"}
+        >
+          {theme === "dark" ? "☀️" : "🌙"}
+        </button>
 
         <Link 
           href="/login"

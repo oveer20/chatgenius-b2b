@@ -15,6 +15,114 @@ function TypingIndicator() {
   );
 }
 
+function AnimatedAgent() {
+  const [pulse, setPulse] = useState(true);
+  
+  useEffect(() => {
+    const interval = setInterval(() => setPulse(p => !p), 2000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <motion.div
+      animate={{ 
+        scale: pulse ? [1, 1.05, 1] : 1,
+        y: pulse ? [0, -5, 0] : 0,
+      }}
+      transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+      style={{ position: 'relative', width: '80px', height: '80px' }}
+    >
+      {/* Outer glow */}
+      <motion.div
+        animate={{ scale: [1, 1.3, 1], opacity: [0.3, 0.6, 0.3] }}
+        transition={{ duration: 2, repeat: Infinity }}
+        style={{
+          position: 'absolute',
+          inset: '-10px',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(212,175,55,0.4) 0%, transparent 70%)',
+        }}
+      />
+      
+      {/* Avatar circle */}
+      <div style={{
+        width: '80px',
+        height: '80px',
+        borderRadius: '50%',
+        background: 'linear-gradient(135deg, #D4AF37 0%, #B8860B 100%)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        boxShadow: '0 8px 32px rgba(212,175,55,0.5)',
+        border: '3px solid rgba(255,255,255,0.2)',
+        position: 'relative',
+        zIndex: 1,
+      }}>
+        {/* AI Icon */}
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      </div>
+      
+      {/* Status indicator */}
+      <motion.div
+        animate={{ scale: [1, 1.2, 1] }}
+        transition={{ duration: 1, repeat: Infinity }}
+        style={{
+          position: 'absolute',
+          bottom: '2px',
+          right: '2px',
+          width: '16px',
+          height: '16px',
+          borderRadius: '50%',
+          background: '#25D366',
+          border: '3px solid #111520',
+        }}
+      />
+    </motion.div>
+  );
+}
+
+function FloatingParticles() {
+  const particles = Array.from({ length: 12 }, (_, i) => ({
+    id: i,
+    x: Math.random() * 400 - 200,
+    y: Math.random() * 200 - 100,
+    size: Math.random() * 4 + 2,
+    duration: Math.random() * 3 + 2,
+    delay: Math.random() * 2,
+  }));
+
+  return (
+    <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', overflow: 'hidden' }}>
+      {particles.map((p) => (
+        <motion.div
+          key={p.id}
+          animate={{
+            y: [p.y, p.y - 50, p.y],
+            opacity: [0, 0.8, 0],
+          }}
+          transition={{
+            duration: p.duration,
+            repeat: Infinity,
+            delay: p.delay,
+          }}
+          style={{
+            position: 'absolute',
+            left: '50%',
+            top: '50%',
+            width: p.size,
+            height: p.size,
+            borderRadius: '50%',
+            background: '#D4AF37',
+            boxShadow: `0 0 ${p.size * 2}px #D4AF37`,
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
 export default function Hero() {
   const { t, lang } = useLang();
   const [aiText, setAiText] = useState("");
@@ -50,7 +158,34 @@ export default function Hero() {
       <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 60% 40% at 50% 20%, rgba(212,175,55,0.1) 0%, transparent 70%)' }} />
       <div style={{ position: 'absolute', top: '15%', left: '10%', width: '300px', height: '300px', background: 'radial-gradient(circle, rgba(212,175,55,0.08) 0%, transparent 70%)', filter: 'blur(60px)' }} />
 
-      <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }} style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', border: '1px solid rgba(212,175,55,0.25)', background: 'rgba(212,175,55,0.06)', color: '#D4AF37', fontFamily: "'DM Mono', monospace", fontSize: '12px', letterSpacing: '0.08em', padding: '8px 16px', borderRadius: '100px', marginBottom: '40px' }}>
+      {/* Animated Agent Section */}
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.8 }}
+        style={{ marginBottom: '40px', position: 'relative' }}
+      >
+        <AnimatedAgent />
+        <FloatingParticles />
+        
+        {/* Agent label */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          style={{
+            marginTop: '16px',
+            fontFamily: "'DM Mono', monospace",
+            fontSize: '12px',
+            color: '#8892a4',
+            letterSpacing: '0.05em',
+          }}
+        >
+          🤖 {lang === "es" ? "Tu agente activo 24/7" : "Your 24/7 active agent"}
+        </motion.div>
+      </motion.div>
+
+      <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }} style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', border: '1px solid rgba(212,175,55,0.25)', background: 'rgba(212,175,55,0.06)', color: '#D4AF37', fontFamily: "'DM Mono', monospace", fontSize: '12px', letterSpacing: '0.08em', padding: '8px 16px', borderRadius: '100px', marginBottom: '24px' }}>
         {t.hero.badge}
       </motion.div>
 

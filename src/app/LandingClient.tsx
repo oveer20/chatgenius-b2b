@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, useEffect, Suspense } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
 import { Toaster } from "sonner";
 
 import { LangProvider } from "@/components/LangContext";
+import { ThemeProvider } from "@/components/ThemeContext";
+import ThemeEffect from "@/components/ThemeEffect";
 import AnimatedBackground from "@/components/ui/AnimatedBackground";
 import Particles from "@/components/ui/Particles";
 import Cursor from "@/components/Cursor";
@@ -27,28 +27,13 @@ import Footer from "@/components/sections/Footer";
 import Analytics from "@/components/Analytics";
 import MetaPixel from "@/components/MetaPixel";
 import WelcomePopup from "@/components/WelcomePopup";
-import WhatsAppFloat from "@/components/WhatsAppFloat";
-import ChatFloat from "@/components/ChatFloat";
 import ExitIntentPopup from "@/components/ExitIntentPopup";
 import SocialProof from "@/components/SocialProof";
+import ChatFloat from "@/components/ChatFloat";
 import AIModels from "@/components/sections/AIModels";
-
-function SearchParamsHandler({ onCheckout }: { onCheckout: (plan: string) => void }) {
-  const searchParams = useSearchParams();
-  const [hasAutoCheckedOut, setHasAutoCheckedOut] = useState(false);
-
-  useEffect(() => {
-    try {
-      const planFromUrl = searchParams.get("plan");
-      if (planFromUrl && !hasAutoCheckedOut) {
-        setHasAutoCheckedOut(true);
-        onCheckout(planFromUrl);
-      }
-    } catch (e) {}
-  }, [searchParams, hasAutoCheckedOut, onCheckout]);
-
-  return null;
-}
+import VideoDemo from "@/components/sections/VideoDemo";
+import MediaLogos from "@/components/sections/MediaLogos";
+import CalendlyWidget from "@/components/CalendlyWidget";
 
 export default function LandingClient() {
   const [isMounted, setIsMounted] = useState(false);
@@ -61,51 +46,43 @@ export default function LandingClient() {
 
   return (
     <Suspense fallback={<div style={{ minHeight: '100vh', background: '#070910' }} />}>
-      <LangProvider>
-        <LandingClientContent />
-      </LangProvider>
-    </Suspense>
-  );
-}
-
-function LandingClientContent() {
-  const router = useRouter();
-
-  const handleCheckout = async (planId: string) => {
-    router.push(`/login?redirect=/dashboard&plan=${planId}`);
-  };
-
-  return (
-<main style={{ position: 'relative' }}>
-        <Cursor />
-        <Analytics />
-        <MetaPixel />
-        <Particles />
-        <AnimatedBackground />
-        <div style={{ position: 'relative', zIndex: 10 }}>
-        <Navbar />
-        <Hero />
-        <Stats />
-        <Logos />
-        <LiveDemo />
-        <Features />
-        <AIModels />
-        <FAQ />
-        <TrustBadges />
-        <HowItWorks />
-        <Pricing />
-        <Testimonials />
-        <ScheduleDemo />
-        <LeadCapture />
-        <CTA />
-        <Footer />
-      </div>
-      <WelcomePopup />
-      <ExitIntentPopup />
-      <WhatsAppFloat />
-      <ChatFloat />
-      <SocialProof />
-      <Toaster theme="dark" richColors position="top-center" />
-    </main>
+      <ThemeProvider>
+        <ThemeEffect />
+        <LangProvider>
+          <main style={{ position: 'relative' }}>
+          <Cursor />
+          <Analytics />
+          <MetaPixel />
+          <Particles />
+          <AnimatedBackground />
+          <div style={{ position: 'relative', zIndex: 10 }}>
+            <Navbar />
+            <Hero />
+            <VideoDemo />
+            <MediaLogos />
+            <Stats />
+            <Logos />
+            <LiveDemo />
+            <Features />
+            <AIModels />
+            <FAQ />
+            <TrustBadges />
+            <HowItWorks />
+            <Pricing />
+            <Testimonials />
+            <ScheduleDemo />
+            <LeadCapture />
+            <CTA />
+            <Footer />
+          </div>
+          <WelcomePopup />
+          <ExitIntentPopup />
+          <ChatFloat />
+          <SocialProof />
+          <Toaster theme="dark" richColors position="top-center" />
+        </main>
+        </LangProvider>
+        </ThemeProvider>
+      </Suspense>
   );
 }

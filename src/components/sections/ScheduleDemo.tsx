@@ -2,6 +2,8 @@
 
 import { motion } from "framer-motion";
 import { useLang } from "@/components/LangContext";
+import CalendlyWidget from "@/components/CalendlyWidget";
+import { useState } from "react";
 
 declare global {
   interface Window {
@@ -95,31 +97,7 @@ export default function ScheduleDemo() {
           alignItems: 'center',
           gap: '16px',
         }}>
-          <motion.a
-            href="https://calendly.com/stratix-intelligence/demo"
-            target="_blank"
-            rel="noopener noreferrer"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.98 }}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '10px',
-              padding: '16px 32px',
-              borderRadius: '14px',
-              background: 'linear-gradient(135deg, #D4AF37 0%, #B8860B 100%)',
-              color: '#030a05',
-              textDecoration: 'none',
-              fontWeight: 600,
-              fontSize: '15px',
-              boxShadow: '0 4px 20px rgba(212,175,55,0.3)',
-            }}
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2zm-7 5h5v5h-5z"/>
-            </svg>
-            {lang === "es" ? "Reservar demo gratis" : "Book free demo"}
-          </motion.a>
+          <CalendlyWidget />
 
           <p style={{ color: '#4a5568', fontSize: '13px' }}>
             {lang === "es"

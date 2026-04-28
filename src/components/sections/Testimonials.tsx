@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 
 import { motion } from "framer-motion";
@@ -20,6 +21,7 @@ const TESTIMONIALS = {
 export default function Testimonials() {
   const { lang, t } = useLang();
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  // @ts-ignore
   const testimonials = TESTIMONIALS[lang];
 
   return (

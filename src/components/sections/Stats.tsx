@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, useInView } from "framer-motion";
+import { useLang } from "@/components/LangContext";
 
 interface CounterProps {
   end: number;
@@ -37,13 +38,28 @@ function Counter({ end, suffix = "", prefix = "", duration = 2000 }: CounterProp
 }
 
 export default function Stats() {
+  const { lang } = useLang();
+  
   return (
     <section style={{ 
       padding: 'clamp(3rem, 8vw, 6rem) clamp(1.5rem, 5vw, 4rem)',
       background: 'rgba(212,175,55,0.03)',
       borderTop: '1px solid rgba(212,175,55,0.1)',
-      borderBottom: '1px solid rgba(212,175,55,0.1)',
-    }}>
+borderBottom: '1px solid rgba(212,175,55,0.1)',
+      }}>
+      <h2 style={{ 
+        position: 'absolute', 
+        width: '1px', 
+        height: '1px', 
+        padding: 0, 
+        margin: '-1px', 
+        overflow: 'hidden', 
+        clip: 'rect(0,0,0,0)',
+        whiteSpace: 'nowrap',
+        border: 0,
+      }}>
+        {lang === "es" ? "Resultados de Stratix Intelligence" : "Stratix Intelligence Results"}
+      </h2>
       <div style={{
         maxWidth: '1000px',
         margin: '0 auto',
@@ -69,7 +85,7 @@ export default function Stats() {
             <Counter end={1847} suffix="+" />
           </div>
           <div style={{ color: '#8892a4', fontSize: '14px' }}>
-            Empresas confían en nosotros
+            {lang === "es" ? "Empresas confían en nosotros" : "Companies trust us"}
           </div>
         </motion.div>
 
@@ -90,7 +106,7 @@ export default function Stats() {
             <Counter end={60} suffix="%" prefix="" duration={1500} />
           </div>
           <div style={{ color: '#8892a4', fontSize: '14px' }}>
-            Reducción en costos de adquisición
+            {lang === "es" ? "Reducción en costos de adquisición" : "Reduction in acquisition costs"}
           </div>
         </motion.div>
 
@@ -111,7 +127,7 @@ export default function Stats() {
             <Counter end={4.9} suffix="/5" prefix="" duration={2000} />
           </div>
           <div style={{ color: '#8892a4', fontSize: '14px' }}>
-            Rating promedio de clientes
+            {lang === "es" ? "Rating promedio de clientes" : "Average client rating"}
           </div>
         </motion.div>
 
@@ -132,7 +148,7 @@ export default function Stats() {
             24<span style={{ fontSize: '0.5em' }}>/7</span>
           </div>
           <div style={{ color: '#8892a4', fontSize: '14px' }}>
-            Soporte y operación continua
+            {lang === "es" ? "Soporte y operación continua" : "Continuous support and operation"}
           </div>
         </motion.div>
       </div>

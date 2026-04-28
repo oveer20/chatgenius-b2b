@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { useLang } from "@/components/LangContext";
 import { trackLead } from "@/components/Analytics";
 import { FiUser, FiMail, FiPhone, FiBriefcase, FiCalendar } from "react-icons/fi";
+import { CALENDLY_URL } from "@/lib/constants";
 
 export default function LeadCapture() {
   const { lang } = useLang();
@@ -73,7 +74,7 @@ export default function LeadCapture() {
         </p>
         
         <motion.a
-          href="https://calendly.com/stratix-intelligence/demo"
+          href={CALENDLY_URL}
           target="_blank"
           rel="noopener noreferrer"
           whileHover={{ scale: 1.05 }}

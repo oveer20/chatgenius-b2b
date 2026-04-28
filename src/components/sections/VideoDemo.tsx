@@ -50,32 +50,6 @@ export default function VideoDemo() {
         </p>
 
         <div style={{
-          position: 'relative',
-          maxWidth: '800px',
-          margin: '0 auto',
-          borderRadius: '20px',
-          overflow: 'hidden',
-          border: '1px solid rgba(212,175,55,0.2)',
-          background: '#0d1017',
-          aspectRatio: '16/9',
-        }}>
-          <iframe
-            src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '100%',
-              height: '100%',
-              border: 'none',
-            }}
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowFullScreen
-            loading="lazy"
-          />
-        </div>
-
-        <div style={{
           display: 'flex',
           justifyContent: 'center',
           gap: 'clamp(1rem, 4vw, 2rem)',
@@ -92,9 +66,8 @@ export default function VideoDemo() {
               gap: '8px',
               padding: '14px 24px',
               borderRadius: '12px',
-              background: 'rgba(212,175,55,0.15)',
-              border: '1px solid rgba(212,175,55,0.3)',
-              color: '#D4AF37',
+              background: '#25D366',
+              color: '#fff',
               textDecoration: 'none',
               fontWeight: 600,
               fontSize: '14px',
@@ -119,8 +92,9 @@ export default function VideoDemo() {
               gap: '8px',
               padding: '14px 24px',
               borderRadius: '12px',
-              background: '#25D366',
-              color: '#fff',
+              background: 'rgba(212,175,55,0.15)',
+              border: '1px solid rgba(212,175,55,0.3)',
+              color: '#D4AF37',
               textDecoration: 'none',
               fontWeight: 600,
               fontSize: '14px',

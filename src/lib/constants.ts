@@ -1,3 +1,7 @@
+export const WHATSAPP_NUMBER = "573159269287";
+export const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
+export const CALENDLY_URL = "https://calendly.com/stratix-intelligence/demo";
+
 export const CURRENCIES = {
   USD: { symbol: '$', code: 'USD', rate: 1 },
   COP: { symbol: 'Col$', code: 'COP', rate: 4000 }, 

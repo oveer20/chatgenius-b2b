@@ -5,45 +5,89 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useLang } from "@/components/LangContext";
 import { trackLead } from "@/components/Analytics";
 
+interface FormData {
+  nombre: string;
+  email: string;
+  empresa: string;
+  telefono: string;
+  mensaje: string;
+}
+
 export default function WelcomePopup() {
   const { lang } = useLang();
+  const [step, setStep] = useState(1);
   const [isOpen, setIsOpen] = useState(false);
-  const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState<FormData>({
+    nombre: "",
+    email: "",
+    empresa: "",
+    telefono: "",
+    mensaje: "",
+  });
 
   useEffect(() => {
     const hasSeenPopup = sessionStorage.getItem("stratix_popup_seen");
     if (!hasSeenPopup) {
-      const timer = setTimeout(() => setIsOpen(true), 5000);
+      const timer = setTimeout(() => setIsOpen(true), 8000);
       return () => clearTimeout(timer);
     }
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email) return;
+    if (!formData.email || !formData.nombre) return;
 
+    setLoading(true);
     try {
       await fetch("/api/leads/notify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          email, 
-          source: "Welcome Popup" 
-        })
+        body: JSON.stringify({
+          email: formData.email,
+          name: formData.nombre,
+          company: formData.empresa,
+          phone: formData.telefono,
+          message: formData.mensaje,
+          source: "Multi-step Popup",
+        }),
       });
-      trackLead("welcome_popup");
+      trackLead("multistep_popup");
       sessionStorage.setItem("stratix_popup_seen", "true");
       setSubmitted(true);
-      setTimeout(() => setIsOpen(false), 2000);
+      setTimeout(() => setIsOpen(false), 2500);
     } catch (err) {
       console.error("Error:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleClose = () => {
     sessionStorage.setItem("stratix_popup_seen", "true");
     setIsOpen(false);
+  };
+
+  const nextStep = () => {
+    if (step === 1 && formData.nombre && formData.email) {
+      setStep(2);
+    } else if (step === 2) {
+      setStep(3);
+    }
+  };
+
+  const inputStyle = {
+    width: "100%",
+    padding: "14px 18px",
+    borderRadius: "12px",
+    border: "1px solid rgba(255,255,255,0.15)",
+    background: "rgba(255,255,255,0.05)",
+    color: "#f0f2f8",
+    fontSize: "15px",
+    outline: "none",
+    fontFamily: "'DM Sans', sans-serif",
+    transition: "border-color 0.2s",
   };
 
   return (
@@ -56,7 +100,7 @@ export default function WelcomePopup() {
           style={{
             position: "fixed",
             inset: 0,
-            background: "rgba(0,0,0,0.8)",
+            background: "rgba(0,0,0,0.85)",
             backdropFilter: "blur(8px)",
             zIndex: 9999,
             display: "flex",
@@ -76,7 +120,7 @@ export default function WelcomePopup() {
               border: "1px solid rgba(212,175,55,0.3)",
               borderRadius: "24px",
               padding: "clamp(24px, 5vw, 40px)",
-              maxWidth: "440px",
+              maxWidth: "480px",
               width: "100%",
               position: "relative",
               overflow: "hidden",
@@ -104,38 +148,54 @@ export default function WelcomePopup() {
               ×
             </button>
 
-            <div style={{
-              background: "linear-gradient(135deg, #D4AF37 0%, #B8860B 100%)",
-              width: "60px",
-              height: "60px",
-              borderRadius: "50%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              margin: "0 auto 20px",
-              fontSize: "28px",
-            }}>
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="#000">
-                <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/>
-              </svg>
+            {/* Progress indicator */}
+            <div style={{ display: "flex", gap: "8px", marginBottom: "24px" }}>
+              {[1, 2, 3].map((s) => (
+                <div
+                  key={s}
+                  style={{
+                    flex: 1,
+                    height: "4px",
+                    borderRadius: "2px",
+                    background: s <= step ? "#D4AF37" : "rgba(255,255,255,0.1)",
+                    transition: "background 0.3s",
+                  }}
+                />
+              ))}
             </div>
 
             {submitted ? (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                style={{ textAlign: "center" }}
+                style={{ textAlign: "center", padding: "20px 0" }}
               >
+                <div style={{
+                  width: "80px",
+                  height: "80px",
+                  borderRadius: "50%",
+                  background: "linear-gradient(135deg, #25D366 0%, #128C7E 100%)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  margin: "0 auto 20px",
+                }}>
+                  <svg width="40" height="40" viewBox="0 0 24 24" fill="#fff">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                  </svg>
+                </div>
                 <h3 style={{
                   fontFamily: "'DM Serif Display', serif",
                   fontSize: "24px",
                   color: "#f0f2f8",
                   marginBottom: "8px"
                 }}>
-                  {lang === "es" ? "¡Te contactamos pronto!" : "We'll contact you soon!"}
+                  {lang === "es" ? "¡Gracias!" : "Thank you!"}
                 </h3>
                 <p style={{ color: "#8892a4", fontSize: "14px" }}>
-                  {lang === "es" ? "Revisa tu email en las próximas 24h" : "Check your email in the next 24h"}
+                  {lang === "es" 
+                    ? "Un experto te contactará en minutos" 
+                    : "An expert will contact you in minutes"}
                 </p>
               </motion.div>
             ) : (
@@ -147,7 +207,9 @@ export default function WelcomePopup() {
                   textAlign: "center",
                   marginBottom: "8px",
                 }}>
-                  {lang === "es" ? "¿Quieres una demo personalizada?" : "Want a personalized demo?"}
+                  {step === 1 && (lang === "es" ? "Hablemos" : "Let's talk")}
+                  {step === 2 && (lang === "es" ? "¿En qué podemos ayudarte?" : "How can we help?")}
+                  {step === 3 && (lang === "es" ? "Tu info para contactarte" : "Your info to reach you")}
                 </h3>
                 <p style={{
                   color: "#8892a4",
@@ -155,57 +217,153 @@ export default function WelcomePopup() {
                   textAlign: "center",
                   marginBottom: "24px",
                 }}>
-                  {lang === "es" 
-                    ? "Déjanos tu email y te mostraremos cómo Stratix puede duplicar tus ventas."
-                    : "Leave your email and we'll show you how Stratix can double your sales."}
+                  {step === 1 && (lang === "es" 
+                    ? "Cuéntanos brevemente quién eres" 
+                    : "Tell us briefly who you are")}
+                  {step === 2 && (lang === "es" 
+                    ? "Selecciona tu área de interés" 
+                    : "Select your area of interest")}
+                  {step === 3 && (lang === "es" 
+                    ? "Último paso" 
+                    : "Last step")}
                 </p>
 
                 <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder={lang === "es" ? "Tu email profesional..." : "Your professional email..."}
-                    required
-                    style={{
-                      padding: "14px 18px",
-                      borderRadius: "12px",
-                      border: "1px solid rgba(255,255,255,0.15)",
-                      background: "rgba(255,255,255,0.05)",
-                      color: "#f0f2f8",
-                      fontSize: "15px",
-                      outline: "none",
-                      fontFamily: "'DM Sans', sans-serif",
-                    }}
-                  />
-                  <motion.button
-                    type="submit"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    style={{
-                      padding: "14px 24px",
-                      borderRadius: "12px",
-                      border: "none",
-                      background: "#D4AF37",
-                      color: "#030a05",
-                      fontSize: "15px",
-                      fontWeight: 600,
-                      cursor: "pointer",
-                      fontFamily: "'DM Sans', sans-serif",
-                    }}
-                  >
-                    {lang === "es" ? "Quiero mi demo gratis →" : "Get my free demo →"}
-                  </motion.button>
-                </form>
+                  {step === 1 && (
+                    <>
+                      <input
+                        type="text"
+                        value={formData.nombre}
+                        onChange={(e) => setFormData({...formData, nombre: e.target.value})}
+                        placeholder={lang === "es" ? "Tu nombre *" : "Your name *"}
+                        required
+                        style={inputStyle}
+                      />
+                      <input
+                        type="email"
+                        value={formData.email}
+                        onChange={(e) => setFormData({...formData, email: e.target.value})}
+                        placeholder={lang === "es" ? "Tu email *" : "Your email *"}
+                        required
+                        style={inputStyle}
+                      />
+                      <input
+                        type="text"
+                        value={formData.empresa}
+                        onChange={(e) => setFormData({...formData, empresa: e.target.value})}
+                        placeholder={lang === "es" ? "Nombre de tu empresa" : "Your company name"}
+                        style={inputStyle}
+                      />
+                    </>
+                  )}
 
-                <p style={{
-                  fontSize: "11px",
-                  color: "#4a5568",
-                  textAlign: "center",
-                  marginTop: "16px",
-                }}>
-                  {lang === "es" ? "Sin compromiso. 100% gratis." : "No commitment. 100% free."}
-                </p>
+                  {step === 2 && (
+                    <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                      {[
+                        lang === "es" ? "Automatización de ventas" : "Sales automation",
+                        lang === "es" ? "Atención al cliente IA" : "AI customer service",
+                        lang === "es" ? "Agentes paraWhatsApp/Business" : "Agents for WhatsApp/Business",
+                        lang === "es" ? "Otro" : "Other",
+                      ].map((option) => (
+                        <button
+                          key={option}
+                          type="button"
+                          onClick={() => {
+                            setFormData({...formData, mensaje: option});
+                            setStep(3);
+                          }}
+                          style={{
+                            padding: "14px 18px",
+                            borderRadius: "12px",
+                            border: "1px solid rgba(255,255,255,0.15)",
+                            background: "rgba(255,255,255,0.05)",
+                            color: "#f0f2f8",
+                            fontSize: "15px",
+                            cursor: "pointer",
+                            textAlign: "left",
+                            transition: "all 0.2s",
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.borderColor = "#D4AF37";
+                            e.currentTarget.style.background = "rgba(212,175,55,0.1)";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.borderColor = "rgba(255,255,255,0.15)";
+                            e.currentTarget.style.background = "rgba(255,255,255,0.05)";
+                          }}
+                        >
+                          {option}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+
+                  {step === 3 && (
+                    <>
+                      <input
+                        type="tel"
+                        value={formData.telefono}
+                        onChange={(e) => setFormData({...formData, telefono: e.target.value})}
+                        placeholder={lang === "es" ? "Tu WhatsApp" : "Your WhatsApp"}
+                        style={inputStyle}
+                      />
+                      <textarea
+                        value={formData.mensaje}
+                        onChange={(e) => setFormData({...formData, mensaje: e.target.value})}
+                        placeholder={lang === "es" ? "Mensaje adicional (opcional)" : "Additional message (optional)"}
+                        rows={3}
+                        style={{ ...inputStyle, resize: "none" }}
+                      />
+                    </>
+                  )}
+
+                  {step < 3 && (
+                    <motion.button
+                      type="button"
+                      onClick={nextStep}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      style={{
+                        padding: "14px 24px",
+                        borderRadius: "12px",
+                        border: "none",
+                        background: "#D4AF37",
+                        color: "#030a05",
+                        fontSize: "15px",
+                        fontWeight: 600,
+                        cursor: "pointer",
+                        fontFamily: "'DM Sans', sans-serif",
+                        marginTop: "8px",
+                      }}
+                    >
+                      {lang === "es" ? "Continuar →" : "Continue →"}
+                    </motion.button>
+                  )}
+
+                  {step === 3 && (
+                    <motion.button
+                      type="submit"
+                      disabled={loading}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      style={{
+                        padding: "14px 24px",
+                        borderRadius: "12px",
+                        border: "none",
+                        background: loading ? "#666" : "#D4AF37",
+                        color: "#030a05",
+                        fontSize: "15px",
+                        fontWeight: 600,
+                        cursor: loading ? "not-allowed" : "pointer",
+                        fontFamily: "'DM Sans', sans-serif",
+                      }}
+                    >
+                      {loading 
+                        ? (lang === "es" ? "Enviando..." : "Sending...") 
+                        : (lang === "es" ? "Solicitar demo →" : "Request demo →")}
+                    </motion.button>
+                  )}
+                </form>
               </>
             )}
           </motion.div>

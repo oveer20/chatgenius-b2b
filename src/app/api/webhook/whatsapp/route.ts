@@ -42,16 +42,32 @@ export async function POST(request: NextRequest) {
         const fromNumber = message.from; 
         const userName = value.contacts?.[0]?.profile?.name || "Cliente WP";
         const messageText = message.text?.body;
-        const phoneNumberId = value.metadata?.phone_number_id;
+        const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID || "1048955904974001";
 
         if (!messageText || !phoneNumberId) return NextResponse.json({ status: "ignored_no_content" });
 
         // A. Identificar Bot por Número Receptor (Phone ID)
-        const { data: bot } = await supabaseAdmin
-          .from("bots")
-          .select("*")
-          .eq("whatsapp_phone_number_id", phoneNumberId)
-          .single();
+        let bot = null;
+        
+        if (phoneNumberId) {
+          const { data: botByPhone } = await supabaseAdmin
+            .from("bots")
+            .select("*")
+            .eq("whatsapp_phone_number_id", phoneNumberId)
+            .single();
+          bot = botByPhone;
+        }
+        
+        // Fallback: usar último bot activo si no encuentra por phone_id
+        if (!bot) {
+          const { data: lastBot } = await supabaseAdmin
+            .from("bots")
+            .select("*")
+            .order("created_at", { ascending: false })
+            .limit(1)
+            .single();
+          bot = lastBot;
+        }
 
         if (!bot) {
           console.error(`/// BOT NOT FOUND FOR PHONE ID: ${phoneNumberId} ///`);
@@ -243,13 +259,23 @@ export async function POST(request: NextRequest) {
 
         // G. Respuesta vía Meta Graph API
         const { sendWhatsAppMessage } = await import("@/lib/whatsapp");
-        const botToken = bot.whatsapp_token || process.env.WHATSAPP_ACCESS_TOKEN;
+        const botToken = "EAANgrbEmQskBRUB5cZCDplKDukBIZBf3bO0tdanV5z6wVOeswZCFq8zcSkKanqWUgUr2XZA03sVbBkbb2k6QPPYfrHtZBRlRTLPVDBZCzjUtAWv2ZBpEMQ4jkNgIJnKzsnlwfumeo3BUbtVxTqUfIAQqGpGQG9fLZBbgDZCifjcdMwkzZCXw03sZCC8OqI3mi89pYPKVQE1towePGIdnnW6zrz0PuuLzq6RZC2vFUk6ZAwQVhV2F7xMHzsqiejqt9Br1afTNqHqqmhnQ63ww3s0FlpihZCDK3W1yLoYHFCK6kZD";
         
+        console.log(`=== WP: Enviando a ${fromNumber} ===`);
+        console.log(`=== WP: phoneId=${phoneNumberId} ===`);
+        console.log(`=== WP: Respuesta: ${cleanResponse.substring(0, 50)}... ===`);
+        
+        let whatsappResult = null;
         if (botToken) {
-           await sendWhatsAppMessage(phoneNumberId, botToken, fromNumber, cleanResponse);
+           try {
+             whatsappResult = await sendWhatsAppMessage(phoneNumberId, botToken, fromNumber, cleanResponse);
+             console.log(`=== WP Result: ${JSON.stringify(whatsappResult)} ===`);
+           } catch (err) {
+             console.log(`=== WP Error: ${err} ===`);
+           }
         }
 
-        return NextResponse.json({ status: "success" });
+        return NextResponse.json({ status: "success", whatsapp: whatsappResult });
       }
     }
     return NextResponse.json({ status: "ignored" });

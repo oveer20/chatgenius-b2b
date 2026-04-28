@@ -4,13 +4,21 @@ import { motion } from "framer-motion";
 import { useLang } from "@/components/LangContext";
 import { useState } from "react";
 
-const AI_MODELS = [
+interface AIModel {
+  name: string;
+  provider: string;
+  badge: string;
+  color: string;
+  features: string[];
+}
+
+const AI_MODELS: AIModel[] = [
   {
     name: "Gemini 2.0 Flash",
     provider: "Google",
     badge: "Principal",
     color: "#4285F4",
-    features: ["Ultra rápido", "Multimodal", "Contexto largo"]
+    features: ["Ultra rapido", "Multimodal", "Contexto largo"]
   },
   {
     name: "GPT-3.5 Turbo",
@@ -24,24 +32,62 @@ const AI_MODELS = [
     provider: "Groq",
     badge: "GRATIS",
     color: "#FF6B35",
-    features: ["1000 tok/seg", "Gratis", "Ultra rápido"]
+    features: ["1000 tok/seg", "Gratis", "Ultra rapido"]
   },
   {
     name: "Mistral Small",
     provider: "Mistral AI",
     badge: "GRATIS",
     color: "#9F7AEA",
-    features: ["Eficiente", "Versátil", "Bajo costo"]
+    features: ["Eficiente", "Versatil", "Bajo costo"]
   }
 ];
 
+const getAIIcon = (name: string) => {
+  const lower = name.toLowerCase();
+  if (lower.includes('gemini')) {
+    return (
+      <svg width="28" height="28" viewBox="0 0 100 100" fill="none">
+        <circle cx="50" cy="50" r="45" fill="#4285F4"/>
+        <path d="M50 25 L75 65 L25 65 Z" fill="white"/>
+        <circle cx="50" cy="50" r="8" fill="#4285F4"/>
+      </svg>
+    );
+  }
+  if (lower.includes('gpt') || lower.includes('openai')) {
+    return (
+      <svg width="28" height="28" viewBox="0 0 100 100" fill="none">
+        <circle cx="50" cy="50" r="45" fill="#10A37F"/>
+        <text x="50" y="62" textAnchor="middle" fill="white" fontSize="32" fontWeight="bold">G</text>
+      </svg>
+    );
+  }
+  if (lower.includes('groq') || lower.includes('llama')) {
+    return (
+      <svg width="28" height="28" viewBox="0 0 100 100" fill="none">
+        <circle cx="50" cy="50" r="45" fill="#FF6B35"/>
+        <path d="M30 70 L50 30 L70 70" stroke="white" strokeWidth="6" fill="none"/>
+      </svg>
+    );
+  }
+  if (lower.includes('mistral')) {
+    return (
+      <svg width="28" height="28" viewBox="0 0 100 100" fill="none">
+        <circle cx="50" cy="50" r="45" fill="#9F7AEA"/>
+        <path d="M30 40 L50 30 L70 40 L50 70 Z" fill="white"/>
+      </svg>
+    );
+  }
+  return null;
+};
+
 const TRANSLATIONS = {
   es: {
-    badge: "MÚLTIPLES MOTORES DE IA",
-    title: "No dependés de una sola IA",
-    subtitle: "Stratix combina los mejores modelos de IA. Si uno falla, otro responde automáticamente. Siempre online, siempre disponible.",
-    failoverTitle: "Failover Automático",
-    failoverDesc: "Si Gemini falla → OpenAI responde. Si ambos fallan → Groq toma el control. Si todos fallan → Respuestas instantáneas locales. Tu agente siempre está online."
+    badge: "MULTIPLES MOTORES DE IA",
+    title: "No dependes de una sola IA",
+    subtitle: "Stratix combina los mejores modelos de IA. Si uno falla, otro responde automaticamente. Siempre online, siempre disponible.",
+    failoverTitle: "Failover Automatico",
+    failoverDesc: "Si Gemini falla → OpenAI responde. Si ambos fallan → Groq toma el control. Si todos fallan → Respuestas instantaneas locales. Tu agente siempre esta online."
   },
   en: {
     badge: "MULTIPLE AI ENGINES",
@@ -52,7 +98,7 @@ const TRANSLATIONS = {
   }
 };
 
-function AIModelCard({ model, index }: { model: typeof AI_MODELS[0]; index: number }) {
+function AIModelCard({ model, index }: { model: AIModel; index: number }) {
   const [hovered, setHovered] = useState(false);
 
   return (
@@ -87,9 +133,7 @@ function AIModelCard({ model, index }: { model: typeof AI_MODELS[0]; index: numb
       )}
 
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-        <div style={{ width: 40, height: 40, borderRadius: 10, background: model.color, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 700, fontSize: '0.8rem' }}>
-          {model.name.charAt(0)}
-        </div>
+        {getAIIcon(model.name)}
         <div>
           <div style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.95rem' }}>{model.name}</div>
           <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{model.provider}</div>
@@ -123,7 +167,7 @@ function AIModelCard({ model, index }: { model: typeof AI_MODELS[0]; index: numb
 
 export default function AIModelsSection() {
   const { lang } = useLang();
-  const t = TRANSLATIONS[lang];
+  const t = TRANSLATIONS[lang as keyof typeof TRANSLATIONS] || TRANSLATIONS.es;
 
   return (
     <section style={{
@@ -150,7 +194,7 @@ export default function AIModelsSection() {
           letterSpacing: '0.15em',
           marginBottom: '2rem',
         }}>
-          ✦ {t.badge}
+          {t.badge}
         </span>
 
         <h2 style={{

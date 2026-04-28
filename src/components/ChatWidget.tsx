@@ -16,7 +16,7 @@ export default function ChatWidget() {
       script.defer = true;
       document.body.appendChild(script);
       
-      console.log("🛡️ Stratix: Chat widget loaded");
+      
     }, 2000);
 
     return () => clearTimeout(timer);

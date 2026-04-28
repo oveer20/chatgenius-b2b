@@ -1,0 +1,20 @@
+{
+  "name": "Stratix Intelligence",
+  "short_name": "Stratix",
+  "description": "Agentes IA conversacionales para automatizar ventas 24/7",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#060B14",
+  "theme_color": "#D4AF37",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/stratix_shield.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "productivity"],
+  "lang": "es-CO"
+}
