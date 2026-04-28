@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: 'GTM-T8VQKWXX',
+    google: 'GTM-52MHDWQR',
   },
   icons: { icon: "/stratix_shield.svg" },
   openGraph: {
@@ -96,7 +96,7 @@ export default function RootLayout({
         <link rel="manifest" href="/manifest.json" />
         {/* Google Tag Manager - for GTM container */}
         <script dangerouslySetInnerHTML={{
-          __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-T8VQKWXX');`,
+          __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-52MHDWQR');`,
         }} />
         
         {/* Schema.org - SoftwareApplication */}
@@ -213,7 +213,7 @@ export default function RootLayout({
           <ThemeEffect />
         {/* Google Tag Manager noscript */}
         <noscript dangerouslySetInnerHTML={{
-          __html: `<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T8VQKWXX" height="0" width="0" style="display:none;visibility:hidden"></iframe>`,
+          __html: `<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-52MHDWQR" height="0" width="0" style="display:none;visibility:hidden"></iframe>`,
         }} />
         {children}
         <FloatingWhatsApp />
