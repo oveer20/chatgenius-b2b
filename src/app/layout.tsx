@@ -7,6 +7,7 @@ import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 import WhatsAppStickyMobile from "@/components/WhatsAppStickyMobile";
 import ScarcityPopup from "@/components/ScarcityPopup";
 import CalendlyWidget from "@/components/CalendlyWidget";
+import ShareButton from "@/components/ShareButton";
 import CookieConsent from "@/components/CookieConsent";
 import ThemeEffect from "@/components/ThemeEffect";
 import { ThemeProvider } from "@/components/ThemeContext";
@@ -231,6 +232,7 @@ export default function RootLayout({
         <ScarcityPopup />
         <CalendlyWidget />
         <CookieConsent />
+        <ShareButton />
         </ThemeProvider>
       </body>
     </html>
