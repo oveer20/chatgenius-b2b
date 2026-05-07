@@ -26,7 +26,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://stratix.la'),
+  metadataBase: new URL('https://stratix-intelligence-ia.vercel.app'),
   title: {
     default: 'Stratix Intelligence | IA que Cierra Ventas 24/7',
     template: '%s | Stratix Intelligence'
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     telephone: false,
   },
  alternates: {
-    canonical: 'https://stratix.la',
+    canonical: 'https://stratix-intelligence-ia.vercel.app',
     languages: {
       'es': 'https://stratix.la',
       'en': 'https://stratix.la?lang=en',
