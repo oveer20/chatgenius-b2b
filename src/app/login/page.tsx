@@ -25,7 +25,13 @@ function AuthContent() {
 
     try {
       if (isSignUp) {
-        const { error } = await supabase.auth.signUp({ email, password });
+        const { error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard`,
+          },
+        });
         if (error) throw error;
         toast.success("¡Cuenta creada! Revisa tu email para confirmar.");
       } else {
