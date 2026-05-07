@@ -29,7 +29,6 @@ import MetaPixel from "@/components/MetaPixel";
 import WelcomePopup from "@/components/WelcomePopup";
 import ExitIntentPopup from "@/components/ExitIntentPopup";
 import SocialProof from "@/components/SocialProof";
-// import ChatFloat from "@/components/ChatFloat"; // Removed to fix UI overlap
 import AIModels from "@/components/sections/AIModels";
 import VideoDemo from "@/components/sections/VideoDemo";
 import MediaLogos from "@/components/sections/MediaLogos";
@@ -77,7 +76,6 @@ export default function LandingClient() {
           </div>
           <WelcomePopup />
           <ExitIntentPopup />
-          {/* <ChatFloat /> */} // Removed to fix UI overlap
           <SocialProof />
           <Toaster theme="dark" richColors position="top-center" />
         </main>
