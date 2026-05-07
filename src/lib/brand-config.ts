@@ -25,7 +25,7 @@ export const BRAND = {
 
   // Activos Digitales
   assets: {
-    logo: "https://stratixintelligence.com/logo.png", // Reemplazar con URL real
+    logo: "https://stratix-intelligence-ia.vercel.app/logo.png", // Reemplazar con URL real
     icon: "/stratix_shield.svg",
     dashboardIcon: "/dashboard_icon.png"
   },

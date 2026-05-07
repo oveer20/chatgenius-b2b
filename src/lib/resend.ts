@@ -24,14 +24,14 @@ export async function sendWelcomeEmail(email: string, name: string, plan: string
           <div style="background: rgba(212,175,55,0.03); padding: 30px; border-radius: 15px; border: 1px solid rgba(212,175,55,0.15); margin: 40px 0;">
             <p style="color: #D4AF37; font-weight: 800; font-size: 16px; margin-bottom: 20px; letter-spacing: 1px;">PROTOCOLOS DE INICIO:</p>
             <ul style="text-align: left; line-height: 2.2; margin: 0 auto; max-width: 400px; font-size: 14px; color: rgba(248,249,250,0.8);">
-              <li>🔹 Accede al <a href="https://stratixintelligence.com/dashboard" style="color: #D4AF37; text-decoration: none;">Núcleo de Control</a>.</li>
+              <li>🔹 Accede al <a href="${process.env.NEXT_PUBLIC_APP_URL}/dashboard" style="color: #D4AF37; text-decoration: none;">Núcleo de Control</a>.</li>
               <li>🔹 Conecta tu Activo de WhatsApp o Instagram.</li>
               <li>🔹 Inyecta conocimiento mediante PDF o URL.</li>
               <li>🔹 Activa tu Shield y empieza a escalar.</li>
             </ul>
           </div>
 
-          <a href="https://stratixintelligence.com/dashboard" style="background: #D4AF37; color: #060B14; padding: 16px 32px; border-radius: 10px; text-decoration: none; font-weight: 900; display: inline-block;">INICIAR SESIÓN EN EL NÚCLEO</a>
+          <a href="${process.env.NEXT_PUBLIC_APP_URL}/dashboard" style="background: #D4AF37; color: #060B14; padding: 16px 32px; border-radius: 10px; text-decoration: none; font-weight: 900; display: inline-block;">INICIAR SESIÓN EN EL NÚCLEO</a>
           
           <p style="margin-top: 50px; font-size: 12px; opacity: 0.4;">
             &copy; 2026 Stratix Intelligence — Infraestructura de IA de Alto Rendimiento.

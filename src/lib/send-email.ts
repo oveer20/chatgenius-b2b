@@ -45,7 +45,7 @@ export async function sendHotLeadAlert({
           </div>
           
           <p style="text-align: center; margin-top: 50px;">
-            <a href="https://stratixintelligence.com/dashboard" style="background-color: #D4AF37; color: #060B14; padding: 18px 35px; text-decoration: none; border-radius: 12px; font-weight: 900; display: inline-block; letter-spacing: 0.5px; box-shadow: 0 10px 20px rgba(212,175,55,0.2);">VER EN EL NÚCLEO</a>
+            <a href="${process.env.NEXT_PUBLIC_APP_URL}/dashboard" style="background-color: #D4AF37; color: #060B14; padding: 18px 35px; text-decoration: none; border-radius: 12px; font-weight: 900; display: inline-block; letter-spacing: 0.5px; box-shadow: 0 10px 20px rgba(212,175,55,0.2);">VER EN EL NÚCLEO</a>
           </p>
           
           <p style="font-size: 11px; opacity: 0.3; text-align: center; margin-top: 60px; letter-spacing: 1px;">STRATIX AI — INFRAESTRUCTURA DE ALTO RENDIMIENTO</p>
@@ -92,7 +92,7 @@ export async function sendWelcomePremiumEmail(to: string, plan: string) {
           </div>
           
           <p style="margin-top: 60px;">
-            <a href="https://stratixintelligence.com/dashboard" style="background: #D4AF37; color: #060B14; padding: 22px 45px; text-decoration: none; border-radius: 14px; font-weight: 900; display: inline-block; letter-spacing: 1px; box-shadow: 0 12px 25px rgba(212,175,55,0.25);">ACCEDER AL NÚCLEO</a>
+            <a href="${process.env.NEXT_PUBLIC_APP_URL}/dashboard" style="background: #D4AF37; color: #060B14; padding: 22px 45px; text-decoration: none; border-radius: 14px; font-weight: 900; display: inline-block; letter-spacing: 1px; box-shadow: 0 12px 25px rgba(212,175,55,0.25);">ACCEDER AL NÚCLEO</a>
           </p>
           
           <p style="font-size: 0.75rem; opacity: 0.3; margin-top: 80px;">Stratix Intelligence — Powering the Future of Enterprise IA.</p>
