@@ -7,7 +7,7 @@ import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 import WhatsAppStickyMobile from "@/components/WhatsAppStickyMobile";
 import ScarcityPopup from "@/components/ScarcityPopup";
 import CalendlyWidget from "@/components/CalendlyWidget";
-import ShareButton from "@/components/ShareButton";
+import CalendlyButton from "@/components/CalendlyButton";
 import CookieConsent from "@/components/CookieConsent";
 import ThemeEffect from "@/components/ThemeEffect";
 import { ThemeProvider } from "@/components/ThemeContext";
@@ -120,7 +120,7 @@ export default function RootLayout({
               "name": "Stratix Intelligence",
               "applicationCategory": "BusinessApplication",
               "operatingSystem": "Cloud, Web, WhatsApp, Instagram",
-              "url": "https://stratix.la",
+              "url": "https://stratix-intelligence-ia.vercel.app",
               "description": "Agente de IA para automatización de ventas 24/7 en WhatsApp, Instagram y Web",
               "offers": {
                 "@type": "Offer",
@@ -138,7 +138,7 @@ export default function RootLayout({
               "creator": {
                 "@type": "Organization",
                 "name": "Stratix Intelligence",
-                "url": "https://stratix.la",
+                "url": "https://stratix-intelligence-ia.vercel.app",
                 "location": {
                   "@type": "Place",
                   "address": {
@@ -160,7 +160,7 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "Organization",
               "name": "Stratix Intelligence",
-              "url": "https://stratix.la",
+              "url": "https://stratix-intelligence-ia.vercel.app",
               "logo": "https://stratix-intelligence-ia.vercel.app/stratix_shield.svg",
               "description": "Agente de IA para automatización de ventas 24/7",
               "address": {
@@ -232,7 +232,7 @@ export default function RootLayout({
         <ScarcityPopup />
         <CalendlyWidget />
         <CookieConsent />
-        <ShareButton />
+        <CalendlyButton />
         </ThemeProvider>
       </body>
     </html>
