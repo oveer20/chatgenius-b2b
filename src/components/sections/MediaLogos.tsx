@@ -65,7 +65,7 @@ export default function MediaLogos() {
             transition={{ delay: i * 0.1 }}
             whileHover={{ opacity: 1 }}
             style={{
-              fontFamily: "'DM Serif Display', serif",
+              fontFamily: 'var(--font-serif)',
               fontSize: 'clamp(1.5rem, 4vw, 2rem)',
               color: '#8892a4',
               fontWeight: 400,

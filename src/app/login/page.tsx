@@ -58,7 +58,7 @@ function AuthContent() {
       >
         <Link href="/" className={styles.logo}>
           <img src="/stratix_shield.svg" alt="Stratix" style={{ height: '28px' }} />
-          <span style={{ fontFamily: "'DM Mono', monospace" }}>Stratix <span style={{ color: '#D4AF37' }}>Intelligence</span></span>
+          <span style={{ fontFamily: 'var(--font-mono)' }}>Stratix <span style={{ color: '#D4AF37' }}>Intelligence</span></span>
         </Link>
 
         <h1>{isSignUp ? "Crear cuenta" : "Ingresa a tu cuenta"}</h1>

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Outfit, Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 import ChatWidget from "@/components/ChatWidget";
@@ -11,19 +10,6 @@ import CalendlyButton from "@/components/CalendlyButton";
 import CookieConsent from "@/components/CookieConsent";
 import ThemeEffect from "@/components/ThemeEffect";
 import { ThemeProvider } from "@/components/ThemeContext";
-
-const outfit = Outfit({ 
-  subsets: ["latin"], 
-  weight: ["300", "400", "600", "700", "900"],
-  variable: '--font-display',
-  display: 'swap',
-});
-
-const inter = Inter({ 
-  subsets: ["latin"],
-  variable: '--font-sans',
-  display: 'swap',
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://stratix-intelligence-ia.vercel.app'),
@@ -92,7 +78,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" className={`${outfit.variable} ${inter.variable}`}>
+    <html lang="es">
       <head>
         <link rel="manifest" href="/manifest.json" />
         {/* Google tag (gtag.js) */}

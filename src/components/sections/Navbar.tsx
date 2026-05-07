@@ -38,7 +38,7 @@ export default function Navbar() {
       }}>
         <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
           <img src="/stratix_shield.svg" alt="Stratix" style={{ height: '24px', width: '24px' }} />
-          <span className="nav-text-desktop" style={{ fontFamily: "'DM Mono', monospace", fontSize: '1rem', fontWeight: 500, color: '#f0f2f8' }}>Stratix Intelligence</span>
+          <span className="nav-text-desktop" style={{ fontFamily: 'var(--font-mono)', fontSize: '1rem', fontWeight: 500, color: '#f0f2f8' }}>Stratix Intelligence</span>
         </Link>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>

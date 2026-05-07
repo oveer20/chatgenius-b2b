@@ -26,10 +26,10 @@ export default function Testimonials() {
     <section style={{ padding: 'clamp(4rem, 10vw, 8rem) clamp(1.5rem, 5vw, 4rem)', maxWidth: '1200px', margin: '0 auto' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
         <span style={{ width: '24px', height: '1px', background: '#D4AF37' }} />
-        <span style={{ fontFamily: "'DM Mono', monospace", fontSize: '12px', letterSpacing: '0.12em', color: '#D4AF37', textTransform: 'uppercase' }}>{t.testimonials.label}</span>
+        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', letterSpacing: '0.12em', color: '#D4AF37', textTransform: 'uppercase' }}>{t.testimonials.label}</span>
       </div>
       
-      <h2 style={{ fontFamily: "'DM Serif Display', Georgia, serif", fontSize: 'clamp(2rem, 5vw, 3.5rem)', lineHeight: 1.1, letterSpacing: '-0.02em', marginBottom: '48px', color: '#f0f2f8' }}>
+      <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(2rem, 5vw, 3.5rem)', lineHeight: 1.1, letterSpacing: '-0.02em', marginBottom: '48px', color: '#f0f2f8' }}>
         {t.testimonials.title}<br />
         <em style={{ color: '#D4AF37', fontStyle: 'italic' }}>{t.testimonials.titleEm}</em>
       </h2>
@@ -60,7 +60,7 @@ export default function Testimonials() {
                 position: 'absolute', 
                 top: '16px', 
                 right: '24px', 
-                fontFamily: "'DM Serif Display', Georgia, serif", 
+                fontFamily: 'var(--font-serif)', 
                 fontSize: '5rem', 
                 color: '#D4AF37', 
                 opacity: hoveredIndex === i ? 0.2 : 0.1, 
@@ -110,7 +110,7 @@ export default function Testimonials() {
                   justifyContent: 'center', 
                   fontSize: '12px', 
                   fontWeight: 600, 
-                  fontFamily: "'DM Mono', monospace", 
+                  fontFamily: 'var(--font-mono)', 
                   background: 'rgba(212,175,55,0.1)', 
                   color: '#D4AF37' 
                 }}
@@ -133,7 +133,7 @@ export default function Testimonials() {
                   style={{ 
                     fontSize: '12px', 
                     color: '#4a5568', 
-                    fontFamily: "'DM Mono', monospace" 
+                    fontFamily: 'var(--font-mono)' 
                   }}
                 >
                   {testimonial.role}

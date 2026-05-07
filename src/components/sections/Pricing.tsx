@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useLang } from "@/components/LangContext";
 import { useState, useEffect } from "react";
 import { PRICING_PLANS } from "@/lib/constants";
@@ -18,11 +18,6 @@ export default function Pricing() {
     const base = isAnnual ? plan.priceUsdAnnual : plan.priceUsd;
     const copPrice = isAnnual ? plan.priceCopAnnual : plan.priceCop;
     
-    // Show COP by default, or USD if user prefers
-    // Since useLang hook doesn't always expose currency preference directly in all implementations, 
-    // we'll default to the logic that matches the visual style: $XX for USD or $XXK for COP.
-    // Here we will just return COP for better local relevance, or a generic format.
-    // To match previous behavior:
     return {
       price: `$${base}`,
       period: isAnnual ? "/mes (facturado anual)" : "/mes",
@@ -42,17 +37,19 @@ export default function Pricing() {
           padding: '6px 16px',
           borderRadius: '20px',
           marginBottom: '20px',
+          fontFamily: 'var(--font-sans)',
+          letterSpacing: '0.05em',
         }}>
           {t.pricing.label || "INVERSION INTELIGENTE"}
         </span>
         
-        <h2 style={{ fontFamily: "'DM Serif Display', Georgia, serif", fontSize: 'clamp(2rem, 5vw, 3.5rem)', lineHeight: 1.1, letterSpacing: '-0.02em', marginBottom: '16px', color: '#f0f2f8' }}>
+        <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(2rem, 5vw, 3.5rem)', lineHeight: 1.1, letterSpacing: '-0.02em', marginBottom: '16px', color: '#f0f2f8' }}>
           {t.pricing.title} <em style={{ color: '#D4AF37', fontStyle: 'italic' }}>{t.pricing.titleEm}</em>
         </h2>
         
         {/* Toggle Anual/Mensual */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', marginTop: '32px' }}>
-          <span style={{ color: !isAnnual ? '#fff' : '#8892a4', fontSize: '14px', fontWeight: !isAnnual ? 700 : 500, transition: 'color 0.3s' }}>Mensual</span>
+          <span style={{ color: !isAnnual ? '#fff' : '#8892a4', fontSize: '14px', fontWeight: !isAnnual ? 700 : 500, transition: 'color 0.3s', fontFamily: 'var(--font-sans)' }}>Mensual</span>
           <button
             onClick={() => setIsAnnual(!isAnnual)}
             style={{
@@ -77,7 +74,7 @@ export default function Pricing() {
               transition: 'left 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
             }} />
           </button>
-          <span style={{ color: isAnnual ? '#fff' : '#8892a4', fontSize: '14px', fontWeight: isAnnual ? 700 : 500, transition: 'color 0.3s' }}>
+          <span style={{ color: isAnnual ? '#fff' : '#8892a4', fontSize: '14px', fontWeight: isAnnual ? 700 : 500, transition: 'color 0.3s', fontFamily: 'var(--font-sans)' }}>
             Anual <span style={{ color: '#D4AF37', fontSize: '12px' }}>(Ahorra 20%)</span>
           </span>
         </div>
@@ -121,36 +118,40 @@ export default function Pricing() {
                 <div style={{
                   position: 'absolute', top: '-14px', left: '50%', transform: 'translateX(-50%)',
                   background: '#D4AF37', color: '#000', fontSize: '12px', fontWeight: 700,
-                  padding: '6px 16px', borderRadius: '20px', textTransform: 'uppercase', letterSpacing: '1px'
+                  padding: '6px 16px', borderRadius: '20px', textTransform: 'uppercase', letterSpacing: '1px',
+                  fontFamily: 'var(--font-sans)',
                 }}>
                   Más Popular
                 </div>
               )}
               
-              <h3 style={{ fontSize: '20px', fontWeight: 700, color: '#fff', marginBottom: '8px', marginTop: isHighlighted ? '8px' : '0' }}>
+              <h3 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, color: '#fff', marginBottom: '8px', marginTop: isHighlighted ? '8px' : '0' }}>
                 {plan.name}
               </h3>
-              <p style={{ color: '#8892a4', fontSize: '14px', marginBottom: '24px' }}>{plan.description}</p>
+              <p style={{ color: '#8892a4', fontSize: '14px', marginBottom: '24px', fontFamily: 'var(--font-sans)', lineHeight: 1.5 }}>{plan.description}</p>
               
-              <div style={{ display: 'flex', alignItems: 'flex-end', gap: '4px', marginBottom: '4px' }}>
-                <span style={{ fontFamily: "'DM Serif Display', serif", fontSize: '3.5rem', fontWeight: 700, color: '#fff', lineHeight: 1 }}>
-                  ${isClient ? `$${(isAnnual ? plan.priceCopAnnual : plan.priceCop).toLocaleString('es-CO')}` : '...'}
-                </span>
-                <span style={{ color: '#8892a4', fontSize: '14px', marginBottom: '12px' }}>COP{isAnnual ? "/mes (facturado anual)" : "/mes"}</span>
+              <div style={{ marginBottom: '4px' }}>
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', flexWrap: 'wrap' }}>
+                  <span style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', fontWeight: 700, color: '#fff', lineHeight: 1.1 }}>
+                    ${isClient ? (isAnnual ? plan.priceCopAnnual : plan.priceCop).toLocaleString('es-CO') : '...'}
+                  </span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginTop: '4px' }}>
+                  <span style={{ color: '#8892a4', fontSize: '14px', fontFamily: 'var(--font-sans)' }}>COP{isAnnual ? "/mes" : "/mes"}</span>
+                  {isAnnual && (
+                    <span style={{ color: '#27C93F', fontSize: '12px', fontWeight: 600, fontFamily: 'var(--font-sans)' }}>
+                      · 2 meses gratis
+                    </span>
+                  )}
+                </div>
               </div>
               
-              {isAnnual && (
-                <div style={{ color: '#27C93F', fontSize: '13px', fontWeight: 600, marginBottom: '24px' }}>
-                  Incluye 2 meses gratis
-                </div>
-              )}
-              
-              <div style={{ height: '1px', background: 'rgba(255,255,255,0.1)', margin: '0 0 24px' }} />
+              <div style={{ height: '1px', background: 'rgba(255,255,255,0.1)', margin: '16px 0 24px' }} />
               
               <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '32px', flex: 1 }}>
                 {plan.features.map((f, i) => (
-                  <li key={i} style={{ display: 'flex', gap: '12px', color: '#e2e8f0', fontSize: '14px' }}>
-                    <span style={{ color: '#D4AF37' }}>✓</span> {f}
+                  <li key={i} style={{ display: 'flex', gap: '12px', color: '#e2e8f0', fontSize: '14px', fontFamily: 'var(--font-sans)', lineHeight: 1.4 }}>
+                    <span style={{ color: '#D4AF37', flexShrink: 0 }}>✓</span> {f}
                   </li>
                 ))}
               </ul>
@@ -172,9 +173,10 @@ export default function Pricing() {
                   color: isHighlighted ? '#000' : '#fff',
                   border: isHighlighted ? 'none' : '1px solid rgba(255,255,255,0.2)',
                   transition: 'all 0.3s ease',
+                  fontFamily: 'var(--font-sans)',
                 }}
               >
-                {isHighlighted ? "Empezar prueba gratis 🚀" : "Comenzar"}
+                {isHighlighted ? "Empezar prueba gratis" : "Comenzar"}
               </motion.a>
             </motion.div>
           );

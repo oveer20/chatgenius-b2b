@@ -50,7 +50,7 @@ export default function CTA() {
           <motion.h2 
             style={{ 
               position: 'relative', 
-              fontFamily: "'DM Serif Display', Georgia, serif", 
+              fontFamily: 'var(--font-serif)', 
               fontSize: 'clamp(2rem, 5vw, 3.5rem)', 
               lineHeight: 1.1, 
               letterSpacing: '-0.02em', 
@@ -143,7 +143,7 @@ export default function CTA() {
               justifyContent: 'center', 
               gap: '32px', 
               flexWrap: 'wrap', 
-              fontFamily: "'DM Mono', monospace", 
+              fontFamily: 'var(--font-mono)', 
               fontSize: '12px', 
               color: '#4a5568' 
             }}

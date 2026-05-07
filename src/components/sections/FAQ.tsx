@@ -88,7 +88,7 @@ function FAQItem({ faq, index }: { faq: { q: string; a: string }; index: number 
         }}
       >
         <span style={{
-          fontFamily: "'DM Serif Display', serif",
+          fontFamily: 'var(--font-serif)',
           fontSize: 'clamp(15px, 2vw, 18px)',
           color: isOpen ? '#D4AF37' : '#f0f2f8',
           transition: 'color 0.3s ease',
@@ -163,7 +163,7 @@ export default function FAQ() {
           PREGUNTAS FRECUENTES
         </span>
         <h2 style={{
-          fontFamily: "'DM Serif Display', serif",
+          fontFamily: 'var(--font-serif)',
           fontSize: 'clamp(2rem, 5vw, 3rem)',
           color: '#f0f2f8',
         }}>

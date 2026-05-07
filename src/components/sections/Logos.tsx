@@ -10,7 +10,7 @@ export default function Logos() {
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        style={{ fontFamily: "'DM Mono', monospace", fontSize: '12px', letterSpacing: '0.12em', color: '#4a5568', marginBottom: '32px' }}
+        style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', letterSpacing: '0.12em', color: '#4a5568', marginBottom: '32px' }}
       >
         CONFIADO POR EQUIPOS EN CRECIMIENTO
       </motion.div>
@@ -35,7 +35,7 @@ export default function Logos() {
               transition: { duration: 0.2 }
             }}
             style={{ 
-              fontFamily: "'DM Sans', sans-serif", 
+              fontFamily: 'var(--font-sans)', 
               fontSize: '16px', 
               color: '#8892a4', 
               letterSpacing: '0.03em', 

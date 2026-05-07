@@ -75,7 +75,7 @@ borderBottom: '1px solid rgba(212,175,55,0.1)',
           transition={{ delay: 0.1 }}
         >
           <div style={{
-            fontFamily: "'DM Serif Display', serif",
+            fontFamily: 'var(--font-serif)',
             fontSize: 'clamp(2.5rem, 6vw, 4rem)',
             fontWeight: 700,
             color: '#D4AF37',
@@ -96,7 +96,7 @@ borderBottom: '1px solid rgba(212,175,55,0.1)',
           transition={{ delay: 0.2 }}
         >
           <div style={{
-            fontFamily: "'DM Serif Display', serif",
+            fontFamily: 'var(--font-serif)',
             fontSize: 'clamp(2.5rem, 6vw, 4rem)',
             fontWeight: 700,
             color: '#D4AF37',
@@ -117,7 +117,7 @@ borderBottom: '1px solid rgba(212,175,55,0.1)',
           transition={{ delay: 0.3 }}
         >
           <div style={{
-            fontFamily: "'DM Serif Display', serif",
+            fontFamily: 'var(--font-serif)',
             fontSize: 'clamp(2.5rem, 6vw, 4rem)',
             fontWeight: 700,
             color: '#D4AF37',
@@ -138,7 +138,7 @@ borderBottom: '1px solid rgba(212,175,55,0.1)',
           transition={{ delay: 0.4 }}
         >
           <div style={{
-            fontFamily: "'DM Serif Display', serif",
+            fontFamily: 'var(--font-serif)',
             fontSize: 'clamp(2.5rem, 6vw, 4rem)',
             fontWeight: 700,
             color: '#D4AF37',

@@ -57,7 +57,7 @@ export default function CookieConsent() {
           <div>
             <h3
               style={{
-                fontFamily: "'DM Serif Display', serif",
+                fontFamily: 'var(--font-serif)',
                 fontSize: "18px",
                 color: "#f0f2f8",
                 marginBottom: "8px",

@@ -143,7 +143,7 @@ export default function ScarcityPopup() {
                     background: "rgba(255,255,255,0.1)",
                     padding: "4px 6px",
                     borderRadius: "4px",
-                    fontFamily: "'DM Mono', monospace",
+                    fontFamily: 'var(--font-mono)',
                     color: "#f0f2f8",
                   }}>
                     {String(countdown.hours).padStart(2, "0")}
@@ -153,7 +153,7 @@ export default function ScarcityPopup() {
                     background: "rgba(255,255,255,0.1)",
                     padding: "4px 6px",
                     borderRadius: "4px",
-                    fontFamily: "'DM Mono', monospace",
+                    fontFamily: 'var(--font-mono)',
                     color: "#f0f2f8",
                   }}>
                     {String(countdown.minutes).padStart(2, "0")}
@@ -163,7 +163,7 @@ export default function ScarcityPopup() {
                     background: "rgba(255,255,255,0.1)",
                     padding: "4px 6px",
                     borderRadius: "4px",
-                    fontFamily: "'DM Mono', monospace",
+                    fontFamily: 'var(--font-mono)',
                     color: "#f0f2f8",
                   }}>
                     {String(countdown.seconds).padStart(2, "0")}

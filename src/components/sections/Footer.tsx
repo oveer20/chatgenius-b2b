@@ -34,7 +34,7 @@ export default function Footer() {
           <div>
             <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none', marginBottom: '20px' }}>
               <img src="/stratix_shield.svg" alt="Stratix" style={{ height: '36px', width: '36px' }} />
-              <span style={{ fontFamily: "'DM Mono', monospace", fontSize: '1.2rem', fontWeight: 600, color: '#f0f2f8' }}>Stratix Intelligence</span>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '1.2rem', fontWeight: 600, color: '#f0f2f8' }}>Stratix Intelligence</span>
             </Link>
             <p style={{ fontSize: '14px', color: '#8892a4', maxWidth: '280px', lineHeight: 1.7, marginBottom: '24px' }}>
               Agentes IA conversacionales para automatizar tu atención y ventas 24/7.
@@ -81,13 +81,13 @@ export default function Footer() {
 
           <div style={{ display: 'flex', gap: '64px', flexWrap: 'wrap' }}>
             <div>
-              <h4 style={{ fontFamily: "'DM Mono', monospace", fontSize: '11px', letterSpacing: '0.1em', color: '#D4AF37', marginBottom: '20px' }}>PRODUCTO</h4>
+              <h4 style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.1em', color: '#D4AF37', marginBottom: '20px' }}>PRODUCTO</h4>
               <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '14px' }}>
                 {links.producto.map((l: string, i: number) => <li key={i}><Link href={i === 0 ? "#productos" : "#planes"} style={{ fontSize: '14px', color: '#8892a4', textDecoration: 'none', transition: 'color 0.2s' }} onMouseEnter={(e) => e.currentTarget.style.color = '#f0f2f8'} onMouseLeave={(e) => e.currentTarget.style.color = '#8892a4'}>{l}</Link></li>)}
               </ul>
             </div>
             <div>
-              <h4 style={{ fontFamily: "'DM Mono', monospace", fontSize: '11px', letterSpacing: '0.1em', color: '#D4AF37', marginBottom: '20px' }}>LEGAL</h4>
+              <h4 style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.1em', color: '#D4AF37', marginBottom: '20px' }}>LEGAL</h4>
               <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '14px' }}>
                 <li><Link href="/legal/privacy" style={{ fontSize: '14px', color: '#8892a4', textDecoration: 'none', transition: 'color 0.2s' }} onMouseEnter={(e) => e.currentTarget.style.color = '#f0f2f8'} onMouseLeave={(e) => e.currentTarget.style.color = '#8892a4'}>{lang === "es" ? "Privacidad" : "Privacy"}</Link></li>
                 <li><Link href="/legal/terms" style={{ fontSize: '14px', color: '#8892a4', textDecoration: 'none', transition: 'color 0.2s' }} onMouseEnter={(e) => e.currentTarget.style.color = '#f0f2f8'} onMouseLeave={(e) => e.currentTarget.style.color = '#8892a4'}>{lang === "es" ? "Términos" : "Terms"}</Link></li>
@@ -102,8 +102,8 @@ export default function Footer() {
           transition={{ delay: 0.5 }}
           style={{ marginTop: '48px', paddingTop: '32px', borderTop: '1px solid rgba(255,255,255,0.07)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}
         >
-          <p style={{ fontSize: '13px', color: '#4a5568', fontFamily: "'DM Mono', monospace" }}>{t.footer.copyright}</p>
-          <p style={{ fontSize: '13px', color: '#4a5568', fontFamily: "'DM Mono', monospace" }}>
+          <p style={{ fontSize: '13px', color: '#4a5568', fontFamily: 'var(--font-mono)' }}>{t.footer.copyright}</p>
+          <p style={{ fontSize: '13px', color: '#4a5568', fontFamily: 'var(--font-mono)' }}>
             {lang === "es" ? "Hecho con" : "Made with"} <span style={{ color: '#D4AF37' }}>♥</span> en Colombia
           </p>
         </motion.div>

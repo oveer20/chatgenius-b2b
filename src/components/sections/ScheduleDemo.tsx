@@ -70,7 +70,7 @@ export default function ScheduleDemo() {
         </span>
 
         <h2 style={{
-          fontFamily: "'DM Serif Display', serif",
+          fontFamily: 'var(--font-serif)',
           fontSize: 'clamp(1.8rem, 4vw, 2.5rem)',
           color: '#f0f2f8',
           marginBottom: '12px',

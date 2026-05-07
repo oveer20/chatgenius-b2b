@@ -66,7 +66,7 @@ export default function LeadCapture() {
         }}
       >
         <div style={{ fontSize: '48px', marginBottom: '16px' }}>🎉</div>
-        <h3 style={{ fontFamily: "'DM Serif Display', serif", fontSize: '24px', color: '#f0f2f8', marginBottom: '8px' }}>
+        <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '24px', color: '#f0f2f8', marginBottom: '8px' }}>
           {lang === "es" ? "¡Gracias! Te contactamos pronto" : "Thanks! We'll contact you soon"}
         </h3>
         <p style={{ color: '#8892a4', fontSize: '14px', marginBottom: '24px' }}>
@@ -184,7 +184,7 @@ export default function LeadCapture() {
             fontWeight: 600,
             cursor: loading ? 'not-allowed' : 'pointer',
             opacity: loading ? 0.7 : 1,
-            fontFamily: "'DM Sans', sans-serif",
+            fontFamily: 'var(--font-sans)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -213,6 +213,6 @@ const inputStyle: React.CSSProperties = {
   color: '#f0f2f8',
   fontSize: '15px',
   outline: 'none',
-  fontFamily: "'DM Sans', sans-serif",
+  fontFamily: 'var(--font-sans)',
   boxSizing: 'border-box',
 };

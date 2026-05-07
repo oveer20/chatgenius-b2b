@@ -96,14 +96,14 @@ function FeatureCard({ feature, index }: { feature: typeof FEATURES[0]; index: n
           : 'rgba(212,175,55,0.1)', 
         border: '1px solid rgba(212,175,55,0.3)', 
         color: '#D4AF37', 
-        fontFamily: "'DM Mono', monospace", 
+        fontFamily: 'var(--font-mono)', 
         fontWeight: 600,
         transition: 'all 0.4s ease',
         boxShadow: hovered ? '0 0 20px rgba(212,175,55,0.3)' : 'none',
       }}>{feature.icon}</div>
       
       <h3 style={{ 
-        fontFamily: "'DM Serif Display', Georgia, serif", 
+        fontFamily: 'var(--font-serif)', 
         fontSize: '1.25rem', 
         marginBottom: '10px', 
         color: hovered ? '#D4AF37' : '#f0f2f8',
@@ -120,14 +120,14 @@ function FeatureCard({ feature, index }: { feature: typeof FEATURES[0]; index: n
       {feature.stat && (
         <div>
           <div style={{ 
-            fontFamily: "'DM Serif Display', Georgia, serif', serif", 
+            fontFamily: "var(--font-serif)', serif", 
             fontSize: '3rem', 
             color: '#f0f2f8', 
             letterSpacing: '-0.03em',
             transition: 'all 0.3s ease',
           }}>{feature.stat}</div>
           <div style={{ 
-            fontFamily: "'DM Mono', monospace", 
+            fontFamily: 'var(--font-mono)', 
             fontSize: '10px', 
             color: '#4a5568', 
             marginTop: '8px' 
@@ -141,7 +141,7 @@ function FeatureCard({ feature, index }: { feature: typeof FEATURES[0]; index: n
             <span 
               key={tag} 
               style={{ 
-                fontFamily: "'DM Mono', monospace", 
+                fontFamily: 'var(--font-mono)', 
                 fontSize: '12px', 
                 color: '#8892a4', 
                 padding: '6px 12px', 
@@ -175,8 +175,8 @@ function FeatureCard({ feature, index }: { feature: typeof FEATURES[0]; index: n
             ))}
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '8px' }}>
-            <span style={{ fontFamily: "'DM Mono', monospace", fontSize: '10px', color: '#4a5568' }}>MON</span>
-            <span style={{ fontFamily: "'DM Mono', monospace", fontSize: '10px', color: '#D4AF37' }}>+34%</span>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: '#4a5568' }}>MON</span>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: '#D4AF37' }}>+34%</span>
           </div>
         </div>
       )}
@@ -188,7 +188,7 @@ function FeatureCard({ feature, index }: { feature: typeof FEATURES[0]; index: n
           gap: '8px', 
           padding: '6px 12px', 
           borderRadius: '100px', 
-          fontFamily: "'DM Mono', monospace", 
+          fontFamily: 'var(--font-mono)', 
           fontSize: '11px', 
           background: 'rgba(212,175,55,0.08)', 
           border: '1px solid rgba(212,175,55,0.2)', 
@@ -206,7 +206,7 @@ function FeatureCard({ feature, index }: { feature: typeof FEATURES[0]; index: n
               key={l}
               whileHover={{ scale: 1.1 }}
               style={{ 
-                fontFamily: "'DM Mono', monospace", 
+                fontFamily: 'var(--font-mono)', 
                 fontSize: '14px', 
                 color: '#D4AF37', 
                 fontWeight: 600, 
@@ -237,11 +237,11 @@ export default function Features() {
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
         <span style={{ width: '24px', height: '1px', background: '#D4AF37' }} />
-        <span style={{ fontFamily: "'DM Mono', monospace", fontSize: '12px', letterSpacing: '0.12em', color: '#D4AF37', textTransform: 'uppercase' }}>{t.features.label}</span>
+        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', letterSpacing: '0.12em', color: '#D4AF37', textTransform: 'uppercase' }}>{t.features.label}</span>
       </div>
       
       <h2 style={{ 
-        fontFamily: "'DM Serif Display', Georgia, serif", 
+        fontFamily: 'var(--font-serif)', 
         fontSize: 'clamp(2rem, 5vw, 3.5rem)', 
         lineHeight: 1.1, 
         letterSpacing: '-0.02em', 

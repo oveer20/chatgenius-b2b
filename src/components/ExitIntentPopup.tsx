@@ -129,7 +129,7 @@ export default function ExitIntentPopup() {
             {submitted ? (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                 <h3 style={{
-                  fontFamily: "'DM Serif Display', serif",
+                  fontFamily: 'var(--font-serif)',
                   fontSize: "28px",
                   color: "#f0f2f8",
                   marginBottom: "12px"
@@ -154,7 +154,7 @@ export default function ExitIntentPopup() {
                 </span>
 
                 <h3 style={{
-                  fontFamily: "'DM Serif Display', serif",
+                  fontFamily: 'var(--font-serif)',
                   fontSize: "clamp(22px, 5vw, 32px)",
                   color: "#f0f2f8",
                   marginTop: "16px",

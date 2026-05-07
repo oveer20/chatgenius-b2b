@@ -86,7 +86,7 @@ export default function WelcomePopup() {
     color: "#f0f2f8",
     fontSize: "15px",
     outline: "none",
-    fontFamily: "'DM Sans', sans-serif",
+    fontFamily: 'var(--font-sans)',
     transition: "border-color 0.2s",
   };
 
@@ -185,7 +185,7 @@ export default function WelcomePopup() {
                   </svg>
                 </div>
                 <h3 style={{
-                  fontFamily: "'DM Serif Display', serif",
+                  fontFamily: 'var(--font-serif)',
                   fontSize: "24px",
                   color: "#f0f2f8",
                   marginBottom: "8px"
@@ -201,7 +201,7 @@ export default function WelcomePopup() {
             ) : (
               <>
                 <h3 style={{
-                  fontFamily: "'DM Serif Display', serif",
+                  fontFamily: 'var(--font-serif)',
                   fontSize: "clamp(20px, 4vw, 28px)",
                   color: "#f0f2f8",
                   textAlign: "center",
@@ -332,7 +332,7 @@ export default function WelcomePopup() {
                         fontSize: "15px",
                         fontWeight: 600,
                         cursor: "pointer",
-                        fontFamily: "'DM Sans', sans-serif",
+                        fontFamily: 'var(--font-sans)',
                         marginTop: "8px",
                       }}
                     >
@@ -355,7 +355,7 @@ export default function WelcomePopup() {
                         fontSize: "15px",
                         fontWeight: 600,
                         cursor: loading ? "not-allowed" : "pointer",
-                        fontFamily: "'DM Sans', sans-serif",
+                        fontFamily: 'var(--font-sans)',
                       }}
                     >
                       {loading 

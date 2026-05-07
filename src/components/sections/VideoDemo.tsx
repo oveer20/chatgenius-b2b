@@ -30,7 +30,7 @@ export default function VideoDemo() {
         </span>
 
         <h2 style={{
-          fontFamily: "'DM Serif Display', serif",
+          fontFamily: 'var(--font-serif)',
           fontSize: 'clamp(1.8rem, 5vw, 3.5rem)',
           color: '#f0f2f8',
           marginBottom: '16px',
