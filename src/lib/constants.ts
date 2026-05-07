@@ -9,25 +9,37 @@ export const CURRENCIES = {
 
 export const PRICING_PLANS = [
   { 
-    name: "Starter", 
+    tier: "inicia",
+    name: "Inicia", 
     priceUsd: 29, 
-    description: "Para negocios que inician con IA",
-    features: ["1 Agente IA", "1,000 Msgs/mes", "Soporte Email", "WhatsApp + IG"],
+    priceCop: 89000,
+    priceUsdAnnual: 25, 
+    priceCopAnnual: 79000,
+    description: "Ideal para probar el poder de la IA",
+    features: ["1 Agente IA", "1,000 Mensajes/mes", "Soporte por Email", "WhatsApp + Web"],
     highlight: false 
   },
   { 
-    name: "Professional", 
-    priceUsd: 79, 
-    description: "El más elegido por empresas",
-    features: ["5 Agentes IA", "5,000 Msgs/mes", "Prioridad Alta", "Opal Scoring", "API Access"],
+    tier: "escala",
+    name: "Escala", 
+    priceUsd: 69, 
+    priceCop: 199000,
+    priceUsdAnnual: 59, 
+    priceCopAnnual: 169000,
+    description: "El favorito para crecer rápido",
+    features: ["5 Agentes IA", "10,000 Mensajes/mes", "Soporte Prioritario 24/7", "Opal Scoring", "API Access"],
     highlight: true,
     popular: true
   },
   { 
-    name: "Enterprise", 
-    priceUsd: 249, 
-    description: "Para equipos que necesitan escala",
-    features: ["Agentes Unlimited", "Msgs Unlimited", "Custom Training", "Account Manager", "SLA Garantizado"],
+    tier: "domina",
+    name: "Domina", 
+    priceUsd: 299, 
+    priceCop: 899000,
+    priceUsdAnnual: 249, 
+    priceCopAnnual: 749000,
+    description: "Control total sin límites",
+    features: ["Agentes Ilimitados", "Mensajes Ilimitados", "Account Manager Dedicado", "Custom Training", "SLA Garantizado"],
     highlight: false 
   }
 ];

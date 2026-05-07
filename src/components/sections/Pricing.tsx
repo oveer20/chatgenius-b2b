@@ -1,163 +1,184 @@
 "use client";
 
-import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useLang } from "@/components/LangContext";
-import { useState } from "react";
-
-const PLANS = [
-  {
-    tier: "STARTER",
-    description: { es: "Para negocios que inician", en: "For businesses getting started" },
-    priceUSD: 29, priceCop: 79000,
-    features: { es: ["1 Agente IA", "1,000 msgs/mes", "WhatsApp", "Analytics básico", "Soporte email"], en: ["1 AI Agent", "1,000 msgs/month", "WhatsApp", "Basic analytics", "Email support"] },
-  },
-  {
-    tier: "PROFESSIONAL",
-    description: { es: "El más elegido", en: "The most popular" },
-    priceUSD: 79, priceCop: 219000, featured: true,
-    features: { es: ["5 Agentes IA", "10,000 msgs/mes", "Todos los canales", "RAG Avanzado", "Analytics completo", "Soporte prioritario"], en: ["5 AI Agents", "10,000 msgs/month", "All channels", "Advanced RAG", "Complete analytics", "Priority support"] },
-  },
-  {
-    tier: "ENTERPRISE",
-    description: { es: "Para equipos", en: "For teams" },
-    priceUSD: 199, priceCop: 599000,
-    features: { es: ["Agentes ilimitados", "Mensajes ilimitados", "Training personalizado", "Account Manager", "SLA garantizado"], en: ["Unlimited agents", "Unlimited messages", "Custom training", "Account Manager", "Guaranteed SLA"] },
-  },
-];
+import { useState, useEffect } from "react";
+import { PRICING_PLANS } from "@/lib/constants";
 
 export default function Pricing() {
-  const { lang, showUSD, t } = useLang();
+  const { t } = useLang();
   const [hoveredPlan, setHoveredPlan] = useState<string | null>(null);
+  const [isAnnual, setIsAnnual] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => setIsClient(true), []);
+
+  const getPriceDisplay = (plan: typeof PRICING_PLANS[0]) => {
+    if (!isClient) return "Loading...";
+    const base = isAnnual ? plan.priceUsdAnnual : plan.priceUsd;
+    const copPrice = isAnnual ? plan.priceCopAnnual : plan.priceCop;
+    
+    // Show COP by default, or USD if user prefers
+    // Since useLang hook doesn't always expose currency preference directly in all implementations, 
+    // we'll default to the logic that matches the visual style: $XX for USD or $XXK for COP.
+    // Here we will just return COP for better local relevance, or a generic format.
+    // To match previous behavior:
+    return {
+      price: `$${base}`,
+      period: isAnnual ? "/mes (facturado anual)" : "/mes",
+      saving: isAnnual ? `Ahorras ~20%` : null
+    };
+  };
 
   return (
     <section id="planes" style={{ padding: 'clamp(4rem, 10vw, 8rem) clamp(1.5rem, 5vw, 4rem)', maxWidth: '1200px', margin: '0 auto' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-        <span style={{ width: '24px', height: '1px', background: '#D4AF37' }} />
-        <span style={{ fontFamily: "'DM Mono', monospace", fontSize: '12px', letterSpacing: '0.12em', color: '#D4AF37', textTransform: 'uppercase' }}>{t.pricing.label}</span>
-      </div>
-
-      <h2 style={{ fontFamily: "'DM Serif Display', Georgia, serif", fontSize: 'clamp(2rem, 5vw, 3.5rem)', lineHeight: 1.1, letterSpacing: '-0.02em', marginBottom: '16px', color: '#f0f2f8' }}>
-        {t.pricing.title} <em style={{ color: '#D4AF37', fontStyle: 'italic' }}>{t.pricing.titleEm}</em>
-      </h2>
-      <p style={{ fontSize: '16px', color: '#8892a4', marginBottom: '48px' }}>{t.pricing.subtitle}</p>
-
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
-        {PLANS.map((plan) => (
-          <motion.div 
-            key={plan.tier}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            onMouseEnter={() => setHoveredPlan(plan.tier)}
-            onMouseLeave={() => setHoveredPlan(null)}
-            whileHover={{ y: -8 }}
-            transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            style={{ 
-              position: 'relative', 
-              borderRadius: '20px', 
-              padding: '32px', 
-              display: 'flex', 
-              flexDirection: 'column', 
-              height: '100%', 
-              background: hoveredPlan === plan.tier 
-                ? 'linear-gradient(135deg, rgba(212,175,55,0.1) 0%, rgba(212,175,55,0.04) 100%)' 
-                : plan.featured 
-                  ? 'linear-gradient(135deg, rgba(212,175,55,0.06) 0%, rgba(212,175,55,0.02) 100%)' 
-                  : '#0d1017', 
-              border: hoveredPlan === plan.tier 
-                ? '1px solid rgba(212,175,55,0.5)' 
-                : plan.featured 
-                  ? '1px solid rgba(212,175,55,0.3)' 
-                  : '1px solid rgba(255,255,255,0.07)',
-              transition: 'all 0.3s ease',
-              boxShadow: hoveredPlan === plan.tier ? '0 20px 40px rgba(0,0,0,0.4)' : 'none',
+      <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+        <span style={{
+          display: 'inline-block',
+          background: 'rgba(212,175,55,0.15)',
+          color: '#D4AF37',
+          fontSize: '13px',
+          fontWeight: 600,
+          padding: '6px 16px',
+          borderRadius: '20px',
+          marginBottom: '20px',
+        }}>
+          {t.pricing.label || "INVERSION INTELIGENTE"}
+        </span>
+        
+        <h2 style={{ fontFamily: "'DM Serif Display', Georgia, serif", fontSize: 'clamp(2rem, 5vw, 3.5rem)', lineHeight: 1.1, letterSpacing: '-0.02em', marginBottom: '16px', color: '#f0f2f8' }}>
+          {t.pricing.title} <em style={{ color: '#D4AF37', fontStyle: 'italic' }}>{t.pricing.titleEm}</em>
+        </h2>
+        
+        {/* Toggle Anual/Mensual */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', marginTop: '32px' }}>
+          <span style={{ color: !isAnnual ? '#fff' : '#8892a4', fontSize: '14px', fontWeight: !isAnnual ? 700 : 500, transition: 'color 0.3s' }}>Mensual</span>
+          <button
+            onClick={() => setIsAnnual(!isAnnual)}
+            style={{
+              width: '56px',
+              height: '28px',
+              borderRadius: '14px',
+              background: isAnnual ? '#D4AF37' : 'rgba(255,255,255,0.1)',
+              position: 'relative',
+              border: 'none',
+              cursor: 'pointer',
+              transition: 'background 0.3s',
             }}
           >
-            {plan.featured && (
-              <motion.div 
-                whileHover={{ scale: 1.05 }}
-                style={{ 
-                  position: 'absolute', 
-                  top: 0, 
-                  right: 0, 
-                  background: '#D4AF37', 
-                  color: '#000', 
-                  fontFamily: "'DM Mono', monospace", 
-                  fontSize: '10px', 
-                  fontWeight: 600, 
-                  letterSpacing: '0.1em', 
-                  padding: '6px 14px', 
-                  borderBottomLeftRadius: '14px' 
+            <div style={{
+              width: '22px',
+              height: '22px',
+              borderRadius: '50%',
+              background: '#000',
+              position: 'absolute',
+              top: '3px',
+              left: isAnnual ? '31px' : '3px',
+              transition: 'left 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            }} />
+          </button>
+          <span style={{ color: isAnnual ? '#fff' : '#8892a4', fontSize: '14px', fontWeight: isAnnual ? 700 : 500, transition: 'color 0.3s' }}>
+            Anual <span style={{ color: '#D4AF37', fontSize: '12px' }}>(Ahorra 20%)</span>
+          </span>
+        </div>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px', alignItems: 'center' }}>
+        {PRICING_PLANS.map((plan) => {
+          const priceInfo = getPriceDisplay(plan);
+          const isHighlighted = plan.popular;
+          const isHovered = hoveredPlan === plan.name;
+          
+          return (
+            <motion.div 
+              key={plan.name}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              onMouseEnter={() => setHoveredPlan(plan.name)}
+              onMouseLeave={() => setHoveredPlan(null)}
+              whileHover={{ y: isHighlighted ? 0 : -8 }}
+              style={{ 
+                position: 'relative', 
+                borderRadius: '24px', 
+                padding: isHighlighted ? '40px 32px' : '32px',
+                display: 'flex', 
+                flexDirection: 'column', 
+                height: '100%', 
+                background: isHighlighted 
+                  ? 'linear-gradient(180deg, rgba(212,175,55,0.15) 0%, #0d1017 100%)'
+                  : isHovered ? 'rgba(255,255,255,0.04)' : 'rgba(255,255,255,0.01)',
+                border: isHighlighted 
+                  ? '2px solid #D4AF37' 
+                  : isHovered ? '1px solid rgba(212,175,55,0.3)' : '1px solid rgba(255,255,255,0.05)',
+                transition: 'all 0.3s ease',
+                boxShadow: isHighlighted ? '0 20px 60px rgba(212,175,55,0.15)' : isHovered ? '0 10px 30px rgba(0,0,0,0.3)' : 'none',
+                transform: isHighlighted ? 'scale(1.05)' : 'scale(1)',
+                zIndex: isHighlighted ? 10 : 1,
+              }}
+            >
+              {isHighlighted && (
+                <div style={{
+                  position: 'absolute', top: '-14px', left: '50%', transform: 'translateX(-50%)',
+                  background: '#D4AF37', color: '#000', fontSize: '12px', fontWeight: 700,
+                  padding: '6px 16px', borderRadius: '20px', textTransform: 'uppercase', letterSpacing: '1px'
+                }}>
+                  Más Popular
+                </div>
+              )}
+              
+              <h3 style={{ fontSize: '20px', fontWeight: 700, color: '#fff', marginBottom: '8px', marginTop: isHighlighted ? '8px' : '0' }}>
+                {plan.name}
+              </h3>
+              <p style={{ color: '#8892a4', fontSize: '14px', marginBottom: '24px' }}>{plan.description}</p>
+              
+              <div style={{ display: 'flex', alignItems: 'flex-end', gap: '4px', marginBottom: '4px' }}>
+                <span style={{ fontFamily: "'DM Serif Display', serif", fontSize: '3.5rem', fontWeight: 700, color: '#fff', lineHeight: 1 }}>
+                  ${isAnnual ? plan.priceCopAnnual.toLocaleString('es-CO') : (plan.priceCop / 1000).toFixed(0) + 'K'}
+                </span>
+                <span style={{ color: '#8892a4', fontSize: '14px', marginBottom: '12px' }}>COP{priceInfo.period}</span>
+              </div>
+              
+              {isAnnual && (
+                <div style={{ color: '#27C93F', fontSize: '13px', fontWeight: 600, marginBottom: '24px' }}>
+                  Incluye 2 meses gratis
+                </div>
+              )}
+              
+              <div style={{ height: '1px', background: 'rgba(255,255,255,0.1)', margin: '0 0 24px' }} />
+              
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '32px', flex: 1 }}>
+                {plan.features.map((f, i) => (
+                  <li key={i} style={{ display: 'flex', gap: '12px', color: '#e2e8f0', fontSize: '14px' }}>
+                    <span style={{ color: '#D4AF37' }}>✓</span> {f}
+                  </li>
+                ))}
+              </ul>
+              
+              <motion.a
+                href="/login"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                style={{
+                  width: '100%',
+                  padding: '14px',
+                  borderRadius: '12px',
+                  textAlign: 'center',
+                  textDecoration: 'none',
+                  fontSize: '15px',
+                  fontWeight: 700,
+                  display: 'block',
+                  background: isHighlighted ? '#D4AF37' : 'transparent',
+                  color: isHighlighted ? '#000' : '#fff',
+                  border: isHighlighted ? 'none' : '1px solid rgba(255,255,255,0.2)',
+                  transition: 'all 0.3s ease',
                 }}
               >
-                {t.pricing.popular}
-              </motion.div>
-            )}
-            
-            <div style={{ fontFamily: "'DM Mono', monospace", fontSize: '12px', letterSpacing: '0.1em', color: '#4a5568', marginBottom: '8px' }}>{plan.tier}</div>
-            <div style={{ fontSize: '14px', color: '#8892a4', marginBottom: '16px' }}>{plan.description[lang as keyof typeof plan.description]}</div>
-            
-            <motion.div 
-              style={{ 
-                fontFamily: "'DM Serif Display', Georgia, serif", 
-                fontSize: '2.5rem', 
-                color: hoveredPlan === plan.tier ? '#D4AF37' : '#f0f2f8', 
-                letterSpacing: '-0.02em', 
-                marginBottom: '4px',
-                transition: 'all 0.3s ease',
-              }}
-            >
-              ${showUSD ? plan.priceUSD : (plan.priceCop / 1000).toFixed(0) + 'K'}
+                {isHighlighted ? "Empezar prueba gratis 🚀" : "Comenzar"}
+              </motion.a>
             </motion.div>
-            
-            <div style={{ fontFamily: "'DM Mono', monospace", fontSize: '12px', color: '#4a5568', marginBottom: '24px' }}>{(showUSD ? 'USD' : 'COP') + t.pricing.period}</div>
-            
-            <div style={{ height: '1px', background: 'rgba(255,255,255,0.07)', margin: '0 0 24px' }} />
-            
-            <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '14px', marginBottom: '32px', flex: 1 }}>
-              {plan.features[lang as keyof typeof plan.features].map((f: string, i: number) => (
-                <motion.li 
-                  key={f}
-                  whileHover={{ x: 4 }}
-                  style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', fontSize: '14px', color: '#8892a4' }}
-                >
-                  <motion.span 
-                    style={{ color: '#D4AF37', fontFamily: "'DM Mono', monospace", flexShrink: 0 }}
-                    animate={{ x: hoveredPlan === plan.tier ? 4 : 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    →
-                  </motion.span> 
-                  {f}
-                </motion.li>
-              ))}
-            </ul>
-            
-            <motion.a
-              href="/login"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              style={{
-                width: '100%',
-                padding: '14px',
-                borderRadius: '12px',
-                textAlign: 'center',
-                textDecoration: 'none',
-                fontSize: '14px',
-                fontWeight: 600,
-                display: 'block',
-                background: hoveredPlan === plan.tier || plan.featured ? '#D4AF37' : 'transparent',
-                color: hoveredPlan === plan.tier || plan.featured ? '#030a05' : '#f0f2f8',
-                border: plan.featured || hoveredPlan === plan.tier ? 'none' : '1px solid rgba(255,255,255,0.15)',
-                transition: 'all 0.3s ease',
-                boxShadow: hoveredPlan === plan.tier ? '0 8px 24px rgba(212,175,55,0.3)' : 'none',
-              }}
-            >
-              {plan.featured ? "Empezar prueba gratis 🚀" : "Contactar ventas"}
-            </motion.a>
-          </motion.div>
-        ))}
+          );
+        })}
       </div>
     </section>
   );
