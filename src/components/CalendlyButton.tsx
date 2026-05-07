@@ -10,7 +10,12 @@ export default function CalendlyButton() {
   useEffect(() => setIsClient(true), []);
 
   const handleClick = () => {
-    window.open("https://calendly.com/stratix-intelligence/demo", "_blank");
+    const target = document.getElementById("agendar");
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else {
+      window.open("https://calendly.com/stratix-intelligence/demo", "_blank");
+    }
   };
 
   if (!isClient) return null;

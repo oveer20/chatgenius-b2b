@@ -38,7 +38,7 @@ export default function ScheduleDemo() {
   };
 
   return (
-    <section style={{
+    <section id="agendar" style={{
       padding: 'clamp(4rem, 10vw, 8rem) clamp(1.5rem, 5vw, 4rem)',
       maxWidth: '800px',
       margin: '0 auto',
