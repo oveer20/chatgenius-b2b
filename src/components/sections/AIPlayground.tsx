@@ -26,7 +26,7 @@ export default function AIPlayground() {
       const data = await res.json();
       setMessages(prev => [...prev, { role: "ai", text: data.response || "Hola, en que puedo ayudarte?" }]);
     } catch (e) {
-      setMessages(prev => [...prev, { role: "ai", text: "Hola, soy Nova. Preguntame sobre precios o como automatizar tus ventas." }]);
+      setMessages(prev => [...prev, { role: "ai", text: "Hola, soy Stratix AI. Preguntame sobre precios o como automatizar tus ventas." }]);
     } finally {
       setIsTyping(false);
     }
@@ -54,7 +54,7 @@ export default function AIPlayground() {
         onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; }}
         onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
       >
-        Prueba Nova en vivo
+        Prueba Stratix AI en vivo
       </button>
 
       <AnimatePresence>
@@ -96,7 +96,7 @@ export default function AIPlayground() {
             >
               <div style={{ padding: '20px', borderBottom: '1px solid rgba(255,255,255,0.1)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
-                  <h3 style={{ color: '#D4AF37', margin: 0, fontSize: '16px', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>Nova · Agente IA</h3>
+                  <h3 style={{ color: '#D4AF37', margin: 0, fontSize: '16px', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>Stratix AI · Agente IA</h3>
                   <p style={{ color: '#27C93F', margin: 0, fontSize: '12px', fontFamily: 'var(--font-sans)' }}>En linea · Demo en vivo</p>
                 </div>
                 <button onClick={() => setIsOpen(false)} style={{ background: 'none', border: 'none', color: '#8892a4', fontSize: '24px', cursor: 'pointer' }}>x</button>
@@ -105,7 +105,7 @@ export default function AIPlayground() {
               <div style={{ flex: 1, padding: '20px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {messages.length === 0 && (
                   <div style={{ textAlign: 'center', color: '#4a5568', fontSize: '13px', marginTop: '40px', fontFamily: 'var(--font-sans)' }}>
-                    Hola, soy Nova. Preguntame sobre precios, caracteristicas o pidele una demo a mi creador.
+                    Hola, soy Stratix AI. Preguntame sobre precios, caracteristicas o pidele una demo a mi creador.
                   </div>
                 )}
                 {messages.map((msg, i) => (
