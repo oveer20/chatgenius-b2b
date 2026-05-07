@@ -23,7 +23,7 @@ export async function POST(
     }
 
     // 1. Obtener el HTML de la URL
-    console.log(`/// INICIANDO CRAWLER RAG PARA: ${url} ///`);
+    // Starting RAG crawler
     let html = "";
     try {
       const fetchResponse = await fetch(url, {
@@ -63,7 +63,7 @@ export async function POST(
     let totalChunks = 0;
     const crawledTitles: string[] = [];
 
-    console.log(`/// DEEP CRAWL: Procesando ${pagesToCrawl.length} páginas del dominio ${domain} ///`);
+    // Deep crawl processing
 
     for (const pageUrl of pagesToCrawl) {
       try {

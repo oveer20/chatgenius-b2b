@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
     // Nota: Aquí se debería validar el token de sesión del usuario, 
     // pero para exportación administrativa usamos el Admin Client y validamos procedencia.
     
-    console.log("/// INICIANDO EXPORTACIÓN ESTRATÉGICA DE LEADS ///");
+    // Starting strategic lead export
 
     const { data: leads, error } = await supabaseAdmin
       .from("leads")

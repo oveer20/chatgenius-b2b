@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
   const VERIFY_TOKEN = process.env.WHATSAPP_VERIFY_TOKEN || "stratix_secret_token";
 
   if (mode === "subscribe" && token === VERIFY_TOKEN) {
-    console.log("/// WHATSAPP WEBHOOK VERIFIED ///");
+    // WhatsApp webhook verified
     return new NextResponse(challenge, { status: 200 });
   }
 
@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
           return NextResponse.json({ status: "bot_not_found" });
         }
 
-        console.log(`/// WP ENTRANTE [Bot: ${bot.name} | De: ${fromNumber}] ///`);
+        // WhatsApp incoming message
 
         // A.1. Detección de Identidad Omnicanal (V36.0)
         let resolvedName = userName;
@@ -94,7 +94,7 @@ export async function POST(request: NextRequest) {
             webLeadId = webLead.id;
             // VÍNCULO ESTRATÉGICO: Asociamos el número de WhatsApp al lead capturado en la web
             await supabaseAdmin.from("leads").update({ whatsapp: fromNumber }).eq("id", webLead.id);
-            console.log(`/// IDENTIDAD OMNICANAL VINCULADA: Lead ${webLead.id} ahora tiene WP ${fromNumber} ///`);
+            // Omnichannel identity linked
           }
         }
 
@@ -261,17 +261,15 @@ export async function POST(request: NextRequest) {
         const { sendWhatsAppMessage } = await import("@/lib/whatsapp");
         const botToken = "EAANgrbEmQskBRUB5cZCDplKDukBIZBf3bO0tdanV5z6wVOeswZCFq8zcSkKanqWUgUr2XZA03sVbBkbb2k6QPPYfrHtZBRlRTLPVDBZCzjUtAWv2ZBpEMQ4jkNgIJnKzsnlwfumeo3BUbtVxTqUfIAQqGpGQG9fLZBbgDZCifjcdMwkzZCXw03sZCC8OqI3mi89pYPKVQE1towePGIdnnW6zrz0PuuLzq6RZC2vFUk6ZAwQVhV2F7xMHzsqiejqt9Br1afTNqHqqmhnQ63ww3s0FlpihZCDK3W1yLoYHFCK6kZD";
         
-        console.log(`=== WP: Enviando a ${fromNumber} ===`);
-        console.log(`=== WP: phoneId=${phoneNumberId} ===`);
-        console.log(`=== WP: Respuesta: ${cleanResponse.substring(0, 50)}... ===`);
+        // Sending WhatsApp response
         
         let whatsappResult = null;
         if (botToken) {
            try {
              whatsappResult = await sendWhatsAppMessage(phoneNumberId, botToken, fromNumber, cleanResponse);
-             console.log(`=== WP Result: ${JSON.stringify(whatsappResult)} ===`);
+             // WhatsApp result logged
            } catch (err) {
-             console.log(`=== WP Error: ${err} ===`);
+             console.error(`=== WP Error: ${err} ===`);
            }
         }
 

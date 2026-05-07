@@ -11,7 +11,7 @@ import { supabaseAdmin } from "@/lib/supabase-admin";
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    console.log("/// MERCADO PAGO WEBHOOK RECEIVED ///", body);
+    // Mercado Pago webhook received
 
     const { action, type, data } = body;
 
@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
       const payment = new Payment(client);
       const paymentDetails = await payment.get({ id: paymentId });
       
-      console.log(`/// PAYMENT ${paymentId} STATUS: ${paymentDetails.status} ///`);
+      // Payment status check
 
       // 2. Si el pago está aprobado, activamos el plan premium
       if (paymentDetails.status === "approved") {
@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
         const emailPlanName = mpPlanId.toLowerCase() === "enterprise" ? "Enterprise" : "Professional Pro";
 
         if (userId) {
-          console.log(`/// ACTIVANDO PLAN ${finalPlan.toUpperCase()} PARA USUARIO ${userId} ///`);
+          // Activating plan for user
           
           // 3. Verificación de Perfil y Obtención de Datos de Onboarding
           const { data: profile } = await supabaseAdmin
@@ -86,7 +86,7 @@ export async function POST(request: NextRequest) {
             await sendWelcomeEmail(profile.email, profile.full_name || "Líder Stratix", emailPlanName);
           }
           
-          console.log("/// ACCESO PREMUIM ACTIVADO CON ÉXITO — MP SYNC ///");
+          // Premium access activated
         }
       }
     }

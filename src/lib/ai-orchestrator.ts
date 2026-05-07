@@ -17,9 +17,8 @@ export async function getResilientChatResponse(messages: any[], systemPrompt: st
   };
 
   const executeOpenAI = async (m: string) => {
-    const { getOpenAIResponse } = await import("./openai");
-    const result = await getOpenAIResponse(messages, systemPrompt, m);
-    return toString(result);
+    // OpenAI integration removed - using Gemini only
+    throw new Error("OpenAI not configured");
   };
 
   try {

@@ -71,7 +71,7 @@ export default function WidgetPage() {
           }
         }
       } catch (e) {
-        console.log("Using demo bot");
+        // Using demo bot
       }
       setBotConfig(DEMO_BOT);
       setMessages([{ 

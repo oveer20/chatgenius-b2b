@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 
 import { motion } from "framer-motion";
@@ -21,8 +20,7 @@ const TESTIMONIALS = {
 export default function Testimonials() {
   const { lang, t } = useLang();
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  // @ts-ignore
-  const testimonials = TESTIMONIALS[lang];
+  const testimonials = TESTIMONIALS[lang as keyof typeof TESTIMONIALS];
 
   return (
     <section style={{ padding: 'clamp(4rem, 10vw, 8rem) clamp(1.5rem, 5vw, 4rem)', maxWidth: '1200px', margin: '0 auto' }}>

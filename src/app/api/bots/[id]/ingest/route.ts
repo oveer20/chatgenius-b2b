@@ -21,7 +21,7 @@ export async function POST(
       return NextResponse.json({ error: "Contenido de entrenamiento vacío." }, { status: 400 });
     }
 
-    console.log(`/// INICIANDO INGESTIÓN RAG [Bot: ${botId}] ///`);
+    // Starting RAG ingestion
 
     // 2. Sincronización Estratégica con el Núcleo Vectorial (Neural RAG V24.0)
     const contextualizedContent = `FUENTE (INGRESO MANUAL): ${source || "Nota Directa"}\n\nCONTENIDO:\n${content}`;

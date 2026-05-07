@@ -13,9 +13,9 @@ if (!admin.apps.length) {
       admin.initializeApp({
         credential: admin.credential.cert(serviceAccount),
       });
-      console.log("/// FIREBASE ADMIN SDK: PULSO ACTIVADO ///");
+      // Firebase Admin SDK initialized
     } else {
-      console.warn("/// FIREBASE SDK ADVERTENCIA: No se detectó FIREBASE_SERVICE_ACCOUNT en el entorno. ///");
+      console.warn("/// FIREBASE SDK: No FIREBASE_SERVICE_ACCOUNT detected. ///");
     }
   } catch (error) {
     console.error("/// FALLO EN INICIALIZACIÓN DE FIREBASE ADMIN ///", error);
@@ -41,7 +41,7 @@ export async function sendPushNotification(token: string, title: string, body: s
 
   try {
     const response = await messaging.send(message);
-    console.log(`/// PUSH NOTIFICATION ENVIADA A TOKEN: ${response} ///`);
+    // Push notification sent
     return response;
   } catch (error) {
     console.error("/// FALLO EN PUSH NOTIFICATION (Token) ///", error);

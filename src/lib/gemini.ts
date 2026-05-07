@@ -1,85 +1,12 @@
 import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from "@google/generative-ai";
-import OpenAI from "openai";
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY || "");
-const openai = process.env.OPENAI_API_KEY ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY }) : null;
 
 const MAX_RETRIES = 3;
 const INITIAL_DELAY = 1000;
 
 async function wait(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-async function callOpenAI(messages: any[], systemPrompt: string) {
-  if (!openai) throw new Error("OpenAI no disponible");
-
-  const openAIMessages: Array<{ role: "system" | "user" | "assistant"; content: string }> = [
-    { role: "system", content: systemPrompt },
-    ...messages.map((m: any) => ({ 
-      role: (m.role === "assistant" ? "assistant" : "user") as "user" | "assistant", 
-      content: String(m.content) 
-    }))
-  ];
-
-  const response = await openai.chat.completions.create({
-    model: "gpt-3.5-turbo",
-    messages: openAIMessages,
-    max_tokens: 500,
-    temperature: 0.7,
-  });
-
-  console.log("/// RESPUESTA DESDE: OPENA.I GPT-3.5 ///");
-  return response.choices[0]?.message?.content || "Disculpa, no pude generar una respuesta.";
-}
-
-async function callGroq(messages: any[], systemPrompt: string) {
-  if (!process.env.GROQ_API_KEY) throw new Error("Groq no disponible");
-
-  const { Groq } = await import("groq-sdk");
-  const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
-
-  const groqMessages: Array<{ role: "system" | "user" | "assistant"; content: string }> = [
-    { role: "system", content: systemPrompt },
-    ...messages.map((m: any) => ({ 
-      role: (m.role === "assistant" ? "assistant" : "user") as "user" | "assistant", 
-      content: String(m.content) 
-    }))
-  ];
-
-  const response = await groq.chat.completions.create({
-    model: "llama-3.1-8b-instant",
-    messages: groqMessages,
-    max_tokens: 500,
-    temperature: 0.7,
-  });
-
-  console.log("/// RESPUESTA DESDE: GROQ LLAMA-3 ///");
-  return response.choices[0]?.message?.content || "Disculpa, no pude generar una respuesta.";
-}
-
-async function callMistral(messages: any[], systemPrompt: string) {
-  if (!process.env.MISTRAL_API_KEY) throw new Error("Mistral no disponible");
-
-  const { Mistral } = await import("@mistralai/mistralai");
-  const client = new Mistral({ apiKey: process.env.MISTRAL_API_KEY });
-
-  const mistralMessages: Array<{ role: "system" | "user" | "assistant"; content: string }> = [
-    { role: "system", content: systemPrompt },
-    ...messages.map((m: any) => ({ 
-      role: (m.role === "assistant" ? "assistant" : "user") as "user" | "assistant", 
-      content: String(m.content) 
-    }))
-  ];
-
-  const response = await client.chat.complete({
-    model: "mistral-small-latest",
-    messages: mistralMessages,
-    maxTokens: 500,
-  });
-
-  console.log("/// RESPUESTA DESDE: MISTRAL ///");
-  return response.choices?.[0]?.message?.content || "Disculpa, no pude generar una respuesta.";
 }
 
 export async function getGeminiResponse(messages: any[], systemPrompt: string) {
@@ -120,7 +47,6 @@ export async function getGeminiResponse(messages: any[], systemPrompt: string) {
         throw new Error("Respuesta vacía");
       }
 
-      console.log("/// RESPUESTA DESDE: GEMINI ///");
       return text;
     } catch (error: any) {
       lastError = error;
@@ -133,31 +59,6 @@ export async function getGeminiResponse(messages: any[], systemPrompt: string) {
       break; 
     }
   }
-
-  console.log("/// GEMINI FALLÓ - INTENTANDO OPENA.I ///");
-  if (openai) {
-    try {
-      return await callOpenAI(messages, systemPrompt);
-    } catch (e) {
-      console.log("/// OPENA.I FALLÓ - INTENTANDO GROQ ///");
-    }
-  }
-
-  if (process.env.GROQ_API_KEY) {
-    try {
-      return await callGroq(messages, systemPrompt);
-    } catch (e) {
-      console.log("/// GROQ FALLÓ - INTENTANDO MISTRAL ///");
-    }
-  }
-
-  if (process.env.MISTRAL_API_KEY) {
-    try {
-      return await callMistral(messages, systemPrompt);
-    } catch (e) {
-      console.log("/// TODAS LAS IAS FALLARON ///");
-    }
-  }
   
   throw new Error(`Fallo crítico: ${lastError?.message}`);
 }
@@ -167,7 +68,7 @@ export async function getEmbeddings(text: string) {
     const model = genAI.getGenerativeModel({ model: "text-embedding-004" });
     const result = model.embedContent(text);
     return (await result).embedding.values;
-  } catch (error) {
+  } catch (error: any) {
     console.error("/// ERROR GENERANDO EMBEDDINGS ///", error);
     throw error;
   }

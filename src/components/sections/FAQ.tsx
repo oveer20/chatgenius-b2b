@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 
 import { useState } from "react";
@@ -136,8 +135,7 @@ function FAQItem({ faq, index }: { faq: { q: string; a: string }; index: number 
 
 export default function FAQ() {
   const { lang, t } = useLang();
-  // @ts-ignore
-  const faqs = FAQS[lang];
+  const faqs = FAQS[lang as keyof typeof FAQS];
 
   return (
     <section style={{ 

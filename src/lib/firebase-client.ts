@@ -21,7 +21,7 @@ export const requestForToken = async () => {
       if (currentToken) {
         return currentToken;
       } else {
-        console.log('/// No registration token available ///');
+        // No registration token available
       }
     }
   } catch (err) {

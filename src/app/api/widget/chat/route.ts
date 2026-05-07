@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getGeminiResponse } from "@/lib/gemini";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
 export async function POST(request: NextRequest) {
@@ -63,7 +62,7 @@ export async function POST(request: NextRequest) {
       .eq("id", bot.user_id)
       .single();
 
-    const owner: any = profile || { plan: 'free', messages_sent_this_month: 0 };
+    const owner: { plan: string; messages_sent_this_month: number } = profile || { plan: 'free', messages_sent_this_month: 0 };
 
     // 2. Búsqueda de Conocimiento Estratégico (RAG)
     let semanticContext = "";
@@ -81,7 +80,7 @@ export async function POST(request: NextRequest) {
 
       if (!matchError && chunks) {
         semanticContext = chunks.map((c: any) => c.content).join("\n\n");
-        console.log(`/// RAG (Public): ${chunks.length} fragmentos recuperados.`);
+        // RAG chunks retrieved
       }
     } catch (err) {
       console.error("/// FALLO MOTOR RAG (Public) ///", err);
@@ -140,13 +139,13 @@ export async function POST(request: NextRequest) {
 
     // 4. Orquestación del Núcleo de Inteligencia Dual (V23.0)
     const engineType = bot.model === 'openai' ? 'OPENAI' : 'GEMINI';
-    console.log(`/// DISPARANDO MOTOR DUAL WIDGET: ${engineType} — Bot: ${bot.name} ///`);
+    // Dual engine widget triggered
 
     let responseText = "";
     try {
       if (engineType === 'OPENAI') {
-        const { getOpenAIResponse } = await import("@/lib/openai");
-        responseText = await getOpenAIResponse(messages, fullSystemPrompt);
+        // OpenAI integration removed - using Gemini only
+        throw new Error("OpenAI not configured");
       } else {
         const { getGeminiResponse } = await import("@/lib/gemini");
         const result = await getGeminiResponse(messages, fullSystemPrompt);

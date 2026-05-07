@@ -32,7 +32,7 @@ import SocialProof from "@/components/SocialProof";
 import AIModels from "@/components/sections/AIModels";
 import VideoDemo from "@/components/sections/VideoDemo";
 import MediaLogos from "@/components/sections/MediaLogos";
-import CalendlyWidget from "@/components/CalendlyWidget";
+// CalendlyWidget removed - unused
 
 export default function LandingClient() {
   const [isMounted, setIsMounted] = useState(false);

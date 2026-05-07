@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 
 import { useLang } from "@/components/LangContext";
@@ -22,8 +21,7 @@ const STEPS = {
 
 export default function HowItWorks() {
   const { t, lang } = useLang();
-  // @ts-ignore
-  const steps = STEPS[lang];
+  const steps = STEPS[lang as keyof typeof STEPS];
 
   return (
     <section id="como-funciona" style={{ padding: 'clamp(4rem, 10vw, 8rem) clamp(1.5rem, 5vw, 4rem)', maxWidth: '1200px', margin: '0 auto' }}>

@@ -7,9 +7,11 @@ interface FAQ {
   a: string;
 }
 
+export type LangType = "es" | "en";
+
 interface LangContextType {
-  lang: string;
-  setLang: (lang: string) => void;
+  lang: LangType;
+  setLang: (lang: LangType) => void;
   showUSD: boolean;
   setShowUSD: (show: boolean) => void;
   t: any;
@@ -121,8 +123,9 @@ export function LangProvider({ children }: { children: ReactNode }) {
     localStorage.setItem("stratix_lang", newLang);
   };
 
+  const typedLang = lang as LangType;
   return (
-    <LangContext.Provider value={{ lang, setLang: handleSetLang, showUSD, setShowUSD, t: translations[lang] }}>
+    <LangContext.Provider value={{ lang: typedLang, setLang: handleSetLang, showUSD, setShowUSD, t: translations[typedLang] }}>
       {children}
     </LangContext.Provider>
   );
@@ -132,9 +135,9 @@ export function useLang() {
   const context = useContext(LangContext);
   if (!context) {
     return { 
-      lang: "es", 
+      lang: "es" as LangType, 
       setLang: () => {}, 
-      showUSD: false, 
+      showUSD: false,
       setShowUSD: () => {},
       t: { hero: { badge: "", titleLine1: "", titleLine2: "", subtitle: "", cta1: "", cta2: "" }, footer: { copyright: "" }, pricing: { perMonth: "", perYear: "", popular: "" }, cta: { title: "", titleEm: "", subtitle: "" }, features: { title: "", titleEm: "" }, how: { title: "", titleEm: "" }, testimonials: { title: "", titleEm: "" } }
     };

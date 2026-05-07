@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
 const API_KEY = process.env.CONVERTKIT_API_KEY;
-const API_SECRET = process.env.CONVERTKIT_API_SECRET;
 const FORM_ID = process.env.CONVERTKIT_FORM_ID;
 
 export async function POST(request: NextRequest) {
@@ -13,7 +12,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (!API_KEY || !FORM_ID) {
-      console.log("/// CONVERTKIT NO CONFIGURADO — usando Resend como fallback ///");
+      // ConvertKit not configured, using Resend fallback
       return NextResponse.json({ status: "convertkit_not_configured", success: true });
     }
 

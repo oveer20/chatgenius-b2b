@@ -4,7 +4,7 @@ import { getGeminiResponse } from "@/lib/gemini";
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    console.log("Stitch API Request Body:", JSON.stringify(body));
+    // Stitch API request received
     const { config } = body;
 
     if (!config) {

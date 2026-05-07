@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 
 import Link from "next/link";
@@ -40,10 +39,8 @@ const TAGS = { es: ["WhatsApp", "Instagram", "Web", "Slack"], en: ["WhatsApp", "
 function FeatureCard({ feature, index }: { feature: typeof FEATURES[0]; index: number }) {
   const { lang } = useLang();
   const [hovered, setHovered] = useState(false);
-  // @ts-ignore
-  const t = TRANSLATIONS[lang];
-  // @ts-ignore
-  const tags = TAGS[lang];
+  const t = TRANSLATIONS[lang as keyof typeof TRANSLATIONS];
+  const tags = TAGS[lang as keyof typeof TAGS];
 
   return (
     <motion.div 
@@ -140,7 +137,7 @@ function FeatureCard({ feature, index }: { feature: typeof FEATURES[0]; index: n
 
       {feature.tags && (
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-          {/* @ts-ignore */ tags.map((tag: string) => (
+          {tags.map((tag: string) => (
             <span 
               key={tag} 
               style={{ 

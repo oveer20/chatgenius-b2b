@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getGeminiResponse } from "@/lib/gemini";
+import { getResilientChatResponse } from "@/lib/ai-orchestrator";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
 export async function POST(request: NextRequest) {
@@ -7,7 +7,7 @@ export async function POST(request: NextRequest) {
     const rawBody = await request.text();
     const body = rawBody ? JSON.parse(rawBody) : {};
 
-    const { messages, systemPrompt, knowledgeBase, model, temperature, botId } = body;
+      const { messages, systemPrompt, knowledgeBase, model, botId } = body;
 
     if (!messages || !Array.isArray(messages)) {
       return NextResponse.json({ error: "Se requiere un array de mensajes válido" }, { status: 400 });
@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
 
         if (!matchError && chunks) {
           semanticContext = chunks.map((c: any) => c.content).join("\n\n");
-          console.log(`/// RAG: ${chunks.length} fragmentos recuperados para el bot ${botId}`);
+          // RAG chunks retrieved
         }
       } catch (err) {
         console.error("/// FALLO EN MOTOR RAG ///", err);
@@ -79,8 +79,8 @@ export async function POST(request: NextRequest) {
         intent = meta.intent || intent;
         score = meta.score || score;
         cleanText = text.replace(/\[\[META:[\s\S]*?\]\]/, "").trim();
-      } catch (e) {
-        // Fallback robust para fallos de parseo de JSON inyectado por IA
+      } catch {
+        // Fallback robusto para fallos de parseo de JSON inyectado por IA
         console.warn("/// ERROR PARSEO METADATOS — LÓGICA DE EMERGENCIA ACTIVA ///");
         if (text.toLowerCase().includes("vender") || text.toLowerCase().includes("comprar")) {
           intent = "Sales";

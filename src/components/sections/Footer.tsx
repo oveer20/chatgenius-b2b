@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 
 import Link from "next/link";
@@ -26,8 +25,7 @@ const SOCIAL_LINKS = [
 
 export default function Footer() {
   const { lang, t } = useLang();
-  // @ts-ignore
-  const links = LINKS[lang];
+  const links = LINKS[lang as keyof typeof LINKS];
 
   return (
     <footer style={{ position: 'relative', zIndex: 2, borderTop: '1px solid rgba(255,255,255,0.07)', padding: '64px clamp(1.5rem, 5vw, 4rem)' }}>
