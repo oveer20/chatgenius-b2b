@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useLang } from "@/components/LangContext";
+import AIPlayground from "./AIPlayground";
 
 function TypingIndicator() {
   return (
@@ -208,6 +209,7 @@ export default function Hero() {
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.2"/><path d="M6.5 5.5L10.5 8L6.5 10.5V5.5Z" fill="currentColor"/></svg>
           {t.hero.cta2}
         </a>
+        <AIPlayground />
       </motion.div>
 
       <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 1 }} style={{ position: 'relative', width: '100%', maxWidth: '700px' }}>

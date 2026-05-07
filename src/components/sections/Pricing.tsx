@@ -135,7 +135,7 @@ export default function Pricing() {
             </ul>
             
             <motion.a
-              href={`/login?plan=${plan.tier.toLowerCase()}`}
+              href="/login"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               style={{
@@ -154,7 +154,7 @@ export default function Pricing() {
                 boxShadow: hoveredPlan === plan.tier ? '0 8px 24px rgba(212,175,55,0.3)' : 'none',
               }}
             >
-              {plan.featured ? `${t.pricing.cta} →` : t.pricing.ctaFree}
+              {plan.featured ? "Empezar prueba gratis 🚀" : "Contactar ventas"}
             </motion.a>
           </motion.div>
         ))}

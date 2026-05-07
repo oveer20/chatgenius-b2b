@@ -32,7 +32,9 @@ import SocialProof from "@/components/SocialProof";
 import AIModels from "@/components/sections/AIModels";
 import VideoDemo from "@/components/sections/VideoDemo";
 import MediaLogos from "@/components/sections/MediaLogos";
-// CalendlyWidget removed - unused
+import ROICalculator from "@/components/sections/ROICalculator";
+import BeforeAfter from "@/components/sections/BeforeAfter";
+import AIPlayground from "@/components/sections/AIPlayground";
 
 export default function LandingClient() {
   const [isMounted, setIsMounted] = useState(false);
@@ -58,12 +60,14 @@ export default function LandingClient() {
             <Navbar />
             <Hero />
             <VideoDemo />
+            <BeforeAfter />
             <MediaLogos />
             <Stats />
             <Logos />
             <LiveDemo />
             <Features />
             <AIModels />
+            <ROICalculator />
             <FAQ />
             <TrustBadges />
             <HowItWorks />
