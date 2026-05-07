@@ -53,14 +53,14 @@ export default function FloatingWhatsApp() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          width: '60px',
-          height: '60px',
+          width: '56px',
+          height: '56px',
           borderRadius: '50%',
           background: 'linear-gradient(135deg, #25D366 0%, #128C7E 100%)',
           boxShadow: '0 6px 24px rgba(37, 211, 102, 0.5)',
           cursor: 'pointer',
           textDecoration: 'none',
-          border: '4px solid white',
+          border: '3px solid white',
         }}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}

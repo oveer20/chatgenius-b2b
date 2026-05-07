@@ -25,7 +25,9 @@ export default function CalendlyButton() {
         right: "24px",
         zIndex: 9998,
         display: "flex",
+        flexDirection: "column-reverse",
         alignItems: "center",
+        gap: "12px",
       }}
     >
       {tooltip && (
@@ -50,10 +52,10 @@ export default function CalendlyButton() {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
         style={{
-          width: "48px",
-          height: "48px",
+          width: "56px",
+          height: "56px",
           borderRadius: "50%",
-          background: "#D4AF37", // Stratix Gold
+          background: "#D4AF37",
           color: "white",
           border: "3px solid white",
           boxShadow: "0 4px 12px rgba(212,175,55,0.4)",

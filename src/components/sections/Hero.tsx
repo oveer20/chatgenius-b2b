@@ -195,10 +195,16 @@ export default function Hero() {
       </motion.p>
 
       <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.8 }} style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap', justifyContent: 'center', marginBottom: '80px' }}>
-        <Link href="/login" style={{ background: '#D4AF37', color: '#030a05', fontSize: '15px', fontWeight: 600, padding: '14px 32px', borderRadius: '14px', textDecoration: 'none', display: 'inline-block' }}>
+        <Link href="/login" style={{ background: '#D4AF37', color: '#030a05', fontSize: '15px', fontWeight: 600, padding: '14px 32px', borderRadius: '14px', textDecoration: 'none', display: 'inline-block', transition: 'transform 0.2s, box-shadow 0.2s' }}
+          onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(212,175,55,0.4)'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none'; }}
+        >
           {t.hero.cta1}
         </Link>
-        <Link href="/widget" style={{ padding: '13px 28px', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '14px', fontWeight: 500, textDecoration: 'none', color: '#f0f2f8', display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(255,255,255,0.03)', fontSize: '15px' }}>
+        <Link href="/widget" style={{ padding: '13px 28px', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '14px', fontWeight: 500, textDecoration: 'none', color: '#f0f2f8', display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(255,255,255,0.03)', fontSize: '15px', transition: 'background 0.2s, border-color 0.2s' }}
+          onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.03)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)'; }}
+        >
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.2"/><path d="M6.5 5.5L10.5 8L6.5 10.5V5.5Z" fill="currentColor"/></svg>
           {t.hero.cta2}
         </Link>
