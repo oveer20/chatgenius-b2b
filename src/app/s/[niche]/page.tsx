@@ -25,8 +25,8 @@ const NICHES = {
   },
 };
 
-export async function generateMetadata({ params }: { params: { niche: string } }): Promise<Metadata> {
-  const niche = params.niche;
+export async function generateMetadata({ params }: { params: Promise<{ niche: string }> }): Promise<Metadata> {
+  const { niche } = await params;
   const data = NICHES[niche as keyof typeof NICHES];
   if (!data) return { title: "Stratix Intelligence" };
   return {
@@ -35,8 +35,8 @@ export async function generateMetadata({ params }: { params: { niche: string } }
   };
 }
 
-export default function NichePage({ params }: { params: { niche: string } }) {
-  const niche = params.niche;
+export default async function NichePage({ params }: { params: Promise<{ niche: string }> }) {
+  const { niche } = await params;
   const data = NICHES[niche as keyof typeof NICHES];
   
   if (!data) {
