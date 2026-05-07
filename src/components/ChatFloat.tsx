@@ -11,7 +11,7 @@ export default function ChatFloat() {
     <motion.div
       style={{
         position: "fixed",
-        bottom: "100px",
+        bottom: "24px",
         right: "24px",
         zIndex: 9997,
       }}
