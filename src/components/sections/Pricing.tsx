@@ -134,9 +134,9 @@ export default function Pricing() {
               
               <div style={{ display: 'flex', alignItems: 'flex-end', gap: '4px', marginBottom: '4px' }}>
                 <span style={{ fontFamily: "'DM Serif Display', serif", fontSize: '3.5rem', fontWeight: 700, color: '#fff', lineHeight: 1 }}>
-                  ${isAnnual ? plan.priceCopAnnual.toLocaleString('es-CO') : (plan.priceCop / 1000).toFixed(0) + 'K'}
+                  ${isClient ? (isAnnual ? plan.priceCopAnnual.toLocaleString('es-CO') : (plan.priceCop / 1000).toFixed(0) + 'K') : '...'}
                 </span>
-                <span style={{ color: '#8892a4', fontSize: '14px', marginBottom: '12px' }}>COP{priceInfo.period}</span>
+                <span style={{ color: '#8892a4', fontSize: '14px', marginBottom: '12px' }}>COP{isAnnual ? "/mes (facturado anual)" : "/mes"}</span>
               </div>
               
               {isAnnual && (
