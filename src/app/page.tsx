@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Stratix Intelligence | Arquitectura de IA Corporativa',
     description: 'Vende más, duerme mejor. Automatización omnicanal de Élite para negocios de alto impacto.',
-    url: 'https://www.stratix.la',
+    url: 'https://stratix-intelligence-ia.vercel.app',
     siteName: 'Stratix Intelligence',
     images: [
       {

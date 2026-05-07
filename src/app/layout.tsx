@@ -44,8 +44,8 @@ export const metadata: Metadata = {
  alternates: {
     canonical: 'https://stratix-intelligence-ia.vercel.app',
     languages: {
-      'es': 'https://stratix.la',
-      'en': 'https://stratix.la?lang=en',
+      'es': 'https://stratix-intelligence-ia.vercel.app',
+      'en': 'https://stratix-intelligence-ia.vercel.app?lang=en',
     },
   },
   verification: {
@@ -55,11 +55,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Stratix Intelligence | IA que Cierra Ventas 24/7',
     description: '+1,800 empresas en LATAM usan Stratix para automatizar ventas mientras duermen.',
-    url: 'https://stratix.la',
+    url: 'https://stratix-intelligence-ia.vercel.app',
     siteName: 'Stratix Intelligence',
     images: [
       { url: '/stratix_shield.svg', width: 1200, height: 630, alt: 'Stratix Intelligence' },
-      { url: 'https://stratix.la/og-image.png', width: 1200, height: 630 },
+      { url: 'https://stratix-intelligence-ia.vercel.app/og-image.png', width: 1200, height: 630 },
     ],
     type: 'website',
     locale: 'es_CO',
@@ -161,7 +161,7 @@ export default function RootLayout({
               "@type": "Organization",
               "name": "Stratix Intelligence",
               "url": "https://stratix.la",
-              "logo": "https://stratix.la/stratix_shield.svg",
+              "logo": "https://stratix-intelligence-ia.vercel.app/stratix_shield.svg",
               "description": "Agente de IA para automatización de ventas 24/7",
               "address": {
                 "@type": "PostalAddress",
