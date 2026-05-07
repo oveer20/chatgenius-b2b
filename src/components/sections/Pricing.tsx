@@ -6,23 +6,45 @@ import { useState, useEffect } from "react";
 import { PRICING_PLANS } from "@/lib/constants";
 
 export default function Pricing() {
-  const { t } = useLang();
+  const { t, lang, showUSD } = useLang();
   const [hoveredPlan, setHoveredPlan] = useState<string | null>(null);
   const [isAnnual, setIsAnnual] = useState(false);
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => setIsClient(true), []);
 
-  const getPriceDisplay = (plan: typeof PRICING_PLANS[0]) => {
-    if (!isClient) return "Loading...";
-    const base = isAnnual ? plan.priceUsdAnnual : plan.priceUsd;
-    const copPrice = isAnnual ? plan.priceCopAnnual : plan.priceCop;
-    
+  const isUSD = showUSD;
+
+  const getPrice = (plan: typeof PRICING_PLANS[0]) => {
+    if (!isClient) return 0;
+    if (isUSD) {
+      return isAnnual ? plan.priceUsdAnnual : plan.priceUsd;
+    }
+    return isAnnual ? plan.priceCopAnnual : plan.priceCop;
+  };
+
+  const getPlanData = (plan: typeof PRICING_PLANS[0]) => {
+    if (lang === "en") {
+      return t.pricing.plans[plan.tier as keyof typeof t.pricing.plans] || {
+        name: plan.name,
+        desc: plan.description,
+        features: plan.features,
+      };
+    }
     return {
-      price: `$${base}`,
-      period: isAnnual ? "/mes (facturado anual)" : "/mes",
-      saving: isAnnual ? `Ahorras ~20%` : null
+      name: plan.name,
+      desc: plan.description,
+      features: plan.features,
     };
+  };
+
+  const getCurrencyLabel = () => {
+    if (isUSD) return 'USD';
+    return 'COP';
+  };
+
+  const getFreeMonthsText = () => {
+    return lang === 'en' ? '2 months free' : '2 meses gratis';
   };
 
   return (
@@ -49,7 +71,7 @@ export default function Pricing() {
         
         {/* Toggle Anual/Mensual */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', marginTop: '32px' }}>
-          <span style={{ color: !isAnnual ? '#fff' : '#8892a4', fontSize: '14px', fontWeight: !isAnnual ? 700 : 500, transition: 'color 0.3s', fontFamily: 'var(--font-sans)' }}>Mensual</span>
+          <span style={{ color: !isAnnual ? '#fff' : '#8892a4', fontSize: '14px', fontWeight: !isAnnual ? 700 : 500, transition: 'color 0.3s', fontFamily: 'var(--font-sans)' }}>{t.pricing.monthly || "Mensual"}</span>
           <button
             onClick={() => setIsAnnual(!isAnnual)}
             style={{
@@ -75,24 +97,25 @@ export default function Pricing() {
             }} />
           </button>
           <span style={{ color: isAnnual ? '#fff' : '#8892a4', fontSize: '14px', fontWeight: isAnnual ? 700 : 500, transition: 'color 0.3s', fontFamily: 'var(--font-sans)' }}>
-            Anual <span style={{ color: '#D4AF37', fontSize: '12px' }}>(Ahorra 20%)</span>
+            {t.pricing.annual || "Anual"} <span style={{ color: '#D4AF37', fontSize: '12px' }}>{t.pricing.saveBadge || "(Ahorra 20%)"}</span>
           </span>
         </div>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px', alignItems: 'center' }}>
         {PRICING_PLANS.map((plan) => {
-          const priceInfo = getPriceDisplay(plan);
+          const planData = getPlanData(plan);
           const isHighlighted = plan.popular;
-          const isHovered = hoveredPlan === plan.name;
+          const isHovered = hoveredPlan === plan.tier;
+          const price = getPrice(plan);
           
           return (
             <motion.div 
-              key={plan.name}
+              key={plan.tier}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              onMouseEnter={() => setHoveredPlan(plan.name)}
+              onMouseEnter={() => setHoveredPlan(plan.tier)}
               onMouseLeave={() => setHoveredPlan(null)}
               whileHover={{ y: isHighlighted ? 0 : -8 }}
               style={{ 
@@ -121,26 +144,26 @@ export default function Pricing() {
                   padding: '6px 16px', borderRadius: '20px', textTransform: 'uppercase', letterSpacing: '1px',
                   fontFamily: 'var(--font-sans)',
                 }}>
-                  Más Popular
+                  {t.pricing.mostPopular || "Más Popular"}
                 </div>
               )}
               
               <h3 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, color: '#fff', marginBottom: '8px', marginTop: isHighlighted ? '8px' : '0' }}>
-                {plan.name}
+                {planData.name}
               </h3>
-              <p style={{ color: '#8892a4', fontSize: '14px', marginBottom: '24px', fontFamily: 'var(--font-sans)', lineHeight: 1.5 }}>{plan.description}</p>
+              <p style={{ color: '#8892a4', fontSize: '14px', marginBottom: '24px', fontFamily: 'var(--font-sans)', lineHeight: 1.5 }}>{planData.desc}</p>
               
               <div style={{ marginBottom: '4px' }}>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', flexWrap: 'wrap' }}>
                   <span style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', fontWeight: 700, color: '#fff', lineHeight: 1.1 }}>
-                    ${isClient ? (isAnnual ? plan.priceCopAnnual : plan.priceCop).toLocaleString('es-CO') : '...'}
+                    ${isClient ? price.toLocaleString(isUSD ? 'en-US' : 'es-CO') : '...'}
                   </span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginTop: '4px' }}>
-                  <span style={{ color: '#8892a4', fontSize: '14px', fontFamily: 'var(--font-sans)' }}>COP{isAnnual ? "/mes" : "/mes"}</span>
+                  <span style={{ color: '#8892a4', fontSize: '14px', fontFamily: 'var(--font-sans)' }}>{getCurrencyLabel()}{t.pricing.perMonth || "/mes"}</span>
                   {isAnnual && (
                     <span style={{ color: '#27C93F', fontSize: '12px', fontWeight: 600, fontFamily: 'var(--font-sans)' }}>
-                      · 2 meses gratis
+                      · {getFreeMonthsText()}
                     </span>
                   )}
                 </div>
@@ -149,7 +172,7 @@ export default function Pricing() {
               <div style={{ height: '1px', background: 'rgba(255,255,255,0.1)', margin: '16px 0 24px' }} />
               
               <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '32px', flex: 1 }}>
-                {plan.features.map((f, i) => (
+                {planData.features.map((f: string, i: number) => (
                   <li key={i} style={{ display: 'flex', gap: '12px', color: '#e2e8f0', fontSize: '14px', fontFamily: 'var(--font-sans)', lineHeight: 1.4 }}>
                     <span style={{ color: '#D4AF37', flexShrink: 0 }}>✓</span> {f}
                   </li>
@@ -176,7 +199,7 @@ export default function Pricing() {
                   fontFamily: 'var(--font-sans)',
                 }}
               >
-                {isHighlighted ? "Empezar prueba gratis" : "Comenzar"}
+                {isHighlighted ? t.pricing.startFree : t.pricing.startBtn}
               </motion.a>
             </motion.div>
           );

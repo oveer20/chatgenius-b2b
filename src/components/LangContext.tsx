@@ -36,6 +36,31 @@ const translations: Record<string, any> = {
       popular: "Más popular",
       title: "Planes simples,",
       titleEm: "precios claros",
+      label: "INVERSION INTELIGENTE",
+      monthly: "Mensual",
+      annual: "Anual",
+      saveBadge: "(Ahorra 20%)",
+      freeMonths: "2 meses gratis",
+      startFree: "Empezar prueba gratis",
+      startBtn: "Comenzar",
+      mostPopular: "Más Popular",
+      plans: {
+        inicia: {
+          name: "Inicia",
+          desc: "Ideal para probar el poder de la IA",
+          features: ["1 Agente IA", "1,000 Mensajes/mes", "Soporte por Email", "WhatsApp + Web"],
+        },
+        escala: {
+          name: "Escala",
+          desc: "El favorito para crecer rápido",
+          features: ["5 Agentes IA", "10,000 Mensajes/mes", "Soporte Prioritario 24/7", "Opal Scoring", "API Access"],
+        },
+        domina: {
+          name: "Domina",
+          desc: "Control total sin límites",
+          features: ["Agentes Ilimitados", "Mensajes Ilimitados", "Account Manager Dedicado", "Custom Training", "SLA Garantizado"],
+        },
+      },
     },
     cta: {
       title: "¿Listo para",
@@ -73,6 +98,31 @@ const translations: Record<string, any> = {
       popular: "Most popular",
       title: "Simple plans,",
       titleEm: "clear prices",
+      label: "SMART INVESTMENT",
+      monthly: "Monthly",
+      annual: "Annual",
+      saveBadge: "(Save 20%)",
+      freeMonths: "2 months free",
+      startFree: "Start free trial",
+      startBtn: "Get started",
+      mostPopular: "Most Popular",
+      plans: {
+        inicia: {
+          name: "Starter",
+          desc: "Perfect to test the power of AI",
+          features: ["1 AI Agent", "1,000 Messages/month", "Email Support", "WhatsApp + Web"],
+        },
+        escala: {
+          name: "Growth",
+          desc: "The favorite to scale fast",
+          features: ["5 AI Agents", "10,000 Messages/month", "24/7 Priority Support", "Opal Scoring", "API Access"],
+        },
+        domina: {
+          name: "Enterprise",
+          desc: "Full control, no limits",
+          features: ["Unlimited Agents", "Unlimited Messages", "Dedicated Account Manager", "Custom Training", "Guaranteed SLA"],
+        },
+      },
     },
     cta: {
       title: "Ready to",
