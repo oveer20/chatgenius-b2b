@@ -158,31 +158,28 @@ export default function Hero() {
       <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 60% 40% at 50% 20%, rgba(212,175,55,0.1) 0%, transparent 70%)' }} />
       <div style={{ position: 'absolute', top: '15%', left: '10%', width: '300px', height: '300px', background: 'radial-gradient(circle, rgba(212,175,55,0.08) 0%, transparent 70%)', filter: 'blur(60px)' }} />
 
-      {/* Animated Agent Section */}
+      {/* Animated Agent Section REMOVED for cleaner look */}
+
       <motion.div 
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
+        initial={{ opacity: 0, y: -20 }} 
+        animate={{ opacity: 1, y: 0 }} 
         transition={{ duration: 0.8 }}
-        style={{ marginBottom: '40px', position: 'relative' }}
+        style={{ 
+          display: 'inline-flex', 
+          alignItems: 'center', 
+          gap: '8px', 
+          padding: '8px 16px', 
+          borderRadius: '100px', 
+          marginBottom: '24px',
+          background: 'rgba(212,175,55,0.08)',
+          border: '1px solid rgba(212,175,55,0.2)',
+          color: '#D4AF37',
+          fontSize: '13px',
+          fontWeight: 600
+        }}
       >
-        <AnimatedAgent />
-        <FloatingParticles />
-        
-        {/* Agent label */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          style={{
-            marginTop: '16px',
-            fontFamily: "'DM Mono', monospace",
-            fontSize: '12px',
-            color: '#8892a4',
-            letterSpacing: '0.05em',
-          }}
-        >
-          🤖 {lang === "es" ? "Tu agente activo 24/7" : "Your 24/7 active agent"}
-        </motion.div>
+        <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#25D366', boxShadow: '0 0 8px #25D366' }} />
+        <span>{lang === "es" ? "Agente activo ahora" : "Agent active now"}</span>
       </motion.div>
 
       <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }} style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', border: '1px solid rgba(212,175,55,0.25)', background: 'rgba(212,175,55,0.06)', color: '#D4AF37', fontFamily: "'DM Mono', monospace", fontSize: '12px', letterSpacing: '0.08em', padding: '8px 16px', borderRadius: '100px', marginBottom: '24px' }}>

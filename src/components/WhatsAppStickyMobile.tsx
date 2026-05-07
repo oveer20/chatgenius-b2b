@@ -45,18 +45,18 @@ export default function WhatsAppStickyMobile() {
         className="whatsapp-sticky-mobile"
         style={{
           position: "fixed",
-          bottom: "20px",
-          left: "20px",
-          width: "56px",
-          height: "56px",
+          bottom: "80px",
+          left: "16px",
+          width: "48px",
+          height: "48px",
           borderRadius: "50%",
           background: "linear-gradient(135deg, #25D366 0%, #128C7E 100%)",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          boxShadow: "0 4px 20px rgba(37, 211, 102, 0.5)",
+          boxShadow: "0 4px 16px rgba(37, 211, 102, 0.4)",
           cursor: "pointer",
-          zIndex: 9998,
+          zIndex: 9997,
         }}
       >
         <svg width="28" height="28" viewBox="0 0 24 24" fill="#fff">
