@@ -49,7 +49,7 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: '40ZhsfRzQSLxhU_qORXhjzGyYfTtRwXbYIjGQuq-uj0',
+    google: ['GTM-52MHDWQR', '40ZhsfRzQSLxhU_qORXhjzGyYfTtRwXbYIjGQuq-uj0', 'google26e640a17cac3f30'],
   },
   icons: { icon: "/stratix_shield.svg" },
   openGraph: {
