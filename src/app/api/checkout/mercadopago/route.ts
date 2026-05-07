@@ -51,12 +51,12 @@ export async function POST(request: NextRequest) {
           email: user.email
         },
         back_urls: {
-          success: `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard?success=true`,
-          failure: `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard?error=payment_failed`,
-          pending: `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard?status=pending`
+          success: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?success=true`,
+          failure: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?error=payment_failed`,
+          pending: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?status=pending`
         },
         auto_return: "approved",
-        notification_url: `${process.env.NEXT_PUBLIC_SITE_URL}/api/webhooks/mercadopago`,
+        notification_url: `${process.env.NEXT_PUBLIC_APP_URL}/api/webhook/mercadopago`,
         metadata: {
           userId: user.id,
           planSlug: slug,

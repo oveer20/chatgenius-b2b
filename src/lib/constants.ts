@@ -75,5 +75,5 @@ export const TRUST_LOGOS = [
   { name: "Vercel", color: "#fff" },
   { name: "WhatsApp", color: "#25D366" },
   { name: "OpenAI", color: "#10A37F" },
-  { name: "Stripe", color: "#635BFF" },
+  { name: "Mercado Pago", color: "#00B1EA" },
 ];
