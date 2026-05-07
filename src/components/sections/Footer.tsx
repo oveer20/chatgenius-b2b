@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useLang } from "@/components/LangContext";
-import { FaInstagram, FaWhatsapp, FaFacebook, FaEnvelope } from "react-icons/fa";
+import { FaInstagram, FaWhatsapp, FaFacebook, FaEnvelope, FaLinkedin } from "react-icons/fa";
 
 const LINKS = {
   es: {
@@ -17,6 +17,7 @@ const LINKS = {
 };
 
 const SOCIAL_LINKS = [
+  { icon: FaLinkedin, href: "https://www.linkedin.com/in/jose-gaviriap/", label: "LinkedIn" },
   { icon: FaInstagram, href: "https://www.instagram.com/stratix.intelligence", label: "Instagram" },
   { icon: FaWhatsapp, href: "https://wa.me/573159269287", label: "WhatsApp" },
   { icon: FaFacebook, href: "https://www.facebook.com/share/1NAMx3GSWv/?mibextid=wwXIfr", label: "Facebook" },

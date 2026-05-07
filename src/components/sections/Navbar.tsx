@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useLang } from "@/components/LangContext";
 import { useTheme } from "@/components/ThemeContext";
 import { useState } from "react";
+import { FaLinkedin } from "react-icons/fa";
 
 export default function Navbar() {
   const { lang, setLang, showUSD, setShowUSD } = useLang();
@@ -103,6 +104,32 @@ export default function Navbar() {
               }}
             >USD</button>
           </div>
+
+          <a 
+            href="https://www.linkedin.com/in/jose-gaviriap/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="LinkedIn"
+            style={{ 
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '32px',
+              height: '32px',
+              borderRadius: '6px',
+              background: 'rgba(255,255,255,0.1)',
+              border: 'none',
+              cursor: 'pointer',
+              fontSize: '14px',
+              color: '#8892a4',
+              textDecoration: 'none',
+              transition: 'color 0.2s',
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.color = '#0A66C2'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = '#8892a4'; }}
+          >
+            <FaLinkedin size={16} />
+          </a>
 
           <button 
             onClick={toggleTheme}

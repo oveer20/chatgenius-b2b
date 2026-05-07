@@ -13,6 +13,7 @@ export default function CTA() {
     { key: "email", label: "Email", icon: "M2 4l10 7 10-7", href: "mailto:stratixintelligence@gmail.com" },
     { key: "wa", label: "WhatsApp", icon: "M17.472 14.382c-.297-.149-1.758-.617-2.030-.617-.77.001-3.855.293-6.162 1.393C6.963 17.5 6 18.463 6 19.453v1.034c0 .768.488 1.47 1.156 1.953l.73 1.297c.178.316.527.5.902.5l2.35-.001c.5 0 .973-.254 1.201-.643l2.156-3.373", href: "https://wa.me/573159269287" },
     { key: "fb", label: "Facebook", icon: "M24 12.073c0-6.627-5.373-12-12-12-6.627 0-12 5.373-12 12 0 5.99 4.388 10.954 10.125 11.854v-8.09h-3.047v-3.085h3.047v-2.644c0-3.022 1.812-4.697 4.56-4.697 1.33 0 2.708.264 2.708.264v2.956h-1.528c-1.502 0-1.972.932-1.972 1.886v2.19h3.333l-.532 3.085h-2.801v8.09", href: "https://www.facebook.com/share/1NAMx3GSWv/?mibextid=wwXIfr" },
+    { key: "li", label: "LinkedIn", icon: "M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z", href: "https://www.linkedin.com/in/jose-gaviriap/" },
   ];
 
   return (
@@ -151,6 +152,29 @@ export default function CTA() {
             <motion.span whileHover={{ color: '#D4AF37' }}>{t.cta.meta1}</motion.span>
             <motion.span whileHover={{ color: '#D4AF37' }}>{t.cta.meta2}</motion.span>
             <motion.span whileHover={{ color: '#D4AF37' }}>{t.cta.meta3}</motion.span>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            style={{ position: 'relative', marginTop: '40px', paddingTop: '24px', borderTop: '1px solid rgba(255,255,255,0.07)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px' }}
+          >
+            <span style={{ fontSize: '13px', color: '#8892a4', fontFamily: 'var(--font-sans)' }}>{lang === "es" ? "Fundado por" : "Founded by"}</span>
+            <a
+              href="https://www.linkedin.com/in/jose-gaviriap/"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', textDecoration: 'none', padding: '8px 16px', borderRadius: '12px', background: 'rgba(10,102,194,0.1)', border: '1px solid rgba(10,102,194,0.3)', transition: 'all 0.3s ease' }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(10,102,194,0.2)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(10,102,194,0.1)'; }}
+            >
+              <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'linear-gradient(135deg, #0A66C2, #004182)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '12px', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>JG</div>
+              <div style={{ textAlign: 'left' }}>
+                <div style={{ fontSize: '14px', fontWeight: 600, color: '#f0f2f8', fontFamily: 'var(--font-sans)' }}>Jose Gaviria</div>
+                <div style={{ fontSize: '11px', color: '#8892a4', fontFamily: 'var(--font-sans)' }}>{lang === "es" ? "Founder & CEO" : "Founder & CEO"}</div>
+              </div>
+            </a>
           </motion.div>
         </div>
       </motion.div>
