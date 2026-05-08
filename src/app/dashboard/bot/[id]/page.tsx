@@ -2,14 +2,12 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import {
-  FiArrowLeft, FiSave, FiPlay, FiDatabase, FiSettings, FiCpu, FiRefreshCw,
+  FiArrowLeft, FiSave, FiDatabase, FiCpu, FiRefreshCw,
   FiSend, FiZap, FiCode, FiGlobe, FiStar, FiLayout, FiShield, FiInfo,
   FiActivity, FiPlus, FiMessageCircle
 } from "react-icons/fi";
-import styles from "../../dashboard.module.css";
 import { supabase } from "@/lib/supabase";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 import { Toaster } from 'sonner';
