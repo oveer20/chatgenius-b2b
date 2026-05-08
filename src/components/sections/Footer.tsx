@@ -5,17 +5,6 @@ import { motion } from "framer-motion";
 import { useLang } from "@/components/LangContext";
 import { FaInstagram, FaWhatsapp, FaFacebook, FaEnvelope, FaLinkedin } from "react-icons/fa";
 
-const LINKS = {
-  es: {
-    producto: ["Producto", "Precios"],
-    legal: ["Privacidad", "Términos"],
-  },
-  en: {
-    producto: ["Product", "Pricing"],
-    legal: ["Privacy", "Terms"],
-  },
-};
-
 const SOCIAL_LINKS = [
   { icon: FaLinkedin, href: "https://www.linkedin.com/in/jose-gaviriap/", label: "LinkedIn" },
   { icon: FaInstagram, href: "https://www.instagram.com/stratix.intelligence", label: "Instagram" },
@@ -25,23 +14,43 @@ const SOCIAL_LINKS = [
 ];
 
 export default function Footer() {
-  const { lang, t } = useLang();
-  const links = LINKS[lang as keyof typeof LINKS];
+  const { lang } = useLang();
 
   return (
-    <footer style={{ position: 'relative', zIndex: 2, borderTop: '1px solid rgba(255,255,255,0.07)', padding: '64px clamp(1.5rem, 5vw, 4rem)' }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '48px' }}>
+    <footer style={{
+      position: 'relative',
+      zIndex: 2,
+      borderTop: '1px solid rgba(255,255,255,0.06)',
+      background: 'linear-gradient(180deg, rgba(7,9,16,0.5) 0%, #070910 100%)',
+    }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: 'clamp(3rem, 8vw, 5rem) clamp(1.5rem, 5vw, 4rem) 0' }}>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'minmax(250px, 2fr) repeat(3, 1fr)',
+          gap: 'clamp(2rem, 5vw, 4rem)',
+        }}>
+          {/* Brand Column */}
           <div>
-            <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none', marginBottom: '20px' }}>
-              <img src="/stratix_shield.svg" alt="Stratix" style={{ height: '36px', width: '36px' }} />
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '1.2rem', fontWeight: 600, color: '#f0f2f8' }}>Stratix Intelligence</span>
-            </Link>
-            <p style={{ fontSize: '14px', color: '#8892a4', maxWidth: '280px', lineHeight: 1.7, marginBottom: '24px' }}>
-              Agentes IA conversacionales para automatizar tu atención y ventas 24/7.
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
+              <div style={{
+                width: '36px', height: '36px',
+                background: 'linear-gradient(135deg, #D4AF37, #b8860b)',
+                borderRadius: '10px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '18px',
+                fontWeight: 700,
+                color: '#000',
+              }}>
+                S
+              </div>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '1.1rem', fontWeight: 600, color: '#f0f2f8' }}>Stratix</span>
+            </div>
+            <p style={{ fontSize: '14px', color: '#4a5568', lineHeight: 1.7, marginBottom: '24px', maxWidth: '300px' }}>
+              {lang === "es" ? "Automatiza tu atención y ventas con agentes IA. Responde 24/7 y cierra más negocios mientras descansas." : "Automate your support and sales with AI agents. Respond 24/7 and close more deals while you sleep."}
             </p>
-            
-            <div style={{ display: 'flex', gap: '12px' }}>
+            <div style={{ display: 'flex', gap: '10px' }}>
               {SOCIAL_LINKS.map((social, i) => (
                 <motion.a
                   key={i}
@@ -51,61 +60,119 @@ export default function Footer() {
                   whileHover={{ scale: 1.1, y: -2 }}
                   whileTap={{ scale: 0.95 }}
                   style={{
-                    width: '40px',
-                    height: '40px',
-                    borderRadius: '10px',
-                    background: 'rgba(255,255,255,0.05)',
-                    border: '1px solid rgba(255,255,255,0.1)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: '#8892a4',
+                    width: '38px', height: '38px', borderRadius: '10px',
+                    background: 'rgba(255,255,255,0.04)',
+                    border: '1px solid rgba(255,255,255,0.08)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    color: '#4a5568', textDecoration: 'none',
                     transition: 'all 0.3s ease',
-                    textDecoration: 'none',
                   }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = '#D4AF37';
-                    e.currentTarget.style.color = '#000';
-                    e.currentTarget.style.borderColor = '#D4AF37';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = 'rgba(255,255,255,0.05)';
-                    e.currentTarget.style.color = '#8892a4';
-                    e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)';
-                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = '#D4AF37'; e.currentTarget.style.color = '#000'; e.currentTarget.style.borderColor = '#D4AF37'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.04)'; e.currentTarget.style.color = '#4a5568'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; }}
                 >
-                  <social.icon size={18} />
+                  <social.icon size={16} />
                 </motion.a>
               ))}
             </div>
           </div>
 
-          <div style={{ display: 'flex', gap: '64px', flexWrap: 'wrap' }}>
-            <div>
-              <h4 style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.1em', color: '#D4AF37', marginBottom: '20px' }}>PRODUCTO</h4>
-              <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                {links.producto.map((l: string, i: number) => <li key={i}><Link href={i === 0 ? "#productos" : "#planes"} style={{ fontSize: '14px', color: '#8892a4', textDecoration: 'none', transition: 'color 0.2s' }} onMouseEnter={(e) => e.currentTarget.style.color = '#f0f2f8'} onMouseLeave={(e) => e.currentTarget.style.color = '#8892a4'}>{l}</Link></li>)}
-              </ul>
-            </div>
-            <div>
-              <h4 style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.1em', color: '#D4AF37', marginBottom: '20px' }}>LEGAL</h4>
-              <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                <li><Link href="/legal/privacy" style={{ fontSize: '14px', color: '#8892a4', textDecoration: 'none', transition: 'color 0.2s' }} onMouseEnter={(e) => e.currentTarget.style.color = '#f0f2f8'} onMouseLeave={(e) => e.currentTarget.style.color = '#8892a4'}>{lang === "es" ? "Privacidad" : "Privacy"}</Link></li>
-                <li><Link href="/legal/terms" style={{ fontSize: '14px', color: '#8892a4', textDecoration: 'none', transition: 'color 0.2s' }} onMouseEnter={(e) => e.currentTarget.style.color = '#f0f2f8'} onMouseLeave={(e) => e.currentTarget.style.color = '#8892a4'}>{lang === "es" ? "Términos" : "Terms"}</Link></li>
-              </ul>
-            </div>
+          {/* Product Column */}
+          <div>
+            <h4 style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.12em', color: '#D4AF37', marginBottom: '20px' }}>
+              {lang === "es" ? "PRODUCTO" : "PRODUCT"}
+            </h4>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <li>
+                <Link href="#features" style={{ fontSize: '14px', color: '#4a5568', textDecoration: 'none', transition: 'color 0.2s' }}
+                  onMouseEnter={(e) => e.currentTarget.style.color = '#f0f2f8'}
+                  onMouseLeave={(e) => e.currentTarget.style.color = '#4a5568'}>
+                  {lang === "es" ? "Características" : "Features"}
+                </Link>
+              </li>
+              <li>
+                <Link href="#pricing" style={{ fontSize: '14px', color: '#4a5568', textDecoration: 'none', transition: 'color 0.2s' }}
+                  onMouseEnter={(e) => e.currentTarget.style.color = '#f0f2f8'}
+                  onMouseLeave={(e) => e.currentTarget.style.color = '#4a5568'}>
+                  {lang === "es" ? "Precios" : "Pricing"}
+                </Link>
+              </li>
+              <li>
+                <Link href="#how" style={{ fontSize: '14px', color: '#4a5568', textDecoration: 'none', transition: 'color 0.2s' }}
+                  onMouseEnter={(e) => e.currentTarget.style.color = '#f0f2f8'}
+                  onMouseLeave={(e) => e.currentTarget.style.color = '#4a5568'}>
+                  {lang === "es" ? "Cómo funciona" : "How it works"}
+                </Link>
+              </li>
+              <li>
+                <Link href="#faq" style={{ fontSize: '14px', color: '#4a5568', textDecoration: 'none', transition: 'color 0.2s' }}
+                  onMouseEnter={(e) => e.currentTarget.style.color = '#f0f2f8'}
+                  onMouseLeave={(e) => e.currentTarget.style.color = '#4a5568'}>
+                  FAQ
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Legal Column */}
+          <div>
+            <h4 style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.12em', color: '#D4AF37', marginBottom: '20px' }}>
+              LEGAL
+            </h4>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <li>
+                <Link href="/legal/privacy" style={{ fontSize: '14px', color: '#4a5568', textDecoration: 'none', transition: 'color 0.2s' }}
+                  onMouseEnter={(e) => e.currentTarget.style.color = '#f0f2f8'}
+                  onMouseLeave={(e) => e.currentTarget.style.color = '#4a5568'}>
+                  {lang === "es" ? "Privacidad" : "Privacy"}
+                </Link>
+              </li>
+              <li>
+                <Link href="/legal/terms" style={{ fontSize: '14px', color: '#4a5568', textDecoration: 'none', transition: 'color 0.2s' }}
+                  onMouseEnter={(e) => e.currentTarget.style.color = '#f0f2f8'}
+                  onMouseLeave={(e) => e.currentTarget.style.color = '#4a5568'}>
+                  {lang === "es" ? "Términos" : "Terms"}
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Contact Column */}
+          <div>
+            <h4 style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.12em', color: '#D4AF37', marginBottom: '20px' }}>
+              CONTACTO
+            </h4>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <li>
+                <a href="https://wa.me/573159269287" target="_blank" rel="noopener noreferrer"
+                  style={{ fontSize: '14px', color: '#4a5568', textDecoration: 'none', transition: 'color 0.2s', display: 'flex', alignItems: 'center', gap: '8px' }}
+                  onMouseEnter={(e) => e.currentTarget.style.color = '#f0f2f8'}
+                  onMouseLeave={(e) => e.currentTarget.style.color = '#4a5568'}>
+                  <FaWhatsapp size={14} /> +57 315 926 9287
+                </a>
+              </li>
+              <li>
+                <a href="mailto:stratixintelligence@gmail.com"
+                  style={{ fontSize: '14px', color: '#4a5568', textDecoration: 'none', transition: 'color 0.2s', display: 'flex', alignItems: 'center', gap: '8px' }}
+                  onMouseEnter={(e) => e.currentTarget.style.color = '#f0f2f8'}
+                  onMouseLeave={(e) => e.currentTarget.style.color = '#4a5568'}>
+                  <FaEnvelope size={14} /> stratixintelligence@gmail.com
+                </a>
+              </li>
+            </ul>
           </div>
         </div>
 
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-          style={{ marginTop: '48px', paddingTop: '32px', borderTop: '1px solid rgba(255,255,255,0.07)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          style={{ marginTop: 'clamp(3rem, 5vw, 4rem)', padding: '24px 0', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}
         >
-          <p style={{ fontSize: '13px', color: '#4a5568', fontFamily: 'var(--font-mono)' }}>{t.footer.copyright}</p>
-          <p style={{ fontSize: '13px', color: '#4a5568', fontFamily: 'var(--font-mono)' }}>
-            {lang === "es" ? "Hecho con" : "Made with"} <span style={{ color: '#D4AF37' }}>♥</span> en Colombia
+          <p style={{ fontSize: '13px', color: '#2d3748', fontFamily: 'var(--font-mono)' }}>
+            &copy; {new Date().getFullYear()} Stratix Intelligence. {lang === "es" ? "Todos los derechos reservados." : "All rights reserved."}
+          </p>
+          <p style={{ fontSize: '13px', color: '#2d3748', fontFamily: 'var(--font-mono)' }}>
+            {lang === "es" ? "Hecho con" : "Made with"} <span style={{ color: '#D4AF37' }}>&#9829;</span> {lang === "es" ? "en Colombia" : "in Colombia"}
           </p>
         </motion.div>
       </div>
