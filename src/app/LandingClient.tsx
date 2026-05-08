@@ -4,19 +4,15 @@ import { useState, useEffect, Suspense } from "react";
 import { Toaster } from "sonner";
 
 import { LangProvider } from "@/components/LangContext";
-import { ThemeProvider } from "@/components/ThemeContext";
-import ThemeEffect from "@/components/ThemeEffect";
 import AnimatedBackground from "@/components/ui/AnimatedBackground";
 import Particles from "@/components/ui/Particles";
 import Cursor from "@/components/Cursor";
 import Navbar from "@/components/sections/Navbar";
 import Hero from "@/components/sections/Hero";
 import Stats from "@/components/sections/Stats";
-import Logos from "@/components/sections/Logos";
 import Features from "@/components/sections/Features";
 import HowItWorks from "@/components/sections/HowItWorks";
 import BeforeAfter from "@/components/sections/BeforeAfter";
-import Testimonials from "@/components/sections/Testimonials";
 import Pricing from "@/components/sections/Pricing";
 import ROICalculator from "@/components/sections/ROICalculator";
 import FAQ from "@/components/sections/FAQ";
@@ -27,7 +23,6 @@ import Analytics from "@/components/Analytics";
 import MetaPixel from "@/components/MetaPixel";
 import WelcomePopup from "@/components/WelcomePopup";
 import ExitIntentPopup from "@/components/ExitIntentPopup";
-import SocialProof from "@/components/SocialProof";
 
 export default function LandingClient() {
   const [isMounted, setIsMounted] = useState(false);
@@ -40,62 +35,54 @@ export default function LandingClient() {
 
   return (
     <Suspense fallback={<div style={{ minHeight: '100vh', background: '#070910' }} />}>
-      <ThemeProvider>
-        <ThemeEffect />
-        <LangProvider>
-          <main style={{ position: 'relative' }}>
-          <Cursor />
-          <Analytics />
-          <MetaPixel />
-          <Particles />
-          <AnimatedBackground />
-          <div style={{ position: 'relative', zIndex: 10 }}>
-            <Navbar />
+      <LangProvider>
+        <main style={{ position: 'relative' }}>
+        <Cursor />
+        <Analytics />
+        <MetaPixel />
+        <Particles />
+        <AnimatedBackground />
+        <div style={{ position: 'relative', zIndex: 10 }}>
+          <Navbar />
 
-            {/* 1. HERO - Captura atención */}
-            <Hero />
+          {/* 1. HERO */}
+          <Hero />
 
-            {/* 2. SOCIAL PROOF - Credibilidad inmediata */}
-            <Stats />
-            <Logos />
+          {/* 2. SOCIAL PROOF */}
+          <Stats />
 
-            {/* 3. FEATURES - Propuesta de valor */}
-            <Features />
+          {/* 3. FEATURES */}
+          <Features />
 
-            {/* 4. HOW IT WORKS - Explica el proceso ANTES de pricing */}
-            <HowItWorks />
+          {/* 4. HOW IT WORKS */}
+          <HowItWorks />
 
-            {/* 5. BEFORE/AFTER - Comparación visual */}
-            <BeforeAfter />
+          {/* 5. BEFORE/AFTER */}
+          <BeforeAfter />
 
-            {/* 6. TESTIMONIALS - Prueba social */}
-            <Testimonials />
+          {/* 6. PRICING */}
+          <Pricing />
 
-            {/* 7. PRICING - Precio DESPUÉS de valor */}
-            <Pricing />
+          {/* 7. ROI CALCULATOR */}
+          <ROICalculator />
 
-            {/* 8. ROI CALCULATOR - Justificación financiera */}
-            <ROICalculator />
+          {/* 8. FAQ */}
+          <FAQ />
 
-            {/* 9. FAQ - Resuelve objeciones DESPUÉS de pricing */}
-            <FAQ />
+          {/* 9. TRUST BADGES */}
+          <TrustBadges />
 
-            {/* 10. TRUST BADGES - Confianza */}
-            <TrustBadges />
+          {/* 10. CTA */}
+          <CTA />
 
-            {/* 11. CTA - Llamada a la acción final */}
-            <CTA />
-
-            {/* 12. FOOTER */}
-            <Footer />
-          </div>
-          <WelcomePopup />
-          <ExitIntentPopup />
-          <SocialProof />
-          <Toaster theme="dark" richColors position="top-center" />
-        </main>
-        </LangProvider>
-        </ThemeProvider>
-      </Suspense>
+          {/* 11. FOOTER */}
+          <Footer />
+        </div>
+        <WelcomePopup />
+        <ExitIntentPopup />
+        <Toaster theme="dark" richColors position="top-center" />
+      </main>
+      </LangProvider>
+    </Suspense>
   );
 }

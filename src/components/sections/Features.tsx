@@ -233,7 +233,7 @@ function FeatureCard({ feature, index }: { feature: typeof FEATURES[0]; index: n
 }
 
 export default function Features() {
-  const { lang, t } = useLang();
+  const { t } = useLang();
 
   return (
     <section 

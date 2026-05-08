@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Toaster } from "sonner";
-import ChatWidget from "@/components/ChatWidget";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 import WhatsAppStickyMobile from "@/components/WhatsAppStickyMobile";
 import ScarcityPopup from "@/components/ScarcityPopup";
