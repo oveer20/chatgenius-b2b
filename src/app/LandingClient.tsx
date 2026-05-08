@@ -5,7 +5,6 @@ import { Toaster } from "sonner";
 
 import { LangProvider } from "@/components/LangContext";
 import AnimatedBackground from "@/components/ui/AnimatedBackground";
-import Particles from "@/components/ui/Particles";
 import Cursor from "@/components/Cursor";
 import Navbar from "@/components/sections/Navbar";
 import Hero from "@/components/sections/Hero";
@@ -31,16 +30,25 @@ export default function LandingClient() {
     setIsMounted(true);
   }, []);
 
-  if (!isMounted) return <div style={{ minHeight: '100vh', background: '#070910' }} />;
+  if (!isMounted) {
+    return (
+      <div style={{ minHeight: '100vh', background: '#070910', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
+          <div style={{ width: '48px', height: '48px', borderRadius: '50%', border: '3px solid rgba(212,175,55,0.2)', borderTopColor: '#D4AF37', animation: 'spin 0.8s linear infinite' }} />
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: '#D4AF37', letterSpacing: '3px', textTransform: 'uppercase' }}>Cargando núcleo...</span>
+          <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <Suspense fallback={<div style={{ minHeight: '100vh', background: '#070910' }} />}>
+    <Suspense fallback={<div style={{ minHeight: '100vh', background: '#070910', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><div style={{ width: '48px', height: '48px', borderRadius: '50%', border: '3px solid rgba(212,175,55,0.2)', borderTopColor: '#D4AF37', animation: 'spin 0.8s linear infinite' }} /></div>}>
       <LangProvider>
         <main style={{ position: 'relative' }}>
         <Cursor />
         <Analytics />
         <MetaPixel />
-        <Particles />
         <AnimatedBackground />
         <div style={{ position: 'relative', zIndex: 10 }}>
           <Navbar />

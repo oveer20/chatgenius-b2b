@@ -133,6 +133,7 @@ export default function Stats() {
 
 function TestimonialCard({ testimonial, index }: { testimonial: any; index: number }) {
   const [hovered, setHovered] = useState(false);
+  const [avatarError, setAvatarError] = useState(false);
 
   return (
     <motion.div
@@ -165,7 +166,13 @@ function TestimonialCard({ testimonial, index }: { testimonial: any; index: numb
       </p>
 
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-        <img src={testimonial.avatar} alt={testimonial.initials} style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'rgba(212,175,55,0.1)' }} />
+        {avatarError ? (
+          <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'rgba(184,134,11,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: 700, color: '#D4AF37', flexShrink: 0 }}>
+            {testimonial.initials}
+          </div>
+        ) : (
+          <img src={testimonial.avatar} alt={testimonial.initials} onError={() => setAvatarError(true)} style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'rgba(212,175,55,0.1)', flexShrink: 0 }} />
+        )}
         <div>
           <div style={{ fontSize: '14px', fontWeight: 600, color: '#f0f2f8' }}>{testimonial.name}</div>
           <div style={{ fontSize: '12px', color: '#4a5568' }}>{testimonial.role} · {testimonial.company}</div>

@@ -30,7 +30,9 @@ export default function BotEditor() {
     whatsappToken: "",
     whatsappVerifyToken: "",
     emailAlertsTo: "",
+    isActive: true,
   });
+  const [botStatus, setBotStatus] = useState<'active' | 'inactive' | 'loading'>('loading');
 
   const [chatMessages, setChatMessages] = useState([
     { role: "assistant", content: "¡Sistema en línea! Soy tu activo de IA estratégica. ¿Qué vamos a probar hoy?" }
@@ -47,6 +49,7 @@ export default function BotEditor() {
   const [crawlerUrl, setCrawlerUrl] = useState("");
   const [showToken, setShowToken] = useState(false);
   const [isCrawling, setIsCrawling] = useState(false);
+  const [isTogglingStatus, setIsTogglingStatus] = useState(false);
 
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -58,7 +61,7 @@ export default function BotEditor() {
 
   useEffect(() => {
     async function loadBot() {
-      if (isNew) return;
+      if (isNew) { setBotStatus('inactive'); return; }
       const { data, error } = await supabase.from("bots").select("*").eq("id", id).single();
       if (data) {
         setBotData({
@@ -72,11 +75,15 @@ export default function BotEditor() {
           whatsappToken: data.whatsapp_token || "",
           whatsappVerifyToken: data.whatsapp_verify_token || "",
           emailAlertsTo: data.email_alerts_to || "",
+          isActive: data.is_active !== undefined ? data.is_active : true,
         });
         setKnowledgeBase(data.knowledge_base || "");
+        setBotStatus(data.is_active === false ? 'inactive' : 'active');
       }
     }
     loadBot();
+    const interval = setInterval(loadBot, 30000);
+    return () => clearInterval(interval);
   }, [id, isNew]);
 
   useEffect(() => {
@@ -115,6 +122,7 @@ export default function BotEditor() {
         whatsapp_token: botData.whatsappToken,
         whatsapp_verify_token: botData.whatsappVerifyToken,
         email_alerts_to: botData.emailAlertsTo,
+        is_active: botStatus === 'active',
         updated_at: new Date().toISOString(),
       };
 
@@ -230,6 +238,21 @@ export default function BotEditor() {
     document.body.removeChild(link);
   };
 
+  const handleToggleStatus = async () => {
+    if (isNew || isTogglingStatus) return;
+    setIsTogglingStatus(true);
+    const newStatus = botStatus === 'active' ? false : true;
+    try {
+      const { error } = await supabase.from("bots").update({ is_active: newStatus }).eq("id", id);
+      if (error) throw error;
+      setBotStatus(newStatus ? 'active' : 'inactive');
+    } catch (err: any) {
+      alert("Error: " + err.message);
+    } finally {
+      setIsTogglingStatus(false);
+    }
+  };
+
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!inputMessage.trim()) return;
@@ -280,6 +303,24 @@ export default function BotEditor() {
             <h2 className="text-cinematic" style={{ fontSize: '1.5rem', margin: 0 }}>{isNew ? "Nueva Entidad de IA" : botData.name}</h2>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '4px' }}>
               <span style={{ fontSize: '0.65rem', color: '#D4AF37', fontWeight: 900, background: 'rgba(212,175,55,0.1)', padding: '2px 8px', borderRadius: '4px', letterSpacing: '1px' }}>ID: {id}</span>
+              {!isNew && (
+                <button
+                  onClick={handleToggleStatus}
+                  disabled={isTogglingStatus || botStatus === 'loading'}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: '6px',
+                    fontSize: '0.65rem', fontWeight: 800, letterSpacing: '1px',
+                    padding: '2px 8px', borderRadius: '4px', border: 'none', cursor: 'pointer',
+                    background: botStatus === 'active' ? 'rgba(16,185,129,0.15)' : 'rgba(239,68,68,0.15)',
+                    color: botStatus === 'active' ? '#10b981' : '#ef4444',
+                    transition: 'all 0.3s',
+                  }}
+                >
+                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'currentColor', display: 'inline-block' }} />
+                  {botStatus === 'loading' ? '...' : botStatus === 'active' ? 'ACTIVO' : 'INACTIVO'}
+                  {isTogglingStatus ? '...' : ''}
+                </button>
+              )}
               <span style={{ fontSize: '0.65rem', opacity: 0.4, fontWeight: 700 }}>Protocolo de Inteligencia Activo</span>
             </div>
           </div>
