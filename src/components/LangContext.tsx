@@ -56,10 +56,10 @@ interface LangContextType {
     hero: { badge: string; titleLine1: string; titleLine2: string; subtitle: string; cta1: string; cta2: string };
     footer: { copyright: string };
     pricing: { perMonth: string; perYear: string; popular: string; title: string; titleEm: string; label: string; monthly: string; annual: string; saveBadge: string; freeMonths: string; startFree: string; startBtn: string; mostPopular: string; plans: { inicia: { name: string; desc: string; features: string[] }; escala: { name: string; desc: string; features: string[] }; domina: { name: string; desc: string; features: string[] } } };
-    cta: { title: string; titleEm: string; subtitle: string };
-    features: { title: string; titleEm: string };
-    how: { title: string; titleEm: string };
-    testimonials: { title: string; titleEm: string };
+    cta: { title: string; titleEm: string; subtitle: string; cta1: string; meta1: string; meta2: string; meta3: string };
+    features: { label: string; title: string; titleEm: string; subtitle: string };
+    how: { label: string; title: string; titleEm: string; subtitle: string };
+    testimonials: { label: string; title: string; titleEm: string };
     faq: { badge: string; titlePart1: string; titlePart2: string; noAnswer: string; contactUs: string };
     logos: { badge: string };
     roi: ROIStrings;
@@ -117,16 +117,25 @@ const translations: Record<string, any> = {
       title: "¿Listo para",
       titleEm: "automatizar?",
       subtitle: "Habla con un experto ahora",
+      cta1: "Probar gratis",
+      meta1: "Setup en 15 min",
+      meta2: "14 días gratis",
+      meta3: "Sin tarjeta",
     },
     features: {
+      label: "CAPACIDADES",
       title: "Todo lo que necesitas para",
       titleEm: "vender en automático",
+      subtitle: "Todo lo que tu equipo necesita para cerrar más ventas, sin contratar más gente.",
     },
     how: {
+      label: "PROCESO SIMPLE",
       title: "Cómo funciona en",
       titleEm: "3 pasos",
+      subtitle: "Desde la configuración hasta resultados en menos de 15 minutos.",
     },
     testimonials: {
+      label: "PRUEBA SOCIAL",
       title: "Lo que dicen nuestros",
       titleEm: "clientes",
     },
@@ -236,16 +245,25 @@ const translations: Record<string, any> = {
       title: "Ready to",
       titleEm: "automate?",
       subtitle: "Talk to an expert now",
+      cta1: "Try free",
+      meta1: "Setup in 15 min",
+      meta2: "14 days free",
+      meta3: "No card needed",
     },
     features: {
+      label: "CAPABILITIES",
       title: "Everything you need to",
       titleEm: "sell on autopilot",
+      subtitle: "Everything your team needs to close more sales, without hiring more people.",
     },
     how: {
+      label: "SIMPLE PROCESS",
       title: "How it works in",
       titleEm: "3 steps",
+      subtitle: "From setup to results in less than 15 minutes.",
     },
     testimonials: {
+      label: "SOCIAL PROOF",
       title: "What our",
       titleEm: "clients say",
     },
@@ -354,7 +372,7 @@ export function useLang() {
       setLang: () => {}, 
       showUSD: false,
       setShowUSD: () => {},
-      t: { hero: { badge: "", titleLine1: "", titleLine2: "", subtitle: "", cta1: "", cta2: "" }, footer: { copyright: "" }, pricing: { perMonth: "", perYear: "", popular: "", title: "", titleEm: "", label: "", monthly: "", annual: "", saveBadge: "", freeMonths: "", startFree: "", startBtn: "", mostPopular: "", plans: { inicia: { name: "", desc: "", features: [] as string[] }, escala: { name: "", desc: "", features: [] as string[] }, domina: { name: "", desc: "", features: [] as string[] } } }, cta: { title: "", titleEm: "", subtitle: "" }, features: { title: "", titleEm: "" }, how: { title: "", titleEm: "" }, testimonials: { title: "", titleEm: "" }, faq: { badge: "", titlePart1: "", titlePart2: "", noAnswer: "", contactUs: "" }, logos: { badge: "" }, roi: { badge: "", titlePart1: "", titlePart2: "", subtitle: "", leadsLabel: "", valueLabel: "", timeLabel: "", timeSuffix: "", missedLeadsLabel: "", missedLeadsDesc: "", lostMoneyLabel: "", lostMoneyDesc: "", stratixCostLabel: "", stratixCostDesc: "", cta: "" }, beforeAfter: { badge: "", titlePart1: "", titlePart2: "", withoutTitle: "", withTitle: "", withoutItems: [] as string[], withItems: [] as string[] }, aiPlayground: { openBtn: "", header: "", status: "", welcome: "", fallback: "", errorFallback: "", placeholder: "" } }
+      t: { hero: { badge: "", titleLine1: "", titleLine2: "", subtitle: "", cta1: "", cta2: "" }, footer: { copyright: "" }, pricing: { perMonth: "", perYear: "", popular: "", title: "", titleEm: "", label: "", monthly: "", annual: "", saveBadge: "", freeMonths: "", startFree: "", startBtn: "", mostPopular: "", plans: { inicia: { name: "", desc: "", features: [] as string[] }, escala: { name: "", desc: "", features: [] as string[] }, domina: { name: "", desc: "", features: [] as string[] } } }, cta: { title: "", titleEm: "", subtitle: "", cta1: "", meta1: "", meta2: "", meta3: "" }, features: { label: "", title: "", titleEm: "", subtitle: "" }, how: { label: "", title: "", titleEm: "", subtitle: "" }, testimonials: { label: "", title: "", titleEm: "" }, faq: { badge: "", titlePart1: "", titlePart2: "", noAnswer: "", contactUs: "" }, logos: { badge: "" }, roi: { badge: "", titlePart1: "", titlePart2: "", subtitle: "", leadsLabel: "", valueLabel: "", timeLabel: "", timeSuffix: "", missedLeadsLabel: "", missedLeadsDesc: "", lostMoneyLabel: "", lostMoneyDesc: "", stratixCostLabel: "", stratixCostDesc: "", cta: "" }, beforeAfter: { badge: "", titlePart1: "", titlePart2: "", withoutTitle: "", withTitle: "", withoutItems: [] as string[], withItems: [] as string[] }, aiPlayground: { openBtn: "", header: "", status: "", welcome: "", fallback: "", errorFallback: "", placeholder: "" } }
     };
   }
   return context;
