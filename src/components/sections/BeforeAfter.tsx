@@ -1,8 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useLang } from "@/components/LangContext";
 
 export default function BeforeAfter() {
+  const { t } = useLang();
   return (
     <section style={{
       padding: 'clamp(4rem, 10vw, 8rem) clamp(1.5rem, 5vw, 4rem)',
@@ -30,7 +32,7 @@ export default function BeforeAfter() {
           color: '#f0f2f8',
           marginBottom: '16px',
         }}>
-          Dos realidades, una <em style={{ color: '#D4AF37', fontStyle: 'italic' }}>decision</em>
+          {t.beforeAfter.titlePart1} <em style={{ color: '#D4AF37', fontStyle: 'italic' }}>{t.beforeAfter.titlePart2}</em>
         </h2>
       </div>
 
@@ -52,16 +54,10 @@ export default function BeforeAfter() {
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
             <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'rgba(255,95,86,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ff5f56', fontSize: '18px', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>x</div>
-            <div style={{ color: '#ff5f56', fontWeight: 700, fontSize: '18px', fontFamily: 'var(--font-sans)' }}>Sin Automatizacion</div>
+            <div style={{ color: '#ff5f56', fontWeight: 700, fontSize: '18px', fontFamily: 'var(--font-sans)' }}>{t.beforeAfter.withoutTitle}</div>
           </div>
           <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            {[
-              "Pierdes 40% de leads por no responder rapido",
-              "Tu equipo humano se agota y comete errores",
-              "Pagas salarios altos sin garantia de cobertura 24/7",
-              "Tus clientes esperan minutos u horas por respuesta",
-              "Tu competencia se queda con tus ventas nocturnas"
-            ].map((item, i) => (
+            {t.beforeAfter.withoutItems.map((item: string, i: number) => (
               <li key={i} style={{ display: 'flex', gap: '12px', color: '#8892a4', fontSize: '15px', lineHeight: 1.5, fontFamily: 'var(--font-sans)' }}>
                 <span style={{ color: '#ff5f56', flexShrink: 0 }}>x</span> {item}
               </li>
@@ -85,16 +81,10 @@ export default function BeforeAfter() {
           <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '4px', background: 'linear-gradient(90deg, #27C93F, #D4AF37)' }} />
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
             <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'rgba(39,201,63,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#27C93F', fontSize: '18px', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>AI</div>
-            <div style={{ color: '#27C93F', fontWeight: 700, fontSize: '18px', fontFamily: 'var(--font-sans)' }}>Con Stratix AI</div>
+            <div style={{ color: '#27C93F', fontWeight: 700, fontSize: '18px', fontFamily: 'var(--font-sans)' }}>{t.beforeAfter.withTitle}</div>
           </div>
           <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            {[
-              "Respondes en menos de 2 segundos, siempre",
-              "Cierras citas y ventas mientras duermes",
-              "Un costo fijo mensual que equivale a 1% de un salario",
-              "Experiencia premium y consistente para cada cliente",
-              "Escalabilidad infinita sin contratar mas personal"
-            ].map((item, i) => (
+            {t.beforeAfter.withItems.map((item: string, i: number) => (
               <li key={i} style={{ display: 'flex', gap: '12px', color: '#f0f2f8', fontSize: '15px', lineHeight: 1.5, fontFamily: 'var(--font-sans)' }}>
                 <span style={{ color: '#27C93F', flexShrink: 0 }}>v</span> {item}
               </li>

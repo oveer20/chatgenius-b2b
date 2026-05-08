@@ -2,62 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useLang } from "@/components/LangContext";
-
-const FAQS = {
-  es: [
-    {
-      q: "¿Qué es Stratix Intelligence?",
-      a: "Stratix es un agente de IA conversacional que automatiza la atención al cliente y ventas 24/7. Funciona en WhatsApp, Instagram, web y más, respondiendo automáticamente a tus clientes."
-    },
-    {
-      q: "¿Cuánto tiempo tarda en configurarse?",
-      a: "En menos de 15 minutos puedes tener tu primer agente funcionando. No necesitas conocimientos técnicos. Solo conectas tus canales y el agente aprende de tu información."
-    },
-    {
-      q: "¿Funciona con mi negocio?",
-      a: "Sí. Stratix se adapta a cualquier industria: inmobiliarias, tiendas, restaurantes, servicios profesionales, clínicas, y más. El agente se entrena con tu información específica."
-    },
-    {
-      q: "¿Qué pasa si el cliente hace una pregunta compleja?",
-      a: "El agente maneja el 80% de las consultas automáticamente. Si detecta una pregunta que no puede responder, transfiere la conversación a un humano con todo el contexto."
-    },
-    {
-      q: "¿Puedo conectar WhatsApp Business?",
-      a: "Sí. Conectamos directamente con tu WhatsApp Business API. También integramos Instagram Direct, tu web y otros canales. Todo en un solo panel de control."
-    },
-    {
-      q: "¿Hay garantía?",
-      a: "Sí. 14 días de garantía total. Si no ves resultados, te devolvemos tu dinero sin preguntas."
-    },
-  ],
-  en: [
-    {
-      q: "What is Stratix Intelligence?",
-      a: "Stratix is a conversational AI agent that automates customer service and sales 24/7. It works on WhatsApp, Instagram, web and more, automatically responding to your customers."
-    },
-    {
-      q: "How long does it take to set up?",
-      a: "In less than 15 minutes you can have your first agent running. No technical knowledge needed. Just connect your channels and the agent learns from your information."
-    },
-    {
-      q: "Does it work with my business?",
-      a: "Yes. Stratix adapts to any industry: real estate, stores, restaurants, professional services, clinics, and more. The agent is trained with your specific information."
-    },
-    {
-      q: "What if a customer asks a complex question?",
-      a: "The agent handles 80% of queries automatically. If it detects a question it can't answer, it transfers the conversation to a human with all the context."
-    },
-    {
-      q: "Can I connect WhatsApp Business?",
-      a: "Yes. We connect directly to your WhatsApp Business API. We also integrate Instagram Direct, your web and other channels. All in one control panel."
-    },
-    {
-      q: "Is there a guarantee?",
-      a: "Yes. 14 days full guarantee. If you don't see results, we refund your money with no questions."
-    },
-  ],
-};
+import { useLang, FAQS } from "@/components/LangContext";
 
 function FAQItem({ faq, index }: { faq: { q: string; a: string }; index: number }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -160,14 +105,14 @@ export default function FAQ() {
           marginBottom: '16px',
           letterSpacing: '0.5px',
         }}>
-          PREGUNTAS FRECUENTES
+          {t.faq.badge}
         </span>
         <h2 style={{
           fontFamily: 'var(--font-serif)',
           fontSize: 'clamp(2rem, 5vw, 3rem)',
           color: '#f0f2f8',
         }}>
-          ¿Tienes dudas? <span style={{ color: '#D4AF37' }}>Te respondemos</span>
+          {t.faq.titlePart1} <span style={{ color: '#D4AF37' }}>{t.faq.titlePart2}</span>
         </h2>
       </motion.div>
 
@@ -195,9 +140,9 @@ export default function FAQ() {
         style={{ textAlign: 'center', marginTop: '32px' }}
       >
         <p style={{ color: '#8892a4', fontSize: '14px' }}>
-          {lang === "es" ? "¿No encontraste tu respuesta?" : "Didn't find your answer?"}{" "}
+          {t.faq.noAnswer}{" "}
           <a href="https://wa.me/573159269287" target="_blank" rel="noopener noreferrer" style={{ color: '#D4AF37', textDecoration: 'none' }}>
-            {lang === "es" ? "Escríbenos" : "Write to us"}
+            {t.faq.contactUs}
           </a>
         </p>
       </motion.div>

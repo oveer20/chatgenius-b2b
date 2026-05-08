@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useLang } from "@/components/LangContext";
 
 export default function AIPlayground() {
+  const { t } = useLang();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<{ role: string; text: string }[]>([]);
   const [input, setInput] = useState("");
@@ -24,9 +26,9 @@ export default function AIPlayground() {
       });
       
       const data = await res.json();
-      setMessages(prev => [...prev, { role: "ai", text: data.response || "Hola, en que puedo ayudarte?" }]);
+      setMessages(prev => [...prev, { role: "ai", text: data.response || t.aiPlayground.fallback }]);
     } catch (e) {
-      setMessages(prev => [...prev, { role: "ai", text: "Hola, soy Stratix AI. Preguntame sobre precios o como automatizar tus ventas." }]);
+      setMessages(prev => [...prev, { role: "ai", text: t.aiPlayground.errorFallback }]);
     } finally {
       setIsTyping(false);
     }
@@ -54,7 +56,7 @@ export default function AIPlayground() {
         onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; }}
         onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
       >
-        Prueba Stratix AI en vivo
+        {t.aiPlayground.openBtn}
       </button>
 
       <AnimatePresence>
@@ -96,8 +98,8 @@ export default function AIPlayground() {
             >
               <div style={{ padding: '20px', borderBottom: '1px solid rgba(255,255,255,0.1)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
-                  <h3 style={{ color: '#D4AF37', margin: 0, fontSize: '16px', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>Stratix AI · Agente IA</h3>
-                  <p style={{ color: '#27C93F', margin: 0, fontSize: '12px', fontFamily: 'var(--font-sans)' }}>En linea · Demo en vivo</p>
+                  <h3 style={{ color: '#D4AF37', margin: 0, fontSize: '16px', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>{t.aiPlayground.header}</h3>
+                  <p style={{ color: '#27C93F', margin: 0, fontSize: '12px', fontFamily: 'var(--font-sans)' }}>{t.aiPlayground.status}</p>
                 </div>
                 <button onClick={() => setIsOpen(false)} style={{ background: 'none', border: 'none', color: '#8892a4', fontSize: '24px', cursor: 'pointer' }}>x</button>
               </div>
@@ -105,7 +107,7 @@ export default function AIPlayground() {
               <div style={{ flex: 1, padding: '20px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {messages.length === 0 && (
                   <div style={{ textAlign: 'center', color: '#4a5568', fontSize: '13px', marginTop: '40px', fontFamily: 'var(--font-sans)' }}>
-                    Hola, soy Stratix AI. Preguntame sobre precios, caracteristicas o pidele una demo a mi creador.
+                    {t.aiPlayground.welcome}
                   </div>
                 )}
                 {messages.map((msg, i) => (
@@ -139,7 +141,7 @@ export default function AIPlayground() {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-                  placeholder="Escribe tu mensaje..."
+                  placeholder={t.aiPlayground.placeholder}
                   style={{
                     flex: 1,
                     background: 'rgba(255,255,255,0.05)',

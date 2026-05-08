@@ -7,6 +7,44 @@ interface FAQ {
   a: string;
 }
 
+interface ROIStrings {
+  badge: string;
+  titlePart1: string;
+  titlePart2: string;
+  subtitle: string;
+  leadsLabel: string;
+  valueLabel: string;
+  timeLabel: string;
+  timeSuffix: string;
+  missedLeadsLabel: string;
+  missedLeadsDesc: string;
+  lostMoneyLabel: string;
+  lostMoneyDesc: string;
+  stratixCostLabel: string;
+  stratixCostDesc: string;
+  cta: string;
+}
+
+interface BeforeAfterStrings {
+  badge: string;
+  titlePart1: string;
+  titlePart2: string;
+  withoutTitle: string;
+  withTitle: string;
+  withoutItems: string[];
+  withItems: string[];
+}
+
+interface AIPlaygroundStrings {
+  openBtn: string;
+  header: string;
+  status: string;
+  welcome: string;
+  fallback: string;
+  errorFallback: string;
+  placeholder: string;
+}
+
 export type LangType = "es" | "en";
 
 interface LangContextType {
@@ -14,7 +52,20 @@ interface LangContextType {
   setLang: (lang: LangType) => void;
   showUSD: boolean;
   setShowUSD: (show: boolean) => void;
-  t: any;
+  t: {
+    hero: { badge: string; titleLine1: string; titleLine2: string; subtitle: string; cta1: string; cta2: string };
+    footer: { copyright: string };
+    pricing: { perMonth: string; perYear: string; popular: string; title: string; titleEm: string; label: string; monthly: string; annual: string; saveBadge: string; freeMonths: string; startFree: string; startBtn: string; mostPopular: string; plans: { inicia: { name: string; desc: string; features: string[] }; escala: { name: string; desc: string; features: string[] }; domina: { name: string; desc: string; features: string[] } } };
+    cta: { title: string; titleEm: string; subtitle: string };
+    features: { title: string; titleEm: string };
+    how: { title: string; titleEm: string };
+    testimonials: { title: string; titleEm: string };
+    faq: { badge: string; titlePart1: string; titlePart2: string; noAnswer: string; contactUs: string };
+    logos: { badge: string };
+    roi: ROIStrings;
+    beforeAfter: BeforeAfterStrings;
+    aiPlayground: AIPlaygroundStrings;
+  };
 }
 
 const translations: Record<string, any> = {
@@ -79,6 +130,63 @@ const translations: Record<string, any> = {
       title: "Lo que dicen nuestros",
       titleEm: "clientes",
     },
+    faq: {
+      badge: "PREGUNTAS FRECUENTES",
+      titlePart1: "¿Tienes dudas?",
+      titlePart2: "Te respondemos",
+      noAnswer: "¿No encontraste tu respuesta?",
+      contactUs: "Escríbenos",
+    },
+    logos: {
+      badge: "CONFIADO POR EQUIPOS EN CRECIMIENTO",
+    },
+    roi: {
+      badge: "CALCULADORA DE PERDIDAS",
+      titlePart1: "Cuanto dinero estas",
+      titlePart2: "perdiendo",
+      subtitle: "Ajusta los datos de tu negocio y descubre cuanto te cuesta no responder al instante.",
+      leadsLabel: "Leads / Consultas al mes",
+      valueLabel: "Valor promedio de venta (COP)",
+      timeLabel: "Tiempo promedio de respuesta",
+      timeSuffix: "min",
+      missedLeadsLabel: "Leads Perdidos",
+      missedLeadsDesc: "Clientes que se van a la competencia",
+      lostMoneyLabel: "Dinero Perdido / Mes",
+      lostMoneyDesc: "Ingresos que dejas de ganar",
+      stratixCostLabel: "Costo de Stratix",
+      stratixCostDesc: "Inversion mensual para recuperar todo",
+      cta: "Recupera tus ventas hoy",
+    } as ROIStrings,
+    beforeAfter: {
+      badge: "SIN STRATIX VS CON STRATIX",
+      titlePart1: "Dos realidades, una",
+      titlePart2: "decision",
+      withoutTitle: "Sin Automatizacion",
+      withTitle: "Con Stratix AI",
+      withoutItems: [
+        "Pierdes 40% de leads por no responder rapido",
+        "Tu equipo humano se agota y comete errores",
+        "Pagas salarios altos sin garantia de cobertura 24/7",
+        "Tus clientes esperan minutos u horas por respuesta",
+        "Tu competencia se queda con tus ventas nocturnas",
+      ],
+      withItems: [
+        "Respondes en menos de 2 segundos, siempre",
+        "Cierras citas y ventas mientras duermes",
+        "Un costo fijo mensual que equivale a 1% de un salario",
+        "Experiencia premium y consistente para cada cliente",
+        "Escalabilidad infinita sin contratar mas personal",
+      ],
+    } as BeforeAfterStrings,
+    aiPlayground: {
+      openBtn: "Prueba Stratix AI en vivo",
+      header: "Stratix AI · Agente IA",
+      status: "En linea · Demo en vivo",
+      welcome: "Hola, soy Stratix AI. Preguntame sobre precios, caracteristicas o pidele una demo a mi creador.",
+      fallback: "Hola, en que puedo ayudarte?",
+      errorFallback: "Hola, soy Stratix AI. Preguntame sobre precios o como automatizar tus ventas.",
+      placeholder: "Escribe tu mensaje...",
+    } as AIPlaygroundStrings,
   },
   en: {
     hero: {
@@ -141,6 +249,63 @@ const translations: Record<string, any> = {
       title: "What our",
       titleEm: "clients say",
     },
+    faq: {
+      badge: "FREQUENTLY ASKED QUESTIONS",
+      titlePart1: "Got questions?",
+      titlePart2: "We answer",
+      noAnswer: "Didn't find your answer?",
+      contactUs: "Contact us",
+    },
+    logos: {
+      badge: "TRUSTED BY GROWING TEAMS",
+    },
+    roi: {
+      badge: "LOSS CALCULATOR",
+      titlePart1: "How much money are you",
+      titlePart2: "losing",
+      subtitle: "Adjust your business data and discover how much it costs you not to respond instantly.",
+      leadsLabel: "Leads / Queries per month",
+      valueLabel: "Average sale value (COP)",
+      timeLabel: "Average response time",
+      timeSuffix: "min",
+      missedLeadsLabel: "Missed Leads",
+      missedLeadsDesc: "Customers going to your competition",
+      lostMoneyLabel: "Lost Revenue / Month",
+      lostMoneyDesc: "Revenue you're missing out on",
+      stratixCostLabel: "Stratix Cost",
+      stratixCostDesc: "Monthly investment to recover it all",
+      cta: "Recover your sales today",
+    } as ROIStrings,
+    beforeAfter: {
+      badge: "WITHOUT STRATIX VS WITH STRATIX",
+      titlePart1: "Two realities, one",
+      titlePart2: "decision",
+      withoutTitle: "Without Automation",
+      withTitle: "With Stratix AI",
+      withoutItems: [
+        "You lose 40% of leads by not responding fast enough",
+        "Your human team gets exhausted and makes mistakes",
+        "You pay high salaries with no 24/7 coverage guarantee",
+        "Your customers wait minutes or hours for a response",
+        "Your competition takes your nighttime sales",
+      ],
+      withItems: [
+        "You respond in under 2 seconds, always",
+        "You close appointments and sales while you sleep",
+        "A fixed monthly cost equivalent to 1% of a salary",
+        "Premium and consistent experience for every customer",
+        "Infinite scalability without hiring more staff",
+      ],
+    } as BeforeAfterStrings,
+    aiPlayground: {
+      openBtn: "Try Stratix AI live",
+      header: "Stratix AI · AI Agent",
+      status: "Online · Live demo",
+      welcome: "Hi, I'm Stratix AI. Ask me about pricing, features or request a demo from my creator.",
+      fallback: "Hi, how can I help you?",
+      errorFallback: "Hi, I'm Stratix AI. Ask me about pricing or how to automate your sales.",
+      placeholder: "Type your message...",
+    } as AIPlaygroundStrings,
   },
 };
 
@@ -189,7 +354,7 @@ export function useLang() {
       setLang: () => {}, 
       showUSD: false,
       setShowUSD: () => {},
-      t: { hero: { badge: "", titleLine1: "", titleLine2: "", subtitle: "", cta1: "", cta2: "" }, footer: { copyright: "" }, pricing: { perMonth: "", perYear: "", popular: "" }, cta: { title: "", titleEm: "", subtitle: "" }, features: { title: "", titleEm: "" }, how: { title: "", titleEm: "" }, testimonials: { title: "", titleEm: "" } }
+      t: { hero: { badge: "", titleLine1: "", titleLine2: "", subtitle: "", cta1: "", cta2: "" }, footer: { copyright: "" }, pricing: { perMonth: "", perYear: "", popular: "", title: "", titleEm: "", label: "", monthly: "", annual: "", saveBadge: "", freeMonths: "", startFree: "", startBtn: "", mostPopular: "", plans: { inicia: { name: "", desc: "", features: [] as string[] }, escala: { name: "", desc: "", features: [] as string[] }, domina: { name: "", desc: "", features: [] as string[] } } }, cta: { title: "", titleEm: "", subtitle: "" }, features: { title: "", titleEm: "" }, how: { title: "", titleEm: "" }, testimonials: { title: "", titleEm: "" }, faq: { badge: "", titlePart1: "", titlePart2: "", noAnswer: "", contactUs: "" }, logos: { badge: "" }, roi: { badge: "", titlePart1: "", titlePart2: "", subtitle: "", leadsLabel: "", valueLabel: "", timeLabel: "", timeSuffix: "", missedLeadsLabel: "", missedLeadsDesc: "", lostMoneyLabel: "", lostMoneyDesc: "", stratixCostLabel: "", stratixCostDesc: "", cta: "" }, beforeAfter: { badge: "", titlePart1: "", titlePart2: "", withoutTitle: "", withTitle: "", withoutItems: [] as string[], withItems: [] as string[] }, aiPlayground: { openBtn: "", header: "", status: "", welcome: "", fallback: "", errorFallback: "", placeholder: "" } }
     };
   }
   return context;

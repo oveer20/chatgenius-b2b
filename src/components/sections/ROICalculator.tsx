@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { useLang } from "@/components/LangContext";
 
 export default function ROICalculator() {
+  const { t } = useLang();
   const [leads, setLeads] = useState(50);
   const [value, setValue] = useState(200000);
   const [responseTime, setResponseTime] = useState(60);
@@ -51,7 +53,7 @@ export default function ROICalculator() {
             marginBottom: '16px',
           }}
         >
-          Cuanto dinero estas <span style={{ color: '#ff5f56', fontStyle: 'italic' }}>perdiendo</span> hoy?
+          {t.roi.titlePart1} <span style={{ color: '#ff5f56', fontStyle: 'italic' }}>{t.roi.titlePart2}</span> hoy?
         </motion.h2>
 
         <motion.p
@@ -60,7 +62,7 @@ export default function ROICalculator() {
           viewport={{ once: true }}
           style={{ color: '#8892a4', fontSize: '16px', maxWidth: '600px', margin: '0 auto 50px', lineHeight: 1.6, fontFamily: 'var(--font-sans)' }}
         >
-          Ajusta los datos de tu negocio y descubre cuanto te cuesta no responder al instante.
+          {t.roi.subtitle}
         </motion.p>
 
         <div style={{
@@ -72,7 +74,7 @@ export default function ROICalculator() {
         }}>
           <div style={{ background: 'rgba(255,255,255,0.03)', padding: '24px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.07)' }}>
             <label style={{ display: 'block', color: '#8892a4', fontSize: '14px', marginBottom: '12px', fontWeight: 500, fontFamily: 'var(--font-sans)' }}>
-              Leads / Consultas al mes
+              {t.roi.leadsLabel}
             </label>
             <input
               type="range" min="10" max="500" value={leads}
@@ -86,7 +88,7 @@ export default function ROICalculator() {
 
           <div style={{ background: 'rgba(255,255,255,0.03)', padding: '24px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.07)' }}>
             <label style={{ display: 'block', color: '#8892a4', fontSize: '14px', marginBottom: '12px', fontWeight: 500, fontFamily: 'var(--font-sans)' }}>
-              Valor promedio de venta (COP)
+              {t.roi.valueLabel}
             </label>
             <input
               type="range" min="50000" max="5000000" step="50000" value={value}
@@ -100,7 +102,7 @@ export default function ROICalculator() {
 
           <div style={{ background: 'rgba(255,255,255,0.03)', padding: '24px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.07)' }}>
             <label style={{ display: 'block', color: '#8892a4', fontSize: '14px', marginBottom: '12px', fontWeight: 500, fontFamily: 'var(--font-sans)' }}>
-              Tiempo promedio de respuesta (min)
+              {t.roi.timeLabel} ({t.roi.timeSuffix})
             </label>
             <input
               type="range" min="5" max="120" value={responseTime}
@@ -108,7 +110,7 @@ export default function ROICalculator() {
               style={{ width: '100%', accentColor: '#D4AF37', marginBottom: '10px' }}
             />
             <div style={{ color: '#f0f2f8', fontSize: '24px', fontWeight: 700, fontFamily: 'var(--font-serif)' }}>
-              {responseTime} min
+              {responseTime} {t.roi.timeSuffix}
             </div>
           </div>
         </div>
@@ -124,27 +126,27 @@ export default function ROICalculator() {
           textAlign: 'center',
         }}>
           <div>
-            <div style={{ color: '#ff5f56', fontSize: '14px', fontWeight: 600, marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '1px', fontFamily: 'var(--font-sans)' }}>Leads Perdidos</div>
+            <div style={{ color: '#ff5f56', fontSize: '14px', fontWeight: 600, marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '1px', fontFamily: 'var(--font-sans)' }}>{t.roi.missedLeadsLabel}</div>
             <div style={{ color: '#fff', fontSize: 'clamp(2rem, 4vw, 3.5rem)', fontWeight: 800, fontFamily: 'var(--font-serif)', lineHeight: 1.1 }}>
               -{missedLeads}
             </div>
-            <div style={{ color: '#8892a4', fontSize: '13px', fontFamily: 'var(--font-sans)', marginTop: '8px' }}>Clientes que se van a la competencia</div>
+            <div style={{ color: '#8892a4', fontSize: '13px', fontFamily: 'var(--font-sans)', marginTop: '8px' }}>{t.roi.missedLeadsDesc}</div>
           </div>
 
           <div>
-            <div style={{ color: '#ff5f56', fontSize: '14px', fontWeight: 600, marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '1px', fontFamily: 'var(--font-sans)' }}>Dinero Perdido / Mes</div>
+            <div style={{ color: '#ff5f56', fontSize: '14px', fontWeight: 600, marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '1px', fontFamily: 'var(--font-sans)' }}>{t.roi.lostMoneyLabel}</div>
             <div style={{ color: '#fff', fontSize: 'clamp(1.5rem, 3vw, 2.5rem)', fontWeight: 800, fontFamily: 'var(--font-serif)', lineHeight: 1.1 }}>
               -${lostRevenue.toLocaleString('es-CO')}
             </div>
-            <div style={{ color: '#8892a4', fontSize: '13px', fontFamily: 'var(--font-sans)', marginTop: '8px' }}>Ingresos que dejas de ganar</div>
+            <div style={{ color: '#8892a4', fontSize: '13px', fontFamily: 'var(--font-sans)', marginTop: '8px' }}>{t.roi.lostMoneyDesc}</div>
           </div>
 
           <div style={{ position: 'relative' }}>
-            <div style={{ color: '#D4AF37', fontSize: '14px', fontWeight: 600, marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '1px', fontFamily: 'var(--font-sans)' }}>Costo de Stratix</div>
+            <div style={{ color: '#D4AF37', fontSize: '14px', fontWeight: 600, marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '1px', fontFamily: 'var(--font-sans)' }}>{t.roi.stratixCostLabel}</div>
             <div style={{ color: '#D4AF37', fontSize: 'clamp(1.5rem, 3vw, 2.5rem)', fontWeight: 800, fontFamily: 'var(--font-serif)', lineHeight: 1.1 }}>
               ${stratixCost.toLocaleString('es-CO')}
             </div>
-            <div style={{ color: '#8892a4', fontSize: '13px', fontFamily: 'var(--font-sans)', marginTop: '8px' }}>Inversion mensual para recuperar todo</div>
+            <div style={{ color: '#8892a4', fontSize: '13px', fontFamily: 'var(--font-sans)', marginTop: '8px' }}>{t.roi.stratixCostDesc}</div>
           </div>
         </div>
 
@@ -167,7 +169,7 @@ export default function ROICalculator() {
             transition: 'transform 0.2s',
           }}
         >
-          Recupera tus ventas hoy
+          {t.roi.cta}
         </motion.a>
       </div>
     </section>

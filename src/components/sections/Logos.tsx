@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { useLang } from "@/components/LangContext";
 
 const LOGOS = ["WhatsApp", "Instagram", "Shopify", "Meta", "Google", "Vercel"];
 
 export default function Logos() {
+  const { t } = useLang();
   return (
     <div style={{ padding: '60px clamp(1.5rem, 5vw, 4rem)', textAlign: 'center', position: 'relative', zIndex: 2 }}>
       <motion.div 
@@ -12,7 +14,7 @@ export default function Logos() {
         viewport={{ once: true }}
         style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', letterSpacing: '0.12em', color: '#4a5568', marginBottom: '32px' }}
       >
-        CONFIADO POR EQUIPOS EN CRECIMIENTO
+        {t.logos.badge}
       </motion.div>
       
       <motion.div 
