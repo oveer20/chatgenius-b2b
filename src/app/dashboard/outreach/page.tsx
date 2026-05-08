@@ -17,51 +17,11 @@ import { toast, Toaster } from "sonner";
  */
 
 const STATIC_TARGETS = [
-  {
-    city: "Bogotá",
-    name: "Mubrick",
-    whatsapp: "573173669778",
-    description: "Referentes en tecnología inmobiliaria en la capital.",
-    strategy: "Si ellos adoptan Stratix, el sector entero te verá como el estándar.",
-    message: "Hola equipo de Mubrick! 🏠 Vi que son referentes en el sector, pero su atención fuera de horario aún es manual. He desarrollado una arquitectura de IA llamada Stratix que califica leads Hot 24/7. ¿Les gustaría una Demo Estratégica de 7 días sin costo?",
-    source: "static"
-  },
-  {
-    city: "Bogotá",
-    name: "Ospina",
-    whatsapp: "573125767129",
-    description: "Inmobiliaria con 65 años de trayectoria.",
-    strategy: "Legacy absoluto. Stratix es el refresh que necesitan para no perder leads jóvenes.",
-    message: "Hola! Respeto mucho la trayectoria de Ospina. Me gustaría ofrecerles modernizar su atención con Stratix Intelligence, una IA que respeta su legado pero con velocidad de respuesta 24/7. ¿Hablamos de una demo gratuita entrenada con sus propios manuales?",
-    source: "static"
-  },
-  {
-    city: "Bogotá",
-    name: "Épica",
-    whatsapp: "573125767129",
-    description: "Enfoque en agilidad y modernidad.",
-    strategy: "Rapidez es su mantra. Stratix es agilidad pura.",
-    message: "Hola equipo de Épica! Me encanta su enfoque en agilidad. Quería ofrecerles escalar esa agilidad con Stratix, una IA que atiende a sus interesados al instante incluso a las 3 AM. ¿Les interesa una prueba gratis para ver el ROI?",
-    source: "static"
-  },
-  {
-    city: "Medellín",
-    name: "Alberto Álvarez",
-    whatsapp: "573208431030",
-    description: "El gigante del mercado inmobiliario paisa.",
-    strategy: "Si les ahorras el 10% de trabajo, te pagan lo que sea.",
-    message: "Hola equipo de Alberto Álvarez! Manejan un volumen inmenso de consultas. He diseñado Stratix, una IA que ayuda a sus clientes a encontrar propiedades en segundos liberando a su equipo humano. ¿Les interesa una demo estratégica de 7 días?",
-    source: "static"
-  },
-  {
-    city: "Medellín",
-    name: "Grupo Panorama",
-    whatsapp: "573015446892",
-    description: "Múltiples sedes con cobertura total.",
-    strategy: "Stratix unifica su cerebro comercial ante la dispersión de oficinas.",
-    message: "Hola Panorama Inmobiliario! Vi que tienen cobertura total en la ciudad. ¿Les gustaría centralizar su atención con una arquitectura de IA que califique leads por ustedes mientras descansan? Es gratis probarlo por una semana.",
-    source: "static"
-  },
+  { city: "Bogotá", name: "Inmobiliaria Norte", whatsapp: "573100000001", description: "Líder en zonas residenciales del norte", strategy: "Stratix puede automatizar su atención 24/7 y calificación de leads.", message: "Hola equipo de Inmobiliaria Norte! Vi que lideran el norte de la ciudad. He desarrollado Stratix, una IA que responde consultas de propiedades al instante. ¿Les interesa una demo gratuita de 7 días?", source: "static" },
+  { city: "Bogotá", name: "Arquitectos Associates", whatsapp: "573100000002", description: "Enfoque en proyectos residenciales de lujo", strategy: "Leads de alto valor necesitan atención premium. Stratix la provee.", message: "Hola! Respeto mucho el enfoque de lujo de Arquitectos Associates. Me gustaría ofrecerles Stratix Intelligence, una IA que protege su imagen premium mientras escala su atención. ¿Hablamos?", source: "static" },
+  { city: "Medellín", name: "Ciudad Verde Inmuebles", whatsapp: "573100000003", description: "Proyectos eco-sostenibles en expansión", strategy: "Expansion requiere volumen. Stratix maneja volumen sin perder calidad.", message: "Hola equipo de Ciudad Verde! Me encanta su enfoque sostenible. Quería ofrecerles Stratix, una IA que escala su atención mientras mantienen su compromiso ambiental. ¿Probamos una semana gratis?", source: "static" },
+  { city: "Cali", name: "Valle Real Properties", whatsapp: "573100000004", description: "El gigante inmobiliario del Valle", strategy: "Mayor volumen requiere más automation.", message: "Hola! Vi el impacto de Valle Real en el mercado. He diseñado Stratix para ayudar a su equipo a manejar más consultas sin perder calidad. ¿Les interesa una demo estratégica?", source: "static" },
+  { city: "Barranquilla", name: "Caribe Homes", whatsapp: "573100000005", description: "Especialistas en vivienda social", strategy: "Volumen alto necesita velocidad. Stratix responde en 2 segundos.", message: "Hola equipo de Caribe Homes! El mercado de vivienda social es competitivo. Stratix puede ayudarles a capturar más leads respondiendo al instante. ¿Les gustaría probar una semana gratis?", source: "static" },
 ];
 
 interface Target {

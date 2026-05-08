@@ -45,6 +45,7 @@ export default function BotEditor() {
   const [isLoadingLeads, setIsLoadingLeads] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [crawlerUrl, setCrawlerUrl] = useState("");
+  const [showToken, setShowToken] = useState(false);
   const [isCrawling, setIsCrawling] = useState(false);
 
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -491,8 +492,16 @@ export default function BotEditor() {
                     <FiMessageCircle size={30} color="#25D366" style={{ marginBottom: '1.5rem' }} />
                     <h4 style={{ fontWeight: 900 }}>WHATSAPP API</h4>
                     <div style={{ marginTop: '2rem' }}>
-                      <label style={{ fontSize: '0.65rem', opacity: 0.4 }}>PHONE NUMBER ID</label>
-                      <input value={botData.whatsappPhoneId} onChange={e => setBotData({...botData, whatsappPhoneId: e.target.value})} style={{ width: '100%', padding: '12px', background: 'rgba(0,0,0,0.3)', border: 'none', borderRadius: '8px', color: 'white', marginTop: '5px' }} />
+                      <div>
+                      <label style={{ fontSize: '0.65rem', opacity: 0.4 }}>WHATSAPP TOKEN</label>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '5px' }}>
+                        <input type={showToken ? 'text' : 'password'} value={botData.whatsappToken} onChange={e => setBotData({...botData, whatsappToken: e.target.value})} style={{ flex: 1, padding: '12px', background: 'rgba(0,0,0,0.3)', border: 'none', borderRadius: '8px', color: 'white' }} />
+                        <button onClick={() => setShowToken(!showToken)} style={{ background: 'rgba(255,255,255,0.05)', border: 'none', borderRadius: '8px', padding: '10px', cursor: 'pointer', color: '#D4AF37' }}>
+                          {showToken ? <FiShield size={14} /> : <FiInfo size={14} />}
+                        </button>
+                      </div>
+                      <p style={{ fontSize: '0.65rem', opacity: 0.3, marginTop: '4px' }}>{showToken ? 'Ocultar' : 'Mostrar'} token</p>
+                    </div>
                     </div>
                   </div>
                   <div className="card-elite" style={{ padding: '3rem', border: '1px solid rgba(212,175,55,0.2)' }}>

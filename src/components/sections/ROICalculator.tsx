@@ -10,7 +10,8 @@ export default function ROICalculator() {
   const [value, setValue] = useState(200000);
   const [responseTime, setResponseTime] = useState(60);
 
-  const missedLeads = Math.round(leads * 0.4);
+  const lossRate = Math.min(0.15 + (responseTime / 120) * 0.45, 0.6);
+  const missedLeads = Math.round(leads * lossRate);
   const lostRevenue = missedLeads * value;
   const stratixCost = 79000;
 
