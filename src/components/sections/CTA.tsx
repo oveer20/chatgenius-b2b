@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useLang } from "@/components/LangContext";
 import { useState } from "react";
 
@@ -17,114 +17,155 @@ export default function CTA() {
   ];
 
   return (
-    <section style={{ padding: 'clamp(4rem, 10vw, 8rem) clamp(1.5rem, 5vw, 4rem)', maxWidth: '900px', margin: '0 auto', textAlign: 'center' }}>
-      <motion.div 
+    <section style={{ padding: 'clamp(4rem, 10vw, 8rem) clamp(1.5rem, 5vw, 4rem)', maxWidth: '900px', margin: '0 auto', textAlign: 'center', position: 'relative' }}>
+      {/* Aurora background */}
+      <div style={{
+        position: 'absolute',
+        inset: '-60px',
+        background: 'radial-gradient(ellipse at 30% 50%, rgba(212,175,55,0.08) 0%, transparent 50%), radial-gradient(ellipse at 70% 50%, rgba(59,130,246,0.06) 0%, transparent 50%), radial-gradient(ellipse at 50% 80%, rgba(16,185,129,0.05) 0%, transparent 50%)',
+        filter: 'blur(40px)',
+        pointerEvents: 'none',
+        animation: 'aurora 8s ease-in-out infinite alternate',
+      }} />
+
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.7 }}
       >
-        <div 
+        <div
           onMouseEnter={() => setHovered("box")}
           onMouseLeave={() => setHovered(null)}
-          style={{ 
-            position: 'relative', 
-            borderRadius: '24px', 
-            overflow: 'hidden', 
-            padding: 'clamp(3rem, 6vw, 5rem)', 
-            background: hovered === "box" ? '#0d1520' : '#0d1017', 
+          style={{
+            position: 'relative',
+            borderRadius: '24px',
+            overflow: 'hidden',
+            padding: 'clamp(3rem, 6vw, 5rem)',
+            background: 'rgba(13,16,23,0.7)',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
             border: '1px solid rgba(212,175,55,0.2)',
             transition: 'all 0.4s ease',
+            boxShadow: hovered === "box"
+              ? '0 25px 80px rgba(0,0,0,0.6), 0 0 40px rgba(212,175,55,0.1)'
+              : '0 16px 50px rgba(0,0,0,0.4)',
           }}
         >
-          <motion.div 
-            style={{ 
-              position: 'absolute', 
-              inset: 0, 
-              background: 'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.15) 0%, transparent 70%)', 
-              pointerEvents: 'none' 
+          {/* Animated gradient overlay */}
+          <motion.div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              background: 'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.12) 0%, transparent 70%)',
+              pointerEvents: 'none',
             }}
-            animate={{ opacity: hovered === "box" ? 1 : 0.5 }}
-            transition={{ duration: 0.3 }}
+            animate={{ opacity: [0.5, 0.8, 0.5] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
           />
 
-          <motion.h2 
-            style={{ 
-              position: 'relative', 
-              fontFamily: 'var(--font-serif)', 
-              fontSize: 'clamp(2rem, 5vw, 3.5rem)', 
-              lineHeight: 1.1, 
-              letterSpacing: '-0.02em', 
-              marginBottom: '16px', 
-              color: '#f0f2f8' 
+          {/* Social proof badge */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            style={{
+              position: 'relative',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '8px 16px',
+              borderRadius: '100px',
+              background: 'rgba(16,185,129,0.1)',
+              border: '1px solid rgba(16,185,129,0.2)',
+              marginBottom: '24px',
+              fontSize: '13px',
+              color: '#10b981',
+              fontWeight: 500,
+            }}
+          >
+            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981', animation: 'pulse-glow 2s infinite' }} />
+            {lang === "es" ? "+500 empresas ya automatizaron" : "+500 companies already automated"}
+          </motion.div>
+
+          <motion.h2
+            style={{
+              position: 'relative',
+              fontFamily: 'var(--font-serif)',
+              fontSize: 'clamp(2rem, 5vw, 3.5rem)',
+              lineHeight: 1.1,
+              letterSpacing: '-0.02em',
+              marginBottom: '16px',
+              color: '#f0f2f8',
             }}
           >
             {t.cta.title}<br />
             <em style={{ color: '#D4AF37', fontStyle: 'italic' }}>{t.cta.titleEm}</em>
           </motion.h2>
-          
-          <motion.p 
-            style={{ 
-              position: 'relative', 
-              fontSize: '16px', 
-              color: '#8892a4', 
-              marginBottom: '40px', 
-              maxWidth: '460px', 
-              margin: '0 auto 40px' 
+
+          <motion.p
+            style={{
+              position: 'relative',
+              fontSize: '16px',
+              color: '#8892a4',
+              marginBottom: '40px',
+              maxWidth: '460px',
+              margin: '0 auto 40px',
             }}
           >
             {t.cta.subtitle}
           </motion.p>
 
-          <motion.div 
-            style={{ position: 'relative', display: 'flex', justifyContent: 'center', gap: '16px', flexWrap: 'wrap', marginBottom: '24px' }}
+          <motion.div
+            style={{ position: 'relative', display: 'flex', justifyContent: 'center', gap: '16px', flexWrap: 'wrap', marginBottom: '32px' }}
           >
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <Link 
-                href="/login" 
-                style={{ 
-                  background: '#D4AF37', 
-                  color: '#030a05', 
-                  fontSize: '15px', 
-                  fontWeight: 600, 
-                  padding: '14px 32px', 
-                  borderRadius: '14px', 
-                  textDecoration: 'none', 
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
+              <Link
+                href="/login"
+                style={{
+                  background: 'linear-gradient(135deg, #D4AF37, #E5C555)',
+                  color: '#030a05',
+                  fontSize: '15px',
+                  fontWeight: 700,
+                  padding: '16px 36px',
+                  borderRadius: '14px',
+                  textDecoration: 'none',
                   display: 'inline-block',
-                  boxShadow: '0 4px 20px rgba(212,175,55,0.3)',
+                  boxShadow: '0 4px 20px rgba(212,175,55,0.4), 0 0 40px rgba(212,175,55,0.1)',
+                  transition: 'all 0.3s ease',
                 }}
+                onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 8px 30px rgba(212,175,55,0.5), 0 0 60px rgba(212,175,55,0.2)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 4px 20px rgba(212,175,55,0.4), 0 0 40px rgba(212,175,55,0.1)'; }}
               >
                 {t.cta.cta1}
               </Link>
             </motion.div>
           </motion.div>
 
-          <motion.div 
-            style={{ position: 'relative', display: 'flex', justifyContent: 'center', gap: '16px', flexWrap: 'wrap', marginBottom: '24px' }}
+          <motion.div
+            style={{ position: 'relative', display: 'flex', justifyContent: 'center', gap: '12px', flexWrap: 'wrap', marginBottom: '24px' }}
           >
             {contactLinks.map((link) => (
               <motion.a
                 key={link.key}
                 href={link.href}
                 target="_blank"
-                whileHover={{ scale: 1.05, y: -4 }}
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.05, y: -3 }}
                 whileTap={{ scale: 0.98 }}
                 onMouseEnter={() => setHovered(link.key)}
                 onMouseLeave={() => setHovered(null)}
-                style={{ 
-                  padding: '12px 24px', 
-                  border: hovered === link.key ? '1px solid rgba(212,175,55,0.4)' : '1px solid rgba(255,255,255,0.15)', 
-                  borderRadius: '12px', 
-                  fontWeight: 500, 
-                  textDecoration: 'none', 
-                  color: hovered === link.key ? '#D4AF37' : '#f0f2f8', 
-                  background: hovered === link.key ? 'rgba(212,175,55,0.1)' : 'rgba(255,255,255,0.03)', 
-                  fontSize: '14px', 
-                  display: 'inline-flex', 
-                  alignItems: 'center', 
+                style={{
+                  padding: '10px 20px',
+                  border: hovered === link.key ? '1px solid rgba(212,175,55,0.4)' : '1px solid rgba(255,255,255,0.1)',
+                  borderRadius: '12px',
+                  fontWeight: 500,
+                  textDecoration: 'none',
+                  color: hovered === link.key ? '#D4AF37' : '#f0f2f8',
+                  background: hovered === link.key ? 'rgba(212,175,55,0.1)' : 'rgba(255,255,255,0.02)',
+                  fontSize: '14px',
+                  display: 'inline-flex',
+                  alignItems: 'center',
                   gap: '8px',
                   transition: 'all 0.3s ease',
                 }}
@@ -137,47 +178,62 @@ export default function CTA() {
             ))}
           </motion.div>
 
-          <motion.div 
-            style={{ 
-              position: 'relative', 
-              display: 'flex', 
-              justifyContent: 'center', 
-              gap: '32px', 
-              flexWrap: 'wrap', 
-              fontFamily: 'var(--font-mono)', 
-              fontSize: '12px', 
-              color: '#4a5568' 
+          <motion.div
+            style={{
+              position: 'relative',
+              display: 'flex',
+              justifyContent: 'center',
+              gap: '24px',
+              flexWrap: 'wrap',
+              fontFamily: 'var(--font-mono)',
+              fontSize: '12px',
+              color: '#4a5568',
             }}
           >
-            <motion.span whileHover={{ color: '#D4AF37' }}>{t.cta.meta1}</motion.span>
-            <motion.span whileHover={{ color: '#D4AF37' }}>{t.cta.meta2}</motion.span>
-            <motion.span whileHover={{ color: '#D4AF37' }}>{t.cta.meta3}</motion.span>
+            <span>{t.cta.meta1}</span>
+            <span>•</span>
+            <span>{t.cta.meta2}</span>
+            <span>•</span>
+            <span>{t.cta.meta3}</span>
           </motion.div>
 
+          {/* Founder card */}
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            style={{ position: 'relative', marginTop: '40px', paddingTop: '24px', borderTop: '1px solid rgba(255,255,255,0.07)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px' }}
+            style={{ position: 'relative', marginTop: '32px', paddingTop: '24px', borderTop: '1px solid rgba(255,255,255,0.07)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px' }}
           >
             <span style={{ fontSize: '13px', color: '#8892a4', fontFamily: 'var(--font-sans)' }}>{lang === "es" ? "Fundado por" : "Founded by"}</span>
-            <a
+            <motion.a
               href="https://www.linkedin.com/in/jose-gaviriap/"
               target="_blank"
               rel="noopener noreferrer"
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.98 }}
               style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', textDecoration: 'none', padding: '8px 16px', borderRadius: '12px', background: 'rgba(10,102,194,0.1)', border: '1px solid rgba(10,102,194,0.3)', transition: 'all 0.3s ease' }}
-              onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(10,102,194,0.2)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(10,102,194,0.1)'; }}
             >
               <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'linear-gradient(135deg, #0A66C2, #004182)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '12px', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>JG</div>
               <div style={{ textAlign: 'left' }}>
                 <div style={{ fontSize: '14px', fontWeight: 600, color: '#f0f2f8', fontFamily: 'var(--font-sans)' }}>Jose Gaviria</div>
                 <div style={{ fontSize: '11px', color: '#8892a4', fontFamily: 'var(--font-sans)' }}>{lang === "es" ? "Founder & CEO" : "Founder & CEO"}</div>
               </div>
-            </a>
+            </motion.a>
           </motion.div>
         </div>
       </motion.div>
+
+      <style>{`
+        @keyframes aurora {
+          0% { opacity: 0.5; transform: scale(1) rotate(0deg); }
+          50% { opacity: 1; transform: scale(1.05) rotate(2deg); }
+          100% { opacity: 0.7; transform: scale(1.02) rotate(-1deg); }
+        }
+        @keyframes pulse-glow {
+          0%, 100% { box-shadow: 0 0 4px #10b981; }
+          50% { box-shadow: 0 0 12px #10b981; }
+        }
+      `}</style>
     </section>
   );
 }

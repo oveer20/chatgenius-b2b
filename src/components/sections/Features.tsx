@@ -1,10 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { useLang } from "@/components/LangContext";
-import SectionLabel from "@/components/ui/SectionLabel";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 const FEATURES = [
   { icon: "01", titleKey: "memory", descKey: "memoryDesc" },
@@ -39,37 +37,48 @@ const TAGS = { es: ["WhatsApp", "Instagram", "Web", "Slack"], en: ["WhatsApp", "
 function FeatureCard({ feature, index }: { feature: typeof FEATURES[0]; index: number }) {
   const { lang } = useLang();
   const [hovered, setHovered] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const t = TRANSLATIONS[lang as keyof typeof TRANSLATIONS];
   const tags = TAGS[lang as keyof typeof TAGS];
 
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!ref.current) return;
+    const rect = ref.current.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width - 0.5) * 6;
+    const y = ((e.clientY - rect.top) / rect.height - 0.5) * -6;
+    setTilt({ x, y });
+  };
+
   return (
     <motion.div 
+      ref={ref}
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
+      viewport={{ once: true, margin: "-50px" }}
       transition={{ delay: index * 0.1 }}
       onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      onMouseLeave={() => { setHovered(false); setTilt({ x: 0, y: 0 }); }}
+      onMouseMove={handleMouseMove}
+      animate={hovered ? { rotateY: tilt.x, rotateX: tilt.y } : {}}
       style={{ 
         padding: '28px', 
         background: hovered 
           ? 'rgba(13, 21, 32, 0.8)' 
           : 'rgba(13, 16, 23, 0.6)', 
         backdropFilter: hovered ? 'blur(20px)' : 'blur(10px)',
-        borderRight: '1px solid rgba(255,255,255,0.07)', 
-        borderBottom: '1px solid rgba(255,255,255,0.07)', 
         minWidth: '280px', 
         flex: 1,
-        transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-        transform: hovered ? 'translateY(-12px) scale(1.02)' : 'translateY(0) scale(1)',
-        boxShadow: hovered 
-          ? '0 25px 50px rgba(0,0,0,0.5), 0 0 40px rgba(212,175,55,0.1)' 
-          : '0 10px 40px rgba(0,0,0,0.3)',
+        transition: 'background 0.4s ease, backdrop-filter 0.4s ease',
+        transformStyle: 'preserve-3d',
+        position: 'relative',
+        overflow: 'hidden',
         border: hovered 
           ? '1px solid rgba(212,175,55,0.4)' 
           : '1px solid rgba(255,255,255,0.07)',
-        position: 'relative',
-        overflow: 'hidden',
+        boxShadow: hovered 
+          ? '0 25px 50px rgba(0,0,0,0.5), 0 0 40px rgba(212,175,55,0.1)' 
+          : '0 10px 40px rgba(0,0,0,0.3)',
       }}
     >
       {hovered && (
@@ -120,7 +129,7 @@ function FeatureCard({ feature, index }: { feature: typeof FEATURES[0]; index: n
       {feature.stat && (
         <div>
           <div style={{ 
-            fontFamily: "var(--font-serif)', serif", 
+            fontFamily: "var(--font-serif)", 
             fontSize: '3rem', 
             color: '#f0f2f8', 
             letterSpacing: '-0.03em',
