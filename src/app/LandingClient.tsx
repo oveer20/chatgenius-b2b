@@ -8,16 +8,24 @@ import AnimatedBackground from "@/components/ui/AnimatedBackground";
 import Cursor from "@/components/Cursor";
 import Navbar from "@/components/sections/Navbar";
 import Hero from "@/components/sections/Hero";
+import GuaranteeBanner from "@/components/sections/GuaranteeBanner";
 import Stats from "@/components/sections/Stats";
+import Integrations from "@/components/sections/Integrations";
 import Features from "@/components/sections/Features";
 import HowItWorks from "@/components/sections/HowItWorks";
 import BeforeAfter from "@/components/sections/BeforeAfter";
+import VideoDemo from "@/components/sections/VideoDemo";
 import Pricing from "@/components/sections/Pricing";
+import PricingComparison from "@/components/sections/PricingComparison";
+import InteractiveDemo from "@/components/sections/InteractiveDemo";
 import ROICalculator from "@/components/sections/ROICalculator";
+import ContactForm from "@/components/sections/ContactForm";
 import FAQ from "@/components/sections/FAQ";
+import TrustIndicators from "@/components/sections/TrustIndicators";
 import TrustBadges from "@/components/sections/TrustBadges";
 import CTA from "@/components/sections/CTA";
 import Footer from "@/components/sections/Footer";
+import FloatingSocialProof from "@/components/sections/FloatingSocialProof";
 import Analytics from "@/components/Analytics";
 import MetaPixel from "@/components/MetaPixel";
 import WelcomePopup from "@/components/WelcomePopup";
@@ -53,39 +61,56 @@ export default function LandingClient() {
         <div style={{ position: 'relative', zIndex: 10 }}>
           <Navbar />
 
+          <GuaranteeBanner />
+
           {/* 1. HERO */}
           <Hero />
 
           {/* 2. SOCIAL PROOF */}
           <Stats />
 
-          {/* 3. FEATURES */}
+          {/* 3. INTEGRACIONES */}
+          <Integrations />
+
+          {/* 4. FEATURES */}
           <Features />
 
-          {/* 4. HOW IT WORKS */}
+          {/* 5. HOW IT WORKS */}
           <HowItWorks />
 
-          {/* 5. BEFORE/AFTER */}
+          {/* 6. BEFORE/AFTER */}
           <BeforeAfter />
 
-          {/* 6. PRICING */}
-          <Pricing />
+          {/* 7. VIDEO DEMO */}
+          <VideoDemo />
 
-          {/* 7. ROI CALCULATOR */}
+          {/* 8. PRICING */}
+          <Pricing />
+          <PricingComparison />
+
+          {/* 9. INTERACTIVE DEMO */}
+          <InteractiveDemo />
+
+          {/* 10. ROI CALCULATOR */}
           <ROICalculator />
 
-          {/* 8. FAQ */}
+          {/* 11. CONTACT FORM */}
+          <ContactForm />
+
+          {/* 12. FAQ */}
           <FAQ />
 
-          {/* 9. TRUST BADGES */}
+          {/* 13. TRUST */}
+          <TrustIndicators />
           <TrustBadges />
 
-          {/* 10. CTA */}
+          {/* 14. CTA */}
           <CTA />
 
-          {/* 11. FOOTER */}
+          {/* 15. FOOTER */}
           <Footer />
         </div>
+        <FloatingSocialProof />
         <WelcomePopup />
         <ExitIntentPopup />
         <Toaster theme="dark" richColors position="top-center" />

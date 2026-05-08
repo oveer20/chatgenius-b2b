@@ -174,31 +174,33 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "FAQPage",
               "mainEntity": [
-                {
-                  "@type": "Question",
-                  "name": "¿Cuánto tiempo tarda en configurarse Stratix?",
-                  "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "En 15 minutos tienes tu primer agente configurado. No necesitas experiencia técnica."
-                  }
-                },
-                {
-                  "@type": "Question",
-                  "name": "¿Stratix se integra con mi CRM?",
-                  "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Sí. Conectamos con HubSpot, Salesforce, Zoho, Pipedrive y cualquier sistema con API."
-                  }
-                },
-                {
-                  "@type": "Question",
-                  "name": "¿Hay garantía?",
-                  "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Sí. 14 días de garantía total. Si no ves resultados, te devolvemos tu dinero."
-                  }
-                }
+                { "@type": "Question", "name": "¿Cuánto tiempo tarda en configurarse Stratix?", "acceptedAnswer": { "@type": "Answer", "text": "En 15 minutos tienes tu primer agente configurado. No necesitas experiencia técnica." }},
+                { "@type": "Question", "name": "¿Stratix se integra con mi CRM?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. Conectamos con HubSpot, Salesforce, Zoho, Pipedrive y cualquier sistema con API." }},
+                { "@type": "Question", "name": "¿Hay garantía?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. 7 días gratis y garantía de devolución del 100% en 30 días." }},
+                { "@type": "Question", "name": "¿Stratix funciona con WhatsApp?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. Se integra directamente con WhatsApp Business API, respondiendo automáticamente en segundos, 24/7." }},
+                { "@type": "Question", "name": "¿Cuánto cuesta?", "acceptedAnswer": { "@type": "Answer", "text": "Desde $49 USD/mes. Sin contratos largos. Empieza gratis y cancela cuando quieras." }},
+                { "@type": "Question", "name": "¿Necesito conocimientos técnicos?", "acceptedAnswer": { "@type": "Answer", "text": "No. Configurar Stratix toma 15 minutos. Solo subes tu información." }},
+                { "@type": "Question", "name": "¿Qué pasa si el cliente quiere hablar con un humano?", "acceptedAnswer": { "@type": "Answer", "text": "El bot detecta la intención y transfiere automáticamente a tu equipo cuando es necesario." }},
+                { "@type": "Question", "name": "¿Puedo cancelar en cualquier momento?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. Sin contratos largos ni penalizaciones. Cancela desde tu dashboard cuando quieras." }},
+                { "@type": "Question", "name": "¿Cuántos agentes puedo tener?", "acceptedAnswer": { "@type": "Answer", "text": "Desde 1 agente en el plan Starter hasta ilimitados en el plan Enterprise." }}
               ]
+            }),
+          }}
+        />
+
+        {/* Schema.org - VideoObject */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "VideoObject",
+              "name": "Stratix Intelligence Demo",
+              "description": "Mira cómo Stratix automatiza ventas en WhatsApp, Instagram y Web 24/7",
+              "uploadDate": "2026-05-08",
+              "duration": "PT1M",
+              "embedUrl": "https://stratix-intelligence-ia.vercel.app",
+              "thumbnailUrl": "https://stratix-intelligence-ia.vercel.app/stratix_shield.svg",
             }),
           }}
         />
