@@ -13,15 +13,14 @@ import Navbar from "@/components/sections/Navbar";
 import Hero from "@/components/sections/Hero";
 import Stats from "@/components/sections/Stats";
 import Logos from "@/components/sections/Logos";
-import LiveDemo from "@/components/sections/LiveDemo";
 import Features from "@/components/sections/Features";
+import HowItWorks from "@/components/sections/HowItWorks";
+import BeforeAfter from "@/components/sections/BeforeAfter";
+import Testimonials from "@/components/sections/Testimonials";
+import Pricing from "@/components/sections/Pricing";
+import ROICalculator from "@/components/sections/ROICalculator";
 import FAQ from "@/components/sections/FAQ";
 import TrustBadges from "@/components/sections/TrustBadges";
-import HowItWorks from "@/components/sections/HowItWorks";
-import Pricing from "@/components/sections/Pricing";
-import Testimonials from "@/components/sections/Testimonials";
-import ScheduleDemo from "@/components/sections/ScheduleDemo";
-import LeadCapture from "@/components/sections/LeadCapture";
 import CTA from "@/components/sections/CTA";
 import Footer from "@/components/sections/Footer";
 import Analytics from "@/components/Analytics";
@@ -29,12 +28,6 @@ import MetaPixel from "@/components/MetaPixel";
 import WelcomePopup from "@/components/WelcomePopup";
 import ExitIntentPopup from "@/components/ExitIntentPopup";
 import SocialProof from "@/components/SocialProof";
-import AIModels from "@/components/sections/AIModels";
-import VideoDemo from "@/components/sections/VideoDemo";
-import MediaLogos from "@/components/sections/MediaLogos";
-import ROICalculator from "@/components/sections/ROICalculator";
-import BeforeAfter from "@/components/sections/BeforeAfter";
-import AIPlayground from "@/components/sections/AIPlayground";
 
 export default function LandingClient() {
   const [isMounted, setIsMounted] = useState(false);
@@ -58,24 +51,42 @@ export default function LandingClient() {
           <AnimatedBackground />
           <div style={{ position: 'relative', zIndex: 10 }}>
             <Navbar />
+
+            {/* 1. HERO - Captura atención */}
             <Hero />
-            <VideoDemo />
-            <BeforeAfter />
-            <MediaLogos />
+
+            {/* 2. SOCIAL PROOF - Credibilidad inmediata */}
             <Stats />
             <Logos />
-            <LiveDemo />
+
+            {/* 3. FEATURES - Propuesta de valor */}
             <Features />
-            <AIModels />
-            <ROICalculator />
-            <FAQ />
-            <TrustBadges />
+
+            {/* 4. HOW IT WORKS - Explica el proceso ANTES de pricing */}
             <HowItWorks />
-            <Pricing />
+
+            {/* 5. BEFORE/AFTER - Comparación visual */}
+            <BeforeAfter />
+
+            {/* 6. TESTIMONIALS - Prueba social */}
             <Testimonials />
-            <ScheduleDemo />
-            <LeadCapture />
+
+            {/* 7. PRICING - Precio DESPUÉS de valor */}
+            <Pricing />
+
+            {/* 8. ROI CALCULATOR - Justificación financiera */}
+            <ROICalculator />
+
+            {/* 9. FAQ - Resuelve objeciones DESPUÉS de pricing */}
+            <FAQ />
+
+            {/* 10. TRUST BADGES - Confianza */}
+            <TrustBadges />
+
+            {/* 11. CTA - Llamada a la acción final */}
             <CTA />
+
+            {/* 12. FOOTER */}
             <Footer />
           </div>
           <WelcomePopup />
