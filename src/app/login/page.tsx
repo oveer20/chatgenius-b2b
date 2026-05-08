@@ -40,8 +40,8 @@ function AuthContent() {
         toast.success("¡Bienvenido de vuelta!");
         router.push(redirect);
       }
-    } catch (err: any) {
-      toast.error(err.message || "Error de autenticación");
+    } catch (err) {
+      toast.error((err as Error).message || "Error de autenticación");
     } finally {
       setLoading(false);
     }

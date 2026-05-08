@@ -128,7 +128,7 @@ export default function FAQ() {
           padding: '0 24px',
         }}
       >
-        {faqs.map((faq: any, i: number) => (
+        {faqs.map((faq: {q: string; a: string}, i: number) => (
           <FAQItem key={i} faq={faq} index={i} />
         ))}
       </motion.div>

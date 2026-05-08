@@ -131,7 +131,11 @@ export default function Stats() {
   );
 }
 
-function TestimonialCard({ testimonial, index }: { testimonial: any; index: number }) {
+interface Testimonial {
+  text: string; name: string; role: string; company: string; initials: string; avatar: string;
+}
+
+function TestimonialCard({ testimonial, index }: { testimonial: Testimonial; index: number }) {
   const [hovered, setHovered] = useState(false);
   const [avatarError, setAvatarError] = useState(false);
 

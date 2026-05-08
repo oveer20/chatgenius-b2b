@@ -1,17 +1,17 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import {
   FiArrowLeft, FiSave, FiPlay, FiDatabase, FiSettings, FiCpu, FiRefreshCw,
   FiSend, FiZap, FiCode, FiGlobe, FiStar, FiLayout, FiShield, FiInfo,
-  FiBarChart2, FiUsers, FiMail, FiPhone, FiCalendar, FiMessageCircle, FiPlus, FiDownload, FiActivity
+  FiActivity, FiPlus, FiMessageCircle
 } from "react-icons/fi";
 import styles from "../../dashboard.module.css";
 import { supabase } from "@/lib/supabase";
-import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 import { Toaster } from 'sonner';
 
 export default function BotEditor() {
@@ -33,6 +33,9 @@ export default function BotEditor() {
     isActive: true,
   });
   const [botStatus, setBotStatus] = useState<'active' | 'inactive' | 'loading'>('loading');
+  const [leads, setLeads] = useState<{id: string; name?: string; email?: string; phone?: string; intent?: string; score?: string; created_at: string}[]>([]);
+  const [isCrawling, setIsCrawling] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
 
   const [chatMessages, setChatMessages] = useState([
     { role: "assistant", content: "¡Sistema en línea! Soy tu activo de IA estratégica. ¿Qué vamos a probar hoy?" }
@@ -43,12 +46,8 @@ export default function BotEditor() {
   const [knowledgeBase, setKnowledgeBase] = useState("");
   const [isSyncing, setIsSyncing] = useState(false);
   const [activeTab, setActiveTab] = useState<'identidad' | 'cerebro' | 'entrenamiento' | 'despliegue'>('identidad');
-  const [leads, setLeads] = useState<any[]>([]);
-  const [isLoadingLeads, setIsLoadingLeads] = useState(false);
-  const [isUploading, setIsUploading] = useState(false);
   const [crawlerUrl, setCrawlerUrl] = useState("");
   const [showToken, setShowToken] = useState(false);
-  const [isCrawling, setIsCrawling] = useState(false);
   const [isTogglingStatus, setIsTogglingStatus] = useState(false);
 
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -62,7 +61,7 @@ export default function BotEditor() {
   useEffect(() => {
     async function loadBot() {
       if (isNew) { setBotStatus('inactive'); return; }
-      const { data, error } = await supabase.from("bots").select("*").eq("id", id).single();
+      const { data } = await supabase.from("bots").select("*").eq("id", id).single();
       if (data) {
         setBotData({
           name: data.name,
@@ -89,20 +88,12 @@ export default function BotEditor() {
   useEffect(() => {
     async function loadLeads() {
       if (isNew) return;
-      setIsLoadingLeads(true);
-      try {
-        const { data } = await supabase
-          .from("leads")
-          .select("*")
-          .eq("bot_id", id)
-          .order("created_at", { ascending: false });
-        
-        if (data) setLeads(data);
-      } catch (err) {
-        console.error("Error cargando leads:", err);
-      } finally {
-        setIsLoadingLeads(false);
-      }
+      const { data } = await supabase
+        .from("leads")
+        .select("*")
+        .eq("bot_id", id)
+        .order("created_at", { ascending: false });
+      if (data) setLeads(data);
     }
     loadLeads();
   }, [id, isNew]);
@@ -139,8 +130,8 @@ export default function BotEditor() {
       if (error) throw error;
       alert("¡Activo IA sincronizado con éxito!");
       if (isNew) router.push("/dashboard");
-    } catch (err: any) {
-      alert("Error en la arquitectura: " + err.message);
+    } catch (err) {
+      alert("Error en la arquitectura: " + (err as Error).message);
     } finally {
       setIsSaving(false);
     }
@@ -161,8 +152,8 @@ export default function BotEditor() {
       } else {
         throw new Error(data.error);
       }
-    } catch (err: any) {
-      alert("Fallo en la sincronización RAG: " + err.message);
+    } catch (err) {
+      alert("Fallo en la sincronización RAG: " + (err as Error).message);
     } finally {
       setIsSyncing(false);
     }
@@ -183,8 +174,8 @@ export default function BotEditor() {
       } else {
         throw new Error(data.error);
       }
-    } catch (err: any) {
-      alert("Fallo en la asimilación: " + err.message);
+    } catch (err) {
+      alert("Fallo en la asimilación: " + (err as Error).message);
     } finally {
       setIsUploading(false);
     }
@@ -212,8 +203,8 @@ export default function BotEditor() {
       } else {
         throw new Error(data.error);
       }
-    } catch (err: any) {
-      alert("Fallo al escanear sitio web: " + err.message);
+    } catch (err) {
+      alert("Fallo al escanear sitio web: " + (err as Error).message);
     } finally {
       setIsCrawling(false);
     }
@@ -246,8 +237,8 @@ export default function BotEditor() {
       const { error } = await supabase.from("bots").update({ is_active: newStatus }).eq("id", id);
       if (error) throw error;
       setBotStatus(newStatus ? 'active' : 'inactive');
-    } catch (err: any) {
-      alert("Error: " + err.message);
+    } catch (err) {
+      alert("Error: " + (err as Error).message);
     } finally {
       setIsTogglingStatus(false);
     }

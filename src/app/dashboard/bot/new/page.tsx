@@ -95,8 +95,8 @@ export default function NewBotPage() {
         router.push(`/dashboard/bot/${newBot.id}`);
       }, 1200);
 
-    } catch (error: any) {
-      toast.error("Error: " + error.message);
+    } catch (err) {
+      toast.error("Error: " + (err as Error).message);
     } finally {
       setLoading(false);
     }
