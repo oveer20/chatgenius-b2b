@@ -15,6 +15,7 @@ import Features from "@/components/sections/Features";
 import HowItWorks from "@/components/sections/HowItWorks";
 import BeforeAfter from "@/components/sections/BeforeAfter";
 import VideoDemo from "@/components/sections/VideoDemo";
+import ScreensShowcase from "@/components/sections/ScreensShowcase";
 import Pricing from "@/components/sections/Pricing";
 import PricingComparison from "@/components/sections/PricingComparison";
 import InteractiveDemo from "@/components/sections/InteractiveDemo";
@@ -81,8 +82,8 @@ export default function LandingClient() {
           {/* 6. BEFORE/AFTER */}
           <BeforeAfter />
 
-          {/* 7. VIDEO DEMO */}
-          <VideoDemo />
+          {/* 7. SCREENS SHOWCASE */}
+          <ScreensShowcase />
 
           {/* 8. PRICING */}
           <Pricing />

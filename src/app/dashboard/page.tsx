@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FiPlus, FiMessageSquare, FiUser, FiBarChart2, FiExternalLink, FiHelpCircle, FiZap, FiSend, FiCpu, FiShield } from "react-icons/fi";
+import { FiPlus, FiMessageSquare, FiUser, FiBarChart2, FiExternalLink, FiHelpCircle, FiZap, FiCpu, FiShield } from "react-icons/fi";
 import { toast, Toaster } from "sonner";
 import { supabase } from "@/lib/supabase";
 
@@ -27,9 +27,10 @@ const AI_PROVIDERS = {
 export default function DashboardPage() {
   const router = useRouter();
   const [bots, setBots] = useState<Bot[]>([]);
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<{id?: string; email?: string; user_metadata?: Record<string, string>} | null>(null);
   const [showHelp, setShowHelp] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [leadStats, setLeadStats] = useState({ total: 0, hot: 0, warm: 0, cold: 0 });
 
   useEffect(() => {
     async function init() {
@@ -45,10 +46,27 @@ export default function DashboardPage() {
         if (!res.ok) throw new Error("Error cargando agentes");
         const data = await res.json();
         setBots(data || []);
-      } catch (err) {
+      } catch (_err) {
         toast.error("No se pudieron cargar los agentes.");
       } finally {
         setIsLoading(false);
+      }
+
+      try {
+        const leadsRes = await fetch("/api/leads");
+        if (leadsRes.ok) {
+          const leads = await leadsRes.json();
+          if (Array.isArray(leads)) {
+            setLeadStats({
+              total: leads.length,
+              hot: leads.filter((l: { score?: string }) => l.score === 'Hot').length,
+              warm: leads.filter((l: { score?: string }) => l.score === 'Warm').length,
+              cold: leads.filter((l: { score?: string }) => l.score === 'Cold').length,
+            });
+          }
+        }
+      } catch {
+        // Leads stats optional
       }
     }
     init();
@@ -60,6 +78,8 @@ export default function DashboardPage() {
   };
 
   const displayName = user?.user_metadata?.full_name || user?.email?.split("@")[0] || "bienvenido";
+  const activeBots = bots.length;
+  const conversionRate = leadStats.total > 0 ? Math.round((leadStats.hot / leadStats.total) * 100) : 0;
 
   return (
     <div style={{ backgroundColor: 'var(--bg)', minHeight: '100vh', color: 'var(--text-primary)', fontFamily: 'var(--font-sans)' }}>
@@ -89,24 +109,58 @@ export default function DashboardPage() {
         </motion.div>
 
         {/* Stats rápidas */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem', marginBottom: '3rem' }}>
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} 
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1.5rem', marginBottom: '3rem' }}>
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
             style={{ padding: '1.5rem', background: 'rgba(13,16,23,0.6)', border: '1px solid var(--border)', borderRadius: '16px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '0.5rem' }}>
               <FiCpu style={{ color: 'var(--accent)' }} />
               <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Agentes</span>
             </div>
-            <div style={{ fontFamily: 'var(--font-serif)', fontSize: '2rem', color: 'var(--text-primary)' }}>{bots.length}</div>
+            <div style={{ fontFamily: 'var(--font-serif)', fontSize: '2rem', color: 'var(--accent)' }}>{activeBots}</div>
           </motion.div>
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} 
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}
             style={{ padding: '1.5rem', background: 'rgba(13,16,23,0.6)', border: '1px solid var(--border)', borderRadius: '16px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '0.5rem' }}>
-              <FiShield style={{ color: 'var(--accent)' }} />
-              <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>IAs Disponibles</span>
+              <FiUser style={{ color: '#10b981' }} />
+              <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Total Leads</span>
             </div>
-            <div style={{ fontFamily: 'var(--font-serif)', fontSize: '2rem', color: 'var(--text-primary)' }}>4</div>
+            <div style={{ fontFamily: 'var(--font-serif)', fontSize: '2rem', color: 'var(--text-primary)' }}>{leadStats.total}</div>
+          </motion.div>
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
+            style={{ padding: '1.5rem', background: 'rgba(13,16,23,0.6)', border: '1px solid var(--border)', borderRadius: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '0.5rem' }}>
+              <FiZap style={{ color: '#D4AF37' }} />
+              <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>HOT Leads</span>
+            </div>
+            <div style={{ fontFamily: 'var(--font-serif)', fontSize: '2rem', color: '#D4AF37' }}>{leadStats.hot}</div>
+          </motion.div>
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}
+            style={{ padding: '1.5rem', background: 'rgba(13,16,23,0.6)', border: '1px solid var(--border)', borderRadius: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '0.5rem' }}>
+              <FiBarChart2 style={{ color: '#3B82F6' }} />
+              <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Conversión</span>
+            </div>
+            <div style={{ fontFamily: 'var(--font-serif)', fontSize: '2rem', color: '#10b981' }}>{conversionRate}%</div>
           </motion.div>
         </div>
+
+        {/* Mini Score Distribution */}
+        {leadStats.total > 0 && (
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
+            style={{ padding: '1.5rem', background: 'rgba(13,16,23,0.6)', border: '1px solid var(--border)', borderRadius: '16px', marginBottom: '2rem' }}>
+            <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Distribución de Leads</div>
+            <div style={{ display: 'flex', gap: '4px', height: '8px', borderRadius: '4px', overflow: 'hidden' }}>
+              <div style={{ flex: leadStats.hot, background: '#D4AF37', borderRadius: '4px 0 0 4px' }} />
+              <div style={{ flex: leadStats.warm, background: '#FCD34D' }} />
+              <div style={{ flex: leadStats.cold, background: '#4a5568', borderRadius: '0 4px 4px 0' }} />
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.8rem', fontSize: '0.75rem' }}>
+              <span style={{ color: '#D4AF37' }}>● HOT {leadStats.hot}</span>
+              <span style={{ color: '#FCD34D' }}>● WARM {leadStats.warm}</span>
+              <span style={{ color: '#4a5568' }}>● COLD {leadStats.cold}</span>
+            </div>
+          </motion.div>
+        )}
 
         {/* Acciones rápidas */}
         <div style={{ display: 'flex', gap: '1rem', marginBottom: '3rem', flexWrap: 'wrap' }}>
