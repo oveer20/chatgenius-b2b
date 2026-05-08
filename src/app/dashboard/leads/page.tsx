@@ -8,7 +8,7 @@ import { toast, Toaster } from "sonner";
 import { motion } from "framer-motion";
 
 function LeadsDashboardContent() {
-  const [leads, setLeads] = useState<any[]>([]);
+  const [leads, setLeads] = useState<Array<{id: string; name: string; email: string; phone: string; company: string; bot_id: string; score: string; intent: string; source: string; created_at: string; bots?: {name: string}}>>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isExporting, setIsExporting] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -121,27 +121,45 @@ function LeadsDashboardContent() {
                 {isLoading ? (
                   <tr><td colSpan={5} style={{ textAlign: 'center', padding: '4rem', opacity: 0.5 }}>Analizando base de datos...</td></tr>
                 ) : paginatedLeads.length === 0 ? (
-                  <tr><td colSpan={5} style={{ textAlign: 'center', padding: '4rem', opacity: 0.5 }}>No se encontraron prospectos.</td></tr>
-                ) : paginatedLeads.map((lead, i) => (
+                  <tr><td colSpan={5} style={{ textAlign: 'center', padding: '4rem', opacity: 0.5 }}>No se encontraron prospectos. Ve al dashboard para cargar leads de ejemplo.</td></tr>
+                ) : paginatedLeads.map((lead, i) => {
+                  const sourceColor = { whatsapp: '#25D366', web: '#4285F4', instagram: '#E4405F', facebook: '#1877F2', phone: '#D4AF37' }[lead.source] || '#666';
+                  return (
                   <motion.tr key={lead.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.03 }}
                     style={{ borderBottom: '1px solid rgba(255,255,255,0.03)', fontSize: '0.9rem', cursor: 'pointer' }}>
                     <td style={{ padding: '1.2rem' }}>
-                      <div style={{ fontWeight: 800 }}>{lead.name}</div>
-                      <div style={{ fontSize: '0.75rem', opacity: 0.4 }}>{lead.company || '—'} · {lead.email}</div>
+                      <div style={{ fontWeight: 800, marginBottom: '4px' }}>{lead.name}</div>
+                      <div style={{ fontSize: '0.72rem', opacity: 0.45, display: 'flex', gap: '8px', alignItems: 'center' }}>
+                        <span>{lead.company || '—'}</span>
+                        <span>·</span>
+                        <span>{lead.email}</span>
+                      </div>
+                      <div style={{ marginTop: '6px', display: 'flex', gap: '6px', alignItems: 'center' }}>
+                        <span style={{ fontSize: '0.65rem', padding: '2px 8px', borderRadius: '4px', background: `${sourceColor}22`, color: sourceColor, fontWeight: 800, border: `1px solid ${sourceColor}44` }}>
+                          {lead.source?.toUpperCase() || 'WEB'}
+                        </span>
+                        {lead.phone && <span style={{ fontSize: '0.65rem', opacity: 0.4 }}>{lead.phone}</span>}
+                      </div>
                     </td>
-                    <td style={{ padding: '1.2rem', fontSize: '0.8rem', fontWeight: 700 }}>{lead.bots?.name || 'Stratix Core'}</td>
+                    <td style={{ padding: '1.2rem', fontSize: '0.8rem', fontWeight: 700, opacity: 0.6 }}>{lead.bots?.name || 'Stratix Core'}</td>
                     <td style={{ padding: '1.2rem' }}>
-                      <span style={{ padding: '4px 10px', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', fontSize: '0.7rem', fontWeight: 800 }}>{lead.intent || '—'}</span>
+                      <span style={{ padding: '4px 10px', borderRadius: '8px', background: 'rgba(255,255,255,0.04)', fontSize: '0.75rem', fontWeight: 800, lineHeight: '1.4', display: 'block', maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+                        title={lead.intent || ''}>
+                        {lead.intent || '—'}
+                      </span>
                     </td>
                     <td style={{ padding: '1.2rem' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: lead.score === 'Hot' ? '#D4AF37' : lead.score === 'Warm' ? '#4f7df5' : '#666' }} />
+                        <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: lead.score === 'Hot' ? '#D4AF37' : lead.score === 'Warm' ? '#4285F4' : '#555' }} />
                         <span style={{ fontWeight: 900, color: lead.score === 'Hot' ? '#D4AF37' : 'white' }}>{lead.score || '—'}</span>
                       </div>
                     </td>
-                    <td style={{ padding: '1.2rem', fontSize: '0.75rem', opacity: 0.4 }}>{new Date(lead.created_at).toLocaleDateString()}</td>
+                    <td style={{ padding: '1.2rem', fontSize: '0.75rem', opacity: 0.4 }}>
+                      <div>{new Date(lead.created_at).toLocaleDateString('es-CO')}</div>
+                      <div style={{ opacity: 0.6, fontSize: '0.65rem' }}>{new Date(lead.created_at).toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' })}</div>
+                    </td>
                   </motion.tr>
-                ))}
+                )})}
               </tbody>
             </table>
           </div>
@@ -159,7 +177,7 @@ function LeadsDashboardContent() {
                 </button>
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
                   <button key={p} onClick={() => setPage(p)}
-                    style={{ minWidth: '36px', height: '36px', borderRadius: '8px', background: page === p ? '#D4AF37' : 'rgba(255,255,255,0.05)', border: '1px solid page === p ? #D4AF37 : rgba(255,255,255,0.08)', color: page === p ? '#000' : 'white', cursor: 'pointer', fontWeight: 900, fontSize: '0.8rem' }}>
+                    style={{ minWidth: '36px', height: '36px', borderRadius: '8px', background: page === p ? '#D4AF37' : 'rgba(255,255,255,0.05)', border: `1px solid ${page === p ? '#D4AF37' : 'rgba(255,255,255,0.08)'}`, color: page === p ? '#000' : 'white', cursor: 'pointer', fontWeight: 900, fontSize: '0.8rem' }}>
                     {p}
                   </button>
                 ))}

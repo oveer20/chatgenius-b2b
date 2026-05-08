@@ -6,7 +6,7 @@ export function createClient() {
 
   if (!supabaseUrl || !supabaseAnonKey) {
     console.error("/// STRATIX RESCUE /// Supabase environment variables are missing.");
-    return null as any;
+    return createBrowserClient("https://placeholder.supabase.co", "placeholder-key");
   }
 
   return createBrowserClient(supabaseUrl, supabaseAnonKey);

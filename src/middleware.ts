@@ -39,8 +39,8 @@ export async function middleware(request: NextRequest) {
             request.cookies.set(name, value)
           );
           response = NextResponse.next({ request });
-          cookiesToSet.forEach(({ name, value, options }) =>
-            response.cookies.set(name, value, options)
+          cookiesToSet.forEach(({ name, value }) =>
+            response.cookies.set(name, value)
           );
         },
       },
@@ -57,11 +57,6 @@ export async function middleware(request: NextRequest) {
 
   // Rate limiting básico para APIs (en producción usar Redis/Upstash)
   if (pathname.startsWith("/api")) {
-    const ip =
-      request.headers.get("x-forwarded-for")?.split(",")[0] ??
-      request.headers.get("x-real-ip") ??
-      "unknown";
-
     const rateLimitHeader = request.headers.get("X-RateLimit-Remaining");
     if (rateLimitHeader === "0") {
       return new NextResponse("Too Many Requests", {

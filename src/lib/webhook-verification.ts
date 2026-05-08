@@ -48,12 +48,6 @@ export function verifyStripeSignature(
   // Crear el payload firmado
   const signedPayload = `${timestamp}.${payload}`;
 
-  // Calcular HMAC
-  const expectedSignature = createHmac("sha256", secret)
-    .update(signedPayload)
-    .digest("hex");
-
-  // Comparar signatures
   return createHmac("sha256", secret)
     .update(signedPayload)
     .digest("hex") === signatureValue;
@@ -75,14 +69,11 @@ export function verifyWhatsAppSignature(
   }
 
   // Meta usa HMAC-SHA256
-  const expectedSignature = createHmac("sha256", secret)
-    .update(payload)
-    .digest("hex");
-
-  // El signature viene como "sha256=..."
   const providedSignature = signature.replace("sha256=", "");
 
-  return expectedSignature === providedSignature;
+  return createHmac("sha256", secret)
+    .update(payload)
+    .digest("hex") === providedSignature;
 }
 
 /**

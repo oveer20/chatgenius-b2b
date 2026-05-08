@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase-admin";
+import { sendWhatsAppMessage } from "@/lib/whatsapp";
 
 /**
  * STRATIX INTELLIGENCE — WHATSAPP STRATEGIC HUB (V13.0)
@@ -258,8 +259,7 @@ export async function POST(request: NextRequest) {
         }
 
         // G. Respuesta vía Meta Graph API
-        const { sendWhatsAppMessage } = await import("@/lib/whatsapp");
-        const botToken = "EAANgrbEmQskBRUB5cZCDplKDukBIZBf3bO0tdanV5z6wVOeswZCFq8zcSkKanqWUgUr2XZA03sVbBkbb2k6QPPYfrHtZBRlRTLPVDBZCzjUtAWv2ZBpEMQ4jkNgIJnKzsnlwfumeo3BUbtVxTqUfIAQqGpGQG9fLZBbgDZCifjcdMwkzZCXw03sZCC8OqI3mi89pYPKVQE1towePGIdnnW6zrz0PuuLzq6RZC2vFUk6ZAwQVhV2F7xMHzsqiejqt9Br1afTNqHqqmhnQ63ww3s0FlpihZCDK3W1yLoYHFCK6kZD";
+        const botToken = process.env.WHATSAPP_ACCESS_TOKEN || "";
         
         // Sending WhatsApp response
         

@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     siteName: 'Stratix Intelligence',
     images: [
       { url: '/stratix_shield.svg', width: 1200, height: 630, alt: 'Stratix Intelligence' },
-      { url: 'https://stratix-intelligence-ia.vercel.app/og-image.png', width: 1200, height: 630 },
+      { url: '/og-image.svg', width: 1200, height: 630 },
     ],
     type: 'website',
     locale: 'es_CO',

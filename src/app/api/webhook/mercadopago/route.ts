@@ -31,11 +31,9 @@ export async function POST(request: NextRequest) {
       // 2. Si el pago está aprobado, activamos el plan premium
       if (paymentDetails.status === "approved") {
         // TOKEN COMPUESTO V30.0 (userId:planSlug)
-        const reference = paymentDetails.external_reference || "";
-        const [userId, planSlug] = reference.split(":");
-        
-        // Prioridad: 1. Token de referencia | 2. Item ID | 3. Default
-        const mpPlanId = planSlug || paymentDetails.additional_info?.items?.[0]?.id || "starter";
+        const metadata = paymentDetails.metadata || {};
+        const userId = metadata.userId || paymentDetails.external_reference?.split(":")[0] || "";
+        const mpPlanId = metadata.planSlug || paymentDetails.external_reference?.split(":")[1] || paymentDetails.additional_info?.items?.[0]?.id || "starter";
 
         // Mapeo estratégico de planes hacia la base de Datos (Normalización V39.0)
         const planMapping: Record<string, string> = {

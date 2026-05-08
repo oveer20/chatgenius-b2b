@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#060B14"/>
+      <stop offset="50%" stop-color="#0A1020"/>
+      <stop offset="100%" stop-color="#070910"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#D4AF37"/>
+      <stop offset="50%" stop-color="#F0D060"/>
+      <stop offset="100%" stop-color="#B8860B"/>
+    </linearGradient>
+    <linearGradient id="gold2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#D4AF37"/>
+      <stop offset="100%" stop-color="#8B6914"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect x="0" y="0" width="6" height="630" fill="url(#gold)"/>
+  <rect x="1194" y="0" width="6" height="630" fill="url(#gold)"/>
+  <circle cx="200" cy="500" r="300" fill="rgba(212,175,55,0.05)"/>
+  <circle cx="900" cy="100" r="250" fill="rgba(139,92,246,0.04)"/>
+  <circle cx="1050" cy="450" r="180" fill="rgba(212,175,55,0.04)"/>
+
+  <!-- Shield icon -->
+  <g transform="translate(75, 120)">
+    <path d="M30 0 L60 10 L60 40 Q60 80 30 100 Q0 80 0 40 L0 10 Z" fill="none" stroke="url(#gold)" stroke-width="2.5" opacity="0.6"/>
+    <path d="M30 15 L50 22 L50 42 Q50 70 30 85 Q10 70 10 42 L10 22 Z" fill="url(#gold)" opacity="0.15"/>
+    <text x="30" y="58" font-family="serif" font-size="22" font-weight="700" fill="#D4AF37" text-anchor="middle">S</text>
+  </g>
+
+  <!-- Title -->
+  <text x="170" y="200" font-family="Georgia, serif" font-size="68" font-weight="700" fill="#D4AF37">Stratix</text>
+  <text x="170" y="278" font-family="Georgia, serif" font-size="68" font-weight="400" fill="#E8ECF5">Intelligence</text>
+
+  <!-- Subtitle -->
+  <text x="170" y="340" font-family="system-ui, sans-serif" font-size="26" fill="#8A94A6">IA que Cierra Ventas 24/7</text>
+
+  <!-- Channels -->
+  <text x="170" y="390" font-family="system-ui, sans-serif" font-size="20" fill="#5A6272">WhatsApp · Instagram · Web · CRM</text>
+
+  <!-- Stats row -->
+  <rect x="170" y="430" width="3" height="100" rx="1.5" fill="url(#gold)"/>
+  <text x="190" y="458" font-family="monospace" font-size="18" fill="#10B981">+1,847</text>
+  <text x="190" y="478" font-family="system-ui" font-size="13" fill="#6B7280">empresas automatizadas</text>
+
+  <text x="390" y="458" font-family="monospace" font-size="18" fill="#10B981">+2.4M</text>
+  <text x="390" y="478" font-family="system-ui" font-size="13" fill="#6B7280">leads procesados</text>
+
+  <text x="590" y="458" font-family="monospace" font-size="18" fill="#D4AF37">98.7%</text>
+  <text x="590" y="478" font-family="system-ui" font-size="13" fill="#6B7280">satisfacción</text>
+
+  <!-- Bottom bar -->
+  <rect x="0" y="600" width="1200" height="30" fill="rgba(212,175,55,0.06)"/>
+  <text x="600" y="620" font-family="system-ui" font-size="14" fill="#6B7280" text-anchor="middle">stratix-intelligence-ia.vercel.app</text>
+
+  <!-- Decorative dots -->
+  <circle cx="1100" cy="530" r="4" fill="#D4AF37" opacity="0.4"/>
+  <circle cx="1120" cy="530" r="4" fill="#D4AF37" opacity="0.25"/>
+  <circle cx="1140" cy="530" r="4" fill="#D4AF37" opacity="0.15"/>
+</svg>

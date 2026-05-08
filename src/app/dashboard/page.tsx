@@ -31,6 +31,7 @@ export default function DashboardPage() {
   const [showHelp, setShowHelp] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [leadStats, setLeadStats] = useState({ total: 0, hot: 0, warm: 0, cold: 0 });
+  const [showSampleData, setShowSampleData] = useState(false);
 
   useEffect(() => {
     async function init() {
@@ -53,20 +54,35 @@ export default function DashboardPage() {
       }
 
       try {
-        const leadsRes = await fetch("/api/leads");
+        const leadsRes = await fetch("/api/seed");
         if (leadsRes.ok) {
-          const leads = await leadsRes.json();
-          if (Array.isArray(leads)) {
+          const seedData = await leadsRes.json();
+          if (seedData.seeded) {
+            toast.success(`${seedData.count} leads de ejemplo cargados`);
+          }
+        }
+        const res = await fetch("/api/leads");
+        if (res.ok) {
+          const leads = await res.json();
+          if (Array.isArray(leads) && leads.length > 0) {
             setLeadStats({
               total: leads.length,
               hot: leads.filter((l: { score?: string }) => l.score === 'Hot').length,
               warm: leads.filter((l: { score?: string }) => l.score === 'Warm').length,
               cold: leads.filter((l: { score?: string }) => l.score === 'Cold').length,
             });
+            setShowSampleData(false);
+          } else {
+            setShowSampleData(true);
+            setLeadStats({ total: 47, hot: 12, warm: 23, cold: 12 });
           }
+        } else {
+          setShowSampleData(true);
+          setLeadStats({ total: 47, hot: 12, warm: 23, cold: 12 });
         }
       } catch {
-        // Leads stats optional
+        setShowSampleData(true);
+        setLeadStats({ total: 47, hot: 12, warm: 23, cold: 12 });
       }
     }
     init();
@@ -148,7 +164,10 @@ export default function DashboardPage() {
         {leadStats.total > 0 && (
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
             style={{ padding: '1.5rem', background: 'rgba(13,16,23,0.6)', border: '1px solid var(--border)', borderRadius: '16px', marginBottom: '2rem' }}>
-            <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Distribución de Leads</div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+              <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Distribución de Leads</span>
+              {showSampleData && <span style={{ fontSize: '0.7rem', color: 'var(--accent)', background: 'var(--accent-dim)', padding: '2px 8px', borderRadius: '4px' }}>Datos de ejemplo</span>}
+            </div>
             <div style={{ display: 'flex', gap: '4px', height: '8px', borderRadius: '4px', overflow: 'hidden' }}>
               <div style={{ flex: leadStats.hot, background: '#D4AF37', borderRadius: '4px 0 0 4px' }} />
               <div style={{ flex: leadStats.warm, background: '#FCD34D' }} />
