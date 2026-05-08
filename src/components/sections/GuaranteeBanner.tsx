@@ -20,7 +20,7 @@ const CONTENT = {
 
 export default function GuaranteeBanner() {
   const { lang } = useLang();
-  const c = CONTENT[lang as keyof typeof CONTENT];
+  const c = CONTENT[lang as 'es' | 'en'];
 
   return (
     <motion.div

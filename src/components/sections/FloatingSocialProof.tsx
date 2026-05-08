@@ -25,7 +25,7 @@ const PROOFS = {
 
 export default function FloatingSocialProof() {
   const { lang } = useLang();
-  const proofs = PROOFS[lang as keyof typeof PROOFS];
+  const proofs = PROOFS[lang as 'es' | 'en'];
   const [current, setCurrent] = useState(0);
   const [visible, setVisible] = useState(false);
 

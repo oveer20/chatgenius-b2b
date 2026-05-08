@@ -49,7 +49,7 @@ export default function Integrations() {
     }}>
       <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
         <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '2px', color: '#4a5568', textTransform: 'uppercase' }}>
-          {label}
+{label}
         </span>
       </div>
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 'clamp(1.5rem, 4vw, 3rem)', flexWrap: 'wrap' }}>

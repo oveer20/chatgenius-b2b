@@ -1,7 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { useLang } from "@/components/LangContext";
+import { motion } from "framer-motion";
 
 export default function VideoDemo() {
   const { lang } = useLang();

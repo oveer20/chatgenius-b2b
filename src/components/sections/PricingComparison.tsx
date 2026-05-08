@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 import { useLang } from "@/components/LangContext";
-import { PRICING_PLANS } from "@/lib/constants";
 
 const COMPARE_ROWS = {
   es: [
@@ -42,8 +41,8 @@ function Checkmark({ val }: { val: string }) {
 }
 
 export default function PricingComparison() {
-  const { lang, t } = useLang();
-  const rows = COMPARE_ROWS[lang as keyof typeof COMPARE_ROWS];
+  const { lang } = useLang();
+  const rows = COMPARE_ROWS[lang as 'es' | 'en'];
 
   return (
     <section style={{ padding: 'clamp(4rem, 10vw, 6rem) clamp(1.5rem, 5vw, 4rem)', maxWidth: '1200px', margin: '0 auto' }}>

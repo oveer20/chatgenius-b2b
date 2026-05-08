@@ -21,7 +21,7 @@ const BADGES = {
 
 export default function TrustIndicators() {
   const { lang } = useLang();
-  const badges = BADGES[lang as keyof typeof BADGES];
+  const badges = BADGES[lang as 'es' | 'en'];
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center', gap: 'clamp(1rem, 3vw, 2rem)', flexWrap: 'wrap', padding: '0 clamp(1.5rem, 5vw, 4rem)' }}>
