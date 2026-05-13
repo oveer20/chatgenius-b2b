@@ -1,4 +1,4 @@
-import { resend } from './resend';
+import { getResend } from './resend';
 
 interface EmailParams {
   to: string;
@@ -19,6 +19,12 @@ export async function sendHotLeadAlert({
   intent,
   summary
 }: EmailParams) {
+  const resend = getResend();
+  if (!resend) {
+    console.warn("Resend not configured, skipping hot lead alert");
+    return { success: false, error: "Resend not configured" };
+  }
+
   try {
     const { data, error } = await resend.emails.send({
       from: 'Stratix Intelligence <alerts@onboarding.stratixintelligence.com>',
@@ -66,6 +72,12 @@ export async function sendHotLeadAlert({
 }
 
 export async function sendWelcomePremiumEmail(to: string, plan: string) {
+  const resend = getResend();
+  if (!resend) {
+    console.warn("Resend not configured, skipping welcome email");
+    return { success: false, error: "Resend not configured" };
+  }
+
   const displayPlan = plan.toLowerCase().includes('enterprise') ? 'ENTERPRISE ELITE' : 'PROFESSIONAL PRO';
   
   try {

@@ -1,6 +1,10 @@
 import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from "@google/generative-ai";
 
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY || "");
+function getGenAI() {
+  const key = process.env.GOOGLE_GEMINI_API_KEY;
+  if (!key) throw new Error("GOOGLE_GEMINI_API_KEY not configured");
+  return new GoogleGenerativeAI(key);
+}
 
 const MAX_RETRIES = 3;
 const INITIAL_DELAY = 1000;
@@ -11,6 +15,7 @@ async function wait(ms: number) {
 
 export async function getGeminiResponse(messages: any[], systemPrompt: string) {
   let lastError: any;
+  const genAI = getGenAI();
   
   for (let i = 0; i < MAX_RETRIES; i++) {
     try {
@@ -65,6 +70,7 @@ export async function getGeminiResponse(messages: any[], systemPrompt: string) {
 
 export async function getEmbeddings(text: string) {
   try {
+    const genAI = getGenAI();
     const model = genAI.getGenerativeModel({ model: "text-embedding-004" });
     const result = model.embedContent(text);
     return (await result).embedding.values;
@@ -73,5 +79,3 @@ export async function getEmbeddings(text: string) {
     throw error;
   }
 }
-
-export default genAI;

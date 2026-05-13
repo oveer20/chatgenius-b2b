@@ -1,9 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+function getResend() {
+  const key = process.env.RESEND_API_KEY;
+  if (!key) return null;
+  return new Resend(key);
+}
 
 export async function POST(request: NextRequest) {
+  const resend = getResend();
+  if (!resend) {
+    return NextResponse.json({ error: "Email no configurado" }, { status: 503 });
+  }
+
   try {
     const { email, name, phone, source } = await request.json();
 
@@ -14,13 +23,13 @@ export async function POST(request: NextRequest) {
     const emailHtml = `
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
         <div style="background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%); padding: 30px; text-align: center;">
-          <h1 style="color: #000; margin: 0;">🎯 Nuevo Lead Recibido</h1>
+          <h1 style="color: #000; margin: 0;">Nuevo Lead Recibido</h1>
         </div>
         <div style="background: #0d1017; color: #f0f2f8; padding: 30px;">
           <table style="width: 100%; border-collapse: collapse;">
             <tr>
               <td style="padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
-                <strong style="color: #D4AF37;">📧 Email:</strong>
+                <strong style="color: #D4AF37;">Email:</strong>
               </td>
               <td style="padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
                 <a href="mailto:${email}" style="color: #f0f2f8;">${email}</a>
@@ -29,7 +38,7 @@ export async function POST(request: NextRequest) {
             ${name ? `
             <tr>
               <td style="padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
-                <strong style="color: #D4AF37;">👤 Nombre:</strong>
+                <strong style="color: #D4AF37;">Nombre:</strong>
               </td>
               <td style="padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">${name}</td>
             </tr>
@@ -37,7 +46,7 @@ export async function POST(request: NextRequest) {
             ${phone ? `
             <tr>
               <td style="padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
-                <strong style="color: #D4AF37;">📱 Teléfono:</strong>
+                <strong style="color: #D4AF37;">Telefono:</strong>
               </td>
               <td style="padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
                 <a href="https://wa.me/${phone.replace(/\D/g, '')}" style="color: #25D366;">${phone}</a>
@@ -46,22 +55,21 @@ export async function POST(request: NextRequest) {
             ` : ""}
             <tr>
               <td style="padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
-                <strong style="color: #D4AF37;">🌐 Fuente:</strong>
+                <strong style="color: #D4AF37;">Fuente:</strong>
               </td>
               <td style="padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">${source || "Landing Page"}</td>
             </tr>
             <tr>
               <td style="padding: 12px 0;">
-                <strong style="color: #D4AF37;">⏰ Fecha:</strong>
+                <strong style="color: #D4AF37;">Fecha:</strong>
               </td>
               <td style="padding: 12px 0;">${new Date().toLocaleString("es-CO", { timeZone: "America/Bogota" })}</td>
             </tr>
           </table>
-          
           <div style="margin-top: 30px; text-align: center;">
-            <a href="https://antigravity-mnkc6n1u0-oveer20s-projects.vercel.app/dashboard/leads" 
+            <a href="${process.env.NEXT_PUBLIC_APP_URL || "https://stratix-intelligence-ia.vercel.app"}/dashboard/leads"
                style="background: #D4AF37; color: #000; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block;">
-              Ver Leads →
+              Ver Leads
             </a>
           </div>
         </div>
@@ -71,7 +79,7 @@ export async function POST(request: NextRequest) {
     const { data, error } = await resend.emails.send({
       from: "Stratix AI <onboarding@resend.dev>",
       to: ["stratixintelligence@gmail.com"],
-      subject: `🎯 Nuevo lead: ${email}`,
+      subject: `Nuevo lead: ${email}`,
       html: emailHtml,
     });
 

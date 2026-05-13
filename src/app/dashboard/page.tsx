@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FiPlus, FiMessageSquare, FiUser, FiBarChart2, FiExternalLink, FiHelpCircle, FiZap, FiCpu, FiShield } from "react-icons/fi";
+import { FiPlus, FiMessageSquare, FiUser, FiBarChart2, FiExternalLink, FiHelpCircle, FiCpu, FiZap } from "react-icons/fi";
 import { toast, Toaster } from "sonner";
 import { supabase } from "@/lib/supabase";
 

@@ -14,7 +14,6 @@ import Integrations from "@/components/sections/Integrations";
 import Features from "@/components/sections/Features";
 import HowItWorks from "@/components/sections/HowItWorks";
 import BeforeAfter from "@/components/sections/BeforeAfter";
-import VideoDemo from "@/components/sections/VideoDemo";
 import ScreensShowcase from "@/components/sections/ScreensShowcase";
 import Pricing from "@/components/sections/Pricing";
 import PricingComparison from "@/components/sections/PricingComparison";

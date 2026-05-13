@@ -1,12 +1,21 @@
 import { Resend } from 'resend';
 
-export const resend = new Resend(process.env.RESEND_API_KEY);
+export function getResend() {
+  const key = process.env.RESEND_API_KEY;
+  if (!key) return null;
+  return new Resend(key);
+}
 
 /**
  * STRATIX ONBOARDING PULSE (V35.0)
  * Envío de correo de bienvenida premium tras activación de suscripción.
  */
 export async function sendWelcomeEmail(email: string, name: string, plan: string) {
+  const resend = getResend();
+  if (!resend) {
+    console.warn("RESEND_API_KEY not configured, skipping welcome email");
+    return { success: false, error: "Resend not configured" };
+  }
   try {
     const { data, error } = await resend.emails.send({
       from: 'Stratix Intelligence <onboarding@stratixintelligence.com>',
