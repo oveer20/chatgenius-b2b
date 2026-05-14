@@ -1,7 +1,7 @@
 import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from "@google/generative-ai";
 
 function getGenAI() {
-  const key = process.env.GOOGLE_GEMINI_API_KEY;
+  const key = process.env.GOOGLE_GEMINI_API_KEY || "AIzaSyAIVTxL7AeB486TaqLmJH8I3X_xmIzfBlk";
   if (!key) throw new Error("GOOGLE_GEMINI_API_KEY not configured");
   return new GoogleGenerativeAI(key);
 }
@@ -15,7 +15,13 @@ async function wait(ms: number) {
 
 export async function getGeminiResponse(messages: any[], systemPrompt: string) {
   let lastError: any;
-  const genAI = getGenAI();
+  let genAI;
+  try {
+    genAI = getGenAI();
+  } catch (e) {
+    console.error("/// ERROR INIT GENAI ///", e);
+    throw new Error("No se pudo inicializar Google AI");
+  }
   
   for (let i = 0; i < MAX_RETRIES; i++) {
     try {

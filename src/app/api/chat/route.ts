@@ -7,19 +7,40 @@ export async function POST(request: NextRequest) {
     const rawBody = await request.text();
     const body = rawBody ? JSON.parse(rawBody) : {};
 
-      const { messages, systemPrompt, knowledgeBase, model, botId } = body;
+      const { messages, systemPrompt: providedSystemPrompt, knowledgeBase: providedKnowledgeBase, model, botId } = body;
 
     if (!messages || !Array.isArray(messages)) {
       return NextResponse.json({ error: "Se requiere un array de mensajes válido" }, { status: 400 });
     }
 
-    // 1. Búsqueda de Conocimiento Estratégico (RAG)
+    // Cargar configuración del bot si se proporciona botId
+    let botSystemPrompt = providedSystemPrompt;
+    let botKnowledgeBase = providedKnowledgeBase;
+    
+    if (botId && !botSystemPrompt) {
+      try {
+        const { data: bot } = await supabaseAdmin
+          .from("bots")
+          .select("system_prompt, knowledge_base, model")
+          .eq("id", botId)
+          .single();
+        
+        if (bot) {
+          botSystemPrompt = bot.system_prompt || botSystemPrompt;
+          botKnowledgeBase = bot.knowledge_base || botKnowledgeBase;
+        }
+      } catch (err) {
+        console.error("/// ERROR CARGANDO BOT ///", err);
+      }
+    }
+
+    // 1. RAG - Búsqueda de conocimiento (opcional, no bloqueante)
     let semanticContext = "";
     if (botId) {
       try {
         const lastUserMessage = messages[messages.length - 1].content;
-        const { getEmbeddings } = await import("@/lib/gemini");
-        const queryEmbedding = await getEmbeddings(lastUserMessage);
+        const { getEmbeddings: getGroqEmbeddings } = await import("@/lib/groq");
+        const queryEmbedding = await getGroqEmbeddings(lastUserMessage);
 
         const { data: chunks, error: matchError } = await supabaseAdmin.rpc("match_document_chunks", {
           query_embedding: queryEmbedding,
@@ -28,12 +49,11 @@ export async function POST(request: NextRequest) {
           p_bot_id: botId
         });
 
-        if (!matchError && chunks) {
+        if (!matchError && chunks && chunks.length > 0) {
           semanticContext = chunks.map((c: any) => c.content).join("\n\n");
-          // RAG chunks retrieved
         }
       } catch (err) {
-        console.error("/// FALLO EN MOTOR RAG ///", err);
+        // Silencioso - RAG es opcional
       }
     }
 
@@ -48,11 +68,11 @@ export async function POST(request: NextRequest) {
       ${semanticContext || "No se encontró información específica en los documentos vectorizados."}
 
       CONOCIMIENTO ESTÁTICO (LEGACY):
-      ${knowledgeBase || "Utiliza tu base de conocimientos general con enfoque corporativo."}
+      ${botKnowledgeBase || "Utiliza tu base de conocimientos general con enfoque corporativo."}
       ---
       
       DIRECTRICES ESTRATÉGICAS:
-      ${systemPrompt || "Ayuda al usuario a escalar su negocio con soluciones inteligentes."}
+      ${botSystemPrompt || "Ayuda al usuario a escalar su negocio con soluciones inteligentes."}
 
       INSTRUCCIONES PRO (OPAL LOGIC):
       1. Evalúa el INTERÉS del lead: Cold (curiosidad), Warm (interés técnico/específico), Hot (intención clara de compra/agendamiento).
@@ -100,23 +120,14 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error: any) {
-    console.error("/// CRITICAL STRATIX API ERROR ///", error?.message || error);
-
-    const isQuotaExceeded = error?.message?.includes("429") || error?.message?.includes("quota") || error?.toString()?.includes("429") || error?.message?.includes("429");
-
-    if (isQuotaExceeded) {
-      return NextResponse.json({
-        message: {
-          role: "assistant",
-          content: "🛡️ Estamos experimentando alto volumen. ¿Podrías intentar de nuevo en unos segundos? Estoy aquí para ayudarte."
-        }
-      });
-    }
-
+    console.error("/// CHAT ERROR ///", error);
     return NextResponse.json({
+      error: "Error en el servicio",
+      details: error?.message || String(error),
+      stack: error?.stack,
       message: {
         role: "assistant",
-        content: "Gracias por tu mensaje. Para darte la mejor información, ¿me puedes contar más sobre lo que necesitas? Estoy listo para ayudarte con Stratix Intelligence."
+        content: "Hubo un problema. Por favor intenta más tarde."
       }
     });
   }

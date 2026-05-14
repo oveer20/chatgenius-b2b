@@ -10,11 +10,11 @@ export default function CalendlyButton() {
   useEffect(() => setIsClient(true), []);
 
   const handleClick = () => {
-    const target = document.getElementById("agendar");
+    const target = document.getElementById("contacto");
     if (target) {
       target.scrollIntoView({ behavior: "smooth", block: "start" });
     } else {
-      window.open("https://calendly.com/stratix-intelligence/demo", "_blank");
+      window.location.href = "mailto:stratixintelligence@gmail.com?subject=Agenda%20Demo%20-%20Stratix%20Intelligence&body=Hola,%20quiero%20agendar%20una%20demo%20de%20Stratix%20Intelligence.%0D%0A%0D%0ANombre:%20%0D%0AEmpresa:%20%0D%0ATel%C3%A9fono:%20";
     }
   };
 

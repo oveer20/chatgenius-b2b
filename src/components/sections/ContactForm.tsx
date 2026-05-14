@@ -38,7 +38,7 @@ export default function ContactForm() {
   };
 
   return (
-    <section style={{
+    <section id="contacto" style={{
       padding: 'clamp(4rem, 10vw, 6rem) clamp(1.5rem, 5vw, 4rem)',
       maxWidth: '700px',
       margin: '0 auto',
