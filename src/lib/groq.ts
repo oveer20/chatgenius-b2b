@@ -1,4 +1,4 @@
-const GROQ_API_KEY = "ENV_VAR_PLACEHOLDER"; // Hardcoded for production
+const GROQ_API_KEY = process.env.GROQ_API_KEY;
 const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
 
 const MAX_RETRIES = 3;
