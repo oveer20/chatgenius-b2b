@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FiPlus, FiMessageSquare, FiUser, FiBarChart2, FiExternalLink, FiHelpCircle, FiCpu, FiZap } from "react-icons/fi";
+import { FiPlus, FiMessageSquare, FiUser, FiBarChart2, FiExternalLink, FiHelpCircle, FiCpu, FiZap, FiClock, FiArrowRight } from "react-icons/fi";
 import { toast, Toaster } from "sonner";
 import { supabase } from "@/lib/supabase";
 
@@ -32,6 +32,7 @@ export default function DashboardPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [leadStats, setLeadStats] = useState({ total: 0, hot: 0, warm: 0, cold: 0 });
   const [showSampleData, setShowSampleData] = useState(false);
+  const [recentLeads, setRecentLeads] = useState<Array<{id: string; name: string; score: string; source: string; created_at: string}>>([]);
 
   useEffect(() => {
     async function init() {
@@ -80,11 +81,19 @@ export default function DashboardPage() {
           setShowSampleData(true);
           setLeadStats({ total: 47, hot: 12, warm: 23, cold: 12 });
         }
-      } catch {
-        setShowSampleData(true);
-        setLeadStats({ total: 47, hot: 12, warm: 23, cold: 12 });
+        } catch {
+          setShowSampleData(true);
+          setLeadStats({ total: 47, hot: 12, warm: 23, cold: 12 });
+        }
+
+        try {
+          const res = await fetch("/api/leads?limit=5");
+          if (res.ok) {
+            const leads = await res.json();
+            if (Array.isArray(leads)) setRecentLeads(leads.map((l: any) => ({ id: l.id, name: l.name || '—', score: l.score || 'Cold', source: l.source || 'web', created_at: l.created_at })));
+          }
+        } catch {}
       }
-    }
     init();
   }, [router]);
 
@@ -223,6 +232,43 @@ export default function DashboardPage() {
                   <p className="text-sm mt-1">Son los contactos que el agente captura. Cada conversación genera un lead con información del cliente.</p>
                 </div>
               </div>
+            </div>
+          </motion.div>
+        )}
+
+        {/* Leads Recientes */}
+        {recentLeads.length > 0 && (
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-12 p-6 bg-bg/60 border border-white/10 rounded-xl">
+            <div className="flex justify-between items-center mb-4">
+              <div className="flex items-center gap-2">
+                <FiClock className="text-text-muted" />
+                <span className="text-xs text-text-secondary uppercase tracking-widest font-semibold">Leads Recientes</span>
+              </div>
+              <Link href="/dashboard/leads" className="text-accent no-underline text-xs font-bold flex items-center gap-1">
+                Ver todos <FiArrowRight />
+              </Link>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-white/5 text-xs text-text-muted">
+                    <th className="py-2 pr-4 text-left font-semibold">Nombre</th>
+                    <th className="py-2 pr-4 text-left font-semibold">Score</th>
+                    <th className="py-2 pr-4 text-left font-semibold">Fuente</th>
+                    <th className="py-2 text-left font-semibold">Fecha</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {recentLeads.map(lead => (
+                    <tr key={lead.id} className="border-b border-white/[0.02]">
+                      <td className="py-2 pr-4">{lead.name}</td>
+                      <td className={`py-2 pr-4 font-semibold ${lead.score === 'Hot' ? 'text-accent' : lead.score === 'Warm' ? 'text-blue-500' : 'text-text-muted'}`}>{lead.score}</td>
+                      <td className="py-2 pr-4 uppercase text-xs">{lead.source}</td>
+                      <td className="py-2 text-text-muted text-xs">{new Date(lead.created_at).toLocaleDateString('es-CO')}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </motion.div>
         )}

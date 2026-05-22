@@ -284,8 +284,8 @@ export default function BotEditor() {
 
       {/* Header del Editor Elite */}
       <header className="p-6 px-10 flex justify-between items-center bg-bg/80 backdrop-blur-xl border-b border-white/5">
-        <div className="flex items-center gap-6">
-          <button onClick={() => router.push("/dashboard")} className="card-elite bg-white/[0.03] border border-white/10 text-white p-[10px] rounded-md cursor-pointer transition-all duration-200">
+              <div className="flex items-center gap-6">
+          <button onClick={() => router.push("/dashboard")} className="bg-white/[0.03] border border-white/10 text-white p-[10px] rounded-md cursor-pointer transition-all duration-200 hover:bg-white/5">
             <FiArrowLeft size={18} />
           </button>
           <div>

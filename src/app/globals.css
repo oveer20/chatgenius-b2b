@@ -413,3 +413,27 @@ h1, h2, h3, h4 {
 .stagger-3 { animation-delay: 0.3s; }
 .stagger-4 { animation-delay: 0.4s; }
 .stagger-5 { animation-delay: 0.5s; }
+
+.card-elite {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+.card-elite:hover {
+  background: rgba(255,255,255,0.04);
+  border-color: rgba(212,175,55,0.2);
+}
+
+.text-cinematic {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+.glow-gold {
+  box-shadow: 0 4px 20px rgba(212,175,55,0.3);
+}
+.glow-gold:hover {
+  box-shadow: 0 8px 40px rgba(212,175,55,0.5);
+}
