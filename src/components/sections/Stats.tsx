@@ -57,20 +57,14 @@ export default function Stats() {
 
   return (
     <section>
-      {/* ===== IMPACT METRICS ===== */}
-      <div style={{
-        padding: 'clamp(3rem, 8vw, 6rem) clamp(1.5rem, 5vw, 4rem)',
-        background: 'linear-gradient(180deg, rgba(212,175,55,0.04) 0%, transparent 100%)',
-        borderTop: '1px solid rgba(212,175,55,0.12)',
-        borderBottom: '1px solid rgba(255,255,255,0.04)',
-      }}>
-        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ textAlign: 'center', marginBottom: 'clamp(2rem, 4vw, 3rem)' }}>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', letterSpacing: '0.15em', color: '#D4AF37', textTransform: 'uppercase' }}>
+      <div className="py-[clamp(3rem,8vw,6rem)] px-[clamp(1.5rem,5vw,4rem)] bg-[linear-gradient(180deg,rgba(212,175,55,0.04)_0%,transparent_100%)] border-t border-[rgba(212,175,55,0.12)] border-b border-white/4">
+        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-[clamp(2rem,4vw,3rem)]">
+          <span className="font-mono text-[12px] tracking-[0.15em] text-accent uppercase">
             {lang === "es" ? "Impacto Real en Números" : "Real Impact in Numbers"}
           </span>
         </motion.div>
 
-        <div style={{ maxWidth: '1100px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'clamp(1rem, 3vw, 2rem)' }}>
+        <div className="max-w-[1100px] mx-auto grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-[clamp(1rem,3vw,2rem)]">
           {[
             { value: <Counter end={1847} suffix="+" />, label: lang === "es" ? "Empresas activas" : "Active companies", sub: lang === "es" ? "y creciendo" : "and growing" },
             { value: <><Counter end={2} suffix=".4" />M+</>, label: lang === "es" ? "Leads atendidos" : "Leads handled", sub: lang === "es" ? "este mes" : "this month" },
@@ -83,26 +77,25 @@ export default function Stats() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              style={{ textAlign: 'center', padding: 'clamp(1.5rem, 3vw, 2rem)' }}
+              className="text-center p-[clamp(1.5rem,3vw,2rem)]"
             >
-              <div style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', fontWeight: 700, color: '#D4AF37', lineHeight: 1, marginBottom: '8px' }}>
+              <div className="font-serif text-[clamp(2.5rem,5vw,3.5rem)] font-bold text-accent leading-none mb-2">
                 {stat.value}
               </div>
-              <div style={{ fontSize: '15px', fontWeight: 500, color: '#f0f2f8', marginBottom: '4px' }}>{stat.label}</div>
-              <div style={{ fontSize: '13px', color: '#4a5568' }}>{stat.sub}</div>
+              <div className="text-[15px] font-medium text-text-primary mb-1">{stat.label}</div>
+              <div className="text-[13px] text-text-muted">{stat.sub}</div>
             </motion.div>
           ))}
         </div>
       </div>
 
-      {/* ===== TRUSTED BY MARQUEE ===== */}
-      <div style={{ padding: 'clamp(2rem, 5vw, 3rem) 0', overflow: 'hidden', position: 'relative' }}>
-        <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: '200px', background: 'linear-gradient(90deg, #070910, transparent)', zIndex: 2 }} />
-        <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: '200px', background: 'linear-gradient(90deg, transparent, #070910)', zIndex: 2 }} />
-        
-        <div style={{ display: 'flex', gap: 'clamp(2.5rem, 5vw, 4rem)', width: 'fit-content', animation: 'scroll 30s linear infinite' }}>
+      <div className="py-[clamp(2rem,5vw,3rem)] overflow-hidden relative">
+        <div className="absolute left-0 top-0 bottom-0 w-[200px] bg-[linear-gradient(90deg,#070910,transparent)] z-[2]" />
+        <div className="absolute right-0 top-0 bottom-0 w-[200px] bg-[linear-gradient(90deg,transparent,#070910)] z-[2]" />
+
+        <div className="flex gap-[clamp(2.5rem,5vw,4rem)] w-fit animate-[scroll_30s_linear_infinite]">
           {duplicated.map((name, i) => (
-            <div key={i} style={{ fontSize: 'clamp(14px, 1.8vw, 17px)', fontWeight: 500, color: '#2d3748', whiteSpace: 'nowrap', letterSpacing: '0.5px' }}>
+            <div key={i} className="text-[clamp(14px,1.8vw,17px)] font-medium text-[#2d3748] whitespace-nowrap tracking-[0.5px]">
               {name}
             </div>
           ))}
@@ -110,18 +103,17 @@ export default function Stats() {
         <style>{`@keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-33.333%); } }`}</style>
       </div>
 
-      {/* ===== TESTIMONIALS GRID ===== */}
-      <div style={{ padding: 'clamp(3rem, 8vw, 6rem) clamp(1.5rem, 5vw, 4rem)', maxWidth: '1200px', margin: '0 auto' }}>
-        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ textAlign: 'center', marginBottom: 'clamp(2rem, 4vw, 3rem)' }}>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', letterSpacing: '0.15em', color: '#D4AF37', textTransform: 'uppercase' }}>
+      <div className="py-[clamp(3rem,8vw,6rem)] px-[clamp(1.5rem,5vw,4rem)] max-w-[1200px] mx-auto">
+        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-[clamp(2rem,4vw,3rem)]">
+          <span className="font-mono text-[12px] tracking-[0.15em] text-accent uppercase">
             {lang === "es" ? "Testimonios de Clientes" : "Client Testimonials"}
           </span>
-          <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(1.8rem, 4vw, 2.5rem)', color: '#f0f2f8', marginTop: '12px' }}>
+          <h2 className="font-serif text-[clamp(1.8rem,4vw,2.5rem)] text-text-primary mt-3">
             {lang === "es" ? "Lo que dicen quienes ya crecen con IA" : "What those who already grow with AI say"}
           </h2>
         </motion.div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px' }}>
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-5">
           {testimonials.map((t, i) => (
             <TestimonialCard key={i} testimonial={t} index={i} />
           ))}
@@ -147,17 +139,13 @@ function TestimonialCard({ testimonial, index }: { testimonial: Testimonial; ind
       transition={{ delay: index * 0.08 }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      style={{
-        background: hovered ? 'rgba(255,255,255,0.04)' : 'rgba(255,255,255,0.02)',
-        border: `1px solid ${hovered ? 'rgba(212,175,55,0.3)' : 'rgba(255,255,255,0.06)'}`,
-        borderRadius: '16px',
-        padding: 'clamp(1.5rem, 3vw, 2rem)',
-        transition: 'all 0.3s ease',
-        transform: hovered ? 'translateY(-4px)' : 'none',
-        boxShadow: hovered ? '0 20px 40px rgba(0,0,0,0.3), 0 0 60px rgba(212,175,55,0.05)' : 'none',
-      }}
+      className={`rounded-lg p-[clamp(1.5rem,3vw,2rem)] transition-all duration-300 border ${
+        hovered
+          ? 'bg-white/4 border-accent/30 shadow-[0_20px_40px_rgba(0,0,0,0.3),0_0_60px_rgba(212,175,55,0.05)] -translate-y-1'
+          : 'bg-white/2 border-white/6 shadow-none'
+      }`}
     >
-      <div style={{ display: 'flex', gap: '4px', marginBottom: '16px' }}>
+      <div className="flex gap-1 mb-4">
         {[1,2,3,4,5].map(s => (
           <svg key={s} width="16" height="16" viewBox="0 0 24 24" fill="#D4AF37">
             <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
@@ -165,21 +153,21 @@ function TestimonialCard({ testimonial, index }: { testimonial: Testimonial; ind
         ))}
       </div>
 
-      <p style={{ fontSize: '15px', color: '#c8ced8', lineHeight: 1.7, marginBottom: '20px', fontStyle: 'italic' }}>
-        "{testimonial.text}"
+      <p className="text-[15px] text-[#c8ced8] leading-[1.7] mb-5 italic">
+        &ldquo;{testimonial.text}&rdquo;
       </p>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+      <div className="flex items-center gap-3">
         {avatarError ? (
-          <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'rgba(184,134,11,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: 700, color: '#D4AF37', flexShrink: 0 }}>
+          <div className="w-10 h-10 rounded-full bg-accent2/20 flex items-center justify-center text-sm font-bold text-accent shrink-0">
             {testimonial.initials}
           </div>
         ) : (
-          <img src={testimonial.avatar} alt={testimonial.initials} onError={() => setAvatarError(true)} style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'rgba(212,175,55,0.1)', flexShrink: 0 }} />
+          <img src={testimonial.avatar} alt={testimonial.initials} onError={() => setAvatarError(true)} className="w-10 h-10 rounded-full bg-accent/10 shrink-0" />
         )}
         <div>
-          <div style={{ fontSize: '14px', fontWeight: 600, color: '#f0f2f8' }}>{testimonial.name}</div>
-          <div style={{ fontSize: '12px', color: '#4a5568' }}>{testimonial.role} · {testimonial.company}</div>
+          <div className="text-sm font-semibold text-text-primary">{testimonial.name}</div>
+          <div className="text-xs text-text-muted">{testimonial.role} &middot; {testimonial.company}</div>
         </div>
       </div>
     </motion.div>

@@ -34,7 +34,7 @@ export const metadata: Metadata = {
 export default function LandingPage() {
   return (
     <ErrorBoundary>
-      <Suspense fallback={<div style={{ minHeight: '100vh', background: '#060B14' }} />}>
+      <Suspense fallback={<div className="min-h-screen bg-[#060B14]" />}>
         <LandingClient />
       </Suspense>
     </ErrorBoundary>

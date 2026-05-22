@@ -98,98 +98,85 @@ export default function InteractiveDemo() {
     : "Chat with our AI. No signup. No card. Just type.";
 
   return (
-    <section style={{
-      padding: 'clamp(4rem, 10vw, 6rem) clamp(1.5rem, 5vw, 4rem)',
-      maxWidth: '700px',
-      margin: '0 auto',
-      position: 'relative',
-    }}>
-      <div style={{
-        position: 'absolute', inset: 0,
-        background: 'radial-gradient(ellipse at 50% 50%, rgba(212,175,55,0.06) 0%, transparent 60%)',
-        pointerEvents: 'none',
-      }} />
+    <section className="relative mx-auto max-w-[700px] px-[clamp(1.5rem,5vw,4rem)] py-[clamp(4rem,10vw,6rem)]">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_50%,rgba(212,175,55,0.06)_0%,transparent_60%)]" />
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        style={{ textAlign: 'center', marginBottom: '2rem', position: 'relative' }}
+        className="relative mb-8 text-center"
       >
-        <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(2rem, 5vw, 3rem)', color: '#f0f2f8', marginBottom: '12px' }}>
+        <h2 className="font-serif text-[clamp(2rem,5vw,3rem)] text-text-primary mb-3">
           {title}
         </h2>
-        <p style={{ color: '#8892a4', fontSize: '16px' }}>{subtitle}</p>
+        <p className="text-text-secondary text-base">{subtitle}</p>
       </motion.div>
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        style={{
-          background: 'rgba(17,21,32,0.9)',
-          backdropFilter: 'blur(20px)',
-          WebkitBackdropFilter: 'blur(20px)',
-          border: '1px solid rgba(212,175,55,0.15)',
-          borderRadius: '20px',
-          overflow: 'hidden',
-          position: 'relative',
-        }}
+        className="relative overflow-hidden rounded-2xl border border-accent/10 bg-bg4/90 backdrop-blur-xl"
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '14px 18px', borderBottom: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.02)' }}>
-          <div style={{ display: 'flex', gap: '5px' }}>
-            <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#ff5f57' }} />
-            <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#febc2e' }} />
-            <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#28c840' }} />
+        <div className="flex items-center gap-2.5 border-b border-white/5 bg-white/[0.02] px-[18px] py-3.5">
+          <div className="flex gap-1">
+            <div className="size-2.5 rounded-full bg-[#ff5f57]" />
+            <div className="size-2.5 rounded-full bg-[#febc2e]" />
+            <div className="size-2.5 rounded-full bg-[#28c840]" />
           </div>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: '#D4AF37', letterSpacing: '1px' }}>
+          <span className="font-mono text-[11px] tracking-[1px] text-accent">
             STRATIX AI · DEMO
           </span>
-          <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 6px #10b981' }} />
-            <span style={{ fontSize: '10px', color: '#10b981', fontFamily: 'var(--font-mono)' }}>ONLINE</span>
+          <div className="ml-auto flex items-center gap-1.5">
+            <div className="size-1.5 rounded-full bg-[#10b981] shadow-[0_0_6px_#10b981]" />
+            <span className="font-mono text-[10px] text-[#10b981]">ONLINE</span>
           </div>
         </div>
 
-        <div ref={scrollRef} style={{ padding: '20px', minHeight: '300px', maxHeight: '380px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+        <div ref={scrollRef} className="flex min-h-[300px] max-h-[380px] flex-col gap-3.5 overflow-y-auto p-5">
           {!isStarted ? (
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '260px', gap: '20px' }}>
-              <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: 'linear-gradient(135deg, #D4AF37, #B8860B)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 30px rgba(212,175,55,0.4)', fontSize: '28px' }}>
+            <div className="flex h-[260px] flex-col items-center justify-center gap-5">
+              <div className="flex size-16 items-center justify-center rounded-full bg-gradient-to-br from-accent to-[#B8860B] text-[28px] shadow-[0_0_30px_rgba(212,175,55,0.4)]">
                 🤖
               </div>
-              <div style={{ textAlign: 'center' }}>
-                <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.3rem', color: '#f0f2f8', marginBottom: '6px' }}>
+              <div className="text-center">
+                <h3 className="mb-1.5 font-serif text-[1.3rem] text-text-primary">
                   {lang === "es" ? "Asistente IA Demo" : "AI Assistant Demo"}
                 </h3>
-                <p style={{ color: '#8892a4', fontSize: '13px' }}>
+                <p className="text-[13px] text-text-secondary">
                   {lang === "es" ? "IA real · Respuestas en segundos" : "Real AI · Responses in seconds"}
                 </p>
               </div>
-              <button onClick={startDemo} style={{ padding: '12px 32px', background: '#D4AF37', color: '#000', border: 'none', borderRadius: '12px', fontWeight: 700, fontSize: '14px', cursor: 'pointer', boxShadow: '0 4px 20px rgba(212,175,55,0.3)' }}>
+              <button onClick={startDemo} className="cursor-pointer rounded-xl bg-accent px-8 py-3 text-sm font-bold text-black shadow-[0_4px_20px_rgba(212,175,55,0.3)]">
                 {lang === "es" ? "Iniciar chat" : "Start chat"}
               </button>
             </div>
           ) : (
             <>
               {messages.map((msg, i) => (
-                <div key={i} style={{ display: 'flex', flexDirection: msg.role === "user" ? "row-reverse" : "row", alignItems: 'flex-start', gap: '10px' }}>
+                <div key={i} className={`flex items-start gap-2.5 ${msg.role === "user" ? "flex-row-reverse" : "flex-row"}`}>
                   {msg.role === "bot" && (
-                    <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: 'linear-gradient(135deg, #D4AF37, #B8860B)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: '12px' }}>
+                    <div className="flex size-7 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-accent to-[#B8860B] text-xs">
                       🤖
                     </div>
                   )}
-                  <div style={{ maxWidth: '75%', padding: '10px 14px', borderRadius: '14px', fontSize: '14px', lineHeight: 1.6, background: msg.role === "user" ? '#D4AF37' : 'rgba(255,255,255,0.05)', color: msg.role === "user" ? '#000' : '#f0f2f8', border: msg.role === "bot" ? '1px solid rgba(212,175,55,0.1)' : 'none' }}>
+                  <div className={`max-w-[75%] rounded-[14px] px-3.5 py-2.5 text-sm leading-relaxed ${
+                    msg.role === "user"
+                      ? "bg-accent text-black"
+                      : "border border-accent/10 bg-white/5 text-text-primary"
+                  }`}>
                     {msg.text}
                   </div>
                 </div>
               ))}
               {isTyping && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: 'linear-gradient(135deg, #D4AF37, #B8860B)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px' }}>
+                <div className="flex items-center gap-2.5">
+                  <div className="flex size-7 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-accent to-[#B8860B] text-xs">
                     🤖
                   </div>
-                  <div style={{ display: 'flex', gap: '4px', padding: '10px 14px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(212,175,55,0.1)', borderRadius: '14px' }}>
+                  <div className="flex gap-1 rounded-[14px] border border-accent/10 bg-white/5 px-3.5 py-2.5">
                     {[0,1,2].map(i => (
-                      <span key={i} style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#D4AF37', animation: `typing-bounce 1.2s ease-in-out ${i * 0.2}s infinite` }} />
+                      <span key={i} className={`size-1.5 rounded-full bg-accent animate-[typing-bounce_1.2s_ease-in-out_${i * 0.2}s_infinite]`} />
                     ))}
                   </div>
                 </div>
@@ -199,15 +186,15 @@ export default function InteractiveDemo() {
         </div>
 
         {isStarted && (
-          <form onSubmit={handleSubmit} style={{ display: 'flex', gap: '10px', padding: '14px 18px', borderTop: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.02)' }}>
+          <form onSubmit={handleSubmit} className="flex gap-2.5 border-t border-white/5 bg-white/[0.02] px-[18px] py-3.5">
             <input
               value={input}
               onChange={e => setInput(e.target.value)}
               placeholder={lang === "es" ? "Escribe tu mensaje..." : "Type your message..."}
               disabled={isTyping}
-              style={{ flex: 1, padding: '10px 14px', background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '10px', color: '#f0f2f8', fontSize: '14px', outline: 'none' }}
+              className="flex-1 rounded-xl border border-white/5 bg-black/30 px-3.5 py-2.5 text-sm text-text-primary outline-none"
             />
-            <button type="submit" disabled={!input.trim() || isTyping} style={{ padding: '10px 16px', background: '#D4AF37', color: '#000', border: 'none', borderRadius: '10px', fontWeight: 700, cursor: input.trim() ? 'pointer' : 'default', opacity: input.trim() ? 1 : 0.5 }}>
+            <button type="submit" disabled={!input.trim() || isTyping} className={`rounded-xl bg-accent px-4 py-2.5 font-bold text-black border-none ${input.trim() ? "cursor-pointer opacity-100" : "cursor-default opacity-50"}`}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                 <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
               </svg>
@@ -217,10 +204,10 @@ export default function InteractiveDemo() {
       </motion.div>
 
       {!isStarted && (
-        <div style={{ textAlign: 'center', marginTop: '1.5rem' }}>
-          <a href="/login" style={{ color: '#8892a4', fontSize: '14px', textDecoration: 'none' }}>
+        <div className="mt-6 text-center">
+          <a href="/login" className="text-sm text-text-secondary no-underline">
             {lang === "es" ? "¿Listo para el dashboard completo? " : "Ready for the full dashboard? "}
-            <span style={{ color: '#D4AF37', fontWeight: 600 }}>{lang === "es" ? "Crea tu cuenta gratis →" : "Create free account →"}</span>
+            <span className="font-semibold text-accent">{lang === "es" ? "Crea tu cuenta gratis →" : "Create free account →"}</span>
           </a>
         </div>
       )}

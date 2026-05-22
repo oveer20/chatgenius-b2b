@@ -17,16 +17,15 @@ export default function CTA() {
   ];
 
   return (
-    <section style={{ padding: 'clamp(4rem, 10vw, 8rem) clamp(1.5rem, 5vw, 4rem)', maxWidth: '900px', margin: '0 auto', textAlign: 'center', position: 'relative' }}>
+    <section className="relative mx-auto max-w-[900px] px-[clamp(1.5rem,5vw,4rem)] py-[clamp(4rem,10vw,8rem)] text-center">
       {/* Aurora background */}
-      <div style={{
-        position: 'absolute',
-        inset: '-60px',
-        background: 'radial-gradient(ellipse at 30% 50%, rgba(212,175,55,0.08) 0%, transparent 50%), radial-gradient(ellipse at 70% 50%, rgba(59,130,246,0.06) 0%, transparent 50%), radial-gradient(ellipse at 50% 80%, rgba(16,185,129,0.05) 0%, transparent 50%)',
-        filter: 'blur(40px)',
-        pointerEvents: 'none',
-        animation: 'aurora 8s ease-in-out infinite alternate',
-      }} />
+      <div
+        className="pointer-events-none absolute inset-[-60px] blur-2xl"
+        style={{
+          background: 'radial-gradient(ellipse at 30% 50%, rgba(212,175,55,0.08) 0%, transparent 50%), radial-gradient(ellipse at 70% 50%, rgba(59,130,246,0.06) 0%, transparent 50%), radial-gradient(ellipse at 50% 80%, rgba(16,185,129,0.05) 0%, transparent 50%)',
+          animation: 'aurora 8s ease-in-out infinite alternate',
+        }}
+      />
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -37,15 +36,8 @@ export default function CTA() {
         <div
           onMouseEnter={() => setHovered("box")}
           onMouseLeave={() => setHovered(null)}
+          className="relative overflow-hidden rounded-3xl border border-accent/20 bg-bg/70 p-[clamp(3rem,6vw,5rem)] backdrop-blur-xl"
           style={{
-            position: 'relative',
-            borderRadius: '24px',
-            overflow: 'hidden',
-            padding: 'clamp(3rem, 6vw, 5rem)',
-            background: 'rgba(13,16,23,0.7)',
-            backdropFilter: 'blur(20px)',
-            WebkitBackdropFilter: 'blur(20px)',
-            border: '1px solid rgba(212,175,55,0.2)',
             transition: 'all 0.4s ease',
             boxShadow: hovered === "box"
               ? '0 25px 80px rgba(0,0,0,0.6), 0 0 40px rgba(212,175,55,0.1)'
@@ -54,11 +46,9 @@ export default function CTA() {
         >
           {/* Animated gradient overlay */}
           <motion.div
+            className="pointer-events-none absolute inset-0"
             style={{
-              position: 'absolute',
-              inset: 0,
               background: 'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.12) 0%, transparent 70%)',
-              pointerEvents: 'none',
             }}
             animate={{ opacity: [0.5, 0.8, 0.5] }}
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
@@ -69,82 +59,33 @@ export default function CTA() {
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            style={{
-              position: 'relative',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              padding: '8px 16px',
-              borderRadius: '100px',
-              background: 'rgba(16,185,129,0.1)',
-              border: '1px solid rgba(16,185,129,0.2)',
-              marginBottom: '24px',
-              fontSize: '13px',
-              color: '#10b981',
-              fontWeight: 500,
-            }}
+            className="relative mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-4 py-2 text-[13px] font-medium text-emerald-500"
           >
-            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981', animation: 'pulse-glow 2s infinite' }} />
+            <span className="h-2 w-2 rounded-full bg-emerald-500" style={{ animation: 'pulse-glow 2s infinite' }} />
             {lang === "es" ? "+500 empresas ya automatizaron" : "+500 companies already automated"}
           </motion.div>
 
-          <motion.h2
-            style={{
-              position: 'relative',
-              fontFamily: 'var(--font-serif)',
-              fontSize: 'clamp(2rem, 5vw, 3.5rem)',
-              lineHeight: 1.1,
-              letterSpacing: '-0.02em',
-              marginBottom: '16px',
-              color: '#f0f2f8',
-            }}
-          >
+          <motion.h2 className="relative mb-4 font-serif text-[clamp(2rem,5vw,3.5rem)] leading-[1.1] tracking-[-0.02em] text-text-primary">
             {t.cta.title}<br />
-            <em style={{ color: '#D4AF37', fontStyle: 'italic' }}>{t.cta.titleEm}</em>
+            <em className="italic text-accent">{t.cta.titleEm}</em>
           </motion.h2>
 
-          <motion.p
-            style={{
-              position: 'relative',
-              fontSize: '16px',
-              color: '#8892a4',
-              marginBottom: '40px',
-              maxWidth: '460px',
-              margin: '0 auto 40px',
-            }}
-          >
+          <motion.p className="relative mx-auto mb-10 max-w-[460px] text-[16px] text-text-secondary">
             {t.cta.subtitle}
           </motion.p>
 
-          <motion.div
-            style={{ position: 'relative', display: 'flex', justifyContent: 'center', gap: '16px', flexWrap: 'wrap', marginBottom: '32px' }}
-          >
+          <motion.div className="relative mb-8 flex flex-wrap items-center justify-center gap-4">
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
               <Link
                 href="/login"
-                style={{
-                  background: 'linear-gradient(135deg, #D4AF37, #E5C555)',
-                  color: '#030a05',
-                  fontSize: '15px',
-                  fontWeight: 700,
-                  padding: '16px 36px',
-                  borderRadius: '14px',
-                  textDecoration: 'none',
-                  display: 'inline-block',
-                  boxShadow: '0 4px 20px rgba(212,175,55,0.4), 0 0 40px rgba(212,175,55,0.1)',
-                  transition: 'all 0.3s ease',
-                }}
-                onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 8px 30px rgba(212,175,55,0.5), 0 0 60px rgba(212,175,55,0.2)'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 4px 20px rgba(212,175,55,0.4), 0 0 40px rgba(212,175,55,0.1)'; }}
+                className="inline-block rounded-xl bg-gradient-to-br from-accent to-[#E5C555] px-9 py-4 text-[15px] font-bold text-[#030a05] no-underline shadow-[0_4px_20px_rgba(212,175,55,0.4),0_0_40px_rgba(212,175,55,0.1)] transition-all duration-300 hover:shadow-[0_8px_30px_rgba(212,175,55,0.5),0_0_60px_rgba(212,175,55,0.2)]"
               >
                 {t.cta.cta1}
               </Link>
             </motion.div>
           </motion.div>
 
-          <motion.div
-            style={{ position: 'relative', display: 'flex', justifyContent: 'center', gap: '12px', flexWrap: 'wrap', marginBottom: '24px' }}
-          >
+          <motion.div className="relative mb-6 flex flex-wrap items-center justify-center gap-3">
             {contactLinks.map((link) => (
               <motion.a
                 key={link.key}
@@ -155,19 +96,11 @@ export default function CTA() {
                 whileTap={{ scale: 0.98 }}
                 onMouseEnter={() => setHovered(link.key)}
                 onMouseLeave={() => setHovered(null)}
+                className="inline-flex items-center gap-2 rounded-xl px-5 py-[10px] text-[14px] font-medium no-underline transition-all duration-300"
                 style={{
-                  padding: '10px 20px',
                   border: hovered === link.key ? '1px solid rgba(212,175,55,0.4)' : '1px solid rgba(255,255,255,0.1)',
-                  borderRadius: '12px',
-                  fontWeight: 500,
-                  textDecoration: 'none',
                   color: hovered === link.key ? '#D4AF37' : '#f0f2f8',
                   background: hovered === link.key ? 'rgba(212,175,55,0.1)' : 'rgba(255,255,255,0.02)',
-                  fontSize: '14px',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  transition: 'all 0.3s ease',
                 }}
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
@@ -178,18 +111,7 @@ export default function CTA() {
             ))}
           </motion.div>
 
-          <motion.div
-            style={{
-              position: 'relative',
-              display: 'flex',
-              justifyContent: 'center',
-              gap: '24px',
-              flexWrap: 'wrap',
-              fontFamily: 'var(--font-mono)',
-              fontSize: '12px',
-              color: '#4a5568',
-            }}
-          >
+          <motion.div className="relative flex flex-wrap items-center justify-center gap-6 font-mono text-[12px] text-text-muted">
             <span>{t.cta.meta1}</span>
             <span>•</span>
             <span>{t.cta.meta2}</span>
@@ -202,21 +124,21 @@ export default function CTA() {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            style={{ position: 'relative', marginTop: '32px', paddingTop: '24px', borderTop: '1px solid rgba(255,255,255,0.07)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px' }}
+            className="relative mt-8 flex items-center justify-center gap-4 border-t border-white/7 pt-6"
           >
-            <span style={{ fontSize: '13px', color: '#8892a4', fontFamily: 'var(--font-sans)' }}>{lang === "es" ? "Fundado por" : "Founded by"}</span>
+            <span className="font-sans text-[13px] text-text-secondary">{lang === "es" ? "Fundado por" : "Founded by"}</span>
             <motion.a
               href="https://www.linkedin.com/in/jose-gaviriap/"
               target="_blank"
               rel="noopener noreferrer"
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.98 }}
-              style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', textDecoration: 'none', padding: '8px 16px', borderRadius: '12px', background: 'rgba(10,102,194,0.1)', border: '1px solid rgba(10,102,194,0.3)', transition: 'all 0.3s ease' }}
+              className="inline-flex items-center gap-[10px] rounded-xl border border-[rgba(10,102,194,0.3)] bg-[rgba(10,102,194,0.1)] px-4 py-2 no-underline transition-all duration-300"
             >
-              <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'linear-gradient(135deg, #0A66C2, #004182)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '12px', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>JG</div>
-              <div style={{ textAlign: 'left' }}>
-                <div style={{ fontSize: '14px', fontWeight: 600, color: '#f0f2f8', fontFamily: 'var(--font-sans)' }}>Jose Gaviria</div>
-                <div style={{ fontSize: '11px', color: '#8892a4', fontFamily: 'var(--font-sans)' }}>{lang === "es" ? "Founder & CEO" : "Founder & CEO"}</div>
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-[#0A66C2] to-[#004182] font-sans text-[12px] font-bold text-white">JG</div>
+              <div className="text-left">
+                <div className="font-sans text-[14px] font-semibold text-text-primary">Jose Gaviria</div>
+                <div className="font-sans text-[11px] text-text-secondary">{lang === "es" ? "Founder & CEO" : "Founder & CEO"}</div>
               </div>
             </motion.a>
           </motion.div>

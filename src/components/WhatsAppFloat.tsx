@@ -14,21 +14,7 @@ export default function WhatsAppFloat() {
       transition={{ delay: 1, type: "spring", stiffness: 260, damping: 20 }}
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.9 }}
-      style={{
-        position: "fixed",
-        bottom: "24px",
-        right: "24px",
-        width: "60px",
-        height: "60px",
-        borderRadius: "50%",
-        background: "#25D366",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        boxShadow: "0 4px 20px rgba(37, 211, 102, 0.4)",
-        cursor: "pointer",
-        zIndex: 9998,
-      }}
+      className="fixed bottom-6 right-6 w-[60px] h-[60px] rounded-full bg-[#25D366] flex items-center justify-center shadow-[0_4px_20px_rgba(37,211,102,0.4)] cursor-pointer z-[9998]"
     >
       <FaWhatsapp size={32} color="#fff" />
     </motion.a>

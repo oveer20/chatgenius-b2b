@@ -48,61 +48,32 @@ export default function Pricing() {
   };
 
   return (
-    <section id="planes" style={{ padding: 'clamp(4rem, 10vw, 8rem) clamp(1.5rem, 5vw, 4rem)', maxWidth: '1200px', margin: '0 auto' }}>
-      <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-        <span style={{
-          display: 'inline-block',
-          background: 'rgba(212,175,55,0.15)',
-          color: '#D4AF37',
-          fontSize: '13px',
-          fontWeight: 600,
-          padding: '6px 16px',
-          borderRadius: '20px',
-          marginBottom: '20px',
-          fontFamily: 'var(--font-sans)',
-          letterSpacing: '0.05em',
-        }}>
+    <section id="planes" className="px-[clamp(1.5rem,5vw,4rem)] py-[clamp(4rem,10vw,8rem)] max-w-[1200px] mx-auto">
+      <div className="text-center mb-12">
+        <span className="inline-block bg-accent-dim text-accent text-xs font-semibold px-4 py-1.5 rounded-full mb-5 font-sans tracking-wider">
           {t.pricing.label || "INVERSION INTELIGENTE"}
         </span>
         
-        <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(2rem, 5vw, 3.5rem)', lineHeight: 1.1, letterSpacing: '-0.02em', marginBottom: '16px', color: '#f0f2f8' }}>
-          {t.pricing.title} <em style={{ color: '#D4AF37', fontStyle: 'italic' }}>{t.pricing.titleEm}</em>
+        <h2 className="font-serif text-[clamp(2rem,5vw,3.5rem)] leading-[1.1] tracking-tight mb-4 text-text-primary">
+          {t.pricing.title} <em className="text-accent italic">{t.pricing.titleEm}</em>
         </h2>
         
         {/* Toggle Anual/Mensual */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', marginTop: '32px' }}>
-          <span style={{ color: !isAnnual ? '#fff' : '#8892a4', fontSize: '14px', fontWeight: !isAnnual ? 700 : 500, transition: 'color 0.3s', fontFamily: 'var(--font-sans)' }}>{t.pricing.monthly || "Mensual"}</span>
+        <div className="flex items-center justify-center gap-4 mt-8">
+          <span className={"text-sm font-sans transition-colors duration-300 " + (!isAnnual ? 'text-white font-bold' : 'text-text-secondary font-medium')}>{t.pricing.monthly || "Mensual"}</span>
           <button
             onClick={() => setIsAnnual(!isAnnual)}
-            style={{
-              width: '56px',
-              height: '28px',
-              borderRadius: '14px',
-              background: isAnnual ? '#D4AF37' : 'rgba(255,255,255,0.1)',
-              position: 'relative',
-              border: 'none',
-              cursor: 'pointer',
-              transition: 'background 0.3s',
-            }}
+            className={"w-14 h-7 rounded-full relative border-0 cursor-pointer transition-colors duration-300 " + (isAnnual ? 'bg-accent' : 'bg-white/10')}
           >
-            <div style={{
-              width: '22px',
-              height: '22px',
-              borderRadius: '50%',
-              background: '#000',
-              position: 'absolute',
-              top: '3px',
-              left: isAnnual ? '31px' : '3px',
-              transition: 'left 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-            }} />
+            <div className={"absolute top-[3px] w-[22px] h-[22px] rounded-full bg-black transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] " + (isAnnual ? 'left-[31px]' : 'left-[3px]')} />
           </button>
-          <span style={{ color: isAnnual ? '#fff' : '#8892a4', fontSize: '14px', fontWeight: isAnnual ? 700 : 500, transition: 'color 0.3s', fontFamily: 'var(--font-sans)' }}>
-            {t.pricing.annual || "Anual"} <span style={{ color: '#D4AF37', fontSize: '12px' }}>{t.pricing.saveBadge || "(Ahorra 20%)"}</span>
+          <span className={"text-sm font-sans transition-colors duration-300 " + (isAnnual ? 'text-white font-bold' : 'text-text-secondary font-medium')}>
+            {t.pricing.annual || "Anual"} <span className="text-accent text-xs">{t.pricing.saveBadge || "(Ahorra 20%)"}</span>
           </span>
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px', alignItems: 'center' }}>
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-6 items-center">
         {PRICING_PLANS.map((plan) => {
           const planData = getPlanData(plan);
           const isHighlighted = plan.popular;
@@ -118,63 +89,47 @@ export default function Pricing() {
               onMouseEnter={() => setHoveredPlan(plan.tier)}
               onMouseLeave={() => setHoveredPlan(null)}
               whileHover={{ y: isHighlighted ? 0 : -8 }}
-              style={{ 
-                position: 'relative', 
-                borderRadius: '24px', 
-                padding: isHighlighted ? '40px 32px' : '32px',
-                display: 'flex', 
-                flexDirection: 'column', 
-                height: '100%', 
-                background: isHighlighted 
-                  ? 'linear-gradient(180deg, rgba(212,175,55,0.15) 0%, #0d1017 100%)'
-                  : isHovered ? 'rgba(255,255,255,0.04)' : 'rgba(255,255,255,0.01)',
-                border: isHighlighted 
-                  ? '2px solid #D4AF37' 
-                  : isHovered ? '1px solid rgba(212,175,55,0.3)' : '1px solid rgba(255,255,255,0.05)',
-                transition: 'all 0.3s ease',
-                boxShadow: isHighlighted ? '0 20px 60px rgba(212,175,55,0.15)' : isHovered ? '0 10px 30px rgba(0,0,0,0.3)' : 'none',
-                transform: isHighlighted ? 'scale(1.05)' : 'scale(1)',
-                zIndex: isHighlighted ? 10 : 1,
-              }}
+              className={`relative rounded-2xl flex flex-col h-full transition-all duration-300 ${
+                isHighlighted
+                  ? 'p-10 bg-gradient-to-b from-accent/15 to-[#0d1017] border-2 border-accent shadow-[0_20px_60px_rgba(212,175,55,0.15)] scale-[1.05] z-10'
+                  : isHovered
+                    ? 'p-8 bg-white/[0.04] border border-accent/30 shadow-[0_10px_30px_rgba(0,0,0,0.3)]'
+                    : 'p-8 bg-white/[0.01] border border-white/5'
+              }`}
             >
               {isHighlighted && (
-                <div style={{
-                  position: 'absolute', top: '-14px', left: '50%', transform: 'translateX(-50%)',
-                  background: '#D4AF37', color: '#000', fontSize: '12px', fontWeight: 700,
-                  padding: '6px 16px', borderRadius: '20px', textTransform: 'uppercase', letterSpacing: '1px',
-                  fontFamily: 'var(--font-sans)',
-                }}>
+                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-accent text-black text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-widest font-sans">
                   {t.pricing.mostPopular || "Más Popular"}
                 </div>
               )}
               
-              <h3 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, color: '#fff', marginBottom: '8px', marginTop: isHighlighted ? '8px' : '0' }}>
+              <h3 className={"font-sans text-xl font-bold text-white mb-2 " + (isHighlighted ? 'mt-2' : 'mt-0')}>
                 {planData.name}
               </h3>
-              <p style={{ color: '#8892a4', fontSize: '14px', marginBottom: '24px', fontFamily: 'var(--font-sans)', lineHeight: 1.5 }}>{planData.desc}</p>
+              <p className="text-text-secondary text-sm mb-6 font-sans leading-[1.5]">{planData.desc}</p>
               
-              <div style={{ marginBottom: '4px' }}>
-                <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', flexWrap: 'wrap' }}>
-                  <span style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', fontWeight: 700, color: '#fff', lineHeight: 1.1 }}>
+              <div className="mb-1">
+                <div className="flex items-baseline gap-1 flex-wrap">
+                  <span className="font-serif text-[clamp(2.5rem,5vw,3.5rem)] font-bold text-white leading-[1.1]">
                     ${isClient ? price.toLocaleString(isUSD ? 'en-US' : 'es-CO') : '...'}
                   </span>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginTop: '4px' }}>
-                  <span style={{ color: '#8892a4', fontSize: '14px', fontFamily: 'var(--font-sans)' }}>{getCurrencyLabel()}{t.pricing.perMonth || "/mes"}</span>
+                <div className="flex items-baseline gap-2 mt-1">
+                  <span className="text-text-secondary text-sm font-sans">{getCurrencyLabel()}{t.pricing.perMonth || "/mes"}</span>
                   {isAnnual && (
-                    <span style={{ color: '#27C93F', fontSize: '12px', fontWeight: 600, fontFamily: 'var(--font-sans)' }}>
+                    <span className="text-[#27C93F] text-xs font-semibold font-sans">
                       · {getFreeMonthsText()}
                     </span>
                   )}
                 </div>
               </div>
               
-              <div style={{ height: '1px', background: 'rgba(255,255,255,0.1)', margin: '16px 0 24px' }} />
+              <div className="h-px bg-white/10 mt-4 mb-6" />
               
-              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '32px', flex: 1 }}>
+              <ul className="list-none p-0 m-0 flex flex-col gap-4 mb-8 flex-1">
                 {planData.features.map((f: string, i: number) => (
-                  <li key={i} style={{ display: 'flex', gap: '12px', color: '#e2e8f0', fontSize: '14px', fontFamily: 'var(--font-sans)', lineHeight: 1.4 }}>
-                    <span style={{ color: '#D4AF37', flexShrink: 0 }}>✓</span> {f}
+                  <li key={i} className="flex gap-3 text-[#e2e8f0] text-sm font-sans leading-[1.4]">
+                    <span className="text-accent shrink-0">✓</span> {f}
                   </li>
                 ))}
               </ul>
@@ -183,21 +138,7 @@ export default function Pricing() {
                 href="/login"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                style={{
-                  width: '100%',
-                  padding: '14px',
-                  borderRadius: '12px',
-                  textAlign: 'center',
-                  textDecoration: 'none',
-                  fontSize: '15px',
-                  fontWeight: 700,
-                  display: 'block',
-                  background: isHighlighted ? '#D4AF37' : 'transparent',
-                  color: isHighlighted ? '#000' : '#fff',
-                  border: isHighlighted ? 'none' : '1px solid rgba(255,255,255,0.2)',
-                  transition: 'all 0.3s ease',
-                  fontFamily: 'var(--font-sans)',
-                }}
+                className={"w-full p-3.5 rounded-xl text-center no-underline text-sm font-bold block font-sans transition-all duration-300 " + (isHighlighted ? 'bg-accent text-black' : 'bg-transparent text-white border border-white/20')}
               >
                 {isHighlighted ? t.pricing.startFree : t.pricing.startBtn}
               </motion.a>

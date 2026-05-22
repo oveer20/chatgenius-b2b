@@ -98,129 +98,129 @@ export default function DashboardPage() {
   const conversionRate = leadStats.total > 0 ? Math.round((leadStats.hot / leadStats.total) * 100) : 0;
 
   return (
-    <div style={{ backgroundColor: 'var(--bg)', minHeight: '100vh', color: 'var(--text-primary)', fontFamily: 'var(--font-sans)' }}>
+    <div className="bg-bg min-h-screen text-text-primary font-sans">
       {/* Header */}
-      <header style={{ padding: '1.5rem 5%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border)', background: 'rgba(13,16,23,0.8)', backdropFilter: 'blur(10px)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <img src="/stratix_shield.svg" alt="Stratix" style={{ width: '28px', height: '28px' }} />
-          <span style={{ fontFamily: 'var(--font-sans)', fontSize: '1.2rem', fontWeight: 700 }}>Stratix <span style={{ color: 'var(--accent)' }}>Intelligence</span></span>
+      <header className="py-6 px-[5%] flex justify-between items-center border-b border-white/10 bg-bg/80 backdrop-blur-xl">
+        <div className="flex items-center gap-3">
+          <img src="/stratix_shield.svg" alt="Stratix" className="w-7 h-7" />
+          <span className="font-sans text-xl font-bold">Stratix <span className="text-accent">Intelligence</span></span>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>{user?.email}</span>
-          <button onClick={handleLogout} style={{ padding: '10px 20px', background: 'transparent', border: '1px solid var(--border)', borderRadius: '10px', color: 'var(--text-primary)', cursor: 'pointer', fontSize: '0.85rem' }}>
+        <div className="flex items-center gap-3">
+          <span className="text-xs text-text-secondary">{user?.email}</span>
+          <button onClick={handleLogout} className="px-5 py-[10px] bg-transparent border border-white/10 rounded-sm text-text-primary cursor-pointer text-sm">
             Cerrar sesión
           </button>
         </div>
       </header>
 
-      <main style={{ padding: '3rem 5%', maxWidth: '1200px', margin: '0 auto' }}>
+      <main className="py-12 px-[5%] max-w-[1200px] mx-auto">
         {/* Bienvenida */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ marginBottom: '3rem' }}>
-          <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(2rem, 5vw, 3rem)', fontWeight: 400, marginBottom: '0.5rem' }}>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-12">
+          <h1 className="font-serif text-[clamp(2rem,5vw,3rem)] font-normal mb-2">
             Hola, {displayName} 👋
           </h1>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem' }}>
+          <p className="text-text-secondary text-lg">
             Este es tu centro de control de agentes IA. Aquí puedes crear y gestionar tus asistentes virtuales.
           </p>
         </motion.div>
 
         {/* Stats rápidas */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1.5rem', marginBottom: '3rem' }}>
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-6 mb-12">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
-            style={{ padding: '1.5rem', background: 'rgba(13,16,23,0.6)', border: '1px solid var(--border)', borderRadius: '16px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '0.5rem' }}>
-              <FiCpu style={{ color: 'var(--accent)' }} />
-              <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Agentes</span>
+            className="p-6 bg-bg/60 border border-white/10 rounded-lg">
+            <div className="flex items-center gap-2 mb-2">
+              <FiCpu className="text-accent" />
+              <span className="text-xs text-text-secondary uppercase tracking-widest">Agentes</span>
             </div>
-            <div style={{ fontFamily: 'var(--font-serif)', fontSize: '2rem', color: 'var(--accent)' }}>{activeBots}</div>
+            <div className="font-serif text-3xl text-accent">{activeBots}</div>
           </motion.div>
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}
-            style={{ padding: '1.5rem', background: 'rgba(13,16,23,0.6)', border: '1px solid var(--border)', borderRadius: '16px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '0.5rem' }}>
-              <FiUser style={{ color: '#10b981' }} />
-              <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Total Leads</span>
+            className="p-6 bg-bg/60 border border-white/10 rounded-lg">
+            <div className="flex items-center gap-2 mb-2">
+              <FiUser className="text-[#10b981]" />
+              <span className="text-xs text-text-secondary uppercase tracking-widest">Total Leads</span>
             </div>
-            <div style={{ fontFamily: 'var(--font-serif)', fontSize: '2rem', color: 'var(--text-primary)' }}>{leadStats.total}</div>
+            <div className="font-serif text-3xl text-text-primary">{leadStats.total}</div>
           </motion.div>
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
-            style={{ padding: '1.5rem', background: 'rgba(13,16,23,0.6)', border: '1px solid var(--border)', borderRadius: '16px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '0.5rem' }}>
-              <FiZap style={{ color: '#D4AF37' }} />
-              <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>HOT Leads</span>
+            className="p-6 bg-bg/60 border border-white/10 rounded-lg">
+            <div className="flex items-center gap-2 mb-2">
+              <FiZap className="text-[#D4AF37]" />
+              <span className="text-xs text-text-secondary uppercase tracking-widest">HOT Leads</span>
             </div>
-            <div style={{ fontFamily: 'var(--font-serif)', fontSize: '2rem', color: '#D4AF37' }}>{leadStats.hot}</div>
+            <div className="font-serif text-3xl text-[#D4AF37]">{leadStats.hot}</div>
           </motion.div>
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}
-            style={{ padding: '1.5rem', background: 'rgba(13,16,23,0.6)', border: '1px solid var(--border)', borderRadius: '16px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '0.5rem' }}>
-              <FiBarChart2 style={{ color: '#3B82F6' }} />
-              <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Conversión</span>
+            className="p-6 bg-bg/60 border border-white/10 rounded-lg">
+            <div className="flex items-center gap-2 mb-2">
+              <FiBarChart2 className="text-[#3B82F6]" />
+              <span className="text-xs text-text-secondary uppercase tracking-widest">Conversión</span>
             </div>
-            <div style={{ fontFamily: 'var(--font-serif)', fontSize: '2rem', color: '#10b981' }}>{conversionRate}%</div>
+            <div className="font-serif text-3xl text-[#10b981]">{conversionRate}%</div>
           </motion.div>
         </div>
 
         {/* Mini Score Distribution */}
         {leadStats.total > 0 && (
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
-            style={{ padding: '1.5rem', background: 'rgba(13,16,23,0.6)', border: '1px solid var(--border)', borderRadius: '16px', marginBottom: '2rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-              <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Distribución de Leads</span>
-              {showSampleData && <span style={{ fontSize: '0.7rem', color: 'var(--accent)', background: 'var(--accent-dim)', padding: '2px 8px', borderRadius: '4px' }}>Datos de ejemplo</span>}
+            className="p-6 bg-bg/60 border border-white/10 rounded-lg mb-8">
+            <div className="flex justify-between items-center mb-4">
+              <span className="text-xs text-text-secondary uppercase tracking-widest">Distribución de Leads</span>
+              {showSampleData && <span className="text-[0.7rem] text-accent bg-accent-dim px-2 py-[2px] rounded-xs">Datos de ejemplo</span>}
             </div>
-            <div style={{ display: 'flex', gap: '4px', height: '8px', borderRadius: '4px', overflow: 'hidden' }}>
-              <div style={{ flex: leadStats.hot, background: '#D4AF37', borderRadius: '4px 0 0 4px' }} />
-              <div style={{ flex: leadStats.warm, background: '#FCD34D' }} />
-              <div style={{ flex: leadStats.cold, background: '#4a5568', borderRadius: '0 4px 4px 0' }} />
+            <div className="flex gap-1 h-2 rounded-xs overflow-hidden">
+              <div style={{ flex: leadStats.hot }} className="bg-[#D4AF37] rounded-l-xs" />
+              <div style={{ flex: leadStats.warm }} className="bg-[#FCD34D]" />
+              <div style={{ flex: leadStats.cold }} className="bg-[#4a5568] rounded-r-xs" />
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.8rem', fontSize: '0.75rem' }}>
-              <span style={{ color: '#D4AF37' }}>● HOT {leadStats.hot}</span>
-              <span style={{ color: '#FCD34D' }}>● WARM {leadStats.warm}</span>
-              <span style={{ color: '#4a5568' }}>● COLD {leadStats.cold}</span>
+            <div className="flex justify-between mt-3 text-xs">
+              <span className="text-[#D4AF37]">● HOT {leadStats.hot}</span>
+              <span className="text-[#FCD34D]">● WARM {leadStats.warm}</span>
+              <span className="text-[#4a5568]">● COLD {leadStats.cold}</span>
             </div>
           </motion.div>
         )}
 
         {/* Acciones rápidas */}
-        <div style={{ display: 'flex', gap: '1rem', marginBottom: '3rem', flexWrap: 'wrap' }}>
+        <div className="flex gap-4 mb-12 flex-wrap">
           <button
             onClick={() => setShowHelp(!showHelp)}
-            style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', background: 'var(--accent-dim)', border: '1px solid var(--accent)', borderRadius: '12px', color: 'var(--accent)', cursor: 'pointer', fontSize: '0.9rem', fontWeight: 600 }}
+            className="flex items-center gap-2 px-5 py-3 bg-accent-dim border border-accent rounded-md text-accent cursor-pointer text-sm font-semibold"
           >
             <FiHelpCircle /> {showHelp ? 'Ocultar ayuda' : '¿Cómo funciona?'}
           </button>
-          <Link href="/dashboard/leads" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '12px', color: 'var(--text-primary)', textDecoration: 'none', fontSize: '0.9rem' }}>
+          <Link href="/dashboard/leads" className="flex items-center gap-2 px-5 py-3 bg-bg3 border border-white/10 rounded-md text-text-primary no-underline text-sm">
             <FiBarChart2 /> Ver Leads
           </Link>
-          <Link href="/widget" target="_blank" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '12px', color: 'var(--text-primary)', textDecoration: 'none', fontSize: '0.9rem' }}>
+          <Link href="/widget" target="_blank" className="flex items-center gap-2 px-5 py-3 bg-bg3 border border-white/10 rounded-md text-text-primary no-underline text-sm">
             <FiExternalLink /> Ver widget
           </Link>
         </div>
 
         {/* Panel de ayuda */}
         {showHelp && (
-          <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} style={{ background: 'rgba(13,16,23,0.6)', padding: '2rem', borderRadius: '20px', marginBottom: '3rem', border: '1px solid var(--accent)' }}>
-            <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.5rem', marginBottom: '1.5rem', color: 'var(--accent)' }}>¿Qué es Stratix Intelligence?</h3>
-            <div style={{ display: 'grid', gap: '1.5rem', color: 'var(--text-secondary)' }}>
-              <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
-                <FiMessageSquare style={{ color: 'var(--accent)', marginTop: '4px' }} />
+          <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="bg-bg/60 p-8 rounded-xl mb-12 border border-accent">
+            <h3 className="font-serif text-2xl mb-6 text-accent">¿Qué es Stratix Intelligence?</h3>
+            <div className="grid gap-6 text-text-secondary">
+              <div className="flex gap-4 items-start">
+                <FiMessageSquare className="text-accent mt-1" />
                 <div>
-                  <strong style={{ color: 'var(--text-primary)' }}>Agentes IA</strong>
-                  <p style={{ fontSize: '0.9rem', marginTop: '0.3rem' }}>Son asistentes virtuales que hablan con tus clientes 24/7 en WhatsApp, Web o Instagram. Responden preguntas, califican leads y cierran citas.</p>
+                  <strong className="text-text-primary">Agentes IA</strong>
+                  <p className="text-sm mt-1">Son asistentes virtuales que hablan con tus clientes 24/7 en WhatsApp, Web o Instagram. Responden preguntas, califican leads y cierran citas.</p>
                 </div>
               </div>
-              <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
-                <FiCpu style={{ color: 'var(--accent)', marginTop: '4px' }} />
+              <div className="flex gap-4 items-start">
+                <FiCpu className="text-accent mt-1" />
                 <div>
-                  <strong style={{ color: 'var(--text-primary)' }}>Multi-Motor IA</strong>
-                  <p style={{ fontSize: '0.9rem', marginTop: '0.3rem' }}>Stratix usa 4 motores de IA: Gemini, GPT-3.5, Groq y Mistral. Si uno falla, otro responde automáticamente.</p>
+                  <strong className="text-text-primary">Multi-Motor IA</strong>
+                  <p className="text-sm mt-1">Stratix usa 4 motores de IA: Gemini, GPT-3.5, Groq y Mistral. Si uno falla, otro responde automáticamente.</p>
                 </div>
               </div>
-              <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
-                <FiUser style={{ color: 'var(--accent)', marginTop: '4px' }} />
+              <div className="flex gap-4 items-start">
+                <FiUser className="text-accent mt-1" />
                 <div>
-                  <strong style={{ color: 'var(--text-primary)' }}>Leads</strong>
-                  <p style={{ fontSize: '0.9rem', marginTop: '0.3rem' }}>Son los contactos que el agente captura. Cada conversación genera un lead con información del cliente.</p>
+                  <strong className="text-text-primary">Leads</strong>
+                  <p className="text-sm mt-1">Son los contactos que el agente captura. Cada conversación genera un lead con información del cliente.</p>
                 </div>
               </div>
             </div>
@@ -228,18 +228,18 @@ export default function DashboardPage() {
         )}
 
         {/* Tus Agentes */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-          <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(1.5rem, 4vw, 2rem)' }}>Tus Agentes IA</h2>
-          <Link href="/dashboard/bot/new" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '14px 28px', background: 'var(--accent)', borderRadius: '14px', color: '#030a05', textDecoration: 'none', fontWeight: 700, fontSize: '0.95rem' }}>
+        <div className="flex justify-between items-center mb-8">
+          <h2 className="font-serif text-[clamp(1.5rem,4vw,2rem)]">Tus Agentes IA</h2>
+          <Link href="/dashboard/bot/new" className="flex items-center gap-2 px-7 py-[14px] bg-accent rounded-[14px] text-[#030a05] no-underline font-bold text-[0.95rem]">
             <FiPlus /> Crear agente
           </Link>
         </div>
 
         {/* Lista de agentes */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.5rem', marginBottom: '4rem' }}>
+        <div className="grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-6 mb-16">
           {isLoading ? (
-            <div style={{ gridColumn: '1/-1', textAlign: 'center', padding: '4rem', color: 'var(--text-secondary)' }}>
-              <FiZap size={32} style={{ marginBottom: '1rem', color: 'var(--accent)' }} />
+            <div className="col-span-full text-center p-16 text-text-secondary">
+              <FiZap size={32} className="mb-4 text-accent" />
               <p>Cargando agentes...</p>
             </div>
           ) : bots.length > 0 ? bots.map((bot) => {
@@ -249,40 +249,46 @@ export default function DashboardPage() {
                 key={bot.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                style={{ background: 'rgba(13,16,23,0.6)', backdropFilter: 'blur(10px)', padding: '2rem', borderRadius: '20px', border: '1px solid var(--border)', transition: 'all 0.3s ease' }}
+                className="bg-bg/60 backdrop-blur-xl p-8 rounded-xl border border-white/10 transition-all duration-300"
               >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
+                <div className="flex justify-between items-start mb-4">
                   <div>
-                    <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.2rem', marginBottom: '0.3rem' }}>{bot.name}</h3>
-                    <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{bot.description}</p>
+                    <h3 className="font-serif text-xl mb-1">{bot.name}</h3>
+                    <p className="text-sm text-text-secondary">{bot.description}</p>
                   </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '4px 10px', background: 'rgba(16,185,129,0.1)', borderRadius: '20px' }}>
-                    <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#10b981' }} />
-                    <span style={{ fontSize: '0.7rem', color: '#10b981', fontWeight: 600 }}>Activo</span>
+                  <div className="flex items-center gap-1.5 px-[10px] py-1 bg-[#10b981]/10 rounded-full">
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#10b981]" />
+                    <span className="text-[0.7rem] text-[#10b981] font-semibold">Activo</span>
                   </div>
                 </div>
                 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1.5rem', padding: '8px 12px', background: 'var(--surface)', borderRadius: '8px' }}>
-                  <div style={{ width: 8, height: 8, borderRadius: '50%', background: aiInfo.color }} />
-                  <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>{aiInfo.name}</span>
-                  <span style={{ fontSize: '0.65rem', padding: '2px 6px', background: aiInfo.badge === 'GRATIS' ? 'rgba(16,185,129,0.2)' : 'var(--accent-glow)', color: aiInfo.badge === 'GRATIS' ? '#10b981' : 'var(--accent)', borderRadius: '4px', fontWeight: 600 }}>{aiInfo.badge}</span>
+                <div className="flex items-center gap-2 mb-6 px-3 py-2 bg-bg3 rounded-sm">
+                  <div style={{ background: aiInfo.color }} className="w-2 h-2 rounded-full" />
+                  <span className="text-xs text-text-secondary">{aiInfo.name}</span>
+                  <span className="text-[0.65rem] px-[6px] py-[2px] rounded-xs font-semibold"
+                    style={{
+                      background: aiInfo.badge === 'GRATIS' ? 'rgba(16,185,129,0.2)' : 'var(--accent-glow)',
+                      color: aiInfo.badge === 'GRATIS' ? '#10b981' : 'var(--accent)'
+                    }}>
+                    {aiInfo.badge}
+                  </span>
                 </div>
                 
-                <div style={{ display: 'flex', gap: '0.8rem' }}>
-                  <Link href={`/dashboard/bot/${bot.id}`} style={{ flex: 1, textAlign: 'center', padding: '12px', background: 'var(--accent-dim)', borderRadius: '10px', color: 'var(--accent)', textDecoration: 'none', fontWeight: 600, fontSize: '0.85rem' }}>
+                <div className="flex gap-3">
+                  <Link href={`/dashboard/bot/${bot.id}`} className="flex-1 text-center p-3 bg-accent-dim rounded-sm text-accent no-underline font-semibold text-sm">
                     Configurar
                   </Link>
-                  <Link href="/widget" target="_blank" style={{ flex: 1, textAlign: 'center', padding: '12px', background: 'transparent', border: '1px solid var(--border)', borderRadius: '10px', color: 'var(--text-primary)', textDecoration: 'none', fontWeight: 600, fontSize: '0.85rem' }}>
+                  <Link href="/widget" target="_blank" className="flex-1 text-center p-3 bg-transparent border border-white/10 rounded-sm text-text-primary no-underline font-semibold text-sm">
                     Probar
                   </Link>
                 </div>
               </motion.div>
             );
           }) : (
-            <div style={{ gridColumn: '1/-1', textAlign: 'center', padding: '4rem', background: 'rgba(13,16,23,0.6)', borderRadius: '20px', border: '1px dashed var(--border)' }}>
-              <FiMessageSquare size={40} style={{ color: 'var(--text-muted)', marginBottom: '1rem' }} />
-              <p style={{ color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>No tienes agentes todavía</p>
-              <Link href="/dashboard/bot/new" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '14px 28px', background: 'var(--accent)', borderRadius: '14px', color: '#030a05', textDecoration: 'none', fontWeight: 700 }}>
+            <div className="col-span-full text-center p-16 bg-bg/60 rounded-xl border border-dashed border-white/10">
+              <FiMessageSquare size={40} className="text-text-muted mb-4" />
+              <p className="text-text-secondary mb-6">No tienes agentes todavía</p>
+              <Link href="/dashboard/bot/new" className="inline-flex items-center gap-2 px-7 py-[14px] bg-accent rounded-[14px] text-[#030a05] no-underline font-bold">
                 <FiPlus /> Crear tu primer agente
               </Link>
             </div>
@@ -291,20 +297,20 @@ export default function DashboardPage() {
 
         {/* Info de IAs */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
-          style={{ padding: '2rem', background: 'rgba(13,16,23,0.6)', border: '1px solid var(--border)', borderRadius: '20px' }}>
-          <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.3rem', marginBottom: '1.5rem', color: 'var(--accent)' }}>Motores de IA Disponibles</h3>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+          className="p-8 bg-bg/60 border border-white/10 rounded-xl">
+          <h3 className="font-serif text-[1.3rem] mb-6 text-accent">Motores de IA Disponibles</h3>
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4">
             {Object.entries(AI_PROVIDERS).map(([key, info]) => (
-              <div key={key} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '12px', background: 'var(--surface)', borderRadius: '10px' }}>
-                <div style={{ width: 10, height: 10, borderRadius: '50%', background: info.color }} />
+              <div key={key} className="flex items-center gap-2 p-3 bg-bg3 rounded-sm">
+                <div style={{ background: info.color }} className="w-2.5 h-2.5 rounded-full" />
                 <div>
-                  <div style={{ fontSize: '0.85rem', fontWeight: 600 }}>{info.name}</div>
-                  <div style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>{info.badge}</div>
+                  <div className="text-sm font-semibold">{info.name}</div>
+                  <div className="text-[0.7rem] text-text-secondary">{info.badge}</div>
                 </div>
               </div>
             ))}
           </div>
-          <p style={{ marginTop: '1rem', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
+          <p className="mt-4 text-xs text-text-secondary">
             Cuando crees un agente, podrás elegir qué motor de IA usar. Todos incluyen failover automático.
           </p>
         </motion.div>

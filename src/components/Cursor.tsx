@@ -82,28 +82,17 @@ export default function Cursor() {
     <>
       <div
         ref={cursorRef}
-        style={{
-          position: "fixed",
-          width: isClick ? "50px" : isHover ? "40px" : "30px",
-          height: isClick ? "50px" : isHover ? "40px" : "30px",
-          borderRadius: "50%",
-          border: isHover ? "2px solid rgba(212,175,55,0.9)" : "1px solid rgba(212,175,55,0.5)",
-          pointerEvents: "none",
-          zIndex: 99999,
-          transition: "width 0.15s ease, height 0.15s ease, border 0.15s ease",
-        }}
+        className={`fixed rounded-full pointer-events-none z-[99999] transition-all duration-150 ${
+          isClick ? "w-[50px] h-[50px]" : isHover ? "w-[40px] h-[40px]" : "w-[30px] h-[30px]"
+        } ${
+          isHover
+            ? "border-2 border-[rgba(212,175,55,0.9)]"
+            : "border border-[rgba(212,175,55,0.5)]"
+        }`}
       />
       <div
         ref={dotRef}
-        style={{
-          position: "fixed",
-          width: "6px",
-          height: "6px",
-          borderRadius: "50%",
-          background: "#D4AF37",
-          pointerEvents: "none",
-          zIndex: 100000,
-        }}
+        className="fixed w-[6px] h-[6px] rounded-full bg-accent pointer-events-none z-[100000]"
       />
     </>
   );

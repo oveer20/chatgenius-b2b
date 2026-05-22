@@ -62,9 +62,9 @@ export default function WidgetPage() {
           const bot = await res.json();
           if (bot && bot.id) {
             setBotConfig(bot);
-            setMessages([{ 
-              role: "assistant", 
-              content: `¡Hola! Soy ${bot.name}. ¿En qué puedo ayudarte hoy?` 
+            setMessages([{
+              role: "assistant",
+              content: `¡Hola! Soy ${bot.name}. ¿En qué puedo ayudarte hoy?`
             }]);
             setLoadingBot(false);
             return;
@@ -74,9 +74,9 @@ export default function WidgetPage() {
         // Using demo bot
       }
       setBotConfig(DEMO_BOT);
-      setMessages([{ 
-        role: "assistant", 
-        content: `¡Hola! Soy ${DEMO_BOT.name}. ¿En qué puedo ayudarte hoy?` 
+      setMessages([{
+        role: "assistant",
+        content: `¡Hola! Soy ${DEMO_BOT.name}. ¿En qué puedo ayudarte hoy?`
       }]);
       setLoadingBot(false);
     }
@@ -94,9 +94,9 @@ export default function WidgetPage() {
       return;
     }
     setStep("chat");
-    setMessages(prev => [...prev, { 
-      role: "assistant", 
-      content: `¡Mucho gusto ${leadData.name}! ¿Qué tipo de propiedad estás buscando?` 
+    setMessages(prev => [...prev, {
+      role: "assistant",
+      content: `¡Mucho gusto ${leadData.name}! ¿Qué tipo de propiedad estás buscando?`
     }]);
   };
 
@@ -111,7 +111,6 @@ export default function WidgetPage() {
     setIsTyping(true);
 
     try {
-      // Usar Google Gemini API real
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -123,7 +122,7 @@ export default function WidgetPage() {
         })
       });
       const data = await res.json();
-      
+
       if (data.message) {
         setMessages(prev => [...prev, data.message]);
       } else {
@@ -138,9 +137,9 @@ export default function WidgetPage() {
         "Automatizo tu WhatsApp, Instagram y Web 24/7. Te gustaria ver una demo gratuita?"
       ];
       setTimeout(() => {
-        setMessages(prev => [...prev, { 
-          role: "assistant", 
-          content: fallbacks[Math.floor(Math.random() * fallbacks.length)] 
+        setMessages(prev => [...prev, {
+          role: "assistant",
+          content: fallbacks[Math.floor(Math.random() * fallbacks.length)]
         }]);
         setIsTyping(false);
       }, 500);
@@ -150,45 +149,43 @@ export default function WidgetPage() {
   };
 
   return (
-    <div style={{ background: '#060B14', minHeight: '100vh', color: 'white', fontFamily: 'Inter, sans-serif' }}>
-      <header style={{ padding: '1rem 5%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <img src="/stratix_shield.svg" alt="Stratix" style={{ width: '28px' }} />
-          <span style={{ fontWeight: 800 }}>Stratix AI</span>
-          <span style={{ fontSize: '0.7rem', background: 'rgba(212,175,55,0.2)', color: '#D4AF37', padding: '2px 8px', borderRadius: '4px' }}>GEMINI 2.0</span>
+    <div className="bg-bg min-h-screen text-white font-sans">
+      <header className="px-[5%] py-4 flex justify-between items-center border-b border-white/5">
+        <div className="flex items-center gap-2.5">
+          <img src="/stratix_shield.svg" alt="Stratix" className="w-7" />
+          <span className="font-extrabold">Stratix AI</span>
+          <span className="text-xs bg-accent/20 text-accent px-2 py-0.5 rounded">GEMINI 2.0</span>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.75rem', opacity: 0.5 }}>
+        <div className="flex items-center gap-2 text-xs opacity-50">
           <FiCpu size={14} />
           Powered by Google AI
         </div>
       </header>
 
-      <main style={{ maxWidth: '600px', margin: '0 auto', padding: '2rem 5%' }}>
-        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-          <h1 style={{ fontSize: '1.8rem', fontWeight: 900, marginBottom: '0.5rem' }}>Prueba el agente IA</h1>
-          <p style={{ opacity: 0.5 }}>Conectado con {botConfig?.name || "Multi-Motor IA"}</p>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '1rem', fontSize: '0.75rem', opacity: 0.4 }}>
-            <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+      <main className="max-w-[600px] mx-auto px-[5%] py-8">
+        <div className="text-center mb-8">
+          <h1 className="text-[1.8rem] font-black mb-2">Prueba el agente IA</h1>
+          <p className="opacity-50">Conectado con {botConfig?.name || "Multi-Motor IA"}</p>
+          <div className="flex justify-center gap-4 mt-4 text-xs opacity-40">
+            <span className="flex items-center gap-1">
               <FiZap size={12} /> Respuesta instantánea
             </span>
-            <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <span className="flex items-center gap-1">
               <FiMessageSquare size={12} /> Contexto completo
             </span>
           </div>
         </div>
 
-        {/* Chat */}
-        <div style={{ background: 'rgba(255,255,255,0.02)', borderRadius: '20px', border: '1px solid rgba(212,175,55,0.15)', overflow: 'hidden' }}>
-          {/* Header */}
-          <div style={{ padding: '1rem', background: 'rgba(212,175,55,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#D4AF37', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div className="bg-white/[0.02] rounded-[20px] border border-accent/15 overflow-hidden">
+          <div className="p-4 bg-accent/10 flex items-center justify-between">
+            <div className="flex items-center gap-2.5">
+              <div className="w-10 h-10 rounded-full bg-accent flex items-center justify-center">
                 <FiMessageSquare size={20} color="#000" />
               </div>
               <div>
-                <div style={{ fontWeight: 800, fontSize: '0.95rem' }}>{botConfig?.name || "Agente IA"}</div>
-                <div style={{ fontSize: '0.75rem', opacity: 0.5, display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#10b981' }} />
+                <div className="font-extrabold text-sm">{botConfig?.name || "Agente IA"}</div>
+                <div className="text-xs opacity-50 flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                   Multi-Motor IA ✓
                 </div>
               </div>
@@ -196,49 +193,42 @@ export default function WidgetPage() {
             <FiZap color="#D4AF37" />
           </div>
 
-          {/* Messages */}
-          <div ref={scrollRef} style={{ height: '350px', overflowY: 'auto', padding: '1rem', display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
+          <div ref={scrollRef} className="h-[350px] overflow-y-auto p-4 flex flex-col gap-3">
             {messages.map((msg, i) => (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                style={{
-                  background: msg.role === 'assistant' ? 'rgba(255,255,255,0.05)' : 'rgba(212,175,55,0.15)',
-                  padding: '0.8rem 1rem',
-                  borderRadius: '14px',
-                  fontSize: '0.9rem',
-                  maxWidth: '85%',
-                  alignSelf: msg.role === 'assistant' ? 'flex-start' : 'flex-end'
-                }}
+                className={`${
+                  msg.role === 'assistant' ? 'bg-white/5 self-start' : 'bg-accent/15 self-end'
+                } p-3 px-4 rounded-[14px] text-sm max-w-[85%]`}
               >
                 {msg.content}
               </motion.div>
             ))}
             {isTyping && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', opacity: 0.5, fontSize: '0.8rem' }}>
+              <div className="flex items-center gap-2 opacity-50 text-xs">
                 <FiCpu size={14} className="spin" />
                 Gemini está pensando...
               </div>
             )}
           </div>
 
-          {/* Input */}
-          <form onSubmit={handleSendMessage} style={{ padding: '1rem', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', gap: '0.8rem' }}>
+          <form onSubmit={handleSendMessage} className="p-4 border-t border-white/5 flex gap-3">
             <input
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Escribe tu mensaje..."
-              style={{ flex: 1, padding: '12px 16px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', color: 'white', fontSize: '0.9rem', outline: 'none' }}
+              className="flex-1 px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white text-sm outline-none"
             />
-            <button type="submit" style={{ padding: '12px', background: '#D4AF37', border: 'none', borderRadius: '12px', cursor: 'pointer' }}>
+            <button type="submit" className="p-3 bg-accent border-none rounded-xl cursor-pointer">
               <FiSend size={18} color="#000" />
             </button>
           </form>
         </div>
 
-        <p style={{ textAlign: 'center', marginTop: '1.5rem', opacity: 0.3, fontSize: '0.75rem' }}>
+        <p className="text-center mt-6 opacity-30 text-xs">
           Conectando con Multi-Motor IA - El sistema más robusto con 4 engines activos
         </p>
       </main>

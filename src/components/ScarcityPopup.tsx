@@ -17,11 +17,9 @@ export default function ScarcityPopup() {
     const lastSeen = localStorage.getItem("stratix_scarcity_time");
     const now = Date.now();
     
-    // Show every 24 hours
     if (!lastSeen || now - parseInt(lastSeen) > 24 * 60 * 60 * 1000) {
       const timer = setTimeout(() => {
         setIsOpen(true);
-        // Random reduce offers
         setOffers(Math.floor(Math.random() * 5) + 3);
       }, 30000);
       return () => clearTimeout(timer);
@@ -58,114 +56,42 @@ export default function ScarcityPopup() {
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 50 }}
-          style={{
-            position: "fixed",
-            bottom: "100px",
-            left: "20px",
-            zIndex: 9998,
-            maxWidth: "340px",
-            background: "linear-gradient(135deg, #1a1f2e 0%, #0d1017 100%)",
-            border: "1px solid rgba(212,175,55,0.3)",
-            borderRadius: "16px",
-            padding: "20px",
-            boxShadow: "0 20px 60px rgba(0,0,0,0.5)",
-          }}
+          className="fixed bottom-[100px] left-5 z-[9998] max-w-[340px] bg-gradient-to-br from-[#1a1f2e] to-[#0d1017] border border-accent/30 rounded-[16px] p-5 shadow-[0_20px_60px_rgba(0,0,0,0.5)]"
         >
           <button
             onClick={handleClose}
-            style={{
-              position: "absolute",
-              top: "8px",
-              right: "8px",
-              background: "transparent",
-              border: "none",
-              color: "#8892a4",
-              fontSize: "16px",
-              cursor: "pointer",
-            }}
+            className="absolute top-2 right-2 bg-transparent border-none text-text-muted text-base cursor-pointer"
           >
             ×
           </button>
 
-          <div style={{
-            display: "flex",
-            gap: "12px",
-            alignItems: "flex-start",
-          }}>
-            <div style={{
-              width: "48px",
-              height: "48px",
-              borderRadius: "12px",
-              background: "linear-gradient(135deg, #ef4444 0%, #dc2626 100%)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flexShrink: 0,
-            }}>
+          <div className="flex gap-3 items-start">
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#ef4444] to-[#dc2626] flex items-center justify-center shrink-0">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="#fff">
                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
               </svg>
             </div>
 
             <div>
-              <div style={{
-                color: "#ef4444",
-                fontSize: "12px",
-                fontWeight: 600,
-                marginBottom: "4px",
-                textTransform: "uppercase",
-                letterSpacing: "0.5px",
-              }}>
+              <div className="text-[#ef4444] text-xs font-semibold mb-1 uppercase tracking-[0.5px]">
                 ⚡ {lang === "es" ? "Oferta limitada" : "Limited offer"}
               </div>
-              <div style={{
-                color: "#f0f2f8",
-                fontSize: "14px",
-                fontWeight: 600,
-                marginBottom: "8px",
-              }}>
+              <div className="text-text-primary text-sm font-semibold mb-2">
                 {lang === "es" 
                   ? `Solo quedan ${offers} cupos gratis` 
                   : `Only ${offers} free spots left`}
               </div>
-              <div style={{
-                display: "flex",
-                gap: "8px",
-                alignItems: "center",
-              }}>
-                <div style={{
-                  display: "flex",
-                  gap: "4px",
-                  fontSize: "11px",
-                  color: "#8892a4",
-                }}>
-                  <span style={{
-                    background: "rgba(255,255,255,0.1)",
-                    padding: "4px 6px",
-                    borderRadius: "4px",
-                    fontFamily: 'var(--font-mono)',
-                    color: "#f0f2f8",
-                  }}>
+              <div className="flex gap-2 items-center">
+                <div className="flex gap-1 text-[11px] text-text-muted">
+                  <span className="bg-white/10 px-[6px] py-[4px] rounded font-mono text-text-primary">
                     {String(countdown.hours).padStart(2, "0")}
                   </span>
                   <span>:</span>
-                  <span style={{
-                    background: "rgba(255,255,255,0.1)",
-                    padding: "4px 6px",
-                    borderRadius: "4px",
-                    fontFamily: 'var(--font-mono)',
-                    color: "#f0f2f8",
-                  }}>
+                  <span className="bg-white/10 px-[6px] py-[4px] rounded font-mono text-text-primary">
                     {String(countdown.minutes).padStart(2, "0")}
                   </span>
                   <span>:</span>
-                  <span style={{
-                    background: "rgba(255,255,255,0.1)",
-                    padding: "4px 6px",
-                    borderRadius: "4px",
-                    fontFamily: 'var(--font-mono)',
-                    color: "#f0f2f8",
-                  }}>
+                  <span className="bg-white/10 px-[6px] py-[4px] rounded font-mono text-text-primary">
                     {String(countdown.seconds).padStart(2, "0")}
                   </span>
                 </div>
@@ -175,18 +101,7 @@ export default function ScarcityPopup() {
 
           <a
             href="/login"
-            style={{
-              display: "block",
-              textAlign: "center",
-              marginTop: "16px",
-              padding: "10px",
-              borderRadius: "10px",
-              background: "linear-gradient(135deg, #D4AF37 0%, #B8860B 100%)",
-              color: "#030a05",
-              fontSize: "13px",
-              fontWeight: 600,
-              textDecoration: "none",
-            }}
+            className="block text-center mt-4 p-[10px] rounded-xl bg-gradient-to-br from-accent to-accent2 text-[#030a05] text-[13px] font-semibold no-underline"
           >
             {lang === "es" ? "¡Reservar mi lugar!" : "Reserve my spot!"}
           </a>

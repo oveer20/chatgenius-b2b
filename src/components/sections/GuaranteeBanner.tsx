@@ -26,30 +26,24 @@ export default function GuaranteeBanner() {
     <motion.div
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
-      style={{
-        background: 'linear-gradient(135deg, rgba(212,175,55,0.12) 0%, rgba(16,185,129,0.08) 100%)',
-        borderTop: '1px solid rgba(212,175,55,0.2)',
-        borderBottom: '1px solid rgba(16,185,129,0.15)',
-        padding: '12px clamp(1.5rem, 5vw, 3rem)',
-        textAlign: 'center',
-      }}
+      className="bg-gradient-to-br from-[rgba(212,175,55,0.12)] to-[rgba(16,185,129,0.08)] border-t border-[rgba(212,175,55,0.2)] border-b border-[rgba(16,185,129,0.15)] px-[clamp(1.5rem,5vw,3rem)] py-3 text-center"
     >
-      <div style={{ maxWidth: '900px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 'clamp(12px, 3vw, 24px)', flexWrap: 'wrap' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', fontWeight: 900, letterSpacing: '2px', color: '#D4AF37', background: 'rgba(212,175,55,0.15)', padding: '4px 10px', borderRadius: '6px' }}>
+      <div className="max-w-[900px] mx-auto flex items-center justify-center gap-[clamp(12px,3vw,24px)] flex-wrap">
+        <div className="flex items-center gap-2">
+          <span className="font-mono text-[11px] font-black tracking-[2px] text-accent bg-accent/10 px-[10px] py-1 rounded-md">
             {c.label}
           </span>
         </div>
-        <span style={{ fontSize: '15px', fontWeight: 600, color: '#f0f2f8' }}>
+        <span className="text-[15px] font-semibold text-text-primary">
           {c.title}
         </span>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span style={{ fontSize: '13px', color: '#10b981' }}>✓</span>
-          <span style={{ fontSize: '13px', color: '#8892a4' }}>{c.badge}</span>
+        <div className="flex items-center gap-2">
+          <span className="text-[13px] text-[#10b981]">✓</span>
+          <span className="text-[13px] text-text-secondary">{c.badge}</span>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span style={{ fontSize: '13px', color: '#D4AF37' }}>🛡</span>
-          <span style={{ fontSize: '13px', color: '#8892a4' }}>{c.desc}</span>
+        <div className="flex items-center gap-2">
+          <span className="text-[13px] text-accent">🛡</span>
+          <span className="text-[13px] text-text-secondary">{c.desc}</span>
         </div>
       </div>
     </motion.div>

@@ -60,17 +60,7 @@ export default function ExitIntentPopup() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          style={{
-            position: "fixed",
-            inset: 0,
-            background: "rgba(0,0,0,0.85)",
-            backdropFilter: "blur(10px)",
-            zIndex: 99999,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "20px",
-          }}
+          className="fixed inset-0 bg-black/85 backdrop-blur-[10px] z-[99999] flex items-center justify-center p-5"
           onClick={handleClose}
         >
           <motion.div
@@ -78,147 +68,66 @@ export default function ExitIntentPopup() {
             animate={{ scale: 1, y: 0, opacity: 1 }}
             exit={{ scale: 0.8, y: 50, opacity: 0 }}
             onClick={(e) => e.stopPropagation()}
-            style={{
-              background: "linear-gradient(135deg, #0d1017 0%, #151922 100%)",
-              border: "1px solid rgba(212,175,55,0.4)",
-              borderRadius: "24px",
-              padding: "clamp(24px, 5vw, 48px)",
-              maxWidth: "480px",
-              width: "100%",
-              textAlign: "center",
-              position: "relative",
-              boxShadow: "0 0 60px rgba(212,175,55,0.2)",
-            }}
+            className="bg-gradient-to-br from-[#0d1017] to-[#151922] border border-accent/40 rounded-[24px] p-[clamp(24px,5vw,48px)] max-w-[480px] w-full text-center relative shadow-[0_0_60px_rgba(212,175,55,0.2)]"
           >
             <button
               onClick={handleClose}
-              style={{
-                position: "absolute",
-                top: "16px",
-                right: "16px",
-                background: "rgba(255,255,255,0.1)",
-                border: "none",
-                borderRadius: "50%",
-                width: "32px",
-                height: "32px",
-                cursor: "pointer",
-                color: "#8892a4",
-                fontSize: "20px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
+              className="absolute top-4 right-4 bg-white/10 border-none rounded-full w-8 h-8 cursor-pointer text-text-muted text-xl flex items-center justify-center"
             >
               ×
             </button>
 
-            <div style={{
-              width: "80px",
-              height: "80px",
-              borderRadius: "50%",
-              background: "linear-gradient(135deg, #D4AF37 0%, #B8860B 100%)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              margin: "0 auto 24px",
-              fontSize: "36px",
-            }}>
+            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-accent to-accent2 flex items-center justify-center mx-auto mb-6 text-[36px]">
               🎁
             </div>
 
             {submitted ? (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                <h3 style={{
-                  fontFamily: 'var(--font-serif)',
-                  fontSize: "28px",
-                  color: "#f0f2f8",
-                  marginBottom: "12px"
-                }}>
+                <h3 className="font-serif text-[28px] text-text-primary mb-3">
                   {lang === "es" ? "¡Te mandamos los tips!" : "Sending you the tips!"}
                 </h3>
-                <p style={{ color: "#8892a4" }}>
+                <p className="text-text-muted">
                   {lang === "es" ? "Revisa tu email en 2 minutos" : "Check your email in 2 minutes"}
                 </p>
               </motion.div>
             ) : (
               <>
-                <span style={{
-                  background: "rgba(212,175,55,0.2)",
-                  color: "#D4AF37",
-                  padding: "4px 12px",
-                  borderRadius: "12px",
-                  fontSize: "12px",
-                  fontWeight: 600,
-                }}>
+                <span className="bg-accent/20 text-accent px-3 py-[4px] rounded-[12px] text-xs font-semibold">
                   {lang === "es" ? "ÚLTIMO MOMENTO" : "LAST CHANCE"}
                 </span>
 
-                <h3 style={{
-                  fontFamily: 'var(--font-serif)',
-                  fontSize: "clamp(22px, 5vw, 32px)",
-                  color: "#f0f2f8",
-                  marginTop: "16px",
-                  marginBottom: "12px",
-                  lineHeight: 1.2,
-                }}>
+                <h3 className="font-serif text-[clamp(22px,5vw,32px)] text-text-primary mt-4 mb-3 leading-tight">
                   {lang === "es" 
                     ? "¿Te vas sin ver esto?" 
                     : "Leaving without this?"}
                 </h3>
 
-                <p style={{
-                  color: "#8892a4",
-                  fontSize: "15px",
-                  marginBottom: "24px",
-                  lineHeight: 1.6,
-                }}>
+                <p className="text-text-muted text-[15px] mb-6 leading-relaxed">
                   {lang === "es" 
                     ? "Obtén nuestro informe gratuito: \"5 formas de duplicar ventas con IA\" antes de irte."
                     : "Get our free report: \"5 ways to double sales with AI\" before you go."}
                 </p>
 
-                <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                <form onSubmit={handleSubmit} className="flex flex-col gap-3">
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder={lang === "es" ? "Tu mejor email..." : "Your best email..."}
                     required
-                    style={{
-                      padding: "16px 20px",
-                      borderRadius: "12px",
-                      border: "1px solid rgba(255,255,255,0.2)",
-                      background: "rgba(255,255,255,0.08)",
-                      color: "#f0f2f8",
-                      fontSize: "16px",
-                      outline: "none",
-                      textAlign: "center",
-                    }}
+                    className="px-5 py-4 rounded-xl border border-white/20 bg-white/5 text-text-primary text-base outline-none text-center"
                   />
                   <motion.button
                     type="submit"
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    style={{
-                      padding: "16px 24px",
-                      borderRadius: "12px",
-                      border: "none",
-                      background: "linear-gradient(135deg, #D4AF37 0%, #B8860B 100%)",
-                      color: "#030a05",
-                      fontSize: "16px",
-                      fontWeight: 700,
-                      cursor: "pointer",
-                    }}
+                    className="px-6 py-4 rounded-xl border-none bg-gradient-to-br from-accent to-accent2 text-[#030a05] text-base font-bold cursor-pointer"
                   >
                     {lang === "es" ? "Enviarme el informe gratis →" : "Send me the free report →"}
                   </motion.button>
                 </form>
 
-                <p style={{
-                  fontSize: "11px",
-                  color: "#4a5568",
-                  marginTop: "16px",
-                }}>
+                <p className="text-[11px] text-[#4a5568] mt-4">
                   {lang === "es" 
                     ? "Sin spam. Solo contenido de valor." 
                     : "No spam. Only valuable content."}

@@ -35,9 +35,9 @@ const COMPARE_ROWS = {
 };
 
 function Checkmark({ val }: { val: string }) {
-  if (val === "✓") return <span style={{ color: '#10b981', fontWeight: 700 }}>✓</span>;
-  if (val === "—" || val === "") return <span style={{ color: '#4a5568' }}>—</span>;
-  return <span style={{ color: '#f0f2f8', fontSize: '13px' }}>{val}</span>;
+  if (val === "✓") return <span className="text-emerald-500 font-bold">✓</span>;
+  if (val === "—" || val === "") return <span className="text-text-muted">—</span>;
+  return <span className="text-text-primary text-xs">{val}</span>;
 }
 
 export default function PricingComparison() {
@@ -45,29 +45,29 @@ export default function PricingComparison() {
   const rows = COMPARE_ROWS[lang as 'es' | 'en'];
 
   return (
-    <section style={{ padding: 'clamp(4rem, 10vw, 6rem) clamp(1.5rem, 5vw, 4rem)', maxWidth: '1200px', margin: '0 auto' }}>
+    <section className="px-[clamp(1.5rem,5vw,4rem)] py-[clamp(4rem,10vw,6rem)] max-w-[1200px] mx-auto">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        style={{ textAlign: 'center', marginBottom: '3rem' }}
+        className="text-center mb-12"
       >
-        <span style={{ display: 'inline-block', background: 'rgba(212,175,55,0.15)', color: '#D4AF37', fontSize: '13px', fontWeight: 600, padding: '6px 16px', borderRadius: '20px', marginBottom: '16px' }}>
+        <span className="inline-block bg-accent-dim text-accent text-xs font-semibold px-4 py-1.5 rounded-full mb-4">
           {lang === "es" ? "¿POR QUÉ STRATIX?" : "WHY STRATIX?"}
         </span>
-        <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(2rem, 5vw, 3rem)', color: '#f0f2f8', marginBottom: '12px' }}>
+        <h2 className="font-serif text-[clamp(2rem,5vw,3rem)] text-text-primary mb-3">
           {lang === "es" ? "Compara con la competencia" : "Compare with competitors"}
         </h2>
-        <p style={{ color: '#8892a4', fontSize: '16px' }}>
+        <p className="text-text-secondary text-base">
           {lang === "es" ? "Sin letra pequeña. Sin límites sorpresa." : "No hidden fees. No surprise limits."}
         </p>
       </motion.div>
 
-      <div style={{ overflowX: 'auto', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.07)' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '700px' }}>
+      <div className="overflow-x-auto rounded-2xl border border-white/5">
+        <table className="w-full border-collapse min-w-[700px]">
           <thead>
-            <tr style={{ background: 'rgba(255,255,255,0.03)' }}>
-              <th style={{ padding: '16px 20px', textAlign: 'left', fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '1px', color: '#4a5568', textTransform: 'uppercase', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+            <tr className="bg-white/5">
+              <th className="p-4 px-5 text-left font-mono text-xs tracking-widest text-text-muted uppercase border-b border-white/5">
                 {lang === "es" ? "CARACTERÍSTICA" : "FEATURE"}
               </th>
               {[
@@ -76,7 +76,7 @@ export default function PricingComparison() {
                 lang === "es" ? "Enterprise" : "Enterprise",
                 "STRATIX",
               ].map((h, i) => (
-                <th key={i} style={{ padding: '16px 20px', textAlign: 'center', fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '1px', color: i === 3 ? '#D4AF37' : '#4a5568', textTransform: 'uppercase', borderBottom: '1px solid rgba(255,255,255,0.07)', borderLeft: i === 3 ? '2px solid rgba(212,175,55,0.3)' : '1px solid rgba(255,255,255,0.07)' }}>
+                <th key={i} className={"p-4 px-5 text-center font-mono text-xs tracking-widest uppercase border-b border-white/5 " + (i === 3 ? 'text-accent border-l-2 border-accent/30' : 'text-text-muted border-l border-white/5')}>
                   {h}
                 </th>
               ))}
@@ -90,15 +90,13 @@ export default function PricingComparison() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.03 }}
-                style={{ borderBottom: '1px solid rgba(255,255,255,0.04)', transition: 'background 0.2s' }}
-                onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.03)')}
-                onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+                className="border-b border-white/5 transition-colors duration-200 hover:bg-white/5"
               >
-                <td style={{ padding: '14px 20px', fontSize: '14px', color: '#8892a4' }}>{row.feature}</td>
+                <td className="p-3.5 px-5 text-sm text-text-secondary">{row.feature}</td>
                 {[row.starter, row.growth, row.enterprise, row.ours].map((val, j) => (
-                  <td key={j} style={{ padding: '14px 20px', textAlign: 'center', borderLeft: j === 3 ? '2px solid rgba(212,175,55,0.3)' : '1px solid rgba(255,255,255,0.04)' }}>
+                  <td key={j} className={"p-3.5 px-5 text-center " + (j === 3 ? 'border-l-2 border-accent/30' : 'border-l border-white/5')}>
                     {j === 3 ? (
-                      <span style={{ color: '#10b981', fontWeight: 700, fontSize: '13px' }}>{val}</span>
+                      <span className="text-emerald-500 font-bold text-xs">{val}</span>
                     ) : (
                       <Checkmark val={val} />
                     )}
@@ -114,7 +112,7 @@ export default function PricingComparison() {
         initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        style={{ textAlign: 'center', marginTop: '2rem', fontSize: '13px', color: '#4a5568' }}
+        className="text-center mt-8 text-xs text-text-muted"
       >
         {lang === "es"
           ? "* Los competidores varían. Datos basados en investigación de mercado de enero 2026."

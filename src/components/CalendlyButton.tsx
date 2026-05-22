@@ -24,31 +24,10 @@ export default function CalendlyButton() {
     <motion.div
       onMouseEnter={() => setTooltip(true)}
       onMouseLeave={() => setTooltip(false)}
-      style={{
-        position: "fixed",
-        bottom: "100px",
-        right: "24px",
-        zIndex: 9998,
-        display: "flex",
-        flexDirection: "column-reverse",
-        alignItems: "center",
-        gap: "12px",
-      }}
+      className="fixed bottom-[100px] right-6 z-[9998] flex flex-col-reverse items-center gap-3"
     >
       {tooltip && (
-        <div
-          style={{
-            marginRight: "12px",
-            background: "#D4AF37",
-            color: "#000",
-            padding: "6px 12px",
-            borderRadius: "8px",
-            fontSize: "13px",
-            fontWeight: 700,
-            whiteSpace: "nowrap",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
-          }}
-        >
+        <div className="mr-3 bg-accent text-black px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap shadow-[0_4px_12px_rgba(0,0,0,0.2)]">
           Agendar Demo 📅
         </div>
       )}
@@ -56,19 +35,7 @@ export default function CalendlyButton() {
         onClick={handleClick}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
-        style={{
-          width: "56px",
-          height: "56px",
-          borderRadius: "50%",
-          background: "#D4AF37",
-          color: "white",
-          border: "3px solid white",
-          boxShadow: "0 4px 12px rgba(212,175,55,0.4)",
-          cursor: "pointer",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
+        className="w-14 h-14 rounded-full bg-accent text-white border-[3px] border-white shadow-[0_4px_12px_rgba(212,175,55,0.4)] cursor-pointer flex items-center justify-center"
         aria-label="Agendar Demo"
       >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">

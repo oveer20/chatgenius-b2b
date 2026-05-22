@@ -64,99 +64,104 @@ function LeadsDashboardContent() {
   const hotLeadsCount = leads.filter(l => l.score === 'Hot').length;
   const intentionRate = leads.length > 0 ? Math.round((hotLeadsCount / leads.length) * 100) : 0;
 
+  const getSourceColor = (source: string) => {
+    const colors: Record<string, string> = { whatsapp: '#25D366', web: '#4285F4', instagram: '#E4405F', facebook: '#1877F2', phone: '#D4AF37' };
+    return colors[source] || '#666';
+  };
+
   return (
-    <div style={{ minHeight: '100vh', background: '#060B14', color: 'white', padding: '2rem 5%' }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem', flexWrap: 'wrap', gap: '1rem' }}>
+    <div className="min-h-screen bg-bg text-text-primary p-8">
+      <div className="max-w-5xl mx-auto">
+        <div className="flex justify-between items-center mb-12 flex-wrap gap-4">
           <div>
-            <Link href="/dashboard" style={{ color: '#D4AF37', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', marginBottom: '1rem', fontWeight: 700 }}>
+            <Link href="/dashboard" className="text-accent no-underline flex items-center gap-2 text-xs font-bold mb-4">
               <FiArrowLeft /> REGRESAR AL DASHBOARD
             </Link>
-            <h1 style={{ fontSize: '2.5rem', fontWeight: 900, letterSpacing: '-1px' }}>
-              Intelligence <span style={{ color: '#D4AF37' }}>Lead Board</span>
+            <h1 className="text-4xl font-black tracking-tight">
+              Intelligence <span className="text-accent">Lead Board</span>
             </h1>
           </div>
           <button onClick={() => handleExport(null)} disabled={isExporting || leads.length === 0}
-            style={{ padding: '14px 28px', background: '#D4AF37', color: '#000', border: 'none', borderRadius: '12px', fontWeight: 900, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px' }}>
+            className="px-7 py-3.5 bg-accent text-black border-none rounded-md font-black cursor-pointer flex items-center gap-2.5 transition-all duration-200 disabled:opacity-50">
             <FiDownload /> {isExporting ? "EXPORTANDO..." : "EXPORTAR CSV"}
           </button>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem', marginBottom: '3rem' }}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
           {[
-            { label: 'PROSPECTOS TOTALES', value: leads.length, icon: <FiUsers />, color: '#4f7df5' },
-            { label: 'LEADS HOT', value: hotLeadsCount, icon: <FiZap />, color: '#D4AF37' },
-            { label: 'TASA DE CONVERSIÓN', value: `${intentionRate}%`, icon: <FiActivity />, color: '#27C93F' }
+            { label: 'PROSPECTOS TOTALES', value: leads.length, icon: <FiUsers />, colorClass: 'text-blue-500' },
+            { label: 'LEADS HOT', value: hotLeadsCount, icon: <FiZap />, colorClass: 'text-accent' },
+            { label: 'TASA DE CONVERSIÓN', value: `${intentionRate}%`, icon: <FiActivity />, colorClass: 'text-green-500' }
           ].map((stat, i) => (
-            <div key={i} style={{ padding: '2rem', background: 'rgba(255,255,255,0.02)', borderRadius: '24px', border: '1px solid rgba(255,255,255,0.05)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                <span style={{ fontSize: '0.7rem', fontWeight: 900, opacity: 0.3, letterSpacing: '2px' }}>{stat.label}</span>
-                <span style={{ color: stat.color }}>{stat.icon}</span>
+            <div key={i} className="p-8 bg-white/[0.02] rounded-2xl border border-white/5">
+              <div className="flex justify-between items-center mb-4">
+                <span className="text-xs font-black opacity-30 tracking-widest">{stat.label}</span>
+                <span className={stat.colorClass}>{stat.icon}</span>
               </div>
-              <div style={{ fontSize: '2.2rem', fontWeight: 900 }}>{stat.value}</div>
+              <div className="text-4xl font-black">{stat.value}</div>
             </div>
           ))}
         </div>
 
-        <div style={{ background: 'rgba(11,17,32,0.8)', padding: '1.5rem', borderRadius: '28px', border: '1px solid rgba(212,175,55,0.15)', backdropFilter: 'blur(30px)' }}>
-          <div style={{ position: 'relative', marginBottom: '2rem' }}>
-            <FiSearch style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', opacity: 0.4 }} />
+        <div className="bg-bg2/80 p-6 rounded-3xl border border-accent/15 backdrop-blur-xl">
+          <div className="relative mb-8">
+            <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 opacity-40" />
             <input placeholder="Buscar por nombre, empresa o correo..."
               value={searchTerm} onChange={e => { setSearchTerm(e.target.value); setPage(1); }}
-              style={{ width: '100%', padding: '16px 16px 16px 48px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '15px', color: 'white', outline: 'none' }} />
+              className="w-full py-4 px-4 pl-12 bg-white/[0.03] border border-white/10 rounded-lg text-text-primary outline-none focus:border-accent/30 transition-all duration-200" />
           </div>
 
-          <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse text-left">
               <thead>
-                <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', fontSize: '0.75rem', fontWeight: 900, opacity: 0.4, color: '#D4AF37' }}>
-                  <th style={{ padding: '1rem' }}>CONTACTO</th>
-                  <th style={{ padding: '1rem' }}>BOT</th>
-                  <th style={{ padding: '1rem' }}>INTENCIÓN</th>
-                  <th style={{ padding: '1rem' }}>SCORE</th>
-                  <th style={{ padding: '1rem' }}>FECHA</th>
+                <tr className="border-b border-white/5 text-xs font-black opacity-40 text-accent">
+                  <th className="p-4">CONTACTO</th>
+                  <th className="p-4">BOT</th>
+                  <th className="p-4">INTENCIÓN</th>
+                  <th className="p-4">SCORE</th>
+                  <th className="p-4">FECHA</th>
                 </tr>
               </thead>
               <tbody>
                 {isLoading ? (
-                  <tr><td colSpan={5} style={{ textAlign: 'center', padding: '4rem', opacity: 0.5 }}>Analizando base de datos...</td></tr>
+                  <tr><td colSpan={5} className="text-center p-16 opacity-50">Analizando base de datos...</td></tr>
                 ) : paginatedLeads.length === 0 ? (
-                  <tr><td colSpan={5} style={{ textAlign: 'center', padding: '4rem', opacity: 0.5 }}>No se encontraron prospectos. Ve al dashboard para cargar leads de ejemplo.</td></tr>
+                  <tr><td colSpan={5} className="text-center p-16 opacity-50">No se encontraron prospectos. Ve al dashboard para cargar leads de ejemplo.</td></tr>
                 ) : paginatedLeads.map((lead, i) => {
-                  const sourceColor = { whatsapp: '#25D366', web: '#4285F4', instagram: '#E4405F', facebook: '#1877F2', phone: '#D4AF37' }[lead.source] || '#666';
+                  const sourceColor = getSourceColor(lead.source);
                   return (
                   <motion.tr key={lead.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.03 }}
-                    style={{ borderBottom: '1px solid rgba(255,255,255,0.03)', fontSize: '0.9rem', cursor: 'pointer' }}>
-                    <td style={{ padding: '1.2rem' }}>
-                      <div style={{ fontWeight: 800, marginBottom: '4px' }}>{lead.name}</div>
-                      <div style={{ fontSize: '0.72rem', opacity: 0.45, display: 'flex', gap: '8px', alignItems: 'center' }}>
+                    className="border-b border-white/[0.03] text-sm cursor-pointer hover:bg-white/[0.02] transition-all duration-200">
+                    <td className="p-5">
+                      <div className="font-extrabold mb-1">{lead.name}</div>
+                      <div className="text-xs opacity-45 flex gap-2 items-center">
                         <span>{lead.company || '—'}</span>
                         <span>·</span>
                         <span>{lead.email}</span>
                       </div>
-                      <div style={{ marginTop: '6px', display: 'flex', gap: '6px', alignItems: 'center' }}>
+                      <div className="mt-1.5 flex gap-1.5 items-center">
                         <span style={{ fontSize: '0.65rem', padding: '2px 8px', borderRadius: '4px', background: `${sourceColor}22`, color: sourceColor, fontWeight: 800, border: `1px solid ${sourceColor}44` }}>
                           {lead.source?.toUpperCase() || 'WEB'}
                         </span>
-                        {lead.phone && <span style={{ fontSize: '0.65rem', opacity: 0.4 }}>{lead.phone}</span>}
+                        {lead.phone && <span className="text-xs opacity-4">{lead.phone}</span>}
                       </div>
                     </td>
-                    <td style={{ padding: '1.2rem', fontSize: '0.8rem', fontWeight: 700, opacity: 0.6 }}>{lead.bots?.name || 'Stratix Core'}</td>
-                    <td style={{ padding: '1.2rem' }}>
-                      <span style={{ padding: '4px 10px', borderRadius: '8px', background: 'rgba(255,255,255,0.04)', fontSize: '0.75rem', fontWeight: 800, lineHeight: '1.4', display: 'block', maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+                    <td className="p-5 text-sm font-bold opacity-60">{lead.bots?.name || 'Stratix Core'}</td>
+                    <td className="p-5">
+                      <span className="px-2.5 py-1 rounded-sm bg-white/[0.04] text-xs font-extrabold leading-tight block max-w-52 truncate"
                         title={lead.intent || ''}>
                         {lead.intent || '—'}
                       </span>
                     </td>
-                    <td style={{ padding: '1.2rem' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: lead.score === 'Hot' ? '#D4AF37' : lead.score === 'Warm' ? '#4285F4' : '#555' }} />
-                        <span style={{ fontWeight: 900, color: lead.score === 'Hot' ? '#D4AF37' : 'white' }}>{lead.score || '—'}</span>
+                    <td className="p-5">
+                      <div className="flex items-center gap-2">
+                        <div className={`w-2 h-2 rounded-full ${lead.score === 'Hot' ? 'bg-accent' : lead.score === 'Warm' ? 'bg-blue-500' : 'bg-neutral-600'}`} />
+                        <span className={`font-black ${lead.score === 'Hot' ? 'text-accent' : 'text-text-primary'}`}>{lead.score || '—'}</span>
                       </div>
                     </td>
-                    <td style={{ padding: '1.2rem', fontSize: '0.75rem', opacity: 0.4 }}>
+                    <td className="p-5 text-xs opacity-4">
                       <div>{new Date(lead.created_at).toLocaleDateString('es-CO')}</div>
-                      <div style={{ opacity: 0.6, fontSize: '0.65rem' }}>{new Date(lead.created_at).toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' })}</div>
+                      <div className="opacity-60 text-xs">{new Date(lead.created_at).toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' })}</div>
                     </td>
                   </motion.tr>
                 )})}
@@ -164,25 +169,24 @@ function LeadsDashboardContent() {
             </table>
           </div>
 
-          {/* Pagination */}
           {totalPages > 1 && (
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1.5rem', paddingTop: '1rem', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-              <span style={{ fontSize: '0.8rem', opacity: 0.4 }}>
+            <div className="flex justify-between items-center mt-6 pt-4 border-t border-white/5">
+              <span className="text-sm opacity-4">
                 Mostrando {((page - 1) * PAGE_SIZE) + 1}–{Math.min(page * PAGE_SIZE, filteredLeads.length)} de {filteredLeads.length}
               </span>
-              <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+              <div className="flex gap-2 items-center">
                 <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
-                  style={{ width: '36px', height: '36px', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', color: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  className="w-9 h-9 rounded-sm bg-white/5 border border-white/[0.08] text-text-primary cursor-pointer flex items-center justify-center transition-all duration-200 disabled:opacity-30 hover:bg-white/10">
                   <FiChevronLeft size={16} />
                 </button>
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
                   <button key={p} onClick={() => setPage(p)}
-                    style={{ minWidth: '36px', height: '36px', borderRadius: '8px', background: page === p ? '#D4AF37' : 'rgba(255,255,255,0.05)', border: `1px solid ${page === p ? '#D4AF37' : 'rgba(255,255,255,0.08)'}`, color: page === p ? '#000' : 'white', cursor: 'pointer', fontWeight: 900, fontSize: '0.8rem' }}>
+                    className={`min-w-9 h-9 rounded-sm border font-black text-sm transition-all duration-200 ${page === p ? 'bg-accent border-accent text-black' : 'bg-white/5 border-white/[0.08] text-text-primary hover:bg-white/10'}`}>
                     {p}
                   </button>
                 ))}
                 <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}
-                  style={{ width: '36px', height: '36px', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', color: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  className="w-9 h-9 rounded-sm bg-white/5 border border-white/[0.08] text-text-primary cursor-pointer flex items-center justify-center transition-all duration-200 disabled:opacity-30 hover:bg-white/10">
                   <FiChevronRight size={16} />
                 </button>
               </div>
@@ -197,7 +201,7 @@ function LeadsDashboardContent() {
 
 export default function LeadsDashboard() {
   return (
-    <Suspense fallback={<div style={{ padding: '50px', color: 'white', textAlign: 'center' }}>Sincronizando Leads...</div>}>
+    <Suspense fallback={<div className="p-12 text-text-primary text-center">Sincronizando Leads...</div>}>
       <LeadsDashboardContent />
     </Suspense>
   );

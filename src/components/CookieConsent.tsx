@@ -31,47 +31,22 @@ export default function CookieConsent() {
     <motion.div
       initial={{ y: 100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      style={{
-        position: "fixed",
-        bottom: 0,
-        left: 0,
-        right: 0,
-        zIndex: 99999,
-        background: "linear-gradient(135deg, #0d1017 0%, #1a1f2e 100%)",
-        borderTop: "1px solid rgba(212,175,55,0.3)",
-        padding: "20px",
-        boxShadow: "0 -4px 30px rgba(0,0,0,0.5)",
-      }}
+      className="fixed bottom-0 left-0 right-0 z-[99999] bg-gradient-to-br from-[#0d1017] to-[#1a1f2e] border-t border-accent/10 p-5 shadow-[0_-4px_30px_rgba(0,0,0,0.5)]"
     >
-      <div
-        style={{
-          maxWidth: "1200px",
-          margin: "0 auto",
-          display: "flex",
-          flexDirection: "column",
-          gap: "16px",
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "flex-start", gap: "16px" }}>
-          <div style={{ fontSize: "32px", flexShrink: 0 }}>🍪</div>
+      <div className="max-w-[1200px] mx-auto flex flex-col gap-4">
+        <div className="flex items-start gap-4">
+          <div className="text-[32px] shrink-0">🍪</div>
           <div>
-            <h3
-              style={{
-                fontFamily: 'var(--font-serif)',
-                fontSize: "18px",
-                color: "#f0f2f8",
-                marginBottom: "8px",
-              }}
-            >
+            <h3 className="font-serif text-[18px] text-text-primary mb-2">
               {lang === "es" ? "Política de Cookies" : "Cookie Policy"}
             </h3>
-            <p style={{ color: "#8892a4", fontSize: "14px", lineHeight: 1.6 }}>
+            <p className="text-text-muted text-sm leading-relaxed">
               {lang === "es"
                 ? "Utilizamos cookies para mejorar tu experiencia y analizar el tráfico del sitio. Al continuar, aceptas nuestra "
                 : "We use cookies to improve your experience and analyze site traffic. By continuing, you agree to our "}
               <a
                 href="/legal/privacy"
-                style={{ color: "#D4AF37", textDecoration: "underline" }}
+                className="text-accent underline"
               >
                 {lang === "es" ? "política de privacidad" : "privacy policy"}
               </a>
@@ -80,21 +55,12 @@ export default function CookieConsent() {
           </div>
         </div>
 
-        <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
+        <div className="flex gap-3 flex-wrap">
           <motion.button
             onClick={acceptCookies}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            style={{
-              padding: "12px 24px",
-              borderRadius: "10px",
-              border: "none",
-              background: "linear-gradient(135deg, #D4AF37 0%, #B8860B 100%)",
-              color: "#030a05",
-              fontWeight: 600,
-              fontSize: "14px",
-              cursor: "pointer",
-            }}
+            className="px-6 py-3 rounded-[10px] border-none bg-gradient-to-br from-accent to-accent2 text-[#030a05] font-semibold text-sm cursor-pointer"
           >
             {lang === "es" ? "Aceptar cookies" : "Accept cookies"}
           </motion.button>
@@ -102,16 +68,7 @@ export default function CookieConsent() {
             onClick={declineCookies}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            style={{
-              padding: "12px 24px",
-              borderRadius: "10px",
-              border: "1px solid rgba(255,255,255,0.2)",
-              background: "transparent",
-              color: "#8892a4",
-              fontWeight: 600,
-              fontSize: "14px",
-              cursor: "pointer",
-            }}
+            className="px-6 py-3 rounded-[10px] border border-white/20 bg-transparent text-text-muted font-semibold text-sm cursor-pointer"
           >
             {lang === "es" ? "Rechazar" : "Decline"}
           </motion.button>

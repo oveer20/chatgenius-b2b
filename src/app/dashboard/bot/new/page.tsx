@@ -103,17 +103,17 @@ export default function NewBotPage() {
   };
 
   return (
-    <div style={{ backgroundColor: '#060B14', minHeight: '100vh', color: 'white', padding: '4rem 5%', fontFamily: 'Inter, sans-serif' }}>
-      <div style={{ maxWidth: '700px', margin: '0 auto' }}>
+    <div className="bg-bg min-h-screen text-white py-16 px-[5%] font-sans">
+      <div className="mx-auto max-w-[700px]">
 
-        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} style={{ marginBottom: '3rem' }}>
-          <Link href="/dashboard" style={{ color: '#D4AF37', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', fontWeight: 900, letterSpacing: '1px' }}>
+        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-12">
+          <Link href="/dashboard" className="text-accent no-underline flex items-center gap-2 text-[0.85rem] font-black tracking-[1px]">
             <FiArrowLeft /> VOLVER AL DASHBOARD
           </Link>
-          <h1 style={{ fontSize: '2.8rem', fontWeight: 900, marginTop: '1.5rem', fontFamily: 'Outfit, sans-serif', letterSpacing: '-1px' }}>
-            Crear <span style={{ color: '#D4AF37' }}>Agente IA</span>
+          <h1 className="text-[2.8rem] font-black mt-6 font-sans tracking-[-1px]">
+            Crear <span className="text-accent">Agente IA</span>
           </h1>
-          <p style={{ opacity: 0.5, fontSize: '1.1rem', marginTop: '0.5rem' }}>Configura tu agente para atención automática.</p>
+          <p className="opacity-50 text-[1.1rem] mt-2">Configura tu agente para atención automática.</p>
         </motion.div>
 
         <motion.form
@@ -121,36 +121,36 @@ export default function NewBotPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
           onSubmit={handleSubmit}
-          style={{ background: 'rgba(255,255,255,0.02)', padding: '3rem', borderRadius: '32px', border: '1px solid rgba(212,175,55,0.15)' }}
+          className="bg-white/[0.03] p-12 rounded-3xl border border-accent/10"
         >
 
-          <div style={{ marginBottom: '2rem' }}>
-            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 900, opacity: 0.4, marginBottom: '0.8rem', letterSpacing: '1px' }}>NOMBRE DEL AGENTE</label>
-            <div style={{ position: 'relative' }}>
-              <FiCpu style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#D4AF37' }} />
+          <div className="mb-8">
+            <label className="block text-xs font-black opacity-40 mb-3 tracking-[1px]">NOMBRE DEL AGENTE</label>
+            <div className="relative">
+              <FiCpu className="absolute left-4 top-1/2 -translate-y-1/2 text-accent" />
               <input
                 required name="name" value={formData.name} onChange={handleChange}
                 placeholder="Ej: Asesor Inmobiliario"
-                style={{ width: '100%', padding: '16px 16px 16px 48px', borderRadius: '15px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(0,0,0,0.3)', color: 'white', fontSize: '1rem', fontWeight: 600, outline: 'none', boxSizing: 'border-box' }}
+                className="w-full p-4 pl-12 rounded-[15px] border border-white/10 bg-black/30 text-white text-base font-semibold outline-none box-border"
               />
             </div>
           </div>
 
-          <div style={{ marginBottom: '2rem' }}>
-            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 900, opacity: 0.4, marginBottom: '0.8rem', letterSpacing: '1px' }}>DESCRIPCIÓN</label>
-            <div style={{ position: 'relative' }}>
-              <FiActivity style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#D4AF37' }} />
+          <div className="mb-8">
+            <label className="block text-xs font-black opacity-40 mb-3 tracking-[1px]">DESCRIPCIÓN</label>
+            <div className="relative">
+              <FiActivity className="absolute left-4 top-1/2 -translate-y-1/2 text-accent" />
               <input
                 required name="description" value={formData.description} onChange={handleChange}
                 placeholder="Ej: Asesor de ventas inmobiliarias"
-                style={{ width: '100%', padding: '16px 16px 16px 48px', borderRadius: '15px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(0,0,0,0.3)', color: 'white', fontSize: '1rem', outline: 'none', boxSizing: 'border-box' }}
+                className="w-full p-4 pl-12 rounded-[15px] border border-white/10 bg-black/30 text-white text-base outline-none box-border"
               />
             </div>
           </div>
 
-          <div style={{ marginBottom: '3rem' }}>
-            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 900, opacity: 0.4, marginBottom: '1rem', letterSpacing: '1px' }}>MODELO IA</label>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+          <div className="mb-12">
+            <label className="block text-xs font-black opacity-40 mb-4 tracking-[1px]">MODELO IA</label>
+            <div className="grid grid-cols-2 gap-4">
               {[
                 { id: 'gemini', label: 'Gemini 2.0 Flash', tag: 'PRINCIPAL', color: '#4285F4' },
                 { id: 'gpt', label: 'GPT-3.5 Turbo', tag: 'BACKUP', color: '#10A37F' },
@@ -160,31 +160,27 @@ export default function NewBotPage() {
                 <div
                   key={model.id}
                   onClick={() => setFormData({ ...formData, model: model.id })}
-                  style={{
-                    padding: '20px', borderRadius: '18px',
-                    border: formData.model === model.id ? '2px solid #D4AF37' : '1px solid rgba(255,255,255,0.05)',
-                    background: formData.model === model.id ? 'rgba(212,175,55,0.05)' : 'rgba(255,255,255,0.01)',
-                    cursor: 'pointer', transition: 'all 0.3s'
-                  }}
+                  className={`p-5 rounded-[18px] cursor-pointer transition-all duration-200 ${
+                    formData.model === model.id
+                      ? 'border-2 border-accent bg-accent-dim'
+                      : 'border border-white/5 bg-white/[0.03]'
+                  }`}
                 >
-                  <div style={{ fontSize: '0.6rem', fontWeight: 900, background: model.color, color: '#fff', padding: '2px 8px', borderRadius: '4px', display: 'inline-block', marginBottom: '8px' }}>{model.tag}</div>
-                  <div style={{ fontWeight: 800, fontSize: '0.9rem' }}>{model.label}</div>
+                  <div className="text-[0.6rem] font-black text-white px-2 py-0.5 rounded-xs inline-block mb-2" style={{ background: model.color }}>{model.tag}</div>
+                  <div className="font-extrabold text-[0.9rem]">{model.label}</div>
                 </div>
               ))}
             </div>
-            <p style={{ fontSize: '0.7rem', opacity: 0.5, marginTop: '1rem' }}>
+            <p className="text-[0.7rem] opacity-50 mt-4">
               Todos incluyen failover automático - si falla uno, otro responde
             </p>
           </div>
 
           <button
             type="submit" disabled={loading || !formData.name}
-            style={{
-              width: '100%', padding: '20px', borderRadius: '18px', border: 'none',
-              background: loading ? 'rgba(212,175,55,0.2)' : '#D4AF37', color: '#000',
-              fontSize: '1.1rem', fontWeight: 900, cursor: loading ? 'not-allowed' : 'pointer',
-              display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '12px'
-            }}
+            className={`w-full p-5 rounded-[18px] border-none flex items-center justify-center gap-3 text-[1.1rem] font-black text-black ${
+              loading ? 'bg-accent/20 cursor-not-allowed' : 'bg-accent cursor-pointer'
+            }`}
           >
             {loading ? <FiZap /> : <FiPlus />}
             {loading ? 'CREANDO...' : 'CREAR AGENTE'}

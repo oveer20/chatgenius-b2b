@@ -59,48 +59,31 @@ function StepCard({ step, svgPath, svgLabel, index, isLast }: { step: { num: str
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => { setIsHovered(false); setTilt({ x: 0, y: 0 }); }}
       animate={isHovered ? { rotateY: tilt.x, rotateX: tilt.y } : {}}
-      style={{
-        padding: '32px',
-        background: isHovered ? 'rgba(255,255,255,0.05)' : 'rgba(255,255,255,0.02)',
-        borderRight: isLast ? 'none' : '1px solid rgba(255,255,255,0.07)',
-        position: 'relative',
-        borderRadius: '16px',
-        transformStyle: 'preserve-3d',
-        transition: 'background 0.3s ease',
-      }}
+      className={"p-8 relative rounded-2xl transition-colors duration-300 [transform-style:preserve-3d] " + (isHovered ? 'bg-white/5' : 'bg-white/[0.02]') + (!isLast ? ' border-r border-white/5' : '')}
     >
-      <div style={{
-        width: '56px', height: '56px', borderRadius: '50%',
-        background: 'linear-gradient(135deg, rgba(212,175,55,0.15), rgba(212,175,55,0.05))',
-        border: '1px solid rgba(212,175,55,0.3)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        marginBottom: '20px',
-        transition: 'all 0.3s ease',
-        transform: isHovered ? 'scale(1.1)' : 'scale(1)',
-        boxShadow: isHovered ? '0 0 20px rgba(212,175,55,0.2)' : 'none',
-      }}>
+      <div className={"w-14 h-14 rounded-full flex items-center justify-center mb-5 transition-all duration-300 bg-[linear-gradient(135deg,rgba(212,175,55,0.15),rgba(212,175,55,0.05))] border border-accent/30 " + (isHovered ? 'scale-110 shadow-[0_0_20px_rgba(212,175,55,0.2)]' : 'scale-100')}>
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
           <path d={svgPath} />
         </svg>
       </div>
 
-      <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: '#D4AF37', letterSpacing: '0.08em', marginBottom: '12px', opacity: isHovered ? 1 : 0.6, transition: 'opacity 0.3s ease' }}>
+      <div className={"font-mono text-xs text-accent tracking-wide mb-3 transition-opacity duration-300 " + (isHovered ? 'opacity-100' : 'opacity-60')}>
         {step.num} — {svgLabel}
       </div>
 
-      <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.3rem', marginBottom: '12px', color: '#f0f2f8', transition: 'color 0.3s ease' }}>
+      <h3 className="font-serif text-[1.3rem] mb-3 text-text-primary transition-colors duration-300">
         {step.title}
       </h3>
-      <p style={{ fontSize: '14px', color: '#8892a4', lineHeight: 1.65 }}>{step.desc}</p>
+      <p className="text-sm text-text-secondary leading-[1.65]">{step.desc}</p>
 
       {!isLast && (
-        <div style={{ position: 'absolute', top: '56px', right: '-1px', width: '2px', height: '40px', background: 'linear-gradient(to bottom, transparent, rgba(212,175,55,0.3), transparent)', opacity: isHovered ? 1 : 0.3, transition: 'opacity 0.3s ease' }} />
+        <div className={"absolute top-14 -right-px w-0.5 h-10 bg-[linear-gradient(to_bottom,transparent,rgba(212,175,55,0.3),transparent)] transition-opacity duration-300 " + (isHovered ? 'opacity-100' : 'opacity-30')} />
       )}
 
       {isHovered && (
         <motion.div
           layoutId="step-glow"
-          style={{ position: 'absolute', inset: 0, borderRadius: '16px', background: 'radial-gradient(circle at 50% 0%, rgba(212,175,55,0.08) 0%, transparent 60%)', pointerEvents: 'none' }}
+          className="absolute inset-0 rounded-2xl bg-[radial-gradient(circle_at_50%_0%,rgba(212,175,55,0.08)_0%,transparent_60%)] pointer-events-none"
         />
       )}
     </motion.div>
@@ -113,21 +96,21 @@ export default function HowItWorks() {
   const svgIcons = STEPS_SVG[lang as keyof typeof STEPS_SVG];
 
   return (
-    <section id="como-funciona" style={{ padding: 'clamp(4rem, 10vw, 8rem) clamp(1.5rem, 5vw, 4rem)', maxWidth: '1200px', margin: '0 auto', position: 'relative' }}>
-      <div style={{ position: 'absolute', top: '20%', right: '-10%', width: '400px', height: '400px', background: 'radial-gradient(circle, rgba(212,175,55,0.04) 0%, transparent 70%)', filter: 'blur(40px)', pointerEvents: 'none' }} />
+    <section id="como-funciona" className="px-[clamp(1.5rem,5vw,4rem)] py-[clamp(4rem,10vw,8rem)] max-w-[1200px] mx-auto relative">
+      <div className="absolute top-[20%] -right-[10%] w-[400px] h-[400px] bg-[radial-gradient(circle,rgba(212,175,55,0.04)_0%,transparent_70%)] blur-[40px] pointer-events-none" />
 
-      <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ textAlign: 'center', marginBottom: '56px' }}>
-        <span style={{ display: 'inline-block', background: 'rgba(212,175,55,0.15)', color: '#D4AF37', fontSize: '13px', fontWeight: 600, padding: '6px 16px', borderRadius: '20px', marginBottom: '16px', letterSpacing: '0.5px' }}>
+      <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-14">
+        <span className="inline-block bg-accent-dim text-accent text-xs font-semibold px-4 py-1.5 rounded-full mb-4 tracking-wide">
           {t.how.label}
         </span>
-        <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(2rem, 5vw, 3.5rem)', lineHeight: 1.1, letterSpacing: '-0.02em', marginBottom: '16px', color: '#f0f2f8' }}>
+        <h2 className="font-serif text-[clamp(2rem,5vw,3.5rem)] leading-[1.1] tracking-tight mb-4 text-text-primary">
           {t.how.title}<br />
-          <em style={{ color: '#D4AF37', fontStyle: 'italic' }}>{t.how.titleEm}</em>
+          <em className="text-accent italic">{t.how.titleEm}</em>
         </h2>
-        <p style={{ fontSize: '16px', color: '#8892a4' }}>{t.how.subtitle}</p>
+        <p className="text-base text-text-secondary">{t.how.subtitle}</p>
       </motion.div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '0', borderRadius: '16px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.07)', background: 'rgba(13,16,23,0.5)', backdropFilter: 'blur(10px)' }}>
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-0 rounded-2xl overflow-hidden border border-white/5 bg-[rgba(13,16,23,0.5)] backdrop-blur-xl">
         {steps.map((step, i) => (
           <StepCard key={step.num} step={step} svgPath={svgIcons[i].path} svgLabel={svgIcons[i].label} index={i} isLast={i === steps.length - 1} />
         ))}

@@ -41,8 +41,8 @@ export default async function NichePage({ params }: { params: Promise<{ niche: s
   
   if (!data) {
     return (
-      <div style={{ minHeight: '100vh', background: '#060B14', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <h1>Nicho no encontrado. Vuelve al <a href="/" style={{ color: '#D4AF37' }}>inicio</a>.</h1>
+      <div className="min-h-screen bg-bg text-white flex items-center justify-center">
+        <h1>Nicho no encontrado. Vuelve al <a href="/" className="text-accent">inicio</a>.</h1>
       </div>
     );
   }

@@ -77,18 +77,7 @@ export default function WelcomePopup() {
     }
   };
 
-  const inputStyle = {
-    width: "100%",
-    padding: "14px 18px",
-    borderRadius: "12px",
-    border: "1px solid rgba(255,255,255,0.15)",
-    background: "rgba(255,255,255,0.05)",
-    color: "#f0f2f8",
-    fontSize: "15px",
-    outline: "none",
-    fontFamily: 'var(--font-sans)',
-    transition: "border-color 0.2s",
-  };
+  const inputClasses = "w-full px-[18px] py-[14px] rounded-xl border border-white/15 bg-white/5 text-text-primary text-[15px] outline-none font-sans transition-[border-color] duration-200";
 
   return (
     <AnimatePresence>
@@ -97,17 +86,7 @@ export default function WelcomePopup() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          style={{
-            position: "fixed",
-            inset: 0,
-            background: "rgba(0,0,0,0.85)",
-            backdropFilter: "blur(8px)",
-            zIndex: 9999,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "20px",
-          }}
+          className="fixed inset-0 bg-black/85 backdrop-blur-[8px] z-[9999] flex items-center justify-center p-5"
           onClick={handleClose}
         >
           <motion.div
@@ -115,51 +94,22 @@ export default function WelcomePopup() {
             animate={{ scale: 1, y: 0 }}
             exit={{ scale: 0.8, y: 50 }}
             onClick={(e) => e.stopPropagation()}
-            style={{
-              background: "linear-gradient(135deg, #0d1017 0%, #151922 100%)",
-              border: "1px solid rgba(212,175,55,0.3)",
-              borderRadius: "24px",
-              padding: "clamp(24px, 5vw, 40px)",
-              maxWidth: "480px",
-              width: "100%",
-              position: "relative",
-              overflow: "hidden",
-            }}
+            className="bg-gradient-to-br from-[#0d1017] to-[#151922] border border-accent/30 rounded-[24px] p-[clamp(24px,5vw,40px)] max-w-[480px] w-full relative overflow-hidden"
           >
             <button
               onClick={handleClose}
-              style={{
-                position: "absolute",
-                top: "16px",
-                right: "16px",
-                background: "rgba(255,255,255,0.1)",
-                border: "none",
-                borderRadius: "50%",
-                width: "32px",
-                height: "32px",
-                cursor: "pointer",
-                color: "#8892a4",
-                fontSize: "18px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
+              className="absolute top-4 right-4 bg-white/10 border-none rounded-full w-8 h-8 cursor-pointer text-text-muted text-[18px] flex items-center justify-center"
             >
               ×
             </button>
 
-            {/* Progress indicator */}
-            <div style={{ display: "flex", gap: "8px", marginBottom: "24px" }}>
+            <div className="flex gap-2 mb-6">
               {[1, 2, 3].map((s) => (
                 <div
                   key={s}
-                  style={{
-                    flex: 1,
-                    height: "4px",
-                    borderRadius: "2px",
-                    background: s <= step ? "#D4AF37" : "rgba(255,255,255,0.1)",
-                    transition: "background 0.3s",
-                  }}
+                  className={`flex-1 h-[4px] rounded-[2px] transition-[background] duration-300 ${
+                    s <= step ? "bg-accent" : "bg-white/10"
+                  }`}
                 />
               ))}
             </div>
@@ -168,31 +118,17 @@ export default function WelcomePopup() {
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                style={{ textAlign: "center", padding: "20px 0" }}
+                className="text-center py-5"
               >
-                <div style={{
-                  width: "80px",
-                  height: "80px",
-                  borderRadius: "50%",
-                  background: "linear-gradient(135deg, #25D366 0%, #128C7E 100%)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  margin: "0 auto 20px",
-                }}>
+                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#25D366] to-[#128C7E] flex items-center justify-center mx-auto mb-5">
                   <svg width="40" height="40" viewBox="0 0 24 24" fill="#fff">
                     <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
                   </svg>
                 </div>
-                <h3 style={{
-                  fontFamily: 'var(--font-serif)',
-                  fontSize: "24px",
-                  color: "#f0f2f8",
-                  marginBottom: "8px"
-                }}>
+                <h3 className="font-serif text-[24px] text-text-primary mb-2">
                   {lang === "es" ? "¡Gracias!" : "Thank you!"}
                 </h3>
-                <p style={{ color: "#8892a4", fontSize: "14px" }}>
+                <p className="text-text-muted text-sm">
                   {lang === "es" 
                     ? "Un experto te contactará en minutos" 
                     : "An expert will contact you in minutes"}
@@ -200,23 +136,12 @@ export default function WelcomePopup() {
               </motion.div>
             ) : (
               <>
-                <h3 style={{
-                  fontFamily: 'var(--font-serif)',
-                  fontSize: "clamp(20px, 4vw, 28px)",
-                  color: "#f0f2f8",
-                  textAlign: "center",
-                  marginBottom: "8px",
-                }}>
+                <h3 className="font-serif text-[clamp(20px,4vw,28px)] text-text-primary text-center mb-2">
                   {step === 1 && (lang === "es" ? "Hablemos" : "Let's talk")}
                   {step === 2 && (lang === "es" ? "¿En qué podemos ayudarte?" : "How can we help?")}
                   {step === 3 && (lang === "es" ? "Tu info para contactarte" : "Your info to reach you")}
                 </h3>
-                <p style={{
-                  color: "#8892a4",
-                  fontSize: "14px",
-                  textAlign: "center",
-                  marginBottom: "24px",
-                }}>
+                <p className="text-text-muted text-sm text-center mb-6">
                   {step === 1 && (lang === "es" 
                     ? "Cuéntanos brevemente quién eres" 
                     : "Tell us briefly who you are")}
@@ -228,7 +153,7 @@ export default function WelcomePopup() {
                     : "Last step")}
                 </p>
 
-                <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                <form onSubmit={handleSubmit} className="flex flex-col gap-3">
                   {step === 1 && (
                     <>
                       <input
@@ -237,7 +162,7 @@ export default function WelcomePopup() {
                         onChange={(e) => setFormData({...formData, nombre: e.target.value})}
                         placeholder={lang === "es" ? "Tu nombre *" : "Your name *"}
                         required
-                        style={inputStyle}
+                        className={inputClasses}
                       />
                       <input
                         type="email"
@@ -245,24 +170,24 @@ export default function WelcomePopup() {
                         onChange={(e) => setFormData({...formData, email: e.target.value})}
                         placeholder={lang === "es" ? "Tu email *" : "Your email *"}
                         required
-                        style={inputStyle}
+                        className={inputClasses}
                       />
                       <input
                         type="text"
                         value={formData.empresa}
                         onChange={(e) => setFormData({...formData, empresa: e.target.value})}
                         placeholder={lang === "es" ? "Nombre de tu empresa" : "Your company name"}
-                        style={inputStyle}
+                        className={inputClasses}
                       />
                     </>
                   )}
 
                   {step === 2 && (
-                    <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                    <div className="flex flex-col gap-[10px]">
                       {[
                         lang === "es" ? "Automatización de ventas" : "Sales automation",
                         lang === "es" ? "Atención al cliente IA" : "AI customer service",
-                        lang === "es" ? "Agentes paraWhatsApp/Business" : "Agents for WhatsApp/Business",
+                        lang === "es" ? "Agentes para WhatsApp/Business" : "Agents for WhatsApp/Business",
                         lang === "es" ? "Otro" : "Other",
                       ].map((option) => (
                         <button
@@ -272,25 +197,7 @@ export default function WelcomePopup() {
                             setFormData({...formData, mensaje: option});
                             setStep(3);
                           }}
-                          style={{
-                            padding: "14px 18px",
-                            borderRadius: "12px",
-                            border: "1px solid rgba(255,255,255,0.15)",
-                            background: "rgba(255,255,255,0.05)",
-                            color: "#f0f2f8",
-                            fontSize: "15px",
-                            cursor: "pointer",
-                            textAlign: "left",
-                            transition: "all 0.2s",
-                          }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.borderColor = "#D4AF37";
-                            e.currentTarget.style.background = "rgba(212,175,55,0.1)";
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.borderColor = "rgba(255,255,255,0.15)";
-                            e.currentTarget.style.background = "rgba(255,255,255,0.05)";
-                          }}
+                          className="px-[18px] py-[14px] rounded-xl border border-white/15 bg-white/5 text-text-primary text-[15px] cursor-pointer text-left transition-all duration-200 hover:border-accent hover:bg-accent/10"
                         >
                           {option}
                         </button>
@@ -305,14 +212,14 @@ export default function WelcomePopup() {
                         value={formData.telefono}
                         onChange={(e) => setFormData({...formData, telefono: e.target.value})}
                         placeholder={lang === "es" ? "Tu WhatsApp" : "Your WhatsApp"}
-                        style={inputStyle}
+                        className={inputClasses}
                       />
                       <textarea
                         value={formData.mensaje}
                         onChange={(e) => setFormData({...formData, mensaje: e.target.value})}
                         placeholder={lang === "es" ? "Mensaje adicional (opcional)" : "Additional message (optional)"}
                         rows={3}
-                        style={{ ...inputStyle, resize: "none" }}
+                        className={`${inputClasses} resize-none`}
                       />
                     </>
                   )}
@@ -323,18 +230,7 @@ export default function WelcomePopup() {
                       onClick={nextStep}
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
-                      style={{
-                        padding: "14px 24px",
-                        borderRadius: "12px",
-                        border: "none",
-                        background: "#D4AF37",
-                        color: "#030a05",
-                        fontSize: "15px",
-                        fontWeight: 600,
-                        cursor: "pointer",
-                        fontFamily: 'var(--font-sans)',
-                        marginTop: "8px",
-                      }}
+                      className="px-6 py-[14px] rounded-xl border-none bg-accent text-[#030a05] text-[15px] font-semibold cursor-pointer font-sans mt-2"
                     >
                       {lang === "es" ? "Continuar →" : "Continue →"}
                     </motion.button>
@@ -346,17 +242,11 @@ export default function WelcomePopup() {
                       disabled={loading}
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
-                      style={{
-                        padding: "14px 24px",
-                        borderRadius: "12px",
-                        border: "none",
-                        background: loading ? "#666" : "#D4AF37",
-                        color: "#030a05",
-                        fontSize: "15px",
-                        fontWeight: 600,
-                        cursor: loading ? "not-allowed" : "pointer",
-                        fontFamily: 'var(--font-sans)',
-                      }}
+                      className={`px-6 py-[14px] rounded-xl border-none text-[15px] font-semibold font-sans ${
+                        loading
+                          ? "bg-[#666] text-[#030a05] cursor-not-allowed"
+                          : "bg-accent text-[#030a05] cursor-pointer"
+                      }`}
                     >
                       {loading 
                         ? (lang === "es" ? "Enviando..." : "Sending...") 

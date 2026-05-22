@@ -31,10 +31,10 @@ class ErrorBoundary extends Component<Props, State> {
   public render() {
     if (this.state.hasError) {
       return (
-        <div style={{ padding: "40px", background: "#300", color: "#fff", fontFamily: "monospace", minHeight: "100vh" }}>
+        <div className="p-10 bg-[#300] text-white font-mono min-h-screen">
           <h2>🚨 FATAL PRODUCTION ERROR 🚨</h2>
-          <p style={{ color: '#F88' }}>{this.state.error && this.state.error.toString()}</p>
-          <pre style={{ whiteSpace: "pre-wrap", background: "#111", padding: "20px", marginTop: "20px" }}>
+          <p className="text-[#F88]">{this.state.error && this.state.error.toString()}</p>
+          <pre className="whitespace-pre-wrap bg-[#111] p-5 mt-5">
             {this.state.errorInfo?.componentStack || this.state.error?.stack || "No stack trace available."}
           </pre>
         </div>

@@ -61,112 +61,51 @@ function FeatureCard({ feature, index }: { feature: typeof FEATURES[0]; index: n
       onMouseLeave={() => { setHovered(false); setTilt({ x: 0, y: 0 }); }}
       onMouseMove={handleMouseMove}
       animate={hovered ? { rotateY: tilt.x, rotateX: tilt.y } : {}}
-      style={{ 
-        padding: '28px', 
-        background: hovered 
-          ? 'rgba(13, 21, 32, 0.8)' 
-          : 'rgba(13, 16, 23, 0.6)', 
-        backdropFilter: hovered ? 'blur(20px)' : 'blur(10px)',
-        minWidth: '280px', 
-        flex: 1,
-        transition: 'background 0.4s ease, backdrop-filter 0.4s ease',
-        transformStyle: 'preserve-3d',
-        position: 'relative',
-        overflow: 'hidden',
-        border: hovered 
-          ? '1px solid rgba(212,175,55,0.4)' 
-          : '1px solid rgba(255,255,255,0.07)',
-        boxShadow: hovered 
-          ? '0 25px 50px rgba(0,0,0,0.5), 0 0 40px rgba(212,175,55,0.1)' 
-          : '0 10px 40px rgba(0,0,0,0.3)',
-      }}
+      style={{ transformStyle: 'preserve-3d' }}
+      className={`p-7 min-w-[280px] flex-1 relative overflow-hidden border transition-[background,backdrop-filter] duration-[0.4s] ease-in-out ${
+        hovered
+          ? 'bg-bg/80 backdrop-blur-xl border-accent/40 shadow-[0_25px_50px_rgba(0,0,0,0.5),0_0_40px_rgba(212,175,55,0.1)]'
+          : 'bg-bg/60 backdrop-blur-lg border-white/7 shadow-[0_10px_40px_rgba(0,0,0,0.3)]'
+      }`}
     >
       {hovered && (
-        <div style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          height: '2px',
-          background: 'linear-gradient(90deg, transparent, #D4AF37, transparent)',
-        }} />
+        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-accent to-transparent" />
       )}
-      <div style={{ 
-        width: '48px', 
-        height: '48px', 
-        borderRadius: '14px', 
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'center', 
-        fontSize: '14px', 
-        marginBottom: '20px', 
-        background: hovered 
-          ? 'linear-gradient(135deg, rgba(212,175,55,0.3), rgba(184,134,11,0.2))' 
-          : 'rgba(212,175,55,0.1)', 
-        border: '1px solid rgba(212,175,55,0.3)', 
-        color: '#D4AF37', 
-        fontFamily: 'var(--font-mono)', 
-        fontWeight: 600,
-        transition: 'all 0.4s ease',
-        boxShadow: hovered ? '0 0 20px rgba(212,175,55,0.3)' : 'none',
-      }}>{feature.icon}</div>
+      <div className={`w-12 h-12 rounded-[14px] flex items-center justify-center text-sm mb-5 border border-accent/30 text-accent font-mono font-semibold transition-all duration-[0.4s] ease-in-out ${
+        hovered
+          ? 'bg-gradient-to-br from-accent/30 to-[rgba(184,134,11,0.2)] shadow-[0_0_20px_rgba(212,175,55,0.3)]'
+          : 'bg-accent/10'
+      }`}>{feature.icon}</div>
       
-      <h3 style={{ 
-        fontFamily: 'var(--font-serif)', 
-        fontSize: '1.25rem', 
-        marginBottom: '10px', 
-        color: hovered ? '#D4AF37' : '#f0f2f8',
-        transition: 'all 0.3s ease',
-      }}>{t[feature.titleKey as keyof typeof t]}</h3>
+      <h3 className={`font-serif text-xl mb-[10px] transition-all duration-[0.3s] ease-in-out ${hovered ? 'text-accent' : 'text-text-primary'}`}>
+        {t[feature.titleKey as keyof typeof t]}
+      </h3>
       
-      <p style={{ 
-        fontSize: '14px', 
-        color: '#8892a4', 
-        lineHeight: 1.65, 
-        marginBottom: '16px' 
-      }}>{t[feature.descKey as keyof typeof t]}</p>
+      <p className="text-sm text-text-secondary leading-[1.65] mb-4">
+        {t[feature.descKey as keyof typeof t]}
+      </p>
 
       {feature.stat && (
         <div>
-          <div style={{ 
-            fontFamily: "var(--font-serif)", 
-            fontSize: '3rem', 
-            color: '#f0f2f8', 
-            letterSpacing: '-0.03em',
-            transition: 'all 0.3s ease',
-          }}>{feature.stat}</div>
-          <div style={{ 
-            fontFamily: 'var(--font-mono)', 
-            fontSize: '10px', 
-            color: '#4a5568', 
-            marginTop: '8px' 
-          }}>{feature.statLabel}</div>
+          <div className="font-serif text-5xl text-text-primary tracking-[-0.03em] transition-all duration-[0.3s] ease-in-out">{feature.stat}</div>
+          <div className="font-mono text-[10px] text-text-muted mt-2">{feature.statLabel}</div>
         </div>
       )}
 
       {feature.tags && (
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+        <div className="flex flex-wrap gap-2">
           {tags.map((tag: string) => (
             <span 
               key={tag} 
-              style={{ 
-                fontFamily: 'var(--font-mono)', 
-                fontSize: '12px', 
-                color: '#8892a4', 
-                padding: '6px 12px', 
-                borderRadius: '8px', 
-                background: 'rgba(255,255,255,0.03)', 
-                border: '1px solid rgba(255,255,255,0.07)',
-                transition: 'all 0.2s ease',
-              }}
+              className="font-mono text-xs text-text-secondary px-3 py-1.5 rounded-md bg-white/3 border border-white/7 transition-all duration-[0.2s] ease-in-out"
             >{tag}</span>
           ))}
         </div>
       )}
 
       {feature.chart && (
-        <div style={{ marginTop: '16px' }}>
-          <div style={{ display: 'flex', alignItems: 'flex-end', gap: '4px', height: '60px' }}>
+        <div className="mt-4">
+          <div className="flex items-end gap-1 h-[60px]">
             {[40, 55, 48, 65, 72, 60, 80, 100].map((h, i) => (
               <motion.div 
                 key={i} 
@@ -174,56 +113,31 @@ function FeatureCard({ feature, index }: { feature: typeof FEATURES[0]; index: n
                 whileInView={{ height: `${h}%` }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.5 + i * 0.05 }}
-                style={{ 
-                  flex: 1, 
-                  borderRadius: '4px 4px 0 0', 
-                  background: i === 7 ? '#D4AF37' : `rgba(212,175,55,${0.15 + i * 0.05})`,
-                  transition: 'all 0.3s ease',
-                }} 
+                className={`flex-1 rounded-t transition-all duration-[0.3s] ease-in-out ${i === 7 ? 'bg-accent' : ''}`}
+                style={{ background: i !== 7 ? `rgba(212,175,55,${0.15 + i * 0.05})` : undefined }}
               />
             ))}
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '8px' }}>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: '#4a5568' }}>MON</span>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: '#D4AF37' }}>+34%</span>
+          <div className="flex justify-between mt-2">
+            <span className="font-mono text-[10px] text-text-muted">MON</span>
+            <span className="font-mono text-[10px] text-accent">+34%</span>
           </div>
         </div>
       )}
 
       {feature.badge && (
-        <div style={{ 
-          display: 'inline-flex', 
-          alignItems: 'center', 
-          gap: '8px', 
-          padding: '6px 12px', 
-          borderRadius: '100px', 
-          fontFamily: 'var(--font-mono)', 
-          fontSize: '11px', 
-          background: 'rgba(212,175,55,0.08)', 
-          border: '1px solid rgba(212,175,55,0.2)', 
-          color: '#D4AF37',
-          transition: 'all 0.3s ease',
-        }}>
-          <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#D4AF37' }} />{feature.badge}
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full font-mono text-[11px] bg-accent/8 border border-accent/20 text-accent transition-all duration-[0.3s] ease-in-out">
+          <span className="w-[6px] h-[6px] rounded-full bg-accent" />{feature.badge}
         </div>
       )}
 
       {feature.langs && (
-        <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+        <div className="flex gap-3 flex-wrap">
           {["ES", "EN", "PT", "FR"].map((l: string) => (
             <motion.span 
               key={l}
               whileHover={{ scale: 1.1 }}
-              style={{ 
-                fontFamily: 'var(--font-mono)', 
-                fontSize: '14px', 
-                color: '#D4AF37', 
-                fontWeight: 600, 
-                padding: '6px 10px', 
-                background: 'rgba(212,175,55,0.1)', 
-                borderRadius: '6px',
-                cursor: 'pointer',
-              }}
+              className="font-mono text-sm text-accent font-semibold px-[10px] py-1.5 bg-accent/10 rounded-md cursor-pointer"
             >{l}</motion.span>
           ))}
         </div>
@@ -238,40 +152,21 @@ export default function Features() {
   return (
     <section 
       id="productos" 
-      style={{ 
-        padding: 'clamp(4rem, 10vw, 8rem) clamp(1.5rem, 5vw, 4rem)', 
-        maxWidth: '1200px', 
-        margin: '0 auto' 
-      }}
+      className="px-[clamp(1.5rem,5vw,4rem)] py-[clamp(4rem,10vw,8rem)] max-w-[1200px] mx-auto"
     >
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-        <span style={{ width: '24px', height: '1px', background: '#D4AF37' }} />
-        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', letterSpacing: '0.12em', color: '#D4AF37', textTransform: 'uppercase' }}>{t.features.label}</span>
+      <div className="flex items-center gap-3 mb-4">
+        <span className="w-6 h-px bg-accent" />
+        <span className="font-mono text-xs tracking-[0.12em] text-accent uppercase">{t.features.label}</span>
       </div>
       
-      <h2 style={{ 
-        fontFamily: 'var(--font-serif)', 
-        fontSize: 'clamp(2rem, 5vw, 3.5rem)', 
-        lineHeight: 1.1, 
-        letterSpacing: '-0.02em', 
-        marginBottom: '16px', 
-        color: '#f0f2f8',
-      }}>
+      <h2 className="font-serif text-[clamp(2rem,5vw,3.5rem)] leading-[1.1] tracking-[-0.02em] mb-4 text-text-primary">
         {t.features.title}<br />
-        <em style={{ color: '#D4AF37', fontStyle: 'italic' }}>{t.features.titleEm}</em>
+        <em className="text-accent not-italic">{t.features.titleEm}</em>
       </h2>
       
-      <p style={{ fontSize: '16px', color: '#8892a4', marginBottom: '48px' }}>{t.features.subtitle}</p>
+      <p className="text-base text-text-secondary mb-12">{t.features.subtitle}</p>
 
-      <motion.div 
-        style={{ 
-          display: 'flex', 
-          flexWrap: 'wrap', 
-          borderRadius: '16px', 
-          overflow: 'hidden', 
-          border: '1px solid rgba(255,255,255,0.07)' 
-        }}
-      >
+      <motion.div className="flex flex-wrap rounded-[16px] overflow-hidden border border-white/7">
         {FEATURES.map((f, i) => (
           <FeatureCard key={f.icon} feature={f} index={i} />
         ))}

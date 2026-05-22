@@ -38,16 +38,8 @@ export default function TrustBadges() {
   ];
 
   return (
-    <section style={{
-      padding: 'clamp(2rem, 5vw, 4rem) clamp(1.5rem, 5vw, 4rem)',
-      maxWidth: '1100px',
-      margin: '0 auto',
-    }}>
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-        gap: 'clamp(1rem, 3vw, 2rem)',
-      }}>
+    <section className="py-8 md:py-16 px-6 md:px-16 max-w-[1100px] mx-auto">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-4 lg:gap-8">
         {badges.map((badge, i) => (
           <motion.div
             key={i}
@@ -56,41 +48,17 @@ export default function TrustBadges() {
             viewport={{ once: true }}
             transition={{ delay: i * 0.1 }}
             whileHover={{ y: -4 }}
-            style={{
-              background: 'rgba(255,255,255,0.02)',
-              border: '1px solid rgba(255,255,255,0.08)',
-              borderRadius: '16px',
-              padding: '20px',
-              textAlign: 'center',
-            }}
+            className="bg-white/[0.02] border border-white/5 rounded-2xl p-5 text-center"
           >
-            <div style={{
-              width: '48px',
-              height: '48px',
-              borderRadius: '50%',
-              background: 'rgba(212,175,55,0.15)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              margin: '0 auto 12px',
-            }}>
+            <div className="size-12 rounded-full bg-accent/15 flex items-center justify-center mx-auto mb-3">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" strokeWidth="2">
                 <path strokeLinecap="round" strokeLinejoin="round" d={badge.icon} />
               </svg>
             </div>
-            <h4 style={{
-              color: '#f0f2f8',
-              fontSize: '15px',
-              fontWeight: 600,
-              marginBottom: '6px',
-            }}>
+            <h4 className="text-sm font-semibold text-text-primary mb-1.5">
               {lang === "es" ? badge.titleEs : badge.titleEn}
             </h4>
-            <p style={{
-              color: '#8892a4',
-              fontSize: '13px',
-              lineHeight: 1.4,
-            }}>
+            <p className="text-sm text-text-secondary leading-[1.4]">
               {lang === "es" ? badge.descEs : badge.descEn}
             </p>
           </motion.div>

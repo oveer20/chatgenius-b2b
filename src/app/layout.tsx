@@ -205,7 +205,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body style={{ margin: 0, padding: 0 }}>
+      <body className="m-0 p-0">
         <ThemeProvider>
           <ThemeEffect />
         {/* Google Tag Manager noscript */}

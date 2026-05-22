@@ -165,57 +165,23 @@ function Notification() {
           initial={{ opacity: 0, x: 100, y: 0 }}
           animate={{ opacity: 1, x: 0, y: 0 }}
           exit={{ opacity: 0, x: 100 }}
-          style={{
-            position: "fixed",
-            bottom: "100px",
-            left: "24px",
-            background: "#0d1017",
-            border: "1px solid rgba(212,175,55,0.3)",
-            borderRadius: "16px",
-            padding: "16px 20px",
-            maxWidth: "320px",
-            zIndex: 9996,
-            boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
-            display: "flex",
-            alignItems: "center",
-            gap: "12px",
-          }}
+          className="fixed bottom-[100px] left-6 bg-bg border border-accent/10 rounded-2xl px-5 py-4 max-w-[320px] z-[9996] shadow-[0_8px_32px_rgba(0,0,0,0.4)] flex items-center gap-3"
         >
-          <div style={{
-            width: "48px",
-            height: "48px",
-            borderRadius: "50%",
-            background: "rgba(212,175,55,0.2)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontSize: "24px",
-            flexShrink: 0,
-          }}>
+          <div className="w-12 h-12 rounded-full bg-accent/20 flex items-center justify-center text-2xl shrink-0">
             {notification.avatar}
           </div>
-          <div style={{ overflow: "hidden" }}>
-            <div style={{
-              fontSize: "14px",
-              color: "#f0f2f8",
-              fontWeight: 600,
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              display: "flex",
-              alignItems: "center",
-              gap: "6px",
-            }}>
+          <div className="overflow-hidden">
+            <div className="text-sm text-text-primary font-semibold truncate flex items-center gap-1.5">
               {notification.name}
-              <span style={{ fontSize: "14px" }}>{getCountryFlag(notification.country)}</span>
+              <span className="text-sm">{getCountryFlag(notification.country)}</span>
             </div>
-            <div style={{ fontSize: "13px", color: "#8892a4" }}>
+            <div className="text-sm text-text-secondary">
               {notification.city}, {notification.country}
             </div>
-            <div style={{ fontSize: "12px", color: "#D4AF37", marginTop: "2px" }}>
+            <div className="text-xs text-accent mt-0.5">
               {lang === "es" ? "Se unió a" : "Joined"} {getPlanName(notification.plan)}
             </div>
-            <div style={{ fontSize: "11px", color: "#4a5568", marginTop: "2px" }}>
+            <div className="text-xs text-text-muted mt-0.5">
               {notification.time}
             </div>
           </div>

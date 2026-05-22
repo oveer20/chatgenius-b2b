@@ -197,7 +197,7 @@ export default function BotEditor() {
         if (data.textSegment) {
           setKnowledgeBase(prev => prev + `\n\n--- SITE: ${crawlerUrl} ---\n` + data.textSegment + "\n[...]");
         }
-        setCrawlerUrl(""); 
+        setCrawlerUrl("");
       } else {
         throw new Error(data.error);
       }
@@ -210,13 +210,13 @@ export default function BotEditor() {
 
   const handleExportCSV = () => {
     if (leads.length === 0) return;
-    
+
     const headers = ["ID,Nombre,Email,Teléfono,Intención,Calificación,Fecha\n"];
     const csvContent = leads.map(l => {
       const date = new Date(l.created_at).toLocaleDateString();
       return `"${l.id}","${l.name || ''}","${l.email || ''}","${l.phone || ''}","${l.intent || ''}","${l.score || ''}","${date}"`;
     }).join("\n");
-    
+
     const blob = new Blob([headers + csvContent], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
@@ -273,76 +273,69 @@ export default function BotEditor() {
   };
 
   return (
-    <div style={{ backgroundColor: '#060B14', height: '100vh', display: 'flex', flexDirection: 'column', color: 'white', fontFamily: 'Inter, sans-serif' }}>
+    <div className="bg-bg h-screen flex flex-col text-white font-sans">
       {/* Status Bar Elite (V50.0) */}
-      <div style={{ background: 'rgba(0,0,0,0.4)', padding: '0.6rem 2.5rem', display: 'flex', gap: '2.5rem', borderBottom: '1px solid rgba(212,175,55,0.08)', fontSize: '0.65rem', letterSpacing: '1px' }}>
-        <div style={{ color: '#D4AF37', fontWeight: 900, display: 'flex', alignItems: 'center', gap: '6px' }}><FiZap /> NÚCLEO STRATIX ACTIVADO</div>
-        <div style={{ opacity: 0.5 }}>OPAL LOGIC: <span style={{ color: '#10b981', fontWeight: 800 }}>ESTABLE</span></div>
-        <div style={{ opacity: 0.5 }}>LATENCIA NEURAL: <span style={{ color: '#10b981', fontWeight: 800 }}>18ms</span></div>
-        <div style={{ marginLeft: 'auto', opacity: 0.4 }}>V50.0 GOLDEN RELEASE</div>
+      <div className="bg-black/40 px-10 py-[0.6rem] flex gap-10 border-b border-accent/10 text-[0.65rem] tracking-[1px]">
+        <div className="text-accent font-black flex items-center gap-1.5"><FiZap /> NÚCLEO STRATIX ACTIVADO</div>
+        <div className="opacity-50">OPAL LOGIC: <span className="text-emerald-500 font-extrabold">ESTABLE</span></div>
+        <div className="opacity-50">LATENCIA NEURAL: <span className="text-emerald-500 font-extrabold">18ms</span></div>
+        <div className="ml-auto opacity-40">V50.0 GOLDEN RELEASE</div>
       </div>
 
       {/* Header del Editor Elite */}
-      <header style={{ padding: '1.5rem 2.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(6,11,20,0.8)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(255,255,255,0.03)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-          <button onClick={() => router.push("/dashboard")} className="card-elite" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', padding: '10px', borderRadius: '12px', cursor: 'pointer', transition: 'all 0.3s' }}>
+      <header className="p-6 px-10 flex justify-between items-center bg-bg/80 backdrop-blur-xl border-b border-white/5">
+        <div className="flex items-center gap-6">
+          <button onClick={() => router.push("/dashboard")} className="card-elite bg-white/[0.03] border border-white/10 text-white p-[10px] rounded-md cursor-pointer transition-all duration-200">
             <FiArrowLeft size={18} />
           </button>
           <div>
-            <h2 className="text-cinematic" style={{ fontSize: '1.5rem', margin: 0 }}>{isNew ? "Nueva Entidad de IA" : botData.name}</h2>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '4px' }}>
-              <span style={{ fontSize: '0.65rem', color: '#D4AF37', fontWeight: 900, background: 'rgba(212,175,55,0.1)', padding: '2px 8px', borderRadius: '4px', letterSpacing: '1px' }}>ID: {id}</span>
+            <h2 className="text-cinematic text-2xl m-0">{isNew ? "Nueva Entidad de IA" : botData.name}</h2>
+            <div className="flex items-center gap-2.5 mt-1">
+              <span className="text-[0.65rem] text-accent font-black bg-accent/10 px-2 py-0.5 rounded-xs tracking-[1px]">ID: {id}</span>
               {!isNew && (
                 <button
                   onClick={handleToggleStatus}
                   disabled={isTogglingStatus || botStatus === 'loading'}
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: '6px',
-                    fontSize: '0.65rem', fontWeight: 800, letterSpacing: '1px',
-                    padding: '2px 8px', borderRadius: '4px', border: 'none', cursor: 'pointer',
-                    background: botStatus === 'active' ? 'rgba(16,185,129,0.15)' : 'rgba(239,68,68,0.15)',
-                    color: botStatus === 'active' ? '#10b981' : '#ef4444',
-                    transition: 'all 0.3s',
-                  }}
+                  className={`flex items-center gap-1.5 text-[0.65rem] font-extrabold tracking-[1px] px-2 py-0.5 rounded-xs border-none cursor-pointer transition-all duration-200 ${
+                    botStatus === 'active'
+                      ? 'bg-emerald-500/15 text-emerald-500'
+                      : 'bg-red-500/15 text-red-500'
+                  }`}
                 >
-                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'currentColor', display: 'inline-block' }} />
+                  <span className="w-1.5 h-1.5 rounded-full bg-current inline-block" />
                   {botStatus === 'loading' ? '...' : botStatus === 'active' ? 'ACTIVO' : 'INACTIVO'}
                   {isTogglingStatus ? '...' : ''}
                 </button>
               )}
-              <span style={{ fontSize: '0.65rem', opacity: 0.4, fontWeight: 700 }}>Protocolo de Inteligencia Activo</span>
+              <span className="text-[0.65rem] opacity-40 font-bold">Protocolo de Inteligencia Activo</span>
             </div>
           </div>
         </div>
-        <button 
-          onClick={handleSave} 
-          className="card-elite glow-gold" 
-          style={{ background: '#D4AF37', color: '#000', padding: '12px 28px', borderRadius: '14px', fontWeight: 900, fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '10px', border: 'none', cursor: 'pointer', transition: 'all 0.4s' }}
+        <button
+          onClick={handleSave}
+          className="card-elite glow-gold py-3 px-7 bg-accent text-black rounded-[14px] font-black text-[0.9rem] flex items-center gap-2.5 border-none cursor-pointer transition-all duration-200"
         >
-          {isSaving ? <FiRefreshCw className="spin" /> : <FiSave />} 
+          {isSaving ? <FiRefreshCw className="spin" /> : <FiSave />}
           {isSaving ? "Sincronizando..." : "Sincronizar Arquitectura"}
         </button>
       </header>
 
       {/* Selector de Pestañas Elite (V50.0) */}
-      <div style={{ background: 'rgba(6,11,20,0.5)', display: 'flex', gap: '3.5rem', padding: '0 3.5rem', borderBottom: '1px solid rgba(255,255,255,0.03)', overflowX: 'auto' }}>
+      <div className="bg-bg/50 flex gap-14 px-14 border-b border-white/5 overflow-x-auto">
         {[
           { id: 'identidad', label: 'IDENTIDAD', icon: <FiStar /> },
           { id: 'cerebro', label: 'MODULARIDAD AI', icon: <FiCpu /> },
           { id: 'entrenamiento', label: 'BASE DE CONOCIMIENTO', icon: <FiDatabase /> },
           { id: 'despliegue', label: 'CANALES & CÓDIGO', icon: <FiCode /> }
         ].map((tab) => (
-          <button 
+          <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id as any)}
-            style={{ 
-              padding: '1.5rem 0', background: 'none', border: 'none', 
-              color: activeTab === tab.id ? '#D4AF37' : 'rgba(255,255,255,0.3)', 
-              fontWeight: 900, fontSize: '0.7rem', cursor: 'pointer', letterSpacing: '2px',
-              borderBottom: activeTab === tab.id ? '2px solid #D4AF37' : '2px solid transparent',
-              display: 'flex', alignItems: 'center', gap: '10px', transition: 'all 0.4s',
-              opacity: activeTab === tab.id ? 1 : 0.6
-            }}
+            className={`py-6 bg-none border-none font-black text-[0.7rem] cursor-pointer tracking-[2px] flex items-center gap-2.5 transition-all duration-200 border-b-2 ${
+              activeTab === tab.id
+                ? 'text-accent border-b-accent opacity-100'
+                : 'text-white/30 border-b-transparent opacity-60'
+            }`}
           >
             {tab.icon} {tab.label}
           </button>
@@ -350,54 +343,54 @@ export default function BotEditor() {
       </div>
 
       {/* Área de Trabajo Split Screen (V50.0) */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 500px', flex: 1, overflow: 'hidden' }}>
+      <div className="grid grid-cols-[1fr_500px] flex-1 overflow-hidden">
 
         {/* Panel de Contenido Principal (Scrollable) */}
-        <div style={{ padding: '3.5rem', overflowY: 'auto', background: 'radial-gradient(circle at top left, rgba(212,175,55,0.03) 0%, transparent 70%)' }}>
-          <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+        <div className="p-14 overflow-y-auto" style={{ background: 'radial-gradient(circle at top left, rgba(212,175,55,0.03) 0%, transparent 70%)' }}>
+          <div className="mx-auto max-w-[1000px]">
 
             {/* PESTAÑA 1: IDENTIDAD ESTRATÉGICA */}
             {activeTab === 'identidad' && (
               <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
-                <h3 className="text-cinematic" style={{ fontSize: '2rem', marginBottom: '2.5rem' }}>Perfil de la Entidad</h3>
-                <div className="card-elite" style={{ padding: '3rem', display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2.5rem' }}>
+                <h3 className="text-cinematic text-3xl mb-10">Perfil de la Entidad</h3>
+                <div className="card-elite p-12 flex flex-col gap-10">
+                  <div className="grid grid-cols-2 gap-10">
                     <div>
-                      <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 900, opacity: 0.4, marginBottom: '1rem', letterSpacing: '1.5px' }}>IDENTIFICADOR DEL AGENTE</label>
-                      <input 
+                      <label className="block text-[0.7rem] font-black opacity-40 mb-4 tracking-[1.5px]">IDENTIFICADOR DEL AGENTE</label>
+                      <input
                         value={botData.name} onChange={e => setBotData({...botData, name: e.target.value})}
-                        style={{ width: '100%', padding: '18px', background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '15px', color: 'white', fontSize: '1.1rem', fontWeight: 600, outline: 'none' }} 
+                        className="w-full p-[18px] bg-black/40 border border-white/5 rounded-[15px] text-white text-[1.1rem] font-semibold outline-none"
                       />
                     </div>
                     <div>
-                      <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 900, opacity: 0.4, marginBottom: '1rem', letterSpacing: '1.5px' }}>ROL OPERATIVO</label>
-                      <input 
+                      <label className="block text-[0.7rem] font-black opacity-40 mb-4 tracking-[1.5px]">ROL OPERATIVO</label>
+                      <input
                         value={botData.description} onChange={e => setBotData({...botData, description: e.target.value})}
                         placeholder="Ej: Arquitecto de Ventas Elite"
-                        style={{ width: '100%', padding: '18px', background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '15px', color: 'white', fontSize: '1rem', outline: 'none' }} 
+                        className="w-full p-[18px] bg-black/40 border border-white/5 rounded-[15px] text-white text-base outline-none"
                       />
                     </div>
                   </div>
                   <div>
-                    <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 900, opacity: 0.4, marginBottom: '1rem', letterSpacing: '1.5px' }}>CENTRO DE ALERTAS (EMAIL)</label>
-                    <input 
+                    <label className="block text-[0.7rem] font-black opacity-40 mb-4 tracking-[1.5px]">CENTRO DE ALERTAS (EMAIL)</label>
+                    <input
                       type="email" value={botData.emailAlertsTo} onChange={e => setBotData({...botData, emailAlertsTo: e.target.value})}
                       placeholder="alertas@tudominio.ai"
-                      style={{ width: '100%', padding: '18px', background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '15px', color: 'white', fontSize: '1rem', outline: 'none' }} 
+                      className="w-full p-[18px] bg-black/40 border border-white/5 rounded-[15px] text-white text-base outline-none"
                     />
-                    <p style={{ marginTop: '1rem', fontSize: '0.75rem', opacity: 0.4 }}>Stratix enviará una Alerta Elite cada vez que se detecte un lead HOT.</p>
+                    <p className="mt-4 text-xs opacity-40">Stratix enviará una Alerta Elite cada vez que se detecte un lead HOT.</p>
                   </div>
                 </div>
 
                 {/* Sección de Leads Integrada */}
                 {leads.length > 0 && (
-                  <div style={{ marginTop: '4rem' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem' }}>
-                      <h3 className="text-cinematic" style={{ fontSize: '1.5rem' }}>Análisis de Conversión</h3>
-                      <button onClick={handleExportCSV} className="card-elite" style={{ padding: '8px 16px', fontSize: '0.8rem', background: 'rgba(16, 185, 129, 0.1)', color: '#10b981', border: '1px solid rgba(16, 185, 129, 0.2)', borderRadius: '8px', cursor: 'pointer', fontWeight: 800 }}>EXPORTAR CSV</button>
+                  <div className="mt-16">
+                    <div className="flex justify-between items-center mb-10">
+                      <h3 className="text-cinematic text-2xl">Análisis de Conversión</h3>
+                      <button onClick={handleExportCSV} className="card-elite px-4 py-2 text-[0.8rem] bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 rounded-sm cursor-pointer font-extrabold">EXPORTAR CSV</button>
                     </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '2rem' }}>
-                        <div className="card-elite" style={{ padding: '2rem', background: 'rgba(0,0,0,0.2)', height: '250px' }}>
+                    <div className="grid grid-cols-2 gap-8 mb-8">
+                        <div className="card-elite p-8 bg-black/20 h-[250px]">
                            <ResponsiveContainer width="100%" height="100%">
                               <PieChart>
                                 <Pie data={[
@@ -411,14 +404,14 @@ export default function BotEditor() {
                               </PieChart>
                            </ResponsiveContainer>
                         </div>
-                        <div className="card-elite" style={{ padding: '1.5rem', overflowY: 'auto', maxHeight: '250px' }}>
-                            <table style={{ width: '100%', fontSize: '0.8rem', borderCollapse: 'collapse' }}>
-                               <thead><tr style={{ opacity: 0.4 }}><th>NOMBRE</th><th>SCORE</th></tr></thead>
+                        <div className="card-elite p-6 overflow-y-auto max-h-[250px]">
+                            <table className="w-full text-[0.8rem] border-collapse">
+                               <thead><tr className="opacity-40"><th>NOMBRE</th><th>SCORE</th></tr></thead>
                                <tbody>
                                   {leads.slice(0, 10).map(l => (
-                                    <tr key={l.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                                      <td style={{ padding: '10px 0' }}>{l.name}</td>
-                                      <td><span style={{ color: l.score === 'Hot' ? '#D4AF37' : 'inherit' }}>{l.score}</span></td>
+                                    <tr key={l.id} className="border-b border-white/5">
+                                      <td className="py-[10px]">{l.name}</td>
+                                      <td><span className={l.score === 'Hot' ? 'text-accent' : ''}>{l.score}</span></td>
                                     </tr>
                                   ))}
                                </tbody>
@@ -433,37 +426,37 @@ export default function BotEditor() {
             {/* PESTAÑA 2: MODULARIDAD AI (CEREBRO) */}
             {activeTab === 'cerebro' && (
               <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
-                <h3 className="text-cinematic" style={{ fontSize: '2rem', marginBottom: '2.5rem' }}>Arquitectura Cognitiva</h3>
-                <div className="card-elite" style={{ padding: '3rem', display: 'flex', flexDirection: 'column', gap: '3rem' }}>
+                <h3 className="text-cinematic text-3xl mb-10">Arquitectura Cognitiva</h3>
+                <div className="card-elite p-12 flex flex-col gap-12">
                   <div>
-                    <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 900, opacity: 0.4, marginBottom: '1.2rem', letterSpacing: '1.5px' }}>NÚCLEO DE PERSONALIDAD (SYSTEM PROMPT)</label>
-                    <textarea 
+                    <label className="block text-[0.7rem] font-black opacity-40 mb-[1.2rem] tracking-[1.5px]">NÚCLEO DE PERSONALIDAD (SYSTEM PROMPT)</label>
+                    <textarea
                       value={botData.systemPrompt} onChange={e => setBotData({...botData, systemPrompt: e.target.value})}
-                      style={{ width: '100%', minHeight: '300px', padding: '25px', background: 'rgba(0,0,0,0.5)', border: '1px solid rgba(212,175,55,0.15)', borderRadius: '20px', color: 'white', lineHeight: '1.8', fontSize: '1.05rem', outline: 'none' }}
+                      className="w-full min-h-[300px] p-[25px] bg-black/50 border border-accent/10 rounded-xl text-white leading-[1.8] text-[1.05rem] outline-none"
                     />
                   </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '3rem' }}>
+                  <div className="grid grid-cols-[1.2fr_0.8fr] gap-12">
                     <div>
-                      <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 900, opacity: 0.4, marginBottom: '1.2rem', letterSpacing: '1.5px' }}>MOTOR DE INTELIGENCIA</label>
-                      <select 
+                      <label className="block text-[0.7rem] font-black opacity-40 mb-[1.2rem] tracking-[1.5px]">MOTOR DE INTELIGENCIA</label>
+                      <select
                         value={botData.model} onChange={e => setBotData({...botData, model: e.target.value})}
-                        style={{ width: '100%', padding: '16px', background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', color: '#D4AF37', fontWeight: 900 }}
+                        className="w-full p-4 bg-black/40 border border-white/10 rounded-md text-accent font-black"
                       >
                         <option value="gemini">Gemini 2.0 Flash (Principal)</option>
                         <option value="gpt">GPT-3.5 Turbo (Backup)</option>
                         <option value="groq">Llama 3.1 8B - Groq (GRATIS)</option>
                         <option value="mistral">Mistral Small (GRATIS)</option>
                       </select>
-                      <p style={{ fontSize: '0.7rem', opacity: 0.5, marginTop: '0.5rem' }}>
+                      <p className="text-[0.7rem] opacity-50 mt-2">
                         Si falla uno, automáticamente responde otro
                       </p>
                     </div>
                     <div>
-                      <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 900, opacity: 0.4, marginBottom: '1.5rem', letterSpacing: '1.5px' }}>TEMPERATURA</label>
-                      <input 
+                      <label className="block text-[0.7rem] font-black opacity-40 mb-6 tracking-[1.5px]">TEMPERATURA</label>
+                      <input
                         type="range" min="0" max="1" step="0.1" value={botData.temperature}
                         onChange={e => setBotData({...botData, temperature: parseFloat(e.target.value)})}
-                        style={{ width: '100%', accentColor: '#D4AF37' }}
+                        className="w-full accent-[#D4AF37]"
                       />
                     </div>
                   </div>
@@ -474,40 +467,40 @@ export default function BotEditor() {
             {/* PESTAÑA 3: ENTRENAMIENTO (RAG) */}
             {activeTab === 'entrenamiento' && (
               <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem' }}>
-                  <h3 className="text-cinematic" style={{ fontSize: '2rem' }}>Memoria Profunda (RAG)</h3>
-                  <button onClick={handleSyncKnowledge} className="card-elite glow-gold" style={{ padding: '12px 24px', background: '#D4AF37', color: '#000', borderRadius: '12px', fontWeight: 900, border: 'none' }}>
+                <div className="flex justify-between items-center mb-12">
+                  <h3 className="text-cinematic text-3xl">Memoria Profunda (RAG)</h3>
+                  <button onClick={handleSyncKnowledge} className="card-elite glow-gold py-3 px-6 bg-accent text-black rounded-md font-black border-none">
                     {isSyncing ? "PROCESANDO..." : "SINCRONIZAR NÚCLEO"}
                   </button>
                 </div>
-                
-                <div className="card-elite" style={{ padding: '2.5rem', marginBottom: '3rem', background: 'rgba(212,175,55,0.03)' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '1.5rem' }}>
+
+                <div className="card-elite p-10 mb-12 bg-accent/[0.03]">
+                  <div className="flex items-center gap-2.5 mb-6">
                     <FiActivity color="#D4AF37" />
-                    <span style={{ fontSize: '0.75rem', fontWeight: 900, letterSpacing: '1px' }}>NIVELES DE CONSCIENCIA NEURAL</span>
+                    <span className="text-xs font-black tracking-[1px]">NIVELES DE CONSCIENCIA NEURAL</span>
                   </div>
-                  <div style={{ height: '8px', background: 'rgba(255,255,255,0.05)', borderRadius: '10px', overflow: 'hidden' }}>
-                    <div style={{ width: knowledgeBase ? '100%' : '15%', height: '100%', background: '#D4AF37' }} />
+                  <div className="h-2 bg-white/5 rounded-[10px] overflow-hidden">
+                    <div className={`h-full bg-accent ${knowledgeBase ? 'w-full' : 'w-[15%]'}`} />
                   </div>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2.5rem', marginBottom: '3rem' }}>
-                  <div className="card-elite" style={{ padding: '2rem' }}>
-                    <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 900, opacity: 0.4, marginBottom: '1rem' }}>URL DE ABSORCIÓN</label>
-                    <div style={{ display: 'flex', gap: '10px' }}>
-                      <input value={crawlerUrl} onChange={e => setCrawlerUrl(e.target.value)} style={{ flex: 1, padding: '12px', background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '8px', color: 'white' }} />
-                      <button onClick={handleCrawlUrl} style={{ background: '#D4AF37', border: 'none', borderRadius: '8px', padding: '0 15px' }}><FiGlobe /></button>
+                <div className="grid grid-cols-2 gap-10 mb-12">
+                  <div className="card-elite p-8">
+                    <label className="block text-[0.7rem] font-black opacity-40 mb-4">URL DE ABSORCIÓN</label>
+                    <div className="flex gap-2.5">
+                      <input value={crawlerUrl} onChange={e => setCrawlerUrl(e.target.value)} className="flex-1 p-3 bg-black/30 border border-white/5 rounded-sm text-white" />
+                      <button onClick={handleCrawlUrl} className="bg-accent border-none rounded-sm px-[15px]"><FiGlobe /></button>
                     </div>
                   </div>
-                  <div className="card-elite" style={{ padding: '2rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                     <label style={{ cursor: 'pointer', color: '#D4AF37', fontWeight: 900 }}><FiPlus /> SUBIR PDF CORPORATIVO <input type="file" onChange={handleFileUpload} style={{ display: 'none' }} /></label>
+                  <div className="card-elite p-8 flex items-center justify-center">
+                     <label className="cursor-pointer text-accent font-black"><FiPlus /> SUBIR PDF CORPORATIVO <input type="file" onChange={handleFileUpload} className="hidden" /></label>
                   </div>
                 </div>
 
-                <div className="card-elite" style={{ padding: '2rem' }}>
-                  <textarea 
+                <div className="card-elite p-8">
+                  <textarea
                     value={knowledgeBase} onChange={e => setKnowledgeBase(e.target.value)}
-                    style={{ width: '100%', minHeight: '300px', background: 'transparent', border: 'none', color: 'white', outline: 'none', fontSize: '1rem', lineHeight: '1.8' }}
+                    className="w-full min-h-[300px] bg-transparent border-none text-white outline-none text-base leading-[1.8]"
                   />
                 </div>
               </motion.div>
@@ -516,28 +509,28 @@ export default function BotEditor() {
             {/* PESTAÑA 4: DESPLIEGUE */}
             {activeTab === 'despliegue' && (
               <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
-                <h3 className="text-cinematic" style={{ fontSize: '2rem', marginBottom: '3rem' }}>Protocolos de Salida</h3>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem' }}>
-                  <div className="card-elite" style={{ padding: '3rem', border: '1px solid rgba(37,211,102,0.2)' }}>
-                    <FiMessageCircle size={30} color="#25D366" style={{ marginBottom: '1.5rem' }} />
-                    <h4 style={{ fontWeight: 900 }}>WHATSAPP API</h4>
-                    <div style={{ marginTop: '2rem' }}>
+                <h3 className="text-cinematic text-3xl mb-12">Protocolos de Salida</h3>
+                <div className="grid grid-cols-2 gap-12">
+                  <div className="card-elite p-12" style={{ border: '1px solid rgba(37,211,102,0.2)' }}>
+                    <FiMessageCircle size={30} color="#25D366" className="mb-6" />
+                    <h4 className="font-black">WHATSAPP API</h4>
+                    <div className="mt-8">
                       <div>
-                      <label style={{ fontSize: '0.65rem', opacity: 0.4 }}>WHATSAPP TOKEN</label>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '5px' }}>
-                        <input type={showToken ? 'text' : 'password'} value={botData.whatsappToken} onChange={e => setBotData({...botData, whatsappToken: e.target.value})} style={{ flex: 1, padding: '12px', background: 'rgba(0,0,0,0.3)', border: 'none', borderRadius: '8px', color: 'white' }} />
-                        <button onClick={() => setShowToken(!showToken)} style={{ background: 'rgba(255,255,255,0.05)', border: 'none', borderRadius: '8px', padding: '10px', cursor: 'pointer', color: '#D4AF37' }}>
+                      <label className="text-[0.65rem] opacity-40">WHATSAPP TOKEN</label>
+                      <div className="flex items-center gap-2 mt-[5px]">
+                        <input type={showToken ? 'text' : 'password'} value={botData.whatsappToken} onChange={e => setBotData({...botData, whatsappToken: e.target.value})} className="flex-1 p-3 bg-black/30 border-none rounded-sm text-white" />
+                        <button onClick={() => setShowToken(!showToken)} className="bg-white/5 border-none rounded-sm p-[10px] cursor-pointer text-accent">
                           {showToken ? <FiShield size={14} /> : <FiInfo size={14} />}
                         </button>
                       </div>
-                      <p style={{ fontSize: '0.65rem', opacity: 0.3, marginTop: '4px' }}>{showToken ? 'Ocultar' : 'Mostrar'} token</p>
+                      <p className="text-[0.65rem] opacity-30 mt-1">{showToken ? 'Ocultar' : 'Mostrar'} token</p>
                     </div>
                     </div>
                   </div>
-                  <div className="card-elite" style={{ padding: '3rem', border: '1px solid rgba(212,175,55,0.2)' }}>
-                    <FiLayout size={30} color="#D4AF37" style={{ marginBottom: '1.5rem' }} />
-                    <h4 style={{ fontWeight: 900 }}>WIDGET WEB</h4>
-                    <code style={{ display: 'block', background: '#000', padding: '1rem', borderRadius: '8px', marginTop: '2rem', fontSize: '0.75rem', color: '#D4AF37' }}>
+                  <div className="card-elite p-12 border border-accent/20">
+                    <FiLayout size={30} color="#D4AF37" className="mb-6" />
+                    <h4 className="font-black">WIDGET WEB</h4>
+                    <code className="block bg-black p-4 rounded-sm mt-8 text-xs text-accent">
                       {`<script src="/widget.js" data-bot-id="${id}"></script>`}
                     </code>
                   </div>
@@ -548,20 +541,20 @@ export default function BotEditor() {
         </div>
 
         {/* Playground */}
-        <div style={{ background: '#03070E', display: 'flex', flexDirection: 'column', borderLeft: '1px solid rgba(255,255,255,0.05)' }}>
-           <div style={{ padding: '1.5rem', background: 'rgba(6,11,20,0.8)', borderBottom: '1px solid rgba(255,255,255,0.03)', display: 'flex', justifyContent: 'space-between' }}>
-              <span style={{ fontSize: '0.75rem', fontWeight: 900, color: '#D4AF37', letterSpacing: '2px' }}>NEURAL PLAYGROUND</span>
-              <FiShield size={16} style={{ opacity: 0.3 }} />
+        <div className="bg-[#03070E] flex flex-col border-l border-white/5">
+           <div className="p-6 bg-bg/80 border-b border-white/5 flex justify-between">
+              <span className="text-xs font-black text-accent tracking-[2px]">NEURAL PLAYGROUND</span>
+              <FiShield size={16} className="opacity-30" />
            </div>
-           <div ref={scrollRef} style={{ flex: 1, padding: '2rem', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+           <div ref={scrollRef} className="flex-1 p-8 overflow-y-auto flex flex-col gap-6">
               {chatMessages.map((msg, i) => (
-                <div key={i} style={{ alignSelf: msg.role === "user" ? "flex-end" : "flex-start", background: msg.role === "user" ? "#D4AF37" : "rgba(255,255,255,0.05)", color: msg.role === "user" ? "#000" : "white", padding: '1rem 1.5rem', borderRadius: '15px' }}>{msg.content}</div>
+                <div key={i} className={`${msg.role === "user" ? "self-end bg-accent text-black" : "self-start bg-white/5 text-white"} p-4 px-6 rounded-[15px]`}>{msg.content}</div>
               ))}
-              {isTyping && <div style={{ fontSize: '0.7rem', opacity: 0.4 }}>Stratix procesando...</div>}
+              {isTyping && <div className="text-[0.7rem] opacity-40">Stratix procesando...</div>}
            </div>
-           <form onSubmit={handleSendMessage} style={{ padding: '2rem', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', gap: '15px' }}>
-              <input value={inputMessage} onChange={e => setInputMessage(e.target.value)} placeholder="Inyectar mensaje..." style={{ flex: 1, padding: '15px', background: 'rgba(255,255,255,0.03)', border: 'none', borderRadius: '12px', color: 'white' }} />
-              <button type="submit" style={{ background: '#D4AF37', border: 'none', borderRadius: '12px', padding: '0 20px' }}><FiSend color="#000" /></button>
+           <form onSubmit={handleSendMessage} className="p-8 border-t border-white/5 flex gap-[15px]">
+              <input value={inputMessage} onChange={e => setInputMessage(e.target.value)} placeholder="Inyectar mensaje..." className="flex-1 p-[15px] bg-white/[0.03] border-none rounded-md text-white" />
+              <button type="submit" className="bg-accent border-none rounded-md px-5"><FiSend color="#000" /></button>
            </form>
         </div>
       </div>

@@ -24,7 +24,7 @@ export default function AIPlayground() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: userMsg, botId: "demo" }),
       });
-      
+
       const data = await res.json();
       setMessages(prev => [...prev, { role: "ai", text: data.response || t.aiPlayground.fallback }]);
     } catch (e) {
@@ -38,23 +38,7 @@ export default function AIPlayground() {
     <>
       <button
         onClick={() => setIsOpen(true)}
-        style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '8px',
-          padding: '12px 24px',
-          borderRadius: '12px',
-          background: 'transparent',
-          border: '1px solid rgba(255,255,255,0.2)',
-          color: '#f0f2f8',
-          fontSize: '14px',
-          fontWeight: 600,
-          cursor: 'pointer',
-          transition: 'all 0.2s',
-          fontFamily: 'var(--font-sans)',
-        }}
-        onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; }}
-        onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
+        className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-transparent border border-white/20 text-[#f0f2f8] text-sm font-semibold cursor-pointer transition-all duration-200 font-sans hover:bg-white/5"
       >
         {t.aiPlayground.openBtn}
       </button>
@@ -66,106 +50,57 @@ export default function AIPlayground() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setIsOpen(false)}
-            style={{
-              position: 'fixed',
-              inset: 0,
-              zIndex: 99999,
-              background: 'rgba(0,0,0,0.8)',
-              backdropFilter: 'blur(8px)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: '20px',
-            }}
+            className="fixed inset-0 z-[99999] bg-black/80 backdrop-blur-xl flex items-center justify-center p-5"
           >
             <motion.div
               initial={{ scale: 0.9, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 20 }}
               onClick={(e) => e.stopPropagation()}
-              style={{
-                width: '100%',
-                maxWidth: '450px',
-                height: '600px',
-                background: '#0d1017',
-                border: '1px solid rgba(212,175,55,0.3)',
-                borderRadius: '24px',
-                display: 'flex',
-                flexDirection: 'column',
-                overflow: 'hidden',
-                boxShadow: '0 20px 60px rgba(0,0,0,0.6)',
-              }}
+              className="w-full max-w-[450px] h-[600px] bg-bg border border-accent/30 rounded-2xl flex flex-col overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.6)]"
             >
-              <div style={{ padding: '20px', borderBottom: '1px solid rgba(255,255,255,0.1)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div className="p-5 border-b border-white/10 flex justify-between items-center">
                 <div>
-                  <h3 style={{ color: '#D4AF37', margin: 0, fontSize: '16px', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>{t.aiPlayground.header}</h3>
-                  <p style={{ color: '#27C93F', margin: 0, fontSize: '12px', fontFamily: 'var(--font-sans)' }}>{t.aiPlayground.status}</p>
+                  <h3 className="text-accent m-0 text-base font-bold font-sans">{t.aiPlayground.header}</h3>
+                  <p className="text-[#27C93F] m-0 text-xs font-sans">{t.aiPlayground.status}</p>
                 </div>
-                <button onClick={() => setIsOpen(false)} style={{ background: 'none', border: 'none', color: '#8892a4', fontSize: '24px', cursor: 'pointer' }}>x</button>
+                <button onClick={() => setIsOpen(false)} className="bg-transparent border-none text-text-secondary text-2xl cursor-pointer">x</button>
               </div>
 
-              <div style={{ flex: 1, padding: '20px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <div className="flex-1 p-5 overflow-y-auto flex flex-col gap-3">
                 {messages.length === 0 && (
-                  <div style={{ textAlign: 'center', color: '#4a5568', fontSize: '13px', marginTop: '40px', fontFamily: 'var(--font-sans)' }}>
+                  <div className="text-center text-text-muted text-xs mt-10 font-sans">
                     {t.aiPlayground.welcome}
                   </div>
                 )}
                 {messages.map((msg, i) => (
-                  <div key={i} style={{ display: 'flex', justifyContent: msg.role === "user" ? "flex-end" : "flex-start" }}>
-                    <div style={{
-                      padding: '10px 14px',
-                      borderRadius: '12px',
-                      maxWidth: '80%',
-                      fontSize: '14px',
-                      lineHeight: 1.4,
-                      background: msg.role === "user" ? "rgba(212,175,55,0.15)" : "rgba(255,255,255,0.05)",
-                      color: '#f0f2f8',
-                      border: msg.role === "user" ? "1px solid rgba(212,175,55,0.2)" : "1px solid rgba(255,255,255,0.07)",
-                      fontFamily: 'var(--font-sans)',
-                    }}>
+                  <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
+                    <div className={`px-3.5 py-2.5 rounded-xl max-w-[80%] text-sm leading-[1.4] font-sans text-text-primary ${msg.role === "user" ? "bg-accent/15 border border-accent/20" : "bg-white/5 border border-white/5"}`}>
                       {msg.text}
                     </div>
                   </div>
                 ))}
                 {isTyping && (
-                  <div style={{ display: 'flex', gap: '4px', padding: '10px', background: 'rgba(255,255,255,0.05)', borderRadius: '12px', width: 'fit-content' }}>
-                    <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#8892a4', animation: 'bounce 1.4s infinite' }} />
-                    <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#8892a4', animation: 'bounce 1.4s infinite 0.2s' }} />
-                    <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#8892a4', animation: 'bounce 1.4s infinite 0.4s' }} />
+                  <div className="flex gap-1 p-2.5 bg-white/5 rounded-xl w-fit">
+                    <span className="w-1.5 h-1.5 rounded-full bg-text-secondary animate-bounce-dot" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-text-secondary animate-bounce-dot animation-delay-200" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-text-secondary animate-bounce-dot animation-delay-400" />
                   </div>
                 )}
               </div>
 
-              <div style={{ padding: '16px', borderTop: '1px solid rgba(255,255,255,0.1)', display: 'flex', gap: '8px' }}>
+              <div className="p-4 border-t border-white/10 flex gap-2">
                 <input
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && sendMessage()}
                   placeholder={t.aiPlayground.placeholder}
-                  style={{
-                    flex: 1,
-                    background: 'rgba(255,255,255,0.05)',
-                    border: '1px solid rgba(255,255,255,0.1)',
-                    borderRadius: '8px',
-                    padding: '10px 12px',
-                    color: '#fff',
-                    outline: 'none',
-                    fontFamily: 'var(--font-sans)',
-                  }}
+                  className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-2.5 text-white outline-none font-sans"
                 />
                 <button
                   onClick={sendMessage}
                   disabled={!input.trim() || isTyping}
-                  style={{
-                    background: input.trim() ? '#D4AF37' : 'rgba(255,255,255,0.05)',
-                    color: input.trim() ? '#000' : '#8892a4',
-                    border: 'none',
-                    borderRadius: '8px',
-                    padding: '0 16px',
-                    fontWeight: 600,
-                    cursor: input.trim() ? 'pointer' : 'not-allowed',
-                    fontFamily: 'var(--font-sans)',
-                  }}
+                  className={`rounded-lg px-4 font-semibold font-sans transition-colors ${input.trim() ? "bg-accent text-black cursor-pointer" : "bg-white/5 text-text-secondary cursor-not-allowed"}`}
                 >
                   →
                 </button>
@@ -179,6 +114,15 @@ export default function AIPlayground() {
         @keyframes bounce {
           0%, 80%, 100% { transform: translateY(0); }
           40% { transform: translateY(-6px); }
+        }
+        .animate-bounce-dot {
+          animation: bounce 1.4s infinite;
+        }
+        .animation-delay-200 {
+          animation-delay: 0.2s;
+        }
+        .animation-delay-400 {
+          animation-delay: 0.4s;
         }
       `}</style>
     </>

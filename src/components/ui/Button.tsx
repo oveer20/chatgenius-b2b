@@ -17,8 +17,8 @@ export default function Button({
   onClick,
   href,
 }: ButtonProps) {
-  const baseStyle = "inline-flex items-center justify-center gap-2 font-semibold cursor-pointer transition-all duration-200 rounded-xl";
-  
+  const baseStyle = "inline-flex items-center justify-center gap-2 font-semibold cursor-pointer transition-all duration-200 rounded-xl no-underline";
+
   const sizeStyle = {
     sm: "text-sm px-4 py-2",
     md: "text-sm px-5 py-[9px]",
@@ -35,7 +35,7 @@ export default function Button({
 
   if (href) {
     return (
-      <a href={href} className={style} style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+      <a href={href} className={style}>
         {children}
       </a>
     );

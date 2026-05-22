@@ -15,15 +15,7 @@ export default function FloatingWhatsApp() {
       initial={{ opacity: 0, y: 100 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.5, type: "spring", stiffness: 260, damping: 20 }}
-      style={{
-        position: 'fixed',
-        bottom: '24px',
-        right: '24px',
-        zIndex: 9999,
-        display: 'flex',
-        alignItems: 'center',
-        gap: showTooltip ? '12px' : '0',
-      }}
+      className="fixed bottom-6 right-6 z-[9999] flex items-center gap-3"
       onMouseEnter={() => setShowTooltip(true)}
       onMouseLeave={() => setShowTooltip(false)}
     >
@@ -31,14 +23,9 @@ export default function FloatingWhatsApp() {
         <motion.div
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
-          style={{
-            background: '#128C7E',
-            padding: '14px 18px',
-            borderRadius: '16px',
-            boxShadow: '0 4px 20px rgba(37, 211, 102, 0.4)',
-          }}
+          className="bg-[#128C7E] px-[18px] py-[14px] rounded-[16px] shadow-[0_4px_20px_rgba(37,211,102,0.4)]"
         >
-          <p style={{ margin: 0, color: 'white', fontSize: '14px', fontWeight: 600, whiteSpace: 'nowrap', fontFamily: 'var(--font-sans)' }}>
+          <p className="m-0 text-white text-sm font-semibold whitespace-nowrap font-sans">
             ¡Escríbenos! 👋
           </p>
         </motion.div>
@@ -49,23 +36,11 @@ export default function FloatingWhatsApp() {
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Chat on WhatsApp"
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: '56px',
-          height: '56px',
-          borderRadius: '50%',
-          background: 'linear-gradient(135deg, #25D366 0%, #128C7E 100%)',
-          boxShadow: '0 6px 24px rgba(37, 211, 102, 0.5)',
-          cursor: 'pointer',
-          textDecoration: 'none',
-          border: '3px solid white',
-        }}
+        className="flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-[#25D366] to-[#128C7E] shadow-[0_6px_24px_rgba(37,211,102,0.5)] cursor-pointer no-underline border-[3px] border-white"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
       >
-<FaWhatsapp size={32} color="#fff" />
+        <FaWhatsapp size={32} color="#fff" />
       </motion.a>
     </motion.div>
   );

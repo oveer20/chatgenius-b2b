@@ -57,8 +57,8 @@ function AuthContent() {
         transition={{ duration: 0.6 }}
       >
         <Link href="/" className={styles.logo}>
-          <img src="/stratix_shield.svg" alt="Stratix" style={{ height: '28px' }} />
-          <span style={{ fontFamily: 'var(--font-mono)' }}>Stratix <span style={{ color: '#D4AF37' }}>Intelligence</span></span>
+          <img src="/stratix_shield.svg" alt="Stratix" className="h-7" />
+          <span className="font-mono">Stratix <span className="text-accent">Intelligence</span></span>
         </Link>
 
         <h1>{isSignUp ? "Crear cuenta" : "Ingresa a tu cuenta"}</h1>
@@ -97,28 +97,13 @@ function AuthContent() {
 
         <button
           onClick={() => setIsSignUp(!isSignUp)}
-          style={{
-            marginTop: '1.5rem',
-            width: '100%',
-            padding: '12px',
-            background: 'transparent',
-            border: '1px solid rgba(212,175,55,0.3)',
-            borderRadius: '12px',
-            color: '#D4AF37',
-            cursor: 'pointer',
-            fontSize: '0.85rem',
-            fontWeight: 700,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '8px',
-          }}
+          className="mt-6 w-full p-3 bg-transparent border border-accent/30 rounded-xl text-accent cursor-pointer text-sm font-bold flex items-center justify-center gap-2"
         >
           <FiUserPlus />
           {isSignUp ? "¿Ya tienes cuenta? Inicia sesión" : "¿No tienes cuenta? Regístrate"}
         </button>
 
-        <Link href="/" style={{ display: 'block', textAlign: 'center', marginTop: '1.5rem', fontSize: '0.85rem', opacity: 0.5, textDecoration: 'none' }}>
+        <Link href="/" className="block text-center mt-6 text-sm opacity-50 no-underline">
           ← Volver al inicio
         </Link>
       </motion.div>
@@ -129,7 +114,7 @@ function AuthContent() {
 
 export default function AuthPage() {
   return (
-    <Suspense fallback={<div style={{ minHeight: '100vh', backgroundColor: '#0B1120', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#D4AF37' }}>Cargando...</div>}>
+    <Suspense fallback={<div className="min-h-screen bg-bg flex items-center justify-center text-accent">Cargando...</div>}>
       <AuthContent />
     </Suspense>
   );

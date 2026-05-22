@@ -1,8 +1,8 @@
 export default function SectionLabel({ children }: { children: string }) {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-      <span style={{ width: '24px', height: '1px', background: '#D4AF37' }} />
-      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.12em', color: '#D4AF37', textTransform: 'uppercase' }}>
+    <div className="flex items-center gap-3 mb-4">
+      <span className="w-6 h-px bg-accent" />
+      <span className="font-mono text-[11px] tracking-[0.12em] text-accent uppercase">
         {children}
       </span>
     </div>

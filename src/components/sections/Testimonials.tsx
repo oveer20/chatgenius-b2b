@@ -23,18 +23,18 @@ export default function Testimonials() {
   const testimonials = TESTIMONIALS[lang as keyof typeof TESTIMONIALS];
 
   return (
-    <section style={{ padding: 'clamp(4rem, 10vw, 8rem) clamp(1.5rem, 5vw, 4rem)', maxWidth: '1200px', margin: '0 auto' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-        <span style={{ width: '24px', height: '1px', background: '#D4AF37' }} />
-        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', letterSpacing: '0.12em', color: '#D4AF37', textTransform: 'uppercase' }}>{t.testimonials.label}</span>
+    <section className="py-16 lg:py-32 px-6 md:px-16 max-w-6xl mx-auto">
+      <div className="flex items-center gap-3 mb-4">
+        <span className="w-6 h-0.5 bg-accent" />
+        <span className="font-mono text-xs tracking-[0.12em] text-accent uppercase">{t.testimonials.label}</span>
       </div>
       
-      <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(2rem, 5vw, 3.5rem)', lineHeight: 1.1, letterSpacing: '-0.02em', marginBottom: '48px', color: '#f0f2f8' }}>
+      <h2 className="font-serif text-[clamp(2rem,5vw,3.5rem)] leading-[1.1] tracking-[-0.02em] mb-12 text-text-primary">
         {t.testimonials.title}<br />
-        <em style={{ color: '#D4AF37', fontStyle: 'italic' }}>{t.testimonials.titleEm}</em>
+        <em className="text-accent">{t.testimonials.titleEm}</em>
       </h2>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px' }}>
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4">
         {testimonials.map((testimonial, i) => (
           <motion.div 
             key={testimonial.author}
@@ -45,96 +45,42 @@ export default function Testimonials() {
             whileHover={{ y: -8 }}
             onMouseEnter={() => setHoveredIndex(i)}
             onMouseLeave={() => setHoveredIndex(null)}
-            style={{ 
-              position: 'relative', 
-              borderRadius: '20px', 
-              padding: '28px', 
-              background: '#0d1017', 
-              border: hoveredIndex === i ? '1px solid rgba(212,175,55,0.3)' : '1px solid rgba(255,255,255,0.07)',
-              transition: 'all 0.3s ease',
-              boxShadow: hoveredIndex === i ? '0 20px 40px rgba(0,0,0,0.3)' : 'none',
-            }}
+            className={`relative rounded-2xl p-7 bg-bg3 transition-all duration-300 ease-out ${hoveredIndex === i ? 'border-accent/30 shadow-[0_20px_40px_rgba(0,0,0,0.3)]' : 'border-white/5'}`}
           >
             <motion.div 
-              style={{ 
-                position: 'absolute', 
-                top: '16px', 
-                right: '24px', 
-                fontFamily: 'var(--font-serif)', 
-                fontSize: '5rem', 
-                color: '#D4AF37', 
-                opacity: hoveredIndex === i ? 0.2 : 0.1, 
-                lineHeight: 1,
-                transition: 'all 0.3s ease',
-              }}
+              className={`absolute top-4 right-6 font-serif text-5xl text-accent leading-none transition-all duration-300 ease-out ${hoveredIndex === i ? 'opacity-20' : 'opacity-10'}`}
             >"</motion.div>
             
             <motion.div 
-              style={{ 
-                color: '#D4AF37', 
-                fontSize: '12px', 
-                letterSpacing: '2px', 
-                marginBottom: '16px',
-              }}
+              className="text-accent text-xs tracking-[2px] mb-4"
             >
               ★★★★★
             </motion.div>
             
             <motion.p 
-              style={{ 
-                fontSize: '14px', 
-                color: '#8892a4', 
-                lineHeight: 1.7, 
-                marginBottom: '24px', 
-                fontStyle: 'italic',
-              }}
+              className="text-sm text-text-secondary leading-[1.7] mb-6 italic"
             >
               "{testimonial.text}"
             </motion.p>
             
             <motion.div 
-              style={{ 
-                display: 'flex', 
-                alignItems: 'center', 
-                gap: '12px',
-              }}
+              className="flex items-center gap-3"
             >
               <motion.div 
                 whileHover={{ scale: 1.1 }}
-                style={{ 
-                  width: '36px', 
-                  height: '36px', 
-                  borderRadius: '50%', 
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  justifyContent: 'center', 
-                  fontSize: '12px', 
-                  fontWeight: 600, 
-                  fontFamily: 'var(--font-mono)', 
-                  background: 'rgba(212,175,55,0.1)', 
-                  color: '#D4AF37' 
-                }}
+                className="size-9 rounded-full flex items-center justify-center text-xs font-semibold font-mono bg-accent/10 text-accent"
               >
                 {testimonial.initials}
               </motion.div>
               
               <motion.div>
                 <motion.div 
-                  style={{ 
-                    fontSize: '14px', 
-                    fontWeight: 500, 
-                    color: hoveredIndex === i ? '#D4AF37' : '#f0f2f8',
-                    transition: 'all 0.3s ease',
-                  }}
+                  className={`text-sm font-medium transition-all duration-300 ease-out ${hoveredIndex === i ? 'text-accent' : 'text-text-primary'}`}
                 >
                   {testimonial.author}
                 </motion.div>
                 <motion.div 
-                  style={{ 
-                    fontSize: '12px', 
-                    color: '#4a5568', 
-                    fontFamily: 'var(--font-mono)' 
-                  }}
+                  className="text-xs text-text-muted font-mono"
                 >
                   {testimonial.role}
                 </motion.div>

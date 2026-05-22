@@ -53,37 +53,24 @@ export default function FloatingSocialProof() {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: -10, scale: 0.95 }}
           transition={{ duration: 0.4 }}
-          style={{
-            position: 'fixed',
-            bottom: '24px',
-            right: '24px',
-            zIndex: 9999,
-            maxWidth: '340px',
-            padding: '14px 18px',
-            background: 'rgba(13,16,23,0.95)',
-            backdropFilter: 'blur(20px)',
-            WebkitBackdropFilter: 'blur(20px)',
-            border: '1px solid rgba(212,175,55,0.2)',
-            borderRadius: '14px',
-            boxShadow: '0 20px 60px rgba(0,0,0,0.5), 0 0 20px rgba(212,175,55,0.1)',
-          }}
+          className="fixed bottom-6 right-6 z-[9999] max-w-[340px] px-[18px] py-[14px] bg-bg/95 backdrop-blur-xl border border-accent/20 rounded-[14px] shadow-[0_20px_60px_rgba(0,0,0,0.5),0_0_20px_rgba(212,175,55,0.1)]"
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{ position: 'relative' }}>
-              <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'linear-gradient(135deg, #D4AF37, #B8860B)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: 700, color: '#000' }}>
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#D4AF37] to-[#B8860B] flex items-center justify-center text-[13px] font-bold text-black">
                 {p.name.split(' ').map(w => w[0]).join('')}
               </div>
-              <div style={{ position: 'absolute', bottom: 0, right: 0, width: '12px', height: '12px', borderRadius: '50%', background: '#10b981', border: '2px solid #0d1017' }} />
+              <div className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-emerald-500 border-2 border-bg" />
             </div>
-            <div style={{ flex: 1 }}>
-              <div style={{ fontSize: '13px', fontWeight: 600, color: '#f0f2f8', marginBottom: '2px' }}>
+            <div className="flex-1">
+              <div className="text-[13px] font-semibold text-text-primary mb-0.5">
                 {p.city}
               </div>
-              <div style={{ fontSize: '12px', color: '#8892a4' }}>
+              <div className="text-[12px] text-text-secondary">
                 {p.name} — {p.action}
               </div>
             </div>
-            <div style={{ fontSize: '11px', color: '#4a5568', whiteSpace: 'nowrap' }}>
+            <div className="text-[11px] text-text-muted whitespace-nowrap">
               {p.time}
             </div>
           </div>

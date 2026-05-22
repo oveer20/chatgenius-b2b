@@ -24,13 +24,13 @@ export default function TrustIndicators() {
   const badges = BADGES[lang as 'es' | 'en'];
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', gap: 'clamp(1rem, 3vw, 2rem)', flexWrap: 'wrap', padding: '0 clamp(1.5rem, 5vw, 4rem)' }}>
+    <div className="flex justify-center gap-4 lg:gap-8 flex-wrap px-6 lg:px-16">
       {badges.map((b, i) => (
-        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span style={{ fontSize: '18px' }}>{b.icon}</span>
+        <div key={i} className="flex items-center gap-2">
+          <span className="text-lg">{b.icon}</span>
           <div>
-            <div style={{ fontSize: '13px', fontWeight: 700, color: '#f0f2f8' }}>{b.label}</div>
-            <div style={{ fontSize: '11px', color: '#4a5568' }}>{b.sub}</div>
+            <div className="text-sm font-bold text-text-primary">{b.label}</div>
+            <div className="text-xs text-text-muted">{b.sub}</div>
           </div>
         </div>
       ))}

@@ -41,18 +41,13 @@ export default function Integrations() {
   const label = lang === "es" ? "CONECTADO CON" : "CONNECTED WITH";
 
   return (
-    <section style={{
-      padding: 'clamp(2rem, 5vw, 4rem) clamp(1.5rem, 5vw, 4rem)',
-      background: 'rgba(255,255,255,0.01)',
-      borderTop: '1px solid rgba(255,255,255,0.05)',
-      borderBottom: '1px solid rgba(255,255,255,0.05)',
-    }}>
-      <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '2px', color: '#4a5568', textTransform: 'uppercase' }}>
+    <section className="py-[clamp(2rem,5vw,4rem)] px-[clamp(1.5rem,5vw,4rem)] bg-white/1 border-t border-white/5 border-b border-white/5">
+      <div className="text-center mb-8">
+        <span className="font-mono text-[11px] tracking-[2px] text-text-muted uppercase">
 {label}
         </span>
       </div>
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 'clamp(1.5rem, 4vw, 3rem)', flexWrap: 'wrap' }}>
+      <div className="flex justify-center items-center gap-[clamp(1.5rem,4vw,3rem)] flex-wrap">
         {INTEGRATIONS.map((item, i) => (
           <motion.div
             key={item.name}
@@ -61,19 +56,12 @@ export default function Integrations() {
             viewport={{ once: true }}
             transition={{ delay: i * 0.05 }}
             whileHover={{ scale: 1.1 }}
-            style={{
-              display: 'flex', alignItems: 'center', gap: '8px',
-              padding: '10px 16px', borderRadius: '10px',
-              background: 'rgba(255,255,255,0.03)',
-              border: '1px solid rgba(255,255,255,0.06)',
-              color: item.color,
-              transition: 'all 0.3s',
-            }}
+            className="flex items-center gap-2 px-4 py-[10px] rounded-[10px] bg-white/3 border border-white/6 transition-all duration-300"
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill={item.color}>
               <path d={item.logo} />
             </svg>
-            <span style={{ fontSize: '13px', fontWeight: 600, color: '#8892a4', whiteSpace: 'nowrap' }}>
+            <span className="text-[13px] font-semibold text-text-secondary whitespace-nowrap">
               {item.name}
             </span>
           </motion.div>

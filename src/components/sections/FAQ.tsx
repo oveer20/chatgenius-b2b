@@ -13,42 +13,22 @@ function FAQItem({ faq, index }: { faq: { q: string; a: string }; index: number 
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.05 }}
-      style={{
-        borderBottom: '1px solid rgba(255,255,255,0.07)',
-      }}
+      className="border-b border-white/7"
     >
       <button
         onClick={() => setIsOpen(!isOpen)}
-        style={{
-          width: '100%',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          padding: '20px 0',
-          background: 'none',
-          border: 'none',
-          cursor: 'pointer',
-          textAlign: 'left',
-          gap: '20px',
-        }}
+        className="flex w-full cursor-pointer items-center justify-between gap-5 border-none bg-none px-0 py-5 text-left"
       >
-        <span style={{
-          fontFamily: 'var(--font-serif)',
-          fontSize: 'clamp(15px, 2vw, 18px)',
-          color: isOpen ? '#D4AF37' : '#f0f2f8',
-          transition: 'color 0.3s ease',
-        }}>
+        <span
+          className="font-serif text-[clamp(15px,2vw,18px)] transition-colors duration-300"
+          style={{ color: isOpen ? '#D4AF37' : '#f0f2f8' }}
+        >
           {faq.q}
         </span>
         <motion.span
           animate={{ rotate: isOpen ? 45 : 0 }}
           transition={{ duration: 0.3 }}
-          style={{
-            fontSize: '24px',
-            color: '#D4AF37',
-            fontWeight: 300,
-            flexShrink: 0,
-          }}
+          className="shrink-0 text-[24px] font-light text-accent"
         >
           +
         </motion.span>
@@ -61,14 +41,9 @@ function FAQItem({ faq, index }: { faq: { q: string; a: string }; index: number 
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.3 }}
-            style={{ overflow: 'hidden' }}
+            className="overflow-hidden"
           >
-            <p style={{
-              fontSize: '15px',
-              color: '#8892a4',
-              lineHeight: 1.7,
-              paddingBottom: '20px',
-            }}>
+            <p className="pb-5 text-[15px] leading-[1.7] text-text-secondary">
               {faq.a}
             </p>
           </motion.div>
@@ -83,36 +58,18 @@ export default function FAQ() {
   const faqs = FAQS[lang as keyof typeof FAQS];
 
   return (
-    <section style={{ 
-      padding: 'clamp(4rem, 10vw, 8rem) clamp(1.5rem, 5vw, 4rem)',
-      maxWidth: '800px',
-      margin: '0 auto',
-    }}>
+    <section className="mx-auto max-w-[800px] px-[clamp(1.5rem,5vw,4rem)] py-[clamp(4rem,10vw,8rem)]">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        style={{ textAlign: 'center', marginBottom: '48px' }}
+        className="mb-12 text-center"
       >
-        <span style={{
-          display: 'inline-block',
-          background: 'rgba(212,175,55,0.15)',
-          color: '#D4AF37',
-          fontSize: '13px',
-          fontWeight: 600,
-          padding: '6px 16px',
-          borderRadius: '20px',
-          marginBottom: '16px',
-          letterSpacing: '0.5px',
-        }}>
+        <span className="mb-4 inline-block rounded-full bg-accent/15 px-4 py-[6px] text-[13px] font-semibold tracking-[0.5px] text-accent">
           {t.faq.badge}
         </span>
-        <h2 style={{
-          fontFamily: 'var(--font-serif)',
-          fontSize: 'clamp(2rem, 5vw, 3rem)',
-          color: '#f0f2f8',
-        }}>
-          {t.faq.titlePart1} <span style={{ color: '#D4AF37' }}>{t.faq.titlePart2}</span>
+        <h2 className="font-serif text-[clamp(2rem,5vw,3rem)] text-text-primary">
+          {t.faq.titlePart1} <span className="text-accent">{t.faq.titlePart2}</span>
         </h2>
       </motion.div>
 
@@ -120,13 +77,7 @@ export default function FAQ() {
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        style={{
-          background: 'rgba(13,16,23,0.6)',
-          backdropFilter: 'blur(20px)',
-          border: '1px solid rgba(255,255,255,0.07)',
-          borderRadius: '20px',
-          padding: '0 24px',
-        }}
+        className="rounded-xl border border-white/7 bg-bg/60 px-6 backdrop-blur-xl"
       >
         {faqs.map((faq: {q: string; a: string}, i: number) => (
           <FAQItem key={i} faq={faq} index={i} />
@@ -137,11 +88,11 @@ export default function FAQ() {
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
-        style={{ textAlign: 'center', marginTop: '32px' }}
+        className="mt-8 text-center"
       >
-        <p style={{ color: '#8892a4', fontSize: '14px' }}>
+        <p className="text-[14px] text-text-secondary">
           {t.faq.noAnswer}{" "}
-          <a href="https://wa.me/573159269287" target="_blank" rel="noopener noreferrer" style={{ color: '#D4AF37', textDecoration: 'none' }}>
+          <a href="https://wa.me/573159269287" target="_blank" rel="noopener noreferrer" className="text-accent no-underline">
             {t.faq.contactUs}
           </a>
         </p>

@@ -14,66 +14,50 @@ export default function VideoDemo() {
     : "Real automation, not simulations";
 
   return (
-    <section style={{
-      padding: 'clamp(4rem, 10vw, 6rem) clamp(1.5rem, 5vw, 4rem)',
-      maxWidth: '900px',
-      margin: '0 auto',
-    }}>
+    <section className="px-[clamp(1.5rem,5vw,4rem)] py-[clamp(4rem,10vw,6rem)] max-w-[900px] mx-auto">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        style={{ textAlign: 'center', marginBottom: '2.5rem' }}
+        className="text-center mb-10"
       >
-        <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(2rem, 5vw, 3rem)', color: '#f0f2f8', marginBottom: '12px' }}>
+        <h2 className="font-serif text-[clamp(2rem,5vw,3rem)] text-text-primary mb-3">
           {title}
         </h2>
-        <p style={{ color: '#8892a4', fontSize: '16px' }}>{sub}</p>
+        <p className="text-text-secondary text-base">{sub}</p>
       </motion.div>
 
       <motion.div
         initial={{ opacity: 0, scale: 0.96 }}
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true }}
-        style={{ position: 'relative', borderRadius: '20px', overflow: 'hidden', cursor: 'pointer', aspectRatio: '16/9', background: '#0d1017', border: '1px solid rgba(255,255,255,0.1)', maxWidth: '800px', margin: '0 auto' }}
+        className="relative rounded-2xl overflow-hidden cursor-pointer aspect-video bg-bg border border-white/5 max-w-[800px] mx-auto"
       >
-        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 50% 50%, rgba(212,175,55,0.08) 0%, transparent 70%)' }} />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_50%,rgba(212,175,55,0.08)_0%,transparent_70%)]" />
 
-        <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '20px' }}>
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-5">
           <motion.div
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
-            style={{
-              width: '80px', height: '80px', borderRadius: '50%',
-              background: 'linear-gradient(135deg, #D4AF37, #B8860B)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              boxShadow: '0 0 40px rgba(212,175,55,0.5)',
-              cursor: 'pointer',
-            }}
+            className="w-20 h-20 rounded-full bg-gradient-to-br from-accent to-[#B8860B] flex items-center justify-center shadow-[0_0_40px_rgba(212,175,55,0.5)] cursor-pointer"
           >
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
               <path d="M8 5v14l11-7z" fill="#000" />
             </svg>
           </motion.div>
           <div>
-            <div style={{ fontFamily: 'var(--font-serif)', fontSize: '1.3rem', color: '#f0f2f8', marginBottom: '4px' }}>
+            <div className="font-serif text-xl text-text-primary mb-1">
               {lang === "es" ? "Ver video de demo" : "Watch demo video"}
             </div>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: '#D4AF37', letterSpacing: '2px' }}>
+            <div className="font-mono text-xs text-accent tracking-[2px]">
               ▶ 0:60
             </div>
           </div>
         </div>
 
-        <div style={{ position: 'absolute', bottom: '16px', right: '16px', display: 'flex', gap: '12px' }}>
+        <div className="absolute bottom-4 right-4 flex gap-3">
           {["ES", "EN", "PT"].map((lang_code, i) => (
-            <span key={lang_code} style={{
-              fontFamily: 'var(--font-mono)', fontSize: '10px', fontWeight: 700,
-              color: i === 0 ? '#D4AF37' : '#4a5568',
-              background: i === 0 ? 'rgba(212,175,55,0.2)' : 'transparent',
-              padding: '4px 8px', borderRadius: '4px',
-              cursor: 'pointer',
-            }}>
+            <span key={lang_code} className={`font-mono text-[10px] font-bold px-2 py-1 rounded cursor-pointer ${i === 0 ? "text-accent bg-accent/20" : "text-text-muted bg-transparent"}`}>
               {lang_code}
             </span>
           ))}

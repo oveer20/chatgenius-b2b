@@ -11,11 +11,6 @@ import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 import { toast, Toaster } from "sonner";
 
-/**
- * STRATIX INTELLIGENCE — MAGIC OUTREACH DASHBOARD (V11.0)
- * CRM de prospección activa — Auth real + leads Hot desde Supabase.
- */
-
 const STATIC_TARGETS = [
   { city: "Bogotá", name: "Inmobiliaria Norte", whatsapp: "573100000001", description: "Líder en zonas residenciales del norte", strategy: "Stratix puede automatizar su atención 24/7 y calificación de leads.", message: "Hola equipo de Inmobiliaria Norte! Vi que lideran el norte de la ciudad. He desarrollado Stratix, una IA que responde consultas de propiedades al instante. ¿Les interesa una demo gratuita de 7 días?", source: "static" },
   { city: "Bogotá", name: "Arquitectos Associates", whatsapp: "573100000002", description: "Enfoque en proyectos residenciales de lujo", strategy: "Leads de alto valor necesitan atención premium. Stratix la provee.", message: "Hola! Respeto mucho el enfoque de lujo de Arquitectos Associates. Me gustaría ofrecerles Stratix Intelligence, una IA que protege su imagen premium mientras escala su atención. ¿Hablamos?", source: "static" },
@@ -41,7 +36,6 @@ function OutreachContent() {
   const [contacted, setContacted] = useState<string[]>([]);
   const [isLoadingLeads, setIsLoadingLeads] = useState(true);
 
-  // 1. Verificar auth y cargar leads Hot reales
   useEffect(() => {
     async function init() {
       const { data: { user } } = await supabase.auth.getUser();
@@ -51,11 +45,9 @@ function OutreachContent() {
       }
       setUserId(user.id);
 
-      // Restaurar estado "contactado" por usuario desde localStorage
       const saved = localStorage.getItem(`stratix_contacted_${user.id}`);
       if (saved) setContacted(JSON.parse(saved));
 
-      // Cargar leads Hot reales como targets adicionales
       try {
         const res = await fetch("/api/leads?score=Hot");
         if (res.ok) {
@@ -77,7 +69,6 @@ function OutreachContent() {
           }
         }
       } catch (_) {
-        // Silencioso — los targets estáticos siguen disponibles
       } finally {
         setIsLoadingLeads(false);
       }
@@ -85,7 +76,6 @@ function OutreachContent() {
     init();
   }, [router]);
 
-  // 2. Abrir WhatsApp y marcar como contactado
   const handleContact = (target: Target) => {
     const encodedText = encodeURIComponent(target.message);
     window.open(`https://wa.me/${target.whatsapp}?text=${encodedText}`, "_blank");
@@ -100,7 +90,6 @@ function OutreachContent() {
     }
   };
 
-  // 3. Agrupar por ciudad
   const grouped = targets.reduce<Record<string, Target[]>>((acc, t) => {
     if (!acc[t.city]) acc[t.city] = [];
     acc[t.city].push(t);
@@ -111,53 +100,50 @@ function OutreachContent() {
   const contactedCount = contacted.filter(n => targets.some(t => t.name === n)).length;
 
   return (
-    <div style={{ minHeight: '100vh', background: '#060B14', color: 'white', padding: '2rem 5%', fontFamily: 'Inter, sans-serif' }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+    <div className="min-h-screen bg-bg text-text-primary p-8 font-sans">
+      <div className="max-w-5xl mx-auto">
 
-        {/* Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '3rem' }}>
+        <div className="flex justify-between items-start mb-12">
           <div>
-            <Link href="/dashboard" style={{ color: '#D4AF37', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', marginBottom: '1rem', fontWeight: 700 }}>
+            <Link href="/dashboard" className="text-accent no-underline flex items-center gap-2 text-xs font-bold mb-4">
               <FiArrowLeft /> REGRESAR AL CENTRO DE CONTROL
             </Link>
-            <h1 style={{ fontSize: '2.5rem', fontWeight: 900, marginBottom: '0.8rem' }}>
-              Magic <span style={{ color: '#D4AF37' }}>Outreach</span>
+            <h1 className="text-4xl font-black mb-3">
+              Magic <span className="text-accent">Outreach</span>
             </h1>
-            <p style={{ opacity: 0.6, fontSize: '1rem', maxWidth: '600px' }}>
+            <p className="opacity-60 text-base max-w-xl">
               Proyecta el poder de Stratix Intelligence con guiones de alta conversión en un clic.
               {isLoadingLeads && (
-                <span style={{ color: '#D4AF37', marginLeft: '10px', fontSize: '0.8rem' }}>
-                  <FiRefreshCw style={{ display: 'inline', marginRight: '4px' }} />
+                <span className="text-accent ml-2.5 text-xs">
+                  <FiRefreshCw className="inline mr-1" />
                   Cargando leads Hot...
                 </span>
               )}
             </p>
           </div>
 
-          {/* Progreso */}
-          <div style={{ padding: '1.5rem 2rem', background: 'rgba(212,175,55,0.05)', borderRadius: '20px', border: '1px solid rgba(212,175,55,0.2)', textAlign: 'center', minWidth: '140px' }}>
-            <div style={{ fontSize: '0.65rem', fontWeight: 900, opacity: 0.5, marginBottom: '0.5rem', letterSpacing: '2px' }}>PROGRESO</div>
-            <div style={{ fontSize: '2.5rem', fontWeight: 900, color: '#D4AF37', lineHeight: 1 }}>
+          <div className="p-6 px-8 bg-accent/5 rounded-xl border border-accent/20 text-center min-w-36">
+            <div className="text-xs font-black opacity-50 mb-2 tracking-widest">PROGRESO</div>
+            <div className="text-4xl font-black text-accent leading-none">
               {contactedCount}
             </div>
-            <div style={{ fontSize: '0.8rem', opacity: 0.4, marginTop: '4px' }}>de {totalTargets}</div>
-            <div style={{ marginTop: '10px', height: '4px', background: 'rgba(255,255,255,0.05)', borderRadius: '10px', overflow: 'hidden' }}>
+            <div className="text-sm opacity-40 mt-1">de {totalTargets}</div>
+            <div className="mt-2.5 h-1 bg-white/5 rounded-full overflow-hidden">
               <div style={{ width: `${totalTargets > 0 ? (contactedCount / totalTargets) * 100 : 0}%`, height: '100%', background: '#D4AF37', transition: 'width 0.5s ease' }} />
             </div>
           </div>
         </div>
 
-        {/* Grupos por ciudad */}
         {Object.entries(grouped).map(([city, cityTargets], cityIndex) => (
-          <div key={city} style={{ marginBottom: '4rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '1.5rem' }}>
-              <FiMapPin style={{ color: cityTargets[0]?.source === 'dynamic' ? '#ef4444' : '#D4AF37' }} />
-              <h2 style={{ fontSize: '1.1rem', fontWeight: 900, letterSpacing: '2px', textTransform: 'uppercase' }}>{city}</h2>
-              <div style={{ flex: 1, height: '1px', background: 'linear-gradient(90deg, rgba(212,175,55,0.2), transparent)' }} />
-              <span style={{ fontSize: '0.7rem', opacity: 0.4 }}>{cityTargets.length} targets</span>
+          <div key={city} className="mb-16">
+            <div className="flex items-center gap-3 mb-6">
+              <FiMapPin className={cityTargets[0]?.source === 'dynamic' ? 'text-red-500' : 'text-accent'} />
+              <h2 className="text-base font-black tracking-widest uppercase">{city}</h2>
+              <div className="flex-1 h-px bg-gradient-to-r from-accent/20 to-transparent" />
+              <span className="text-xs opacity-4">{cityTargets.length} targets</span>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: '1.5rem' }}>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {cityTargets.map((target, i) => {
                 const isContacted = contacted.includes(target.name);
                 const isDynamic = target.source === 'dynamic';
@@ -167,60 +153,32 @@ function OutreachContent() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: (cityIndex * 3 + i) * 0.08 }}
-                    style={{
-                      background: isDynamic ? 'rgba(239,68,68,0.03)' : 'rgba(11,17,32,0.8)',
-                      padding: '2rem',
-                      borderRadius: '24px',
-                      border: isContacted
-                        ? '2px solid #27C93F'
-                        : isDynamic
-                          ? '1px solid rgba(239,68,68,0.3)'
-                          : '1px solid rgba(255,255,255,0.08)',
-                      position: 'relative',
-                      overflow: 'hidden'
-                    }}
+                    className={`p-8 rounded-2xl relative overflow-hidden transition-all duration-200 ${isDynamic ? 'bg-red-500/[0.03]' : 'bg-bg2/80'} ${isContacted ? 'border-2 border-green-500' : isDynamic ? 'border border-red-500/30' : 'border border-white/[0.08]'}`}
                   >
-                    {/* Badge tipo lead */}
                     {isDynamic && (
-                      <span style={{ position: 'absolute', top: '1rem', left: '1rem', background: '#ef4444', color: 'white', fontSize: '0.55rem', fontWeight: 900, padding: '2px 8px', borderRadius: '4px', letterSpacing: '1px' }}>
+                      <span className="absolute top-4 left-4 bg-red-500 text-white text-xs font-black px-2 py-0.5 rounded-xs tracking-tighter">
                         LEAD HOT REAL
                       </span>
                     )}
-                    {isContacted && <FiCheckCircle style={{ position: 'absolute', top: '1rem', right: '1rem', color: '#27C93F' }} />}
+                    {isContacted && <FiCheckCircle className="absolute top-4 right-4 text-green-500" />}
 
-                    <div style={{ marginTop: isDynamic ? '1.8rem' : 0 }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '0.4rem' }}>
-                        {isDynamic ? <FiUser style={{ color: '#ef4444', flexShrink: 0 }} /> : <FiZap style={{ color: '#D4AF37', flexShrink: 0 }} />}
-                        <h3 style={{ fontSize: '1.3rem', fontWeight: 900 }}>{target.name}</h3>
+                    <div className={isDynamic ? 'mt-7' : ''}>
+                      <div className="flex items-center gap-2.5 mb-1">
+                        {isDynamic ? <FiUser className="text-red-500 flex-shrink-0" /> : <FiZap className="text-accent flex-shrink-0" />}
+                        <h3 className="text-xl font-black">{target.name}</h3>
                       </div>
-                      <p style={{ fontSize: '0.82rem', opacity: 0.5, marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <p className="text-sm opacity-50 mb-6 flex items-center gap-1.5">
                         <FiPhone size={12} /> {target.description}
                       </p>
 
-                      <div style={{ marginBottom: '1.8rem', background: 'rgba(255,255,255,0.02)', padding: '1rem', borderRadius: '12px', borderLeft: `3px solid ${isDynamic ? '#ef4444' : '#D4AF37'}` }}>
-                        <div style={{ fontSize: '0.6rem', fontWeight: 900, opacity: 0.4, marginBottom: '0.4rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Potencial Estratégico</div>
-                        <div style={{ fontSize: '0.82rem', lineHeight: 1.6, opacity: 0.8 }}>{target.strategy}</div>
+                      <div className={`mb-7 bg-white/[0.02] p-4 rounded-md ${isDynamic ? 'border-l-3 border-red-500' : 'border-l-3 border-l-accent'}`} style={{ borderLeftWidth: '3px', borderLeftColor: isDynamic ? '#ef4444' : '#D4AF37' }}>
+                        <div className="text-xs font-black opacity-40 mb-1 uppercase tracking-tight">Potencial Estratégico</div>
+                        <div className="text-sm leading-relaxed opacity-80">{target.strategy}</div>
                       </div>
 
                       <button
                         onClick={() => handleContact(target)}
-                        style={{
-                          width: '100%',
-                          padding: '16px',
-                          background: isContacted ? 'rgba(255,255,255,0.05)' : isDynamic ? '#ef4444' : '#D4AF37',
-                          color: isContacted ? 'white' : '#000',
-                          border: 'none',
-                          borderRadius: '15px',
-                          fontWeight: 900,
-                          cursor: 'pointer',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          gap: '12px',
-                          fontSize: '0.85rem',
-                          letterSpacing: '0.5px',
-                          transition: 'all 0.3s ease'
-                        }}
+                        className={`w-full py-4 border-none rounded-lg font-black cursor-pointer flex items-center justify-center gap-3 text-sm tracking-tight transition-all duration-300 hover:opacity-90 ${isContacted ? 'bg-white/5 text-text-primary' : isDynamic ? 'bg-red-500 text-black' : 'bg-accent text-black'}`}
                       >
                         <FiMessageSquare size={16} />
                         {isContacted ? 'RE-CONTACTAR' : 'DISPARAR WHATSAPP'}
@@ -233,28 +191,27 @@ function OutreachContent() {
           </div>
         ))}
 
-        {/* Instrucciones */}
-        <div style={{ marginTop: '4rem', padding: '3rem', background: 'linear-gradient(135deg, rgba(212,175,55,0.08), transparent)', border: '1px solid rgba(212,175,55,0.15)', borderRadius: '32px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '1.5rem' }}>
+        <div className="mt-16 p-12 bg-gradient-to-br from-accent/8 to-transparent border border-accent/15 rounded-3xl">
+          <div className="flex items-center gap-3.5 mb-6">
             <FiInfo size={28} color="#D4AF37" />
-            <h3 style={{ fontSize: '1.3rem', fontWeight: 900 }}>Instrucciones de Élite</h3>
+            <h3 className="text-xl font-black">Instrucciones de Élite</h3>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '2rem' }}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
               { step: "1", text: "Abre WhatsApp Web en tu navegador." },
               { step: "2", text: "Haz clic en el target elegido — el mensaje se precarga." },
               { step: "3", text: "Presiona Enviar. El progreso se guarda automáticamente." },
               { step: "4", text: "Los leads Hot de tus bots aparecen aquí en tiempo real." }
             ].map(item => (
-              <div key={item.step} style={{ display: 'flex', gap: '15px' }}>
-                <span style={{ fontSize: '2rem', fontWeight: 900, color: '#D4AF37', opacity: 0.3, lineHeight: 1 }}>{item.step}</span>
-                <p style={{ fontSize: '0.88rem', lineHeight: 1.6, opacity: 0.7 }}>{item.text}</p>
+              <div key={item.step} className="flex gap-3.5">
+                <span className="text-4xl font-black text-accent opacity-30 leading-none">{item.step}</span>
+                <p className="text-sm leading-relaxed opacity-70">{item.text}</p>
               </div>
             ))}
           </div>
         </div>
 
-        <div style={{ textAlign: 'center', marginTop: '3rem', opacity: 0.15, fontSize: '0.7rem', letterSpacing: '4px' }}>
+        <div className="text-center mt-12 opacity-15 text-xs tracking-widest">
           STRATIX INTELLIGENCE — ACTIVACIÓN COMERCIAL UNIFICADA V11.0
         </div>
       </div>
@@ -265,7 +222,7 @@ function OutreachContent() {
 
 export default function OutreachDashboard() {
   return (
-    <Suspense fallback={<div style={{ padding: '50px', color: 'white', textAlign: 'center' }}>Preparando campaña de élite...</div>}>
+    <Suspense fallback={<div className="p-12 text-text-primary text-center">Preparando campaña de élite...</div>}>
       <OutreachContent />
     </Suspense>
   );

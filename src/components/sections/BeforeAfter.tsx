@@ -95,7 +95,7 @@ function AnimatedCounter({ target, suffix = "" }: { target: string; suffix?: str
     return () => observer.disconnect();
   }, [target, suffix]);
 
-  return <div ref={ref} style={{ color: '#f0f2f8', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 700, fontFamily: 'var(--font-serif)' }}>{display}</div>;
+  return <div ref={ref} className="text-text-primary font-serif text-[clamp(2rem,4vw,3rem)] font-bold">{display}</div>;
 }
 
 export default function BeforeAfter() {
@@ -104,87 +104,43 @@ export default function BeforeAfter() {
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
 
   return (
-    <section style={{
-      padding: 'clamp(4rem, 10vw, 8rem) clamp(1.5rem, 5vw, 4rem)',
-      maxWidth: '1100px',
-      margin: '0 auto',
-      position: 'relative',
-    }}>
-      {/* Background glow */}
-      <div style={{
-        position: 'absolute',
-        top: '30%',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        width: '600px',
-        height: '600px',
-        background: 'radial-gradient(circle, rgba(212,175,55,0.06) 0%, transparent 60%)',
-        filter: 'blur(60px)',
-        pointerEvents: 'none',
-      }} />
+    <section className="px-[clamp(1.5rem,5vw,4rem)] py-[clamp(4rem,10vw,8rem)] max-w-[1100px] mx-auto relative">
+      <div className="absolute top-[30%] left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-[radial-gradient(circle,rgba(212,175,55,0.06)_0%,transparent_60%)] blur-[60px] pointer-events-none" />
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        style={{ textAlign: 'center', marginBottom: '48px' }}
+        className="text-center mb-12"
       >
-        <span style={{
-          display: 'inline-block',
-          background: 'rgba(255,95,86,0.12)',
-          color: '#ff5f56',
-          fontSize: '13px',
-          fontWeight: 600,
-          padding: '6px 16px',
-          borderRadius: '20px',
-          marginBottom: '16px',
-          letterSpacing: '0.5px',
-        }}>
+        <span className="inline-block bg-[rgba(255,95,86,0.12)] text-[#ff5f56] text-[13px] font-semibold px-4 py-[6px] rounded-full mb-4 tracking-[0.5px]">
           {content.badge}
         </span>
-        <h2 style={{
-          fontFamily: 'var(--font-serif)',
-          fontSize: 'clamp(2rem, 5vw, 3.5rem)',
-          color: '#f0f2f8',
-        }}>
-          {content.titlePart1} <em style={{ color: '#D4AF37', fontStyle: 'italic' }}>{content.titlePart2}</em>
+        <h2 className="font-serif text-[clamp(2rem,5vw,3.5rem)] text-text-primary">
+          {content.titlePart1} <em className="text-accent italic">{content.titlePart2}</em>
         </h2>
       </motion.div>
 
-      {/* Comparison Cards */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-        gap: '24px',
-        marginBottom: '48px',
-      }}>
-        {/* Without Stratix */}
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-6 mb-12">
         <motion.div
           initial={{ opacity: 0, x: -30 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           onMouseEnter={() => setHoveredCard('without')}
           onMouseLeave={() => setHoveredCard(null)}
-          style={{
-            background: hoveredCard === 'without' ? 'rgba(239,68,68,0.04)' : 'rgba(255,255,255,0.02)',
-            border: '1px solid rgba(239,68,68,0.2)',
-            borderRadius: '20px',
-            padding: '32px',
-            transition: 'all 0.3s ease',
-            transform: hoveredCard === 'without' ? 'translateY(-4px)' : 'none',
-            boxShadow: hoveredCard === 'without' ? '0 20px 40px rgba(239,68,68,0.1)' : 'none',
-          }}
+          className={`rounded-[20px] p-8 transition-all duration-300 border border-[rgba(239,68,68,0.2)] ${
+            hoveredCard === 'without'
+              ? 'bg-[rgba(239,68,68,0.04)] -translate-y-1 shadow-[0_20px_40px_rgba(239,68,68,0.1)]'
+              : 'bg-white/5'
+          }`}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
-            <div style={{
-              width: '40px', height: '40px', borderRadius: '50%',
-              background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: '#ef4444', fontSize: '18px', fontWeight: 700,
-            }}>✗</div>
-            <h3 style={{ color: '#ff5f56', fontSize: '1.2rem', fontFamily: 'var(--font-serif)' }}>{content.withoutTitle}</h3>
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 rounded-full bg-[rgba(239,68,68,0.1)] border border-[rgba(239,68,68,0.3)] flex items-center justify-center text-[#ef4444] text-lg font-bold">
+              ✗
+            </div>
+            <h3 className="text-[#ff5f56] text-[1.2rem] font-serif">{content.withoutTitle}</h3>
           </div>
-          <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <ul className="list-none p-0 m-0 flex flex-col gap-4">
             {content.withoutItems.map((item: string, i: number) => (
               <motion.li
                 key={i}
@@ -192,47 +148,35 @@ export default function BeforeAfter() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                style={{ display: 'flex', gap: '12px', color: '#8892a4', fontSize: '14px', lineHeight: 1.6, alignItems: 'flex-start' }}
+                className="flex gap-3 text-text-secondary text-sm leading-[1.6] items-start"
               >
-                <span style={{ color: '#ef4444', flexShrink: 0, fontSize: '16px', marginTop: '1px' }}>✕</span>
+                <span className="text-[#ef4444] shrink-0 text-base mt-[1px]">✕</span>
                 {item}
               </motion.li>
             ))}
           </ul>
         </motion.div>
 
-        {/* With Stratix */}
         <motion.div
           initial={{ opacity: 0, x: 30 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           onMouseEnter={() => setHoveredCard('with')}
           onMouseLeave={() => setHoveredCard(null)}
-          style={{
-            background: hoveredCard === 'with' ? 'rgba(212,175,55,0.04)' : 'rgba(13,16,23,0.6)',
-            border: '1px solid rgba(212,175,55,0.3)',
-            borderRadius: '20px',
-            padding: '32px',
-            position: 'relative',
-            overflow: 'hidden',
-            transition: 'all 0.3s ease',
-            transform: hoveredCard === 'with' ? 'translateY(-4px)' : 'none',
-            boxShadow: hoveredCard === 'with' ? '0 20px 40px rgba(212,175,55,0.1)' : 'none',
-          }}
+          className={`rounded-[20px] p-8 relative overflow-hidden transition-all duration-300 border border-accent/10 ${
+            hoveredCard === 'with'
+              ? 'bg-accent-dim -translate-y-1 shadow-[0_20px_40px_rgba(212,175,55,0.1)]'
+              : 'bg-bg2'
+          }`}
         >
-          {/* Top gradient bar */}
-          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '3px', background: 'linear-gradient(90deg, #D4AF37, #10b981, #D4AF37)' }} />
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
-            <div style={{
-              width: '40px', height: '40px', borderRadius: '50%',
-              background: 'linear-gradient(135deg, rgba(212,175,55,0.2), rgba(16,185,129,0.1))',
-              border: '1px solid rgba(212,175,55,0.4)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: '#D4AF37', fontSize: '18px', fontWeight: 700,
-            }}>✓</div>
-            <h3 style={{ color: '#D4AF37', fontSize: '1.2rem', fontFamily: 'var(--font-serif)' }}>{content.withTitle}</h3>
+          <div className="absolute top-0 left-0 right-0 h-[3px] bg-[linear-gradient(90deg,#D4AF37,#10b981,#D4AF37)]" />
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 rounded-full bg-[linear-gradient(135deg,rgba(212,175,55,0.2),rgba(16,185,129,0.1))] border border-accent/10 flex items-center justify-center text-accent text-lg font-bold">
+              ✓
+            </div>
+            <h3 className="text-accent text-[1.2rem] font-serif">{content.withTitle}</h3>
           </div>
-          <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <ul className="list-none p-0 m-0 flex flex-col gap-4">
             {content.withItems.map((item: string, i: number) => (
               <motion.li
                 key={i}
@@ -240,9 +184,9 @@ export default function BeforeAfter() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                style={{ display: 'flex', gap: '12px', color: '#f0f2f8', fontSize: '14px', lineHeight: 1.6, alignItems: 'flex-start' }}
+                className="flex gap-3 text-text-primary text-sm leading-[1.6] items-start"
               >
-                <span style={{ color: '#10b981', flexShrink: 0, fontSize: '16px', marginTop: '1px' }}>✓</span>
+                <span className="text-[#10b981] shrink-0 text-base mt-[1px]">✓</span>
                 {item}
               </motion.li>
             ))}
@@ -250,26 +194,16 @@ export default function BeforeAfter() {
         </motion.div>
       </div>
 
-      {/* Metrics bar */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
-          gap: '24px',
-          background: 'rgba(212,175,55,0.05)',
-          border: '1px solid rgba(212,175,55,0.15)',
-          borderRadius: '16px',
-          padding: '32px',
-          textAlign: 'center',
-        }}
+        className="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-6 bg-accent-dim border border-accent/10 rounded-2xl p-8 text-center"
       >
         {content.metrics.map((metric: { value: string; label: string }, i: number) => (
           <div key={i}>
             <AnimatedCounter target={metric.value} suffix={metric.value.includes('%') ? '' : ''} />
-            <p style={{ color: '#8892a4', fontSize: '13px', marginTop: '8px', fontFamily: 'var(--font-sans)' }}>{metric.label}</p>
+            <p className="text-text-secondary text-[13px] mt-2 font-sans">{metric.label}</p>
           </div>
         ))}
       </motion.div>

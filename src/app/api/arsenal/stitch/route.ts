@@ -35,7 +35,7 @@ export async function POST(req: Request) {
 
     try {
       return NextResponse.json(JSON.parse(text));
-    } catch (parseError) {
+    } catch {
       console.error("JSON Parse Error:", text);
       return NextResponse.json({
         score: 85,

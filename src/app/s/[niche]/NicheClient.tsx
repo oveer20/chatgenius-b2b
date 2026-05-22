@@ -5,41 +5,38 @@ import Link from "next/link";
 
 export default function NicheClient({ data, niche }: { data: any; niche: string }) {
   return (
-    <div style={{ background: '#060B14', color: '#f0f2f8', minHeight: '100vh' }}>
-      {/* Navbar Simple */}
-      <nav style={{ padding: '20px 5%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-        <Link href="/" style={{ fontWeight: 700, fontSize: '18px', color: '#D4AF37', textDecoration: 'none' }}>Stratix</Link>
-        <Link href="/login" style={{ color: '#8892a4', textDecoration: 'none' }}>Volver al inicio</Link>
+    <div className="bg-bg text-text-primary min-h-screen">
+      <nav className="px-[5%] py-5 flex justify-between items-center border-b border-white/5">
+        <Link href="/" className="font-bold text-lg text-accent no-underline">Stratix</Link>
+        <Link href="/login" className="text-text-secondary no-underline">Volver al inicio</Link>
       </nav>
 
-      {/* Hero de Nicho */}
-      <section style={{ padding: 'clamp(4rem, 10vw, 8rem) 5%', textAlign: 'center', maxWidth: '800px', margin: '0 auto' }}>
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ fontSize: '64px', marginBottom: '24px' }}>
+      <section className="px-[5%] py-[clamp(4rem,10vw,8rem)] text-center max-w-[800px] mx-auto">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-[64px] mb-6">
           {data.icon}
         </motion.div>
-        <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 800, marginBottom: '24px', lineHeight: 1.1 }}>
-          La IA que domina el sector <span style={{ color: '#D4AF37' }}>{niche}</span>
+        <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="text-[clamp(2.5rem,5vw,4rem)] font-extrabold mb-6 leading-[1.1]">
+          La IA que domina el sector <span className="text-accent">{niche}</span>
         </motion.h1>
-        <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} style={{ fontSize: '18px', color: '#8892a4', marginBottom: '40px', lineHeight: 1.6 }}>
+        <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="text-lg text-text-secondary mb-10 leading-[1.6]">
           {data.desc}
         </motion.p>
-        <motion.a href="/login" whileHover={{ scale: 1.05 }} style={{ display: 'inline-block', background: '#D4AF37', color: '#000', padding: '16px 32px', borderRadius: '14px', fontWeight: 700, textDecoration: 'none', fontSize: '16px' }}>
+        <motion.a href="/login" whileHover={{ scale: 1.05 }} className="inline-block bg-accent text-black px-8 py-4 rounded-[14px] font-bold no-underline text-base">
           {data.cta} →
         </motion.a>
       </section>
 
-      {/* Beneficios del Nicho */}
-      <section style={{ padding: '4rem 5%', maxWidth: '1000px', margin: '0 auto' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
+      <section className="px-[5%] py-16 max-w-[1000px] mx-auto">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-6">
           {[
             "Atención 24/7 sin contratar personal extra",
             "Respuestas instantáneas que cierran ventas",
             "Integración directa con WhatsApp y tu Web"
           ].map((item, i) => (
-            <div key={i} style={{ background: 'rgba(255,255,255,0.03)', padding: '32px', borderRadius: '16px', border: '1px solid rgba(212,175,55,0.1)' }}>
-              <div style={{ color: '#27C93F', fontSize: '24px', marginBottom: '16px' }}>✓</div>
-              <h3 style={{ color: '#f0f2f8', marginBottom: '8px' }}>{item}</h3>
-              <p style={{ color: '#8892a4', fontSize: '14px' }}>Optimizado específicamente para tu flujo de trabajo en {niche}.</p>
+            <div key={i} className="bg-white/[0.03] p-8 rounded-2xl border border-accent/10">
+              <div className="text-[#27C93F] text-2xl mb-4">✓</div>
+              <h3 className="text-text-primary mb-2">{item}</h3>
+              <p className="text-text-secondary text-sm">Optimizado específicamente para tu flujo de trabajo en {niche}.</p>
             </div>
           ))}
         </div>

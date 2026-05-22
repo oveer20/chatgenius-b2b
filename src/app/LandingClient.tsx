@@ -1,35 +1,37 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, Suspense, lazy } from "react";
 import { Toaster } from "sonner";
 
 import { LangProvider } from "@/components/LangContext";
 import AnimatedBackground from "@/components/ui/AnimatedBackground";
-import Cursor from "@/components/Cursor";
 import Navbar from "@/components/sections/Navbar";
 import Hero from "@/components/sections/Hero";
 import GuaranteeBanner from "@/components/sections/GuaranteeBanner";
 import Stats from "@/components/sections/Stats";
 import Integrations from "@/components/sections/Integrations";
 import Features from "@/components/sections/Features";
-import HowItWorks from "@/components/sections/HowItWorks";
-import BeforeAfter from "@/components/sections/BeforeAfter";
-import ScreensShowcase from "@/components/sections/ScreensShowcase";
-import Pricing from "@/components/sections/Pricing";
-import PricingComparison from "@/components/sections/PricingComparison";
-import InteractiveDemo from "@/components/sections/InteractiveDemo";
-import ROICalculator from "@/components/sections/ROICalculator";
-import ContactForm from "@/components/sections/ContactForm";
-import FAQ from "@/components/sections/FAQ";
-import TrustIndicators from "@/components/sections/TrustIndicators";
-import TrustBadges from "@/components/sections/TrustBadges";
-import CTA from "@/components/sections/CTA";
-import Footer from "@/components/sections/Footer";
-import FloatingSocialProof from "@/components/sections/FloatingSocialProof";
 import Analytics from "@/components/Analytics";
 import MetaPixel from "@/components/MetaPixel";
-import WelcomePopup from "@/components/WelcomePopup";
-import ExitIntentPopup from "@/components/ExitIntentPopup";
+
+const Cursor = lazy(() => import("@/components/Cursor"));
+
+const HowItWorks = lazy(() => import("@/components/sections/HowItWorks"));
+const BeforeAfter = lazy(() => import("@/components/sections/BeforeAfter"));
+const ScreensShowcase = lazy(() => import("@/components/sections/ScreensShowcase"));
+const Pricing = lazy(() => import("@/components/sections/Pricing"));
+const PricingComparison = lazy(() => import("@/components/sections/PricingComparison"));
+const InteractiveDemo = lazy(() => import("@/components/sections/InteractiveDemo"));
+const ROICalculator = lazy(() => import("@/components/sections/ROICalculator"));
+const ContactForm = lazy(() => import("@/components/sections/ContactForm"));
+const FAQ = lazy(() => import("@/components/sections/FAQ"));
+const TrustIndicators = lazy(() => import("@/components/sections/TrustIndicators"));
+const TrustBadges = lazy(() => import("@/components/sections/TrustBadges"));
+const CTA = lazy(() => import("@/components/sections/CTA"));
+const Footer = lazy(() => import("@/components/sections/Footer"));
+const FloatingSocialProof = lazy(() => import("@/components/sections/FloatingSocialProof"));
+const WelcomePopup = lazy(() => import("@/components/WelcomePopup"));
+const ExitIntentPopup = lazy(() => import("@/components/ExitIntentPopup"));
 
 export default function LandingClient() {
   const [isMounted, setIsMounted] = useState(false);
@@ -40,74 +42,58 @@ export default function LandingClient() {
 
   if (!isMounted) {
     return (
-      <div style={{ minHeight: '100vh', background: '#070910', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
-          <div style={{ width: '48px', height: '48px', borderRadius: '50%', border: '3px solid rgba(212,175,55,0.2)', borderTopColor: '#D4AF37', animation: 'spin 0.8s linear infinite' }} />
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: '#D4AF37', letterSpacing: '3px', textTransform: 'uppercase' }}>Cargando núcleo...</span>
-          <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+      <div className="min-h-screen bg-bg flex items-center justify-center">
+        <div className="flex flex-col items-center gap-5">
+          <div className="w-12 h-12 rounded-full border-[3px] border-accent/20 border-t-accent animate-spin" />
+          <span className="font-mono text-xs text-accent tracking-[3px] uppercase">Cargando núcleo...</span>
         </div>
       </div>
     );
   }
 
   return (
-    <Suspense fallback={<div style={{ minHeight: '100vh', background: '#070910', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><div style={{ width: '48px', height: '48px', borderRadius: '50%', border: '3px solid rgba(212,175,55,0.2)', borderTopColor: '#D4AF37', animation: 'spin 0.8s linear infinite' }} /></div>}>
+    <Suspense fallback={<div className="min-h-screen bg-bg flex items-center justify-center"><div className="w-12 h-12 rounded-full border-[3px] border-accent/20 border-t-accent animate-spin" /></div>}>
       <LangProvider>
-        <main style={{ position: 'relative' }}>
+        <main className="relative">
         <Cursor />
         <Analytics />
         <MetaPixel />
         <AnimatedBackground />
-        <div style={{ position: 'relative', zIndex: 10 }}>
+        <div className="relative z-10">
           <Navbar />
 
           <GuaranteeBanner />
 
-          {/* 1. HERO */}
           <Hero />
 
-          {/* 2. SOCIAL PROOF */}
           <Stats />
 
-          {/* 3. INTEGRACIONES */}
           <Integrations />
 
-          {/* 4. FEATURES */}
           <Features />
 
-          {/* 5. HOW IT WORKS */}
           <HowItWorks />
 
-          {/* 6. BEFORE/AFTER */}
           <BeforeAfter />
 
-          {/* 7. SCREENS SHOWCASE */}
           <ScreensShowcase />
 
-          {/* 8. PRICING */}
           <Pricing />
           <PricingComparison />
 
-          {/* 9. INTERACTIVE DEMO */}
           <InteractiveDemo />
 
-          {/* 10. ROI CALCULATOR */}
           <ROICalculator />
 
-          {/* 11. CONTACT FORM */}
           <ContactForm />
 
-          {/* 12. FAQ */}
           <FAQ />
 
-          {/* 13. TRUST */}
           <TrustIndicators />
           <TrustBadges />
 
-          {/* 14. CTA */}
           <CTA />
 
-          {/* 15. FOOTER */}
           <Footer />
         </div>
         <FloatingSocialProof />
