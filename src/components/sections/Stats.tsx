@@ -90,8 +90,8 @@ export default function Stats() {
       </div>
 
       <div className="py-[clamp(2rem,5vw,3rem)] overflow-hidden relative">
-        <div className="absolute left-0 top-0 bottom-0 w-[200px] bg-[linear-gradient(90deg,#070910,transparent)] z-[2]" />
-        <div className="absolute right-0 top-0 bottom-0 w-[200px] bg-[linear-gradient(90deg,transparent,#070910)] z-[2]" />
+        <div className="absolute left-0 top-0 bottom-0 w-[200px] bg-gradient-to-r from-bg to-transparent z-[2]" />
+        <div className="absolute right-0 top-0 bottom-0 w-[200px] bg-gradient-to-l from-bg to-transparent z-[2]" />
 
         <div className="flex gap-[clamp(2.5rem,5vw,4rem)] w-fit animate-[scroll_30s_linear_infinite]">
           {duplicated.map((name, i) => (

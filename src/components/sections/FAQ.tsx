@@ -20,8 +20,7 @@ function FAQItem({ faq, index }: { faq: { q: string; a: string }; index: number 
         className="flex w-full cursor-pointer items-center justify-between gap-5 border-none bg-none px-0 py-5 text-left"
       >
         <span
-          className="font-serif text-[clamp(15px,2vw,18px)] transition-colors duration-300"
-          style={{ color: isOpen ? '#D4AF37' : '#f0f2f8' }}
+          className={`font-serif text-[clamp(15px,2vw,18px)] transition-colors duration-300 ${isOpen ? 'text-accent' : 'text-text-primary'}`}
         >
           {faq.q}
         </span>

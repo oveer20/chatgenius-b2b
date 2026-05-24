@@ -16,7 +16,7 @@ export default function ROICalculator() {
   const stratixCost = 79000;
 
   return (
-    <section id="calculadora" className="border-y border-accent/10 bg-gradient-to-b from-[#070910] via-[#111520] to-[#070910] px-[clamp(1.5rem,5vw,4rem)] py-[clamp(4rem,10vw,8rem)]">
+    <section id="calculadora" className="border-y border-accent/10 bg-gradient-to-b from-bg via-bg3 to-bg px-[clamp(1.5rem,5vw,4rem)] py-[clamp(4rem,10vw,8rem)]">
       <div className="mx-auto max-w-[1000px] text-center">
         <motion.span
           initial={{ opacity: 0, y: 20 }}

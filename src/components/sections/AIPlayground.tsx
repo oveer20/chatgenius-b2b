@@ -38,7 +38,7 @@ export default function AIPlayground() {
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-transparent border border-white/20 text-[#f0f2f8] text-sm font-semibold cursor-pointer transition-all duration-200 font-sans hover:bg-white/5"
+        className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-transparent border border-white/20 text-text-primary text-sm font-semibold cursor-pointer transition-all duration-200 font-sans hover:bg-white/5"
       >
         {t.aiPlayground.openBtn}
       </button>

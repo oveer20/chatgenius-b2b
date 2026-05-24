@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Suspense, lazy } from "react";
+import { Suspense, lazy } from "react";
 import { Toaster } from "sonner";
 
 import { LangProvider } from "@/components/LangContext";
@@ -33,75 +33,78 @@ const FloatingSocialProof = lazy(() => import("@/components/sections/FloatingSoc
 const WelcomePopup = lazy(() => import("@/components/WelcomePopup"));
 const ExitIntentPopup = lazy(() => import("@/components/ExitIntentPopup"));
 
+function SectionFallback() {
+  return <div className="h-64 w-full" />;
+}
+
 export default function LandingClient() {
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  if (!isMounted) {
-    return (
-      <div className="min-h-screen bg-bg flex items-center justify-center">
-        <div className="flex flex-col items-center gap-5">
-          <div className="w-12 h-12 rounded-full border-[3px] border-accent/20 border-t-accent animate-spin" />
-          <span className="font-mono text-xs text-accent tracking-[3px] uppercase">Cargando núcleo...</span>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <Suspense fallback={<div className="min-h-screen bg-bg flex items-center justify-center"><div className="w-12 h-12 rounded-full border-[3px] border-accent/20 border-t-accent animate-spin" /></div>}>
-      <LangProvider>
-        <main className="relative">
-        <Cursor />
+    <LangProvider>
+      <main className="relative">
+        <Suspense fallback={<div className="min-h-screen bg-bg flex items-center justify-center"><div className="w-12 h-12 rounded-full border-[3px] border-accent/20 border-t-accent animate-spin" /></div>}>
+          <Cursor />
+        </Suspense>
         <Analytics />
         <MetaPixel />
         <AnimatedBackground />
         <div className="relative z-10">
           <Navbar />
-
           <GuaranteeBanner />
-
           <Hero />
-
           <Stats />
-
           <Integrations />
-
           <Features />
-
-          <HowItWorks />
-
-          <BeforeAfter />
-
-          <ScreensShowcase />
-
-          <Pricing />
-          <PricingComparison />
-
-          <InteractiveDemo />
-
-          <ROICalculator />
-
-          <ContactForm />
-
-          <FAQ />
-
-          <TrustIndicators />
-          <TrustBadges />
-
-          <CTA />
-
-          <Footer />
+          <Suspense fallback={<SectionFallback />}>
+            <HowItWorks />
+          </Suspense>
+          <Suspense fallback={<SectionFallback />}>
+            <BeforeAfter />
+          </Suspense>
+          <Suspense fallback={<SectionFallback />}>
+            <ScreensShowcase />
+          </Suspense>
+          <Suspense fallback={<SectionFallback />}>
+            <Pricing />
+          </Suspense>
+          <Suspense fallback={<SectionFallback />}>
+            <PricingComparison />
+          </Suspense>
+          <Suspense fallback={<SectionFallback />}>
+            <InteractiveDemo />
+          </Suspense>
+          <Suspense fallback={<SectionFallback />}>
+            <ROICalculator />
+          </Suspense>
+          <Suspense fallback={<SectionFallback />}>
+            <ContactForm />
+          </Suspense>
+          <Suspense fallback={<SectionFallback />}>
+            <FAQ />
+          </Suspense>
+          <Suspense fallback={<SectionFallback />}>
+            <TrustIndicators />
+          </Suspense>
+          <Suspense fallback={<SectionFallback />}>
+            <TrustBadges />
+          </Suspense>
+          <Suspense fallback={<SectionFallback />}>
+            <CTA />
+          </Suspense>
+          <Suspense fallback={<SectionFallback />}>
+            <Footer />
+          </Suspense>
         </div>
-        <FloatingSocialProof />
-        <WelcomePopup />
-        <ExitIntentPopup />
+        <Suspense fallback={null}>
+          <FloatingSocialProof />
+        </Suspense>
+        <Suspense fallback={null}>
+          <WelcomePopup />
+        </Suspense>
+        <Suspense fallback={null}>
+          <ExitIntentPopup />
+        </Suspense>
         <Toaster theme="dark" richColors position="top-center" />
       </main>
-      </LangProvider>
-    </Suspense>
+    </LangProvider>
   );
 }

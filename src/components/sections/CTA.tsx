@@ -98,9 +98,9 @@ export default function CTA() {
                 onMouseLeave={() => setHovered(null)}
                 className="inline-flex items-center gap-2 rounded-xl px-5 py-[10px] text-[14px] font-medium no-underline transition-all duration-300"
                 style={{
-                  border: hovered === link.key ? '1px solid rgba(212,175,55,0.4)' : '1px solid rgba(255,255,255,0.1)',
-                  color: hovered === link.key ? '#D4AF37' : '#f0f2f8',
-                  background: hovered === link.key ? 'rgba(212,175,55,0.1)' : 'rgba(255,255,255,0.02)',
+                  border: hovered === link.key ? '1px solid var(--color-accent)' : '1px solid var(--color-border)',
+                  color: hovered === link.key ? 'var(--color-accent)' : 'var(--color-text-primary)',
+                  background: hovered === link.key ? 'var(--color-accent-dim)' : 'var(--color-surface)',
                 }}
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
