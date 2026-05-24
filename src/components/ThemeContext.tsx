@@ -16,10 +16,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<Theme>("dark");
 
   useEffect(() => {
-    const saved = localStorage.getItem("stratix_theme") as Theme | null;
-    const initial = saved || "dark";
-    setTheme(initial);
-    document.documentElement.setAttribute("data-theme", initial);
+    document.documentElement.setAttribute("data-theme", "dark");
   }, []);
 
   useEffect(() => {
@@ -28,7 +25,9 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   const handleSetTheme = (newTheme: Theme) => {
     setTheme(newTheme);
-    localStorage.setItem("stratix_theme", newTheme);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("stratix_theme", newTheme);
+    }
   };
 
   const toggleTheme = () => {
