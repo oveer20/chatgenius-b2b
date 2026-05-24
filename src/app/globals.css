@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500;600&family=DM+Sans:wght@400;500;600;700&display=swap');
 
 @theme {
   --color-bg: #070910;
@@ -66,6 +65,28 @@
   --error-glow: rgba(239,68,68,0.15);
   --info: #3b82f6;
   --info-glow: rgba(59,130,246,0.15);
+
+  /* === TAILWIND COLOR TOKENS (for @theme-generated classes) === */
+  --color-bg: #070910;
+  --color-bg2: #0d1017;
+  --color-bg3: #111520;
+  --color-bg4: #161b28;
+  --color-surface: rgba(255,255,255,0.03);
+  --color-surface-hover: rgba(255,255,255,0.06);
+  --color-border: rgba(255,255,255,0.07);
+  --color-border-hover: rgba(255,255,255,0.15);
+  --color-accent: #D4AF37;
+  --color-accent2: #B8860B;
+  --color-accent-light: #E5C555;
+  --color-accent-glow: rgba(212,175,55,0.15);
+  --color-accent-glow-strong: rgba(212,175,55,0.3);
+  --color-accent-dim: rgba(212,175,55,0.08);
+  --color-text-primary: #f0f2f8;
+  --color-text-secondary: #8892a4;
+  --color-text-muted: #4a5568;
+  --color-success: #10b981;
+  --color-error: #ef4444;
+  --color-info: #3b82f6;
 
   /* === SPACING SCALE (8px base) === */
   --space-1: 4px;
@@ -153,6 +174,25 @@
   --shadow-xl: 0 16px 50px rgba(0,0,0,0.12);
   --shadow-2xl: 0 25px 80px rgba(0,0,0,0.15);
   --shadow-inner: inset 0 1px 0 rgba(255,255,255,0.8);
+
+  /* === LIGHT THEME COLOR TOKENS === */
+  --color-bg: #f5f5f5;
+  --color-bg2: #ffffff;
+  --color-bg3: #ebebeb;
+  --color-bg4: #e0e0e0;
+  --color-surface: rgba(0,0,0,0.03);
+  --color-surface-hover: rgba(0,0,0,0.06);
+  --color-border: rgba(0,0,0,0.08);
+  --color-border-hover: rgba(0,0,0,0.15);
+  --color-text-primary: #1a1a1a;
+  --color-text-secondary: #555555;
+  --color-text-muted: #888888;
+  --color-accent: #D4AF37;
+  --color-accent2: #B8860B;
+  --color-accent-light: #E5C555;
+  --color-accent-glow: rgba(212,175,55,0.15);
+  --color-accent-glow-strong: rgba(212,175,55,0.3);
+  --color-accent-dim: rgba(212,175,55,0.08);
 }
 
 html { scroll-behavior: smooth; }

@@ -10,11 +10,19 @@ export async function GET() {
 
   try {
     // Check Supabase
-    const { data: bots, error } = await supabaseAdmin
-      .from("bots")
-      .select("id")
-      .limit(1);
-    status.services.supabase = !error ? "ok" : "error";
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      status.services.supabase = "not_configured";
+    } else {
+      try {
+        const { error } = await supabaseAdmin
+          .from("bots")
+          .select("id")
+          .limit(1);
+        status.services.supabase = !error ? "ok" : "error";
+      } catch {
+        status.services.supabase = "error";
+      }
+    }
 
     // Check Gemini API Key exists
     status.services.gemini = process.env.GOOGLE_GEMINI_API_KEY ? "ok" : "missing";

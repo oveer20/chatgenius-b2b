@@ -25,25 +25,23 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
- alternates: {
+  alternates: {
     canonical: 'https://stratix-intelligence-ia.vercel.app',
-    languages: {
-      'es': 'https://stratix-intelligence-ia.vercel.app',
-      'en': 'https://stratix-intelligence-ia.vercel.app?lang=en',
-    },
   },
   verification: {
     google: 'uSkS-Tt36J-Dy_boeR36cOMHaGYd3vD-yCfY79B84Is',
   },
-  icons: { icon: "/stratix_shield.svg" },
+  icons: {
+    icon: "/stratix_shield.svg",
+    apple: [{ url: "/stratix_shield.svg", sizes: "180x180", type: "image/svg+xml" }],
+  },
   openGraph: {
     title: 'Stratix Intelligence | IA que Cierra Ventas 24/7',
     description: '+1,800 empresas en LATAM usan Stratix para automatizar ventas mientras duermen.',
     url: 'https://stratix-intelligence-ia.vercel.app',
     siteName: 'Stratix Intelligence',
     images: [
-      { url: '/stratix_shield.svg', width: 1200, height: 630, alt: 'Stratix Intelligence' },
-      { url: '/og-image.svg', width: 1200, height: 630 },
+      { url: '/og-image.png', width: 1200, height: 630, alt: 'Stratix Intelligence' },
     ],
     type: 'website',
     locale: 'es_CO',
@@ -53,7 +51,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Stratix | IA que Cierra Ventas 24/7',
     description: '+1,800 empresas en LATAM usan Stratix para automatizar ventas.',
-    images: ['/stratix_shield.svg'],
+    images: ['/og-image.png'],
     creator: '@stratix',
     site: '@stratix',
   },
@@ -78,6 +76,9 @@ export default function RootLayout({
   return (
     <html lang="es">
       <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500;600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
         <link rel="manifest" href="/manifest.json" />
         {/* Google tag (gtag.js) */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-C3EKFHJ4FE"></script>

@@ -176,7 +176,7 @@ export default function InteractiveDemo() {
                   </div>
                   <div className="flex gap-1 rounded-[14px] border border-accent/10 bg-white/5 px-3.5 py-2.5">
                     {[0,1,2].map(i => (
-                      <span key={i} className={`size-1.5 rounded-full bg-accent animate-[typing-bounce_1.2s_ease-in-out_${i * 0.2}s_infinite]`} />
+                      <span key={i} className="size-1.5 rounded-full bg-accent" style={{ animation: `typing-bounce 1.2s ease-in-out ${i * 0.2}s infinite` }} />
                     ))}
                   </div>
                 </div>

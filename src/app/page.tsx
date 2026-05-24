@@ -14,9 +14,9 @@ export const metadata: Metadata = {
     siteName: 'Stratix Intelligence',
     images: [
       {
-        url: '/stratix_shield.svg',
-        width: 800,
-        height: 600,
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
         alt: 'Stratix Intelligence S-Shield Architecture',
       },
     ],
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Stratix Intelligence | Venta Autónoma de Élite',
     description: 'La infraestructura de IA más avanzada para el sector B2B e Inmobiliario.',
-    images: ['/stratix_shield.svg'],
+    images: ['/og-image.png'],
   }
 };
 

@@ -56,7 +56,7 @@ export async function POST(
         if (new URL(absoluteUrl).hostname === domain && !internalLinks.includes(absoluteUrl) && absoluteUrl !== url) {
           if (internalLinks.length < 5) internalLinks.push(absoluteUrl);
         }
-      } catch (e) {}
+      } catch {}
     });
 
     const pagesToCrawl = [url, ...internalLinks];

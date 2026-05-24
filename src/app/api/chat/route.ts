@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getResilientChatResponse } from "@/lib/ai-orchestrator";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
 export async function POST(request: NextRequest) {
@@ -52,7 +51,7 @@ export async function POST(request: NextRequest) {
         if (!matchError && chunks && chunks.length > 0) {
           semanticContext = chunks.map((c: any) => c.content).join("\n\n");
         }
-      } catch (err) {
+      } catch {
         // Silencioso - RAG es opcional
       }
     }

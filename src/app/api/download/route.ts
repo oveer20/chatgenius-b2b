@@ -6,7 +6,7 @@ import { supabaseAdmin } from "@/lib/supabase-admin";
  * Generación de reportes de Leads en formato CSV para análisis de ROI.
  */
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     // 1. Verificación de Seguridad (Sólo Admin via Service Role)
     // Nota: Aquí se debería validar el token de sesión del usuario, 

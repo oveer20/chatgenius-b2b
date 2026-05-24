@@ -9,10 +9,9 @@ const PLANS = {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { plan, email, userId } = body;
+    const { plan } = body;
 
     const planKey = plan?.toLowerCase() || "starter";
-    const planData = PLANS[planKey as keyof typeof PLANS] || PLANS.starter;
 
     // En modo demo, simular compra exitosa
     return NextResponse.json({ 
