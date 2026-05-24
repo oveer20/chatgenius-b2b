@@ -86,6 +86,3 @@ export function cleanupExpiredWindows() {
     }
   }
 }
-
-// Ejecutar cleanup cada 5 minutos
-setInterval(cleanupExpiredWindows, 5 * 60 * 1000);

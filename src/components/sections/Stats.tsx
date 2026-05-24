@@ -10,7 +10,7 @@ function Counter({ end, suffix = "", prefix = "", duration = 2 }: { end: number;
   const isInView = useInView(ref, { once: true });
 
   useEffect(() => {
-    if (!isInView) return;
+    if (!isInView || end <= 0) return;
     let start: number;
     const animate = (now: number) => {
       if (!start) start = now;
@@ -22,6 +22,7 @@ function Counter({ end, suffix = "", prefix = "", duration = 2 }: { end: number;
     requestAnimationFrame(animate);
   }, [isInView, end, duration]);
 
+  if (end <= 0) return <span ref={ref}>{prefix}0{suffix}</span>;
   return <span ref={ref}>{prefix}{count.toLocaleString()}{suffix}</span>;
 }
 

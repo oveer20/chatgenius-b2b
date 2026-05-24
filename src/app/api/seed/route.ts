@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase-admin";
+import { createClient } from "@/utils/supabase/server";
 
 const SAMPLE_LEADS = [
   { name: "Carolina Mendoza", email: "carolina.mendoza@techcorp.co", phone: "+573001234567", company: "TechCorp Colombia", score: "Hot", intent: "Quiero automatizar mi equipo de ventas con IA", source: "whatsapp" },
@@ -26,13 +27,14 @@ const SAMPLE_LEADS = [
 
 const SAMPLE_BOT_ID = "00000000-0000-0000-0000-000000000001";
 
-export async function GET(req: NextRequest) {
-  const { data: { user } } = await supabaseAdmin.auth.getUser();
+export async function GET() {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { data: bots } = await supabaseAdmin
+  const { data: bots } = await supabase
     .from("bots")
     .select("id, name")
     .eq("user_id", user.id)

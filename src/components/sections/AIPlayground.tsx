@@ -109,22 +109,6 @@ export default function AIPlayground() {
           </motion.div>
         )}
       </AnimatePresence>
-
-      <style>{`
-        @keyframes bounce {
-          0%, 80%, 100% { transform: translateY(0); }
-          40% { transform: translateY(-6px); }
-        }
-        .animate-bounce-dot {
-          animation: bounce 1.4s infinite;
-        }
-        .animation-delay-200 {
-          animation-delay: 0.2s;
-        }
-        .animation-delay-400 {
-          animation-delay: 0.4s;
-        }
-      `}</style>
     </>
   );
 }

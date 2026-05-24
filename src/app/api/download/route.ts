@@ -1,18 +1,20 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase-admin";
+import { createClient } from "@/utils/supabase/server";
 
-/**
- * STRATIX INTELLIGENCE — EXECUTIVE DATA EXPORT (V38.0)
- * Generación de reportes de Leads en formato CSV para análisis de ROI.
- */
-
-export async function GET(_request: NextRequest) {
+export async function GET() {
   try {
-    // 1. Verificación de Seguridad (Sólo Admin via Service Role)
-    // Nota: Aquí se debería validar el token de sesión del usuario, 
-    // pero para exportación administrativa usamos el Admin Client y validamos procedencia.
-    
-    // Starting strategic lead export
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+    }
+
+    const { data: userBots } = await supabase.from("bots").select("id").eq("user_id", user.id);
+    const botIds = userBots?.map(b => b.id) || [];
+    if (botIds.length === 0) {
+      return NextResponse.json({ error: "No tienes leads para exportar" }, { status: 404 });
+    }
 
     const { data: leads, error } = await supabaseAdmin
       .from("leads")
@@ -29,13 +31,13 @@ export async function GET(_request: NextRequest) {
         utm_campaign,
         bot_id
       `)
+      .in("bot_id", botIds)
       .order("created_at", { ascending: false });
 
     if (error || !leads) {
       throw new Error(error?.message || "No se encontraron datos de leads.");
     }
 
-    // 2. Construcción del CSV (Formato Pro)
     const headers = [
       "FECHA", "NOMBRE", "EMAIL", "WHATSAPP", "EMPRESA", 
       "INTENTO", "OPAL_SCORE", "CAMPANA", "MEDIO", "FUENTE", "BOT_ID"
@@ -60,7 +62,6 @@ export async function GET(_request: NextRequest) {
       ...rows.map(row => row.map(value => `"${value}"`).join(","))
     ].join("\n");
 
-    // 3. Respuesta con Headers de Descarga Forzada
     const filename = `stratix_leads_${new Date().toISOString().split('T')[0]}.csv`;
 
     return new NextResponse(csvContent, {
@@ -73,6 +74,6 @@ export async function GET(_request: NextRequest) {
 
   } catch (err: any) {
     console.error("/// FALLO EN EXPORTACIÓN DE DATOS ///", err);
-    return NextResponse.json({ error: "Error interno generando el reporte de Excel/CSV." }, { status: 500 });
+    return NextResponse.json({ error: "Error interno generando el reporte." }, { status: 500 });
   }
 }

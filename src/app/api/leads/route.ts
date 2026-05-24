@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase-admin";
-import { createClient } from "@/lib/supabase-server";
+import { createClient } from "@/utils/supabase/server";
 
 /**
  * STRATIX INTELLIGENCE — LEADS ENGINE (V30.0)

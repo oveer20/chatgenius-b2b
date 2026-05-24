@@ -1,24 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
 import { syncBotKnowledge } from "@/lib/rag";
+import { createClient } from "@/utils/supabase/server";
 
 export async function POST(request: NextRequest) {
   try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+
     const { url, botId } = await request.json();
+    if (!url || !botId) return NextResponse.json({ error: "URL and botId are required" }, { status: 400 });
 
-    if (!url || !botId) {
-      return NextResponse.json({ error: "URL and botId are required" }, { status: 400 });
-    }
+    const { data: bot } = await supabase.from("bots").select("user_id").eq("id", botId).single();
+    if (!bot || bot.user_id !== user.id) return NextResponse.json({ error: "No autorizado" }, { status: 403 });
 
-    // 1. Respuesta Inmediata (Async Protocol V44.0)
-    // Iniciamos el proceso pero liberamos al cliente
     const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch URL: ${response.statusText}`);
-    }
+    if (!response.ok) throw new Error(`Failed to fetch URL: ${response.statusText}`);
 
     const html = await response.text();
-    
-    // 3. Extracción de Contenido Quirúrgico (V42.0)
     let cleanText = html
       .replace(/<script\b[^>]*>([\s\S]*?)<\/script>/gim, "")
       .replace(/<style\b[^>]*>([\s\S]*?)<\/style>/gim, "")
@@ -30,18 +29,11 @@ export async function POST(request: NextRequest) {
       .replace(/\s+/g, " ")
       .trim();
 
-    // 4. Ingesta Neural en Background (V44.0)
-    // No esperamos el `await` para el RAG, lo lanzamos y devolvemos éxito visual
     syncBotKnowledge(botId, cleanText, url, "web_crawl").catch(e => console.error("ASYNC_RAG_FAIL", e));
 
-    return NextResponse.json({ 
-      success: true, 
-      status: "processing",
-      message: "SINCRONIZACIÓN NEURAL INICIADA: Stratix está devorando el conocimiento corporativo en segundo plano. 🛡️✨"
-    });
+    return NextResponse.json({ success: true, status: "processing", message: "Sincronización neural iniciada." });
   } catch (error: any) {
-    console.error("/// CRAWL API ERROR ///");
-    console.error(error);
+    console.error("/// CRAWL API ERROR ///", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

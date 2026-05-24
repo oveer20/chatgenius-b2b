@@ -10,15 +10,14 @@ import {
 } from "react-icons/fi";
 import { supabase } from "@/lib/supabase";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
-import { Toaster } from 'sonner';
+import { toast } from 'sonner';
 
 export default function BotEditor() {
   const { id } = useParams();
   const router = useRouter();
-  const isNew = id === "new";
 
   const [botData, setBotData] = useState({
-    name: isNew ? "" : "Cargando...",
+    name: "Cargando...",
     description: "",
     systemPrompt: "",
     temperature: 0.7,
@@ -58,7 +57,6 @@ export default function BotEditor() {
 
   useEffect(() => {
     async function loadBot() {
-      if (isNew) { setBotStatus('inactive'); return; }
       const { data } = await supabase.from("bots").select("*").eq("id", id).single();
       if (data) {
         setBotData({
@@ -81,11 +79,10 @@ export default function BotEditor() {
     loadBot();
     const interval = setInterval(loadBot, 30000);
     return () => clearInterval(interval);
-  }, [id, isNew]);
+  }, [id]);
 
   useEffect(() => {
     async function loadLeads() {
-      if (isNew) return;
       const { data } = await supabase
         .from("leads")
         .select("*")
@@ -94,7 +91,7 @@ export default function BotEditor() {
       if (data) setLeads(data);
     }
     loadLeads();
-  }, [id, isNew]);
+  }, [id]);
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -115,21 +112,12 @@ export default function BotEditor() {
         updated_at: new Date().toISOString(),
       };
 
-      let error;
-      if (isNew) {
-        const { data: { user } } = await supabase.auth.getUser();
-        const { error: err } = await supabase.from("bots").insert([{ ...payload, user_id: user?.id }]);
-        error = err;
-      } else {
-        const { error: err } = await supabase.from("bots").update(payload).eq("id", id);
-        error = err;
-      }
+      const { error: err } = await supabase.from("bots").update(payload).eq("id", id);
 
-      if (error) throw error;
-      alert("¡Activo IA sincronizado con éxito!");
-      if (isNew) router.push("/dashboard");
+      if (err) throw err;
+      toast.success("Agente guardado correctamente");
     } catch (err) {
-      alert("Error en la arquitectura: " + (err as Error).message);
+      toast.error("Error al guardar: " + (err as Error).message);
     } finally {
       setIsSaving(false);
     }
@@ -146,12 +134,12 @@ export default function BotEditor() {
       });
       const data = await response.json();
       if (data.success) {
-        alert(`¡Éxito! ${data.chunks_count} fragmentos de conocimiento sincronizados vectorialmente.`);
+        toast.success(`${data.chunks_count} fragmentos sincronizados`);
       } else {
         throw new Error(data.error);
       }
     } catch (err) {
-      alert("Fallo en la sincronización RAG: " + (err as Error).message);
+      toast.error("Error de sincronización: " + (err as Error).message);
     } finally {
       setIsSyncing(false);
     }
@@ -167,13 +155,13 @@ export default function BotEditor() {
       const response = await fetch(`/api/bots/${id}/upload`, { method: "POST", body: formData });
       const data = await response.json();
       if (data.success) {
-        alert(`¡Conocimiento absorbido!`);
+        toast.success("Documento procesado correctamente");
         if (data.text) setKnowledgeBase(prev => prev + "\n\n--- DOCUMENTO ABSORBIDO ---\n" + data.text);
       } else {
         throw new Error(data.error);
       }
     } catch (err) {
-      alert("Fallo en la asimilación: " + (err as Error).message);
+      toast.error("Error al procesar: " + (err as Error).message);
     } finally {
       setIsUploading(false);
     }
@@ -181,7 +169,7 @@ export default function BotEditor() {
 
   const handleCrawlUrl = async () => {
     if (!crawlerUrl || !crawlerUrl.startsWith("http")) {
-      alert("Por favor ingresa una URL válida (http/https)");
+      toast.error("Ingresa una URL válida (http/https)");
       return;
     }
     setIsCrawling(true);
@@ -193,7 +181,7 @@ export default function BotEditor() {
       });
       const data = await response.json();
       if (data.success) {
-        alert(`¡Página absorbida! Se generaron ${data.chunks} vectores de conocimiento.`);
+        toast.success(`${data.chunks} vectores de conocimiento generados`);
         if (data.textSegment) {
           setKnowledgeBase(prev => prev + `\n\n--- SITE: ${crawlerUrl} ---\n` + data.textSegment + "\n[...]");
         }
@@ -202,7 +190,7 @@ export default function BotEditor() {
         throw new Error(data.error);
       }
     } catch (err) {
-      alert("Fallo al escanear sitio web: " + (err as Error).message);
+      toast.error("Error al escanear: " + (err as Error).message);
     } finally {
       setIsCrawling(false);
     }
@@ -228,7 +216,7 @@ export default function BotEditor() {
   };
 
   const handleToggleStatus = async () => {
-    if (isNew || isTogglingStatus) return;
+    if (isTogglingStatus) return;
     setIsTogglingStatus(true);
     const newStatus = botStatus === 'active' ? false : true;
     try {
@@ -236,7 +224,7 @@ export default function BotEditor() {
       if (error) throw error;
       setBotStatus(newStatus ? 'active' : 'inactive');
     } catch (err) {
-      alert("Error: " + (err as Error).message);
+      toast.error("Error: " + (err as Error).message);
     } finally {
       setIsTogglingStatus(false);
     }
@@ -265,7 +253,7 @@ export default function BotEditor() {
       });
       const data = await response.json();
       if (data.message) setChatMessages(prev => [...prev, data.message]);
-    } catch (err) {
+    } catch {
       setChatMessages(prev => [...prev, { role: "assistant", content: "⚠️ Error de conexión con el núcleo de IA." }]);
     } finally {
       setIsTyping(false);
@@ -289,11 +277,10 @@ export default function BotEditor() {
             <FiArrowLeft size={18} />
           </button>
           <div>
-            <h2 className="text-cinematic text-2xl m-0">{isNew ? "Nueva Entidad de IA" : botData.name}</h2>
+            <h2 className="font-serif text-2xl m-0">{botData.name}</h2>
             <div className="flex items-center gap-2.5 mt-1">
               <span className="text-[0.65rem] text-accent font-black bg-accent/10 px-2 py-0.5 rounded-xs tracking-[1px]">ID: {id}</span>
-              {!isNew && (
-                <button
+              <button
                   onClick={handleToggleStatus}
                   disabled={isTogglingStatus || botStatus === 'loading'}
                   className={`flex items-center gap-1.5 text-[0.65rem] font-extrabold tracking-[1px] px-2 py-0.5 rounded-xs border-none cursor-pointer transition-all duration-200 ${
@@ -306,16 +293,15 @@ export default function BotEditor() {
                   {botStatus === 'loading' ? '...' : botStatus === 'active' ? 'ACTIVO' : 'INACTIVO'}
                   {isTogglingStatus ? '...' : ''}
                 </button>
-              )}
               <span className="text-[0.65rem] opacity-40 font-bold">Protocolo de Inteligencia Activo</span>
             </div>
           </div>
         </div>
         <button
           onClick={handleSave}
-          className="card-elite glow-gold py-3 px-7 bg-accent text-black rounded-[14px] font-black text-[0.9rem] flex items-center gap-2.5 border-none cursor-pointer transition-all duration-200"
+          className="py-3 px-7 bg-accent text-black rounded-[14px] font-bold text-[0.9rem] flex items-center gap-2.5 border-none cursor-pointer transition-all duration-200 hover:shadow-[0_0_20px_rgba(212,175,55,0.3)]"
         >
-          {isSaving ? <FiRefreshCw className="spin" /> : <FiSave />}
+          {isSaving ? <FiRefreshCw className="animate-spin" /> : <FiSave />}
           {isSaving ? "Sincronizando..." : "Sincronizar Arquitectura"}
         </button>
       </header>
@@ -352,8 +338,8 @@ export default function BotEditor() {
             {/* PESTAÑA 1: IDENTIDAD ESTRATÉGICA */}
             {activeTab === 'identidad' && (
               <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
-                <h3 className="text-cinematic text-3xl mb-10">Perfil de la Entidad</h3>
-                <div className="card-elite p-12 flex flex-col gap-10">
+                <h3 className="font-serif text-3xl mb-10">Perfil de la Entidad</h3>
+                <div className="bg-black/20 border border-white/5 rounded-xl p-12 flex flex-col gap-10">
                   <div className="grid grid-cols-2 gap-10">
                     <div>
                       <label className="block text-[0.7rem] font-black opacity-40 mb-4 tracking-[1.5px]">IDENTIFICADOR DEL AGENTE</label>
@@ -386,11 +372,11 @@ export default function BotEditor() {
                 {leads.length > 0 && (
                   <div className="mt-16">
                     <div className="flex justify-between items-center mb-10">
-                      <h3 className="text-cinematic text-2xl">Análisis de Conversión</h3>
-                      <button onClick={handleExportCSV} className="card-elite px-4 py-2 text-[0.8rem] bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 rounded-sm cursor-pointer font-extrabold">EXPORTAR CSV</button>
+                      <h3 className="font-serif text-2xl">Análisis de Conversión</h3>
+                      <button onClick={handleExportCSV} className="bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 rounded-sm px-4 py-2 text-[0.8rem] cursor-pointer font-extrabold">EXPORTAR CSV</button>
                     </div>
                     <div className="grid grid-cols-2 gap-8 mb-8">
-                        <div className="card-elite p-8 bg-black/20 h-[250px]">
+                        <div className="bg-black/20 border border-white/5 rounded-xl p-8 h-[250px]">
                            <ResponsiveContainer width="100%" height="100%">
                               <PieChart>
                                 <Pie data={[
@@ -404,7 +390,7 @@ export default function BotEditor() {
                               </PieChart>
                            </ResponsiveContainer>
                         </div>
-                        <div className="card-elite p-6 overflow-y-auto max-h-[250px]">
+                        <div className="bg-black/20 border border-white/5 rounded-xl p-6 overflow-y-auto max-h-[250px]">
                             <table className="w-full text-[0.8rem] border-collapse">
                                <thead><tr className="opacity-40"><th>NOMBRE</th><th>SCORE</th></tr></thead>
                                <tbody>
@@ -426,8 +412,8 @@ export default function BotEditor() {
             {/* PESTAÑA 2: MODULARIDAD AI (CEREBRO) */}
             {activeTab === 'cerebro' && (
               <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
-                <h3 className="text-cinematic text-3xl mb-10">Arquitectura Cognitiva</h3>
-                <div className="card-elite p-12 flex flex-col gap-12">
+                <h3 className="font-serif text-3xl mb-10">Arquitectura Cognitiva</h3>
+                <div className="bg-black/20 border border-white/5 rounded-xl p-12 flex flex-col gap-12">
                   <div>
                     <label className="block text-[0.7rem] font-black opacity-40 mb-[1.2rem] tracking-[1.5px]">NÚCLEO DE PERSONALIDAD (SYSTEM PROMPT)</label>
                     <textarea
@@ -468,13 +454,13 @@ export default function BotEditor() {
             {activeTab === 'entrenamiento' && (
               <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
                 <div className="flex justify-between items-center mb-12">
-                  <h3 className="text-cinematic text-3xl">Memoria Profunda (RAG)</h3>
-                  <button onClick={handleSyncKnowledge} className="card-elite glow-gold py-3 px-6 bg-accent text-black rounded-md font-black border-none">
+                  <h3 className="font-serif text-3xl">Memoria Profunda (RAG)</h3>
+                  <button onClick={handleSyncKnowledge} className="py-3 px-6 bg-accent text-black rounded-md font-bold border-none shadow-[0_0_20px_rgba(212,175,55,0.2)]">
                     {isSyncing ? "PROCESANDO..." : "SINCRONIZAR NÚCLEO"}
                   </button>
                 </div>
 
-                <div className="card-elite p-10 mb-12 bg-accent/[0.03]">
+                <div className="bg-black/20 border border-white/5 rounded-xl p-10 mb-12 bg-accent/[0.03]">
                   <div className="flex items-center gap-2.5 mb-6">
                     <FiActivity color="#D4AF37" />
                     <span className="text-xs font-black tracking-[1px]">NIVELES DE CONSCIENCIA NEURAL</span>
@@ -485,19 +471,22 @@ export default function BotEditor() {
                 </div>
 
                 <div className="grid grid-cols-2 gap-10 mb-12">
-                  <div className="card-elite p-8">
+                  <div className="bg-black/20 border border-white/5 rounded-xl p-8">
                     <label className="block text-[0.7rem] font-black opacity-40 mb-4">URL DE ABSORCIÓN</label>
                     <div className="flex gap-2.5">
                       <input value={crawlerUrl} onChange={e => setCrawlerUrl(e.target.value)} className="flex-1 p-3 bg-black/30 border border-white/5 rounded-sm text-white" />
-                      <button onClick={handleCrawlUrl} className="bg-accent border-none rounded-sm px-[15px]"><FiGlobe /></button>
+                      <button onClick={handleCrawlUrl} disabled={isCrawling} className="bg-accent border-none rounded-sm px-[15px] disabled:opacity-50">{isCrawling ? "..." : <FiGlobe />}</button>
                     </div>
                   </div>
-                  <div className="card-elite p-8 flex items-center justify-center">
-                     <label className="cursor-pointer text-accent font-black"><FiPlus /> SUBIR PDF CORPORATIVO <input type="file" onChange={handleFileUpload} className="hidden" /></label>
+                  <div className="bg-black/20 border border-white/5 rounded-xl p-8 flex items-center justify-center">
+                     <label className="cursor-pointer text-accent font-black disabled:opacity-50">
+  {isUploading ? "SUBIENDO..." : <><FiPlus /> SUBIR PDF CORPORATIVO</>}
+  <input type="file" onChange={handleFileUpload} className="hidden" disabled={isUploading} />
+</label>
                   </div>
                 </div>
 
-                <div className="card-elite p-8">
+                <div className="bg-black/20 border border-white/5 rounded-xl p-8">
                   <textarea
                     value={knowledgeBase} onChange={e => setKnowledgeBase(e.target.value)}
                     className="w-full min-h-[300px] bg-transparent border-none text-white outline-none text-base leading-[1.8]"
@@ -509,9 +498,9 @@ export default function BotEditor() {
             {/* PESTAÑA 4: DESPLIEGUE */}
             {activeTab === 'despliegue' && (
               <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
-                <h3 className="text-cinematic text-3xl mb-12">Protocolos de Salida</h3>
+                <h3 className="font-serif text-3xl mb-12">Protocolos de Salida</h3>
                 <div className="grid grid-cols-2 gap-12">
-                  <div className="card-elite p-12" style={{ border: '1px solid rgba(37,211,102,0.2)' }}>
+                  <div className="bg-black/20 border border-white/5 rounded-xl p-12" style={{ border: '1px solid rgba(37,211,102,0.2)' }}>
                     <FiMessageCircle size={30} color="#25D366" className="mb-6" />
                     <h4 className="font-black">WHATSAPP API</h4>
                     <div className="mt-8">
@@ -527,7 +516,7 @@ export default function BotEditor() {
                     </div>
                     </div>
                   </div>
-                  <div className="card-elite p-12 border border-accent/20">
+                  <div className="bg-black/20 rounded-xl p-12 border border-accent/20">
                     <FiLayout size={30} color="#D4AF37" className="mb-6" />
                     <h4 className="font-black">WIDGET WEB</h4>
                     <code className="block bg-black p-4 rounded-sm mt-8 text-xs text-accent">
@@ -558,7 +547,6 @@ export default function BotEditor() {
            </form>
         </div>
       </div>
-      <Toaster theme="dark" richColors />
     </div>
   );
 }

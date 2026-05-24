@@ -83,6 +83,16 @@ export default function CTA() {
                 {t.cta.cta1}
               </Link>
             </motion.div>
+            <motion.a
+              href="https://wa.me/573159269287?text=Hola!%20Quiero%20agendar%20una%20demo%20de%20Stratix"
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.98 }}
+              className="inline-block rounded-xl border-2 border-accent bg-accent/10 px-9 py-4 text-[15px] font-bold text-accent no-underline shadow-[0_4px_20px_rgba(212,175,55,0.3)] transition-all duration-300 hover:bg-accent hover:text-black hover:shadow-[0_8px_30px_rgba(212,175,55,0.5)]"
+            >
+              {lang === "es" ? "Agendar Demo →" : "Book a Demo →"}
+            </motion.a>
           </motion.div>
 
           <motion.div className="relative mb-6 flex flex-wrap items-center justify-center gap-3">
@@ -98,7 +108,7 @@ export default function CTA() {
                 onMouseLeave={() => setHovered(null)}
                 className="inline-flex items-center gap-2 rounded-xl px-5 py-[10px] text-[14px] font-medium no-underline transition-all duration-300"
                 style={{
-                  border: hovered === link.key ? '1px solid var(--color-accent)' : '1px solid var(--color-border)',
+                  border: hovered === link.key ? '1px solid var(--color-accent)' : '1px solid rgba(255,255,255,0.15)',
                   color: hovered === link.key ? 'var(--color-accent)' : 'var(--color-text-primary)',
                   background: hovered === link.key ? 'var(--color-accent-dim)' : 'var(--color-surface)',
                 }}

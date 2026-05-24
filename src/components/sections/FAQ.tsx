@@ -54,7 +54,7 @@ function FAQItem({ faq, index }: { faq: { q: string; a: string }; index: number 
 
 export default function FAQ() {
   const { lang, t } = useLang();
-  const faqs = FAQS[lang as keyof typeof FAQS];
+  const faqs = FAQS[lang as keyof typeof FAQS] || FAQS.es;
 
   return (
     <section className="mx-auto max-w-[800px] px-[clamp(1.5rem,5vw,4rem)] py-[clamp(4rem,10vw,8rem)]">

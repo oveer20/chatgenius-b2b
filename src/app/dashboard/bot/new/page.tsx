@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { FiArrowLeft, FiPlus, FiCpu, FiZap, FiActivity } from "react-icons/fi";
 import { motion } from "framer-motion";
-import { toast, Toaster } from "sonner";
+import { toast } from "sonner";
 
 const AGENT_TEMPLATE = {
   name: "Stratix Sales Agent",
@@ -188,7 +188,6 @@ export default function NewBotPage() {
 
         </motion.form>
       </div>
-      <Toaster theme="dark" richColors position="top-center" />
     </div>
   );
 }

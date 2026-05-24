@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { Preference } from "mercadopago";
 import { MercadoPagoConfig } from "mercadopago";
 import { PRICING_PLANS, CURRENCIES } from "@/lib/constants";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/utils/supabase/server";
 
 function getMpClient() {
   const key = process.env.MP_ACCESS_TOKEN;
@@ -16,16 +16,19 @@ export async function POST(request: NextRequest) {
     const { slug, currency = "USD" } = await request.json();
 
     // 1. Obtener datos del usuario (Auth Check)
+    const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
 
     // 2. Identificar el Plan y Precio
-    const plan = PRICING_PLANS.find(p => 
-      p.name.toLowerCase().includes(slug) || 
-      (slug === 'pro' && p.name.toLowerCase().includes('professional')) ||
-      (slug === 'enterprise' && p.name.toLowerCase().includes('elite'))
+    const plan = PRICING_PLANS.find(p =>
+      p.tier === slug ||
+      p.name.toLowerCase() === slug?.toLowerCase() ||
+      (slug === 'pro' && p.tier === 'escala') ||
+      (slug === 'enterprise' && p.tier === 'domina') ||
+      (slug === 'starter' && p.tier === 'inicia')
     );
 
     if (!plan) {

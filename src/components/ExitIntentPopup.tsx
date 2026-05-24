@@ -45,9 +45,8 @@ export default function ExitIntentPopup() {
       trackLead("exit_intent_popup");
       setSubmitted(true);
       setTimeout(() => setIsOpen(false), 2000);
-    } catch (err) {
-      console.error("Error:", err);
-      setSubmitted(true);
+    } catch {
+      // Silently fail — don't show success for a failed submission
     }
   };
 

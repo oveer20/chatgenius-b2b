@@ -9,7 +9,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
-import { toast, Toaster } from "sonner";
+import { toast } from "sonner";
 
 const STATIC_TARGETS = [
   { city: "Bogotá", name: "Inmobiliaria Norte", whatsapp: "573100000001", description: "Líder en zonas residenciales del norte", strategy: "Stratix puede automatizar su atención 24/7 y calificación de leads.", message: "Hola equipo de Inmobiliaria Norte! Vi que lideran el norte de la ciudad. He desarrollado Stratix, una IA que responde consultas de propiedades al instante. ¿Les interesa una demo gratuita de 7 días?", source: "static" },
@@ -68,7 +68,7 @@ function OutreachContent() {
             toast.success(`${dynamicTargets.length} leads Hot cargados como targets`);
           }
         }
-      } catch (_) {
+      } catch {
       } finally {
         setIsLoadingLeads(false);
       }
@@ -140,7 +140,7 @@ function OutreachContent() {
               <FiMapPin className={cityTargets[0]?.source === 'dynamic' ? 'text-red-500' : 'text-accent'} />
               <h2 className="text-base font-black tracking-widest uppercase">{city}</h2>
               <div className="flex-1 h-px bg-gradient-to-r from-accent/20 to-transparent" />
-              <span className="text-xs opacity-4">{cityTargets.length} targets</span>
+              <span className="text-xs opacity-40">{cityTargets.length} targets</span>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -171,7 +171,7 @@ function OutreachContent() {
                         <FiPhone size={12} /> {target.description}
                       </p>
 
-                      <div className={`mb-7 bg-white/[0.02] p-4 rounded-md ${isDynamic ? 'border-l-3 border-red-500' : 'border-l-3 border-l-accent'}`} style={{ borderLeftWidth: '3px', borderLeftColor: isDynamic ? '#ef4444' : '#D4AF37' }}>
+                      <div className={`mb-7 bg-white/[0.02] p-4 rounded-md ${isDynamic ? 'border-red-500' : 'border-l-accent'}`} style={{ borderLeftWidth: '3px', borderLeftColor: isDynamic ? '#ef4444' : '#D4AF37' }}>
                         <div className="text-xs font-black opacity-40 mb-1 uppercase tracking-tight">Potencial Estratégico</div>
                         <div className="text-sm leading-relaxed opacity-80">{target.strategy}</div>
                       </div>
@@ -215,7 +215,6 @@ function OutreachContent() {
           STRATIX INTELLIGENCE — ACTIVACIÓN COMERCIAL UNIFICADA V11.0
         </div>
       </div>
-      <Toaster theme="dark" richColors position="top-center" />
     </div>
   );
 }

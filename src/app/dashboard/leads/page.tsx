@@ -2,12 +2,14 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { FiDownload, FiSearch, FiArrowLeft, FiActivity, FiUsers, FiZap, FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
-import { toast, Toaster } from "sonner";
+import { toast } from "sonner";
 import { motion } from "framer-motion";
 
 function LeadsDashboardContent() {
+  const router = useRouter();
   const [leads, setLeads] = useState<Array<{id: string; name: string; email: string; phone: string; company: string; bot_id: string; score: string; intent: string; source: string; created_at: string; bots?: {name: string}}>>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isExporting, setIsExporting] = useState(false);
@@ -18,7 +20,7 @@ function LeadsDashboardContent() {
   useEffect(() => {
     async function fetchLeads() {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
+      if (!user) { router.push("/login"); return; }
       const { data, error } = await supabase
         .from("leads")
         .select("*, bots(name)")
@@ -143,7 +145,7 @@ function LeadsDashboardContent() {
                         <span style={{ fontSize: '0.65rem', padding: '2px 8px', borderRadius: '4px', background: `${sourceColor}22`, color: sourceColor, fontWeight: 800, border: `1px solid ${sourceColor}44` }}>
                           {lead.source?.toUpperCase() || 'WEB'}
                         </span>
-                        {lead.phone && <span className="text-xs opacity-4">{lead.phone}</span>}
+                        {lead.phone && <span className="text-xs opacity-40">{lead.phone}</span>}
                       </div>
                     </td>
                     <td className="p-5 text-sm font-bold opacity-60">{lead.bots?.name || 'Stratix Core'}</td>
@@ -159,7 +161,7 @@ function LeadsDashboardContent() {
                         <span className={`font-black ${lead.score === 'Hot' ? 'text-accent' : 'text-text-primary'}`}>{lead.score || '—'}</span>
                       </div>
                     </td>
-                    <td className="p-5 text-xs opacity-4">
+                    <td className="p-5 text-xs opacity-40">
                       <div>{new Date(lead.created_at).toLocaleDateString('es-CO')}</div>
                       <div className="opacity-60 text-xs">{new Date(lead.created_at).toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' })}</div>
                     </td>
@@ -171,7 +173,7 @@ function LeadsDashboardContent() {
 
           {totalPages > 1 && (
             <div className="flex justify-between items-center mt-6 pt-4 border-t border-white/5">
-              <span className="text-sm opacity-4">
+              <span className="text-sm opacity-40">
                 Mostrando {((page - 1) * PAGE_SIZE) + 1}–{Math.min(page * PAGE_SIZE, filteredLeads.length)} de {filteredLeads.length}
               </span>
               <div className="flex gap-2 items-center">
@@ -194,7 +196,6 @@ function LeadsDashboardContent() {
           )}
         </div>
       </div>
-      <Toaster theme="dark" richColors position="top-center" />
     </div>
   );
 }

@@ -5,6 +5,15 @@ import { useLang } from "@/components/LangContext";
 import { useState, useEffect } from "react";
 import { PRICING_PLANS } from "@/lib/constants";
 
+function safeFormatPrice(value: number | undefined, isUSD: boolean): string {
+  if (value == null || isNaN(value)) return isUSD ? "0" : "0";
+  try {
+    return value.toLocaleString(isUSD ? "en-US" : "es-CO");
+  } catch {
+    return String(value);
+  }
+}
+
 export default function Pricing() {
   const { t, lang, showUSD } = useLang();
   const [hoveredPlan, setHoveredPlan] = useState<string | null>(null);
@@ -15,12 +24,12 @@ export default function Pricing() {
 
   const isUSD = showUSD;
 
-  const getPrice = (plan: typeof PRICING_PLANS[0]) => {
+  const getPrice = (plan: typeof PRICING_PLANS[0]): number => {
     if (!isClient) return 0;
-    if (isUSD) {
-      return isAnnual ? plan.priceUsdAnnual : plan.priceUsd;
-    }
-    return isAnnual ? plan.priceCopAnnual : plan.priceCop;
+    const val = isUSD
+      ? (isAnnual ? plan.priceUsdAnnual : plan.priceUsd)
+      : (isAnnual ? plan.priceCopAnnual : plan.priceCop);
+    return val ?? 0;
   };
 
   const getPlanData = (plan: typeof PRICING_PLANS[0]) => {
@@ -63,6 +72,8 @@ export default function Pricing() {
           <span className={"text-sm font-sans transition-colors duration-300 " + (!isAnnual ? 'text-white font-bold' : 'text-text-secondary font-medium')}>{t.pricing.monthly || "Mensual"}</span>
           <button
             onClick={() => setIsAnnual(!isAnnual)}
+            role="switch"
+            aria-checked={isAnnual}
             className={"w-14 h-7 rounded-full relative border-0 cursor-pointer transition-colors duration-300 " + (isAnnual ? 'bg-accent' : 'bg-white/10')}
           >
             <div className={"absolute top-[3px] w-[22px] h-[22px] rounded-full bg-black transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] " + (isAnnual ? 'left-[31px]' : 'left-[3px]')} />
@@ -92,10 +103,8 @@ export default function Pricing() {
               className={`relative rounded-2xl flex flex-col h-full transition-all duration-300 ${
                 isHighlighted
                   ? 'p-10 bg-gradient-to-b from-accent/15 to-[#0d1017] border-2 border-accent shadow-[0_20px_60px_rgba(212,175,55,0.15)] scale-[1.05] z-10'
-                  : isHovered
-                    ? 'p-8 bg-white/[0.04] border border-accent/30 shadow-[0_10px_30px_rgba(0,0,0,0.3)]'
-                    : 'p-8 bg-white/[0.01] border border-white/5'
-              }`}
+                  : 'p-8 bg-white/[0.02] border border-white/8 shadow-sm shadow-black/20'
+              } ${isHovered && !isHighlighted ? 'bg-white/[0.06] border-accent/30 shadow-[0_10px_30px_rgba(0,0,0,0.3)]' : ''}`}
             >
               {isHighlighted && (
                 <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-accent text-black text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-widest font-sans">
@@ -111,7 +120,7 @@ export default function Pricing() {
               <div className="mb-1">
                 <div className="flex items-baseline gap-1 flex-wrap">
                   <span className="font-serif text-[clamp(2.5rem,5vw,3.5rem)] font-bold text-white leading-[1.1]">
-                    ${isClient ? price.toLocaleString(isUSD ? 'en-US' : 'es-CO') : '...'}
+                    ${isClient ? safeFormatPrice(price, isUSD) : '...'}
                   </span>
                 </div>
                 <div className="flex items-baseline gap-2 mt-1">

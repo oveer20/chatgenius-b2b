@@ -30,18 +30,21 @@ export default function FloatingSocialProof() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const show = () => setVisible(true);
-    const hide = () => setVisible(false);
-    show();
+    setCurrent(0);
+    setVisible(true);
+    let hideTimeout: ReturnType<typeof setTimeout>;
     const id = setInterval(() => {
-      hide();
-      setTimeout(() => {
+      setVisible(false);
+      hideTimeout = setTimeout(() => {
         setCurrent(prev => (prev + 1) % proofs.length);
-        show();
+        setVisible(true);
       }, 500);
     }, 12000);
-    return () => clearInterval(id);
-  }, []);
+    return () => {
+      clearInterval(id);
+      clearTimeout(hideTimeout);
+    };
+  }, [proofs]);
 
   const p = proofs[current];
 

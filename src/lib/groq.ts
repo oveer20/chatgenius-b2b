@@ -62,6 +62,6 @@ export async function getGroqResponse(messages: any[], systemPrompt: string) {
   throw new Error(`Fallo crítico: ${lastError?.message}`);
 }
 
-export async function getEmbeddings(text: string) {
+export async function getEmbeddings(_text: string) {
   return new Array(768).fill(0);
 }

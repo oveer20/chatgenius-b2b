@@ -14,6 +14,7 @@
     // 1. Crear el Host del Shadow DOM
     const host = document.createElement('div');
     host.id = 'stratix-widget-root';
+    host.style.zIndex = '2147483647';
     document.body.appendChild(host);
     const shadow = host.attachShadow({ mode: 'open' });
 

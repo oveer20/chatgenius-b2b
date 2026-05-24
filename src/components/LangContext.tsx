@@ -75,8 +75,8 @@ const translations: Record<string, any> = {
       titleLine1: "Tu agente de ventas",
       titleLine2: "que nunca duerme",
       subtitle: "Automatiza tu atención 24/7. Responde instantly. Cierra deals mientras descansas.",
-      cta1: "Probar gratis",
-      cta2: "Ver demo",
+      cta1: "Comenzar Gratis",
+      cta2: "Ver Demo en Vivo",
     },
     footer: {
       copyright: "© 2024 Stratix Intelligence. Todos los derechos reservados.",
@@ -92,8 +92,8 @@ const translations: Record<string, any> = {
       annual: "Anual",
       saveBadge: "(Ahorra 20%)",
       freeMonths: "2 meses gratis",
-      startFree: "Empezar prueba gratis",
-      startBtn: "Comenzar",
+      startFree: "Desplegar IA Gratis",
+      startBtn: "Iniciar Ahora",
       mostPopular: "Más Popular",
       plans: {
         inicia: {
@@ -117,7 +117,7 @@ const translations: Record<string, any> = {
       title: "¿Listo para",
       titleEm: "automatizar?",
       subtitle: "Habla con un experto ahora",
-      cta1: "Probar gratis",
+      cta1: "Comenzar Gratis",
       meta1: "Setup en 15 min",
       meta2: "14 días gratis",
       meta3: "Sin tarjeta",
@@ -203,8 +203,8 @@ const translations: Record<string, any> = {
       titleLine1: "Your sales agent",
       titleLine2: "that never sleeps",
       subtitle: "Automate your support 24/7. Respond instantly. Close deals while you sleep.",
-      cta1: "Try free",
-      cta2: "See demo",
+      cta1: "Get Started",
+      cta2: "Watch Live Demo",
     },
     footer: {
       copyright: "© 2024 Stratix Intelligence. All rights reserved.",
@@ -220,8 +220,8 @@ const translations: Record<string, any> = {
       annual: "Annual",
       saveBadge: "(Save 20%)",
       freeMonths: "2 months free",
-      startFree: "Start free trial",
-      startBtn: "Get started",
+      startFree: "Deploy AI Free",
+      startBtn: "Start Now",
       mostPopular: "Most Popular",
       plans: {
         inicia: {
@@ -245,7 +245,7 @@ const translations: Record<string, any> = {
       title: "Ready to",
       titleEm: "automate?",
       subtitle: "Talk to an expert now",
-      cta1: "Try free",
+      cta1: "Get Started",
       meta1: "Setup in 15 min",
       meta2: "14 days free",
       meta3: "No card needed",
