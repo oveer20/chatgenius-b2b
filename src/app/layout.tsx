@@ -6,7 +6,6 @@ import ScarcityPopup from "@/components/ScarcityPopup";
 import CalendlyWidget from "@/components/CalendlyWidget";
 import CalendlyButton from "@/components/CalendlyButton";
 import CookieConsent from "@/components/CookieConsent";
-import ThemeEffect from "@/components/ThemeEffect";
 import { ThemeProvider } from "@/components/ThemeContext";
 
 export const metadata: Metadata = {
@@ -208,7 +207,6 @@ export default function RootLayout({
       </head>
       <body className="m-0 p-0">
         <ThemeProvider>
-          <ThemeEffect />
         {/* Google Tag Manager noscript */}
         <noscript dangerouslySetInnerHTML={{
           __html: `<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T8VQKWXX" height="0" width="0" style="display:none;visibility:hidden"></iframe>`,
