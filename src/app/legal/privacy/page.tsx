@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { FiArrowLeft, FiLock, FiShield, FiDatabase } from "react-icons/fi";
+import { FiArrowLeft, FiLock, FiShield } from "react-icons/fi";
 
 export default function PrivacyPolicy() {
   return (

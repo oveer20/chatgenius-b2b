@@ -5,8 +5,8 @@ import { usePathname } from "next/navigation";
 
 declare global {
   interface Window {
-    gtag: (...args: any[]) => void;
-    dataLayer: any[];
+    gtag: (...args: unknown[]) => void;
+    dataLayer: unknown[];
   }
 }
 
@@ -44,7 +44,7 @@ export default function Analytics() {
       }
     };
 
-    const handleSchedule = (e: CustomEvent) => {
+    const handleSchedule = (_e: CustomEvent) => {
       if (typeof window.gtag !== "undefined") {
         window.gtag("event", "schedule_demo", {
           event_category: "conversion",

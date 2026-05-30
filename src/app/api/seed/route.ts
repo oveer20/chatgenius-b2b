@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { createClient } from "@/utils/supabase/server";
 
@@ -52,7 +52,7 @@ export async function GET() {
     return NextResponse.json({ seeded: false, reason: "Already has leads", botId });
   }
 
-  const inserts = SAMPLE_LEADS.map((lead, i) => ({
+  const inserts = SAMPLE_LEADS.map((lead, _i) => ({
     ...lead,
     bot_id: botId,
     created_at: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000).toISOString(),

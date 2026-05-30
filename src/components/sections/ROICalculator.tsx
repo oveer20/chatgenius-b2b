@@ -119,7 +119,7 @@ export default function ROICalculator() {
           href="/login"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="mt-10 inline-block rounded-xl bg-accent px-8 py-4 font-sans text-base font-bold text-[#030a05] no-underline shadow-[0_4px_20px_rgba(212,175,55,0.4)] transition-transform duration-200"
+          className="mt-10 inline-block rounded-xl bg-accent px-8 py-4 font-sans text-base font-bold text-bg no-underline shadow-[0_4px_20px_rgba(212,175,55,0.4)] transition-transform duration-200"
         >
           {t.roi.cta}
         </motion.a>

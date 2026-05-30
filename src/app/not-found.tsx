@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { FiArrowLeft, FiShield } from "react-icons/fi";
+import { FiArrowLeft } from "react-icons/fi";
 import Image from "next/image";
 
 export default function NotFound() {

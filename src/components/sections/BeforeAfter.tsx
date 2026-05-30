@@ -59,7 +59,7 @@ const PHONE_CONTENT = {
   },
 };
 
-function PhoneMockup({ data }: { data: { title: string; subtitle: string; messages: any[]; lost?: boolean } }) {
+function PhoneMockup({ data }: { data: { title: string; subtitle: string; messages: { side: string; text: string; delay?: number; slow?: boolean; ai?: boolean }[]; lost?: boolean } }) {
   const [visibleMessages, setVisibleMessages] = useState(0);
 
   const startAnimation = () => {
@@ -102,7 +102,7 @@ function PhoneMockup({ data }: { data: { title: string; subtitle: string; messag
             </div>
           </div>
           <div className="p-3 min-h-[380px] flex flex-col gap-2">
-            {(data.messages as any[]).map((msg, i) => (
+            {data.messages.map((msg, i) => (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 10, scale: 0.95 }}

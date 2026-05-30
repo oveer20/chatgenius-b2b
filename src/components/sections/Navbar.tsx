@@ -91,6 +91,7 @@ export default function Navbar() {
 
           <button
             onClick={toggleTheme}
+            aria-label={lang === "es" ? "Cambiar tema" : "Toggle theme"}
             className="flex items-center justify-center w-8 h-8 rounded-[6px] bg-white/5 border-none cursor-pointer transition-all duration-200 text-text-secondary hover:bg-white/10 hover:text-accent"
           >
             {theme === "dark" ? (
@@ -106,6 +107,7 @@ export default function Navbar() {
 
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label={lang === "es" ? "Abrir menú" : "Open menu"}
             className="nav-hamburger hidden items-center justify-center w-9 h-9 rounded-[8px] bg-white/5 border-none cursor-pointer transition-all duration-200 text-text-primary"
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -126,7 +128,7 @@ export default function Navbar() {
 
           <Link
             href="/login"
-            className="bg-accent text-[#030a05] text-xs font-semibold px-3 py-1.5 rounded-[8px] no-underline font-sans transition-all duration-200 shadow-[0_2px_10px_rgba(212,175,55,0.3)] hover:shadow-[0_4px_20px_rgba(212,175,55,0.5)]"
+            className="bg-accent text-bg text-xs font-semibold px-3 py-1.5 rounded-[8px] no-underline font-sans transition-all duration-200 shadow-[0_2px_10px_rgba(212,175,55,0.3)] hover:shadow-[0_4px_20px_rgba(212,175,55,0.5)]"
           >
             {lang === "es" ? "Entrar" : "Sign in"}
           </Link>

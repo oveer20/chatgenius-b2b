@@ -186,7 +186,7 @@ export async function POST(request: NextRequest) {
             intent = meta.intent || intent;
             score = meta.score || score;
             cleanResponse = rawAiResponse.replace(/\[\[META:[\s\S]*?\]\]/, "").trim();
-          } catch (e) {}
+          } catch (_e) {}
         }
 
         // F. Sincronización CRM (Leads System)

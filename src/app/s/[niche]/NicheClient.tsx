@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 
-export default function NicheClient({ data, niche }: { data: any; niche: string }) {
+export default function NicheClient({ data, niche }: { data: Record<string, string>; niche: string }) {
   return (
     <div className="bg-bg text-text-primary min-h-screen">
       <nav className="px-[5%] py-5 flex justify-between items-center border-b border-white/5">

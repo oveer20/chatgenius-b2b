@@ -65,7 +65,7 @@ export default function CTA() {
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
               <Link
                 href="/login"
-                className="inline-block rounded-xl bg-gradient-to-br from-accent to-[#E5C555] px-9 py-4 text-[15px] font-bold text-[#030a05] no-underline shadow-[0_4px_20px_rgba(212,175,55,0.4)] transition-all duration-300 hover:shadow-[0_8px_30px_rgba(212,175,55,0.5)] animate-[glowPulse_3s_ease-in-out_infinite]"
+                className="inline-block rounded-xl bg-gradient-to-br from-accent to-accent-light px-9 py-4 text-[15px] font-bold text-bg no-underline shadow-[0_4px_20px_rgba(212,175,55,0.4)] transition-all duration-300 hover:shadow-[0_8px_30px_rgba(212,175,55,0.5)] animate-[glowPulse_3s_ease-in-out_infinite]"
               >
                 {t.cta.cta1}
               </Link>

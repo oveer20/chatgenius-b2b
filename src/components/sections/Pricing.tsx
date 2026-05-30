@@ -102,7 +102,7 @@ export default function Pricing() {
                 whileHover={{ y: isHighlighted ? -6 : -4 }}
                 className={`relative rounded-2xl flex flex-col h-full transition-all duration-500 ${
                   isHighlighted
-                    ? 'p-10 bg-gradient-to-b from-accent/20 via-accent/8 to-[#0d1017] border-2 border-accent shadow-[0_30px_80px_rgba(212,175,55,0.2),0_0_60px_rgba(212,175,55,0.05)] scale-[1.03] z-10'
+                    ? 'p-10 bg-gradient-to-b from-accent/20 via-accent/8 to-bg2 border-2 border-accent shadow-[0_30px_80px_rgba(212,175,55,0.2),0_0_60px_rgba(212,175,55,0.05)] scale-[1.03] z-10'
                     : 'p-8 bg-white/[0.03] border border-white/10 shadow-md shadow-black/30'
                 } ${isHovered && !isHighlighted ? 'bg-white/[0.07] border-accent/30 shadow-[0_20px_50px_rgba(0,0,0,0.4)]' : ''}`}
               >
@@ -172,7 +172,7 @@ export default function Pricing() {
                   href="/login"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className={"w-full p-3.5 rounded-xl text-center no-underline text-sm font-bold block font-sans transition-all duration-300 " + (isHighlighted ? 'bg-accent text-black shadow-[0_4px_20px_rgba(212,175,55,0.3)] hover:shadow-[0_8px_30px_rgba(212,175,55,0.5)]' : 'bg-transparent text-white border border-white/20 hover:border-accent/40 hover:bg-accent/5')}
+                  className={"w-full p-3.5 rounded-xl text-center no-underline text-sm font-bold block font-sans transition-all duration-300 " + (isHighlighted ? 'bg-accent text-black shadow-accent-glow-strong hover:shadow-[0_8px_30px_rgba(212,175,55,0.5)]' : 'bg-transparent text-white border border-white/20 hover:border-accent/40 hover:bg-accent/5')}
                 >
                   {isHighlighted ? t.pricing.startFree : t.pricing.startBtn}
                 </motion.a>

@@ -84,7 +84,7 @@ export async function POST(req: Request) {
     }
 
     return NextResponse.json({ success: true, leadId: data[0].id });
-  } catch (err: any) {
+  } catch (_err: any) {
     return NextResponse.json({ error: "Error interno del servidor" }, { status: 500 });
   }
 }

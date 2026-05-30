@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Metadata } from "next";
 import NicheClient from "./NicheClient";
 
@@ -42,7 +43,7 @@ export default async function NichePage({ params }: { params: Promise<{ niche: s
   if (!data) {
     return (
       <div className="min-h-screen bg-bg text-white flex items-center justify-center">
-        <h1>Nicho no encontrado. Vuelve al <a href="/" className="text-accent">inicio</a>.</h1>
+        <h1>Nicho no encontrado. Vuelve al <Link href="/" className="text-accent">inicio</Link>.</h1>
       </div>
     );
   }

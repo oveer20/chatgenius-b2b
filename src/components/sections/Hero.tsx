@@ -116,7 +116,7 @@ export default function Hero() {
               href="/login"
               whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.97 }}
-              className="inline-block bg-accent text-[#030a05] text-[15px] font-bold px-8 py-3.5 rounded-xl no-underline shadow-[0_4px_20px_rgba(212,175,55,0.3)] hover:shadow-[0_6px_30px_rgba(212,175,55,0.4)] transition-shadow duration-300"
+              className="inline-block bg-accent text-bg text-[15px] font-bold px-8 py-3.5 rounded-xl no-underline shadow-accent-glow-strong hover:shadow-[0_6px_30px_rgba(212,175,55,0.4)] transition-shadow duration-300"
             >
               {t.hero.cta1}
             </motion.a>
@@ -134,7 +134,7 @@ export default function Hero() {
           <motion.div {...fadeUp(0.3)} className="flex items-center gap-6 text-sm text-text-muted">
             <div className="flex -space-x-2">
               {["CM","MG","AR","LV"].map((initials, i) => (
-                <div key={i} className="w-8 h-8 rounded-full bg-gradient-to-br from-accent to-[#B8860B] flex items-center justify-center text-[9px] font-bold text-black border-2 border-bg shadow-[0_2px_8px_rgba(0,0,0,0.3)]">{initials}</div>
+                <div key={i} className="w-8 h-8 rounded-full bg-gradient-to-br from-accent to-accent2 flex items-center justify-center text-[9px] font-bold text-black border-2 border-bg shadow-[0_2px_8px_rgba(0,0,0,0.3)]">{initials}</div>
               ))}
             </div>
             <span className="font-sans">{lang === "es" ? "Únete a +1,800 empresas" : "Join +1,800 companies"}</span>
@@ -186,7 +186,7 @@ export default function Hero() {
                 transition={{ delay: 1.5, duration: 0.5 }}
                 className="flex items-start gap-3"
               >
-                <div className="w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-bold font-mono bg-gradient-to-br from-accent to-[#B8860B] text-black shadow-[0_2px_8px_rgba(212,175,55,0.3)] shrink-0">AI</div>
+                <div className="w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-bold font-mono bg-gradient-to-br from-accent to-accent2 text-black shadow-[0_2px_8px_rgba(212,175,55,0.3)] shrink-0">AI</div>
                 <div className="max-w-[75%] px-4 py-3 rounded-[16px_16px_16px_4px] text-sm leading-[1.5] bg-accent/8 border border-accent/15 text-text-primary font-sans min-h-[40px]">
                   {typing ? <TypingIndicator /> : aiText}
                 </div>

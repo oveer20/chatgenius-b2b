@@ -13,19 +13,19 @@ const VIEWS = [
   },
   {
     id: "chat",
-    gradient: "from-[#10b981]/20 via-[#10b981]/5 to-transparent",
+    gradient: "from-success/20 via-success/5 to-transparent",
     accent: "#10b981",
     label: "Chat IA",
   },
   {
     id: "leads",
-    gradient: "from-[#3B82F6]/20 via-[#3B82F6]/5 to-transparent",
+    gradient: "from-info/20 via-info/5 to-transparent",
     accent: "#3B82F6",
     label: "Leads",
   },
   {
     id: "analytics",
-    gradient: "from-[#D4AF37]/20 via-[#D4AF37]/5 to-transparent",
+    gradient: "from-accent/20 via-accent/5 to-transparent",
     accent: "#D4AF37",
     label: "Analytics",
   },
@@ -34,9 +34,6 @@ const VIEWS = [
 export default function ScreensShowcase() {
   const { lang } = useLang();
   const [active, setActive] = useState(0);
-
-  const next = () => setActive(a => (a + 1) % VIEWS.length);
-  const prev = () => setActive(a => (a - 1 + VIEWS.length) % VIEWS.length);
 
   const t = {
     title: lang === "es" ? "Tu centro de control IA" : "Your AI command center",

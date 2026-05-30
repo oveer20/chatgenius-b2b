@@ -22,7 +22,7 @@ export default function Footer() {
         <div className="grid grid-cols-[minmax(250px,2fr)_repeat(3,1fr)] gap-[clamp(2rem,5vw,4rem)]">
           <div>
             <div className="flex items-center gap-[10px] mb-4">
-              <div className="w-9 h-9 bg-gradient-to-br from-accent to-[#b8860b] rounded-lg flex items-center justify-center text-lg font-bold text-black">
+              <div className="w-9 h-9 bg-gradient-to-br from-accent to-accent2 rounded-lg flex items-center justify-center text-lg font-bold text-black">
                 S
               </div>
               <span className="font-mono text-[1.1rem] font-semibold text-text-primary">Stratix</span>

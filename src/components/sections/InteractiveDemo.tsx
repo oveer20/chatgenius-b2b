@@ -128,15 +128,15 @@ export default function InteractiveDemo() {
             STRATIX AI · DEMO
           </span>
           <div className="ml-auto flex items-center gap-1.5">
-            <div className="size-1.5 rounded-full bg-[#10b981] shadow-[0_0_6px_#10b981]" />
-            <span className="font-mono text-[10px] text-[#10b981]">ONLINE</span>
+            <div className="size-1.5 rounded-full bg-success shadow-[0_0_6px_#10b981]" />
+            <span className="font-mono text-[10px] text-success">ONLINE</span>
           </div>
         </div>
 
         <div ref={scrollRef} className="flex min-h-[300px] max-h-[380px] flex-col gap-3.5 overflow-y-auto p-5">
           {!isStarted ? (
             <div className="flex h-[260px] flex-col items-center justify-center gap-5">
-              <div className="flex size-16 items-center justify-center rounded-full bg-gradient-to-br from-accent to-[#B8860B] text-[28px] shadow-[0_0_30px_rgba(212,175,55,0.4)]">
+              <div className="flex size-16 items-center justify-center rounded-full bg-gradient-to-br from-accent to-accent2 text-[28px] shadow-[0_0_30px_rgba(212,175,55,0.4)]">
                 🤖
               </div>
               <div className="text-center">
@@ -147,7 +147,7 @@ export default function InteractiveDemo() {
                   {lang === "es" ? "IA real · Respuestas en segundos" : "Real AI · Responses in seconds"}
                 </p>
               </div>
-              <button onClick={startDemo} className="cursor-pointer rounded-xl bg-accent px-8 py-3 text-sm font-bold text-black shadow-[0_4px_20px_rgba(212,175,55,0.3)]">
+              <button onClick={startDemo} className="cursor-pointer rounded-xl bg-accent px-8 py-3 text-sm font-bold text-black shadow-accent-glow-strong">
                 {lang === "es" ? "Iniciar chat" : "Start chat"}
               </button>
             </div>
@@ -156,7 +156,7 @@ export default function InteractiveDemo() {
               {messages.map((msg, i) => (
                 <div key={i} className={`flex items-start gap-2.5 ${msg.role === "user" ? "flex-row-reverse" : "flex-row"}`}>
                   {msg.role === "bot" && (
-                    <div className="flex size-7 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-accent to-[#B8860B] text-xs">
+                    <div className="flex size-7 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-accent to-accent2 text-xs">
                       🤖
                     </div>
                   )}
@@ -171,7 +171,7 @@ export default function InteractiveDemo() {
               ))}
               {isTyping && (
                 <div className="flex items-center gap-2.5">
-                  <div className="flex size-7 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-accent to-[#B8860B] text-xs">
+                  <div className="flex size-7 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-accent to-accent2 text-xs">
                     🤖
                   </div>
                   <div className="flex gap-1 rounded-[14px] border border-accent/10 bg-white/5 px-3.5 py-2.5">
@@ -194,7 +194,7 @@ export default function InteractiveDemo() {
               disabled={isTyping}
               className="flex-1 rounded-xl border border-white/5 bg-black/30 px-3.5 py-2.5 text-sm text-text-primary outline-none"
             />
-            <button type="submit" disabled={!input.trim() || isTyping} className={`rounded-xl bg-accent px-4 py-2.5 font-bold text-black border-none ${input.trim() ? "cursor-pointer opacity-100" : "cursor-default opacity-50"}`}>
+            <button type="submit" aria-label={lang === "es" ? "Enviar mensaje" : "Send message"} disabled={!input.trim() || isTyping} className={`rounded-xl bg-accent px-4 py-2.5 font-bold text-black border-none ${input.trim() ? "cursor-pointer opacity-100" : "cursor-default opacity-50"}`}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                 <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
               </svg>

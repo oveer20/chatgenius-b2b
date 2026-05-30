@@ -12,12 +12,12 @@ const FEATURES = [
   },
   {
     id: "speed",
-    gradient: "from-[#10b981]/20 via-[#10b981]/5 to-transparent",
+    gradient: "from-success/20 via-success/5 to-transparent",
     accent: "#10b981",
   },
   {
     id: "channels",
-    gradient: "from-[#3B82F6]/20 via-[#3B82F6]/5 to-transparent",
+    gradient: "from-info/20 via-info/5 to-transparent",
     accent: "#3B82F6",
   },
   {

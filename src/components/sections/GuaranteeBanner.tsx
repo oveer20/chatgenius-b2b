@@ -26,7 +26,7 @@ export default function GuaranteeBanner() {
     <motion.div
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-gradient-to-br from-accent/10 to-[rgba(16,185,129,0.06)] border-t border-accent/15 border-b border-white/5 px-[clamp(1.5rem,5vw,3rem)] py-3 text-center"
+      className="bg-gradient-to-br from-accent/10 to-success/6 border-t border-accent/15 border-b border-white/5 px-[clamp(1.5rem,5vw,3rem)] py-3 text-center"
     >
       <div className="max-w-[900px] mx-auto flex items-center justify-center gap-[clamp(12px,3vw,24px)] flex-wrap">
         <div className="flex items-center gap-2">

@@ -5,6 +5,7 @@ import { Toaster } from "sonner";
 
 import { LangProvider } from "@/components/LangContext";
 import AnimatedBackground from "@/components/ui/AnimatedBackground";
+import ScrollProgress from "@/components/ui/ScrollProgress";
 import Navbar from "@/components/sections/Navbar";
 import Hero from "@/components/sections/Hero";
 import GuaranteeBanner from "@/components/sections/GuaranteeBanner";
@@ -48,6 +49,7 @@ export default function LandingClient() {
         <Analytics />
         <MetaPixel />
         <AnimatedBackground />
+        <ScrollProgress />
         <div className="relative z-10">
           <Navbar />
           <GuaranteeBanner />

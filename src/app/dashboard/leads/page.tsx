@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect, Suspense } from "react";
-import { FiDownload, FiSearch, FiArrowLeft, FiActivity, FiUsers, FiZap, FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import { Download } from "lucide-react";
+import { FiSearch, FiArrowLeft, FiActivity, FiUsers, FiZap, FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { SkeletonTableRow, SkeletonKPI } from "@/components/ui/SkeletonLoader";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -13,7 +14,6 @@ function LeadsDashboardContent() {
   const router = useRouter();
   const [leads, setLeads] = useState<Array<{id: string; name: string; email: string; phone: string; company: string; bot_id: string; score: string; intent: string; source: string; created_at: string; bots?: {name: string}}>>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isExporting, setIsExporting] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [page, setPage] = useState(1);
   const PAGE_SIZE = 25;
@@ -33,27 +33,35 @@ function LeadsDashboardContent() {
     fetchLeads();
   }, []);
 
-  const handleExport = async (botId: string | null) => {
-    if (!botId && leads.length === 0) return;
-    setIsExporting(true);
-    toast.info("Generando reporte CSV de Inteligencia...");
-    try {
-      const res = await fetch("/api/download", {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ botId: botId || leads[0]?.bot_id })
-      });
-      if (!res.ok) throw new Error("Fallo en la generación del CSV");
-      const blob = await res.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `Stratix_Leads_${new Date().toISOString().split('T')[0]}.csv`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      toast.success("Base de datos exportada con éxito.");
-    } catch { toast.error("Error al exportar los datos."); }
-    finally { setIsExporting(false); }
+  const exportCSV = () => {
+    if (!leads.length) {
+      toast.error("No leads to export");
+      return;
+    }
+
+    const headers = ["Name", "Phone", "Email", "Source", "Status", "Date", "Bot Name", "Notes"];
+    const rows = leads.map(l => [
+      l.name || "",
+      l.phone || "",
+      l.email || "",
+      l.source || "",
+      l.score || "",
+      l.created_at ? new Date(l.created_at).toLocaleDateString() : "",
+      l.bots?.name || "",
+      l.intent || "",
+    ]);
+
+    const csv = [headers.join(","), ...rows.map(r => r.map(c => `"${c.replace(/"/g, '""')}"`).join(","))].join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `leads-export-${new Date().toISOString().split("T")[0]}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    toast.success("Leads exported successfully");
   };
 
   const filteredLeads = leads.filter(l =>
@@ -83,9 +91,9 @@ function LeadsDashboardContent() {
             Intelligence <span className="text-accent">Lead Board</span>
           </h1>
         </div>
-        <button onClick={() => handleExport(null)} disabled={isExporting || leads.length === 0}
-          className="px-6 py-3 bg-accent text-black border-none rounded-xl font-bold cursor-pointer flex items-center gap-2.5 transition-all duration-200 hover:scale-105 disabled:opacity-50">
-          <FiDownload /> {isExporting ? "Exportando..." : "Exportar CSV"}
+        <button onClick={exportCSV} disabled={leads.length === 0}
+          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-bg/60 border border-white/10 hover:border-accent/30 text-sm transition-all disabled:opacity-40">
+          <Download size={16} /> Export CSV
         </button>
       </div>
 

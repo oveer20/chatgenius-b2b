@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import "./globals.css";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 import WhatsAppStickyMobile from "@/components/WhatsAppStickyMobile";
@@ -77,36 +78,12 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="preload" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500;600&family=DM+Sans:wght@400;500;600;700&display=swap" as="style" />
-        <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500;600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+        <link rel="preload" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&display=swap" as="style" />
+        <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
         <link rel="manifest" href="/manifest.json" />
-        {/* Google tag (gtag.js) */}
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-C3EKFHJ4FE"></script>
-        <script dangerouslySetInnerHTML={{
-          __html: `
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-C3EKFHJ4FE');
-          `,
-        }} />
-        {/* Google Tag Manager - for GTM container */}
-        <script dangerouslySetInnerHTML={{
-          __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-T8VQKWXX');`,
-        }} />
-        
-        {/* Google Tag Manager noscript */}
-        <noscript dangerouslySetInnerHTML={{
-          __html: `<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T8VQKWXX" height="0" width="0" style="display:none;visibility:hidden"></iframe>`,
-        }} />
-
       </head>
       <body className="m-0 p-0">
         <ThemeProvider>
-        {/* Google Tag Manager noscript */}
-        <noscript dangerouslySetInnerHTML={{
-          __html: `<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T8VQKWXX" height="0" width="0" style="display:none;visibility:hidden"></iframe>`,
-        }} />
         {children}
         <FloatingWhatsApp />
         <WhatsAppStickyMobile />
@@ -115,6 +92,18 @@ export default function RootLayout({
         <CookieConsent />
         <CalendlyButton />
         </ThemeProvider>
+
+        <Script strategy="afterInteractive" src="https://www.googletagmanager.com/gtag/js?id=G-C3EKFHJ4FE" />
+        <Script id="gtag-init" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: `
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-C3EKFHJ4FE');
+        ` }} />
+        <Script id="gtm-init" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: `
+          (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-T8VQKWXX');
+        ` }} />
+        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T8VQKWXX" height="0" width="0" style={{ display: 'none', visibility: 'hidden' }}></iframe></noscript>
 
         {/* Schema.org - SoftwareApplication */}
         <script

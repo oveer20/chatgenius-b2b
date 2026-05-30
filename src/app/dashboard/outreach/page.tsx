@@ -54,8 +54,8 @@ function OutreachContent() {
         if (res.ok) {
           const hotLeads = await res.json();
           const dynamicTargets: Target[] = hotLeads
-            .filter((l: any) => l.whatsapp)
-            .map((l: any) => ({
+            .filter((l: { whatsapp?: string }) => l.whatsapp)
+            .map((l: { name?: string; phone?: string; email?: string; bots?: { name?: string }; whatsapp: string }) => ({
               city: "Tus Leads Hot 🔥",
               name: l.name || "Prospecto",
               whatsapp: l.whatsapp.replace(/\D/g, ""),

@@ -58,7 +58,7 @@ export default function Stats() {
 
   return (
     <section>
-      <div className="py-32 px-[clamp(1.5rem,5vw,4rem)] bg-[linear-gradient(180deg,rgba(212,175,55,0.04)_0%,transparent_100%)] border-t border-[rgba(212,175,55,0.12)] border-b border-white/4">
+      <div className="py-32 px-[clamp(1.5rem,5vw,4rem)] bg-[linear-gradient(180deg,rgba(212,175,55,0.04)_0%,transparent_100%)] border-t border-accent/12 border-b border-white/4">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-[clamp(2rem,4vw,3rem)]">
           <span className="font-mono text-[12px] tracking-[0.15em] text-accent uppercase">
             {lang === "es" ? "Impacto Real en Números" : "Real Impact in Numbers"}
@@ -154,7 +154,7 @@ function TestimonialCard({ testimonial, index }: { testimonial: Testimonial; ind
       </p>
 
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-accent to-[#B8860B] flex items-center justify-center text-xs font-bold text-black shrink-0 shadow-[0_2px_8px_rgba(0,0,0,0.3)]">
+        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-accent to-accent2 flex items-center justify-center text-xs font-bold text-black shrink-0 shadow-[0_2px_8px_rgba(0,0,0,0.3)]">
           {testimonial.initials}
         </div>
         <div>
@@ -167,6 +167,7 @@ function TestimonialCard({ testimonial, index }: { testimonial: Testimonial; ind
 }
 
 function TestimonialCarousel({ testimonials }: { testimonials: Testimonial[] }) {
+  const { lang } = useLang();
   const [active, setActive] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -203,6 +204,7 @@ function TestimonialCarousel({ testimonials }: { testimonials: Testimonial[] }) 
           <button
             key={i}
             onClick={() => goTo(i)}
+            aria-label={lang === "es" ? `Ir al testimonio ${i + 1}` : `Go to testimonial ${i + 1}`}
             className={`h-1.5 rounded-full border-0 cursor-pointer transition-all duration-500 ${
               i === active ? 'w-8 bg-accent' : 'w-1.5 bg-white/10 hover:bg-white/20'
             }`}

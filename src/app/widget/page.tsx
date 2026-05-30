@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { FiSend, FiCpu, FiZap, FiMessageSquare } from "react-icons/fi";
-import { toast, Toaster } from "sonner";
+import { Toaster } from "sonner";
 import { motion } from "framer-motion";
 
 const DEMO_BOT = {
@@ -43,8 +43,8 @@ CIERRE: Si el cliente muestra interés, ofrece agendar una demo gratuita de 30 m
 };
 
 export default function WidgetPage() {
-  const [botConfig, setBotConfig] = useState<any>(DEMO_BOT);
-  const [messages, setMessages] = useState<any[]>([]);
+  const [botConfig, setBotConfig] = useState(DEMO_BOT);
+  const [messages, setMessages] = useState<{ role: string; content: string }[]>([]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [loadingBot, setLoadingBot] = useState(true);
