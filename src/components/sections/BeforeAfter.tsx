@@ -104,7 +104,7 @@ export default function BeforeAfter() {
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
 
   return (
-    <section className="px-[clamp(1.5rem,5vw,4rem)] py-[clamp(4rem,10vw,8rem)] max-w-[1100px] mx-auto relative">
+    <section className="px-[clamp(1.5rem,5vw,4rem)] py-32 max-w-[1100px] mx-auto relative">
       <div className="absolute top-[30%] left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-[radial-gradient(circle,rgba(212,175,55,0.06)_0%,transparent_60%)] blur-[60px] pointer-events-none" />
 
       <motion.div
@@ -116,7 +116,7 @@ export default function BeforeAfter() {
         <span className="inline-block bg-[rgba(255,95,86,0.12)] text-[#ff5f56] text-[13px] font-semibold px-4 py-[6px] rounded-full mb-4 tracking-[0.5px]">
           {content.badge}
         </span>
-        <h2 className="font-serif text-[clamp(2rem,5vw,3.5rem)] text-text-primary">
+        <h2 className="font-serif text-4xl md:text-5xl font-bold tracking-tighter text-text-primary">
           {content.titlePart1} <em className="text-accent italic">{content.titlePart2}</em>
         </h2>
       </motion.div>

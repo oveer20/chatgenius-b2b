@@ -18,7 +18,7 @@ export default function Sidebar() {
   return (
     <aside className="hidden md:flex w-[240px] flex-col border-r border-white/10 bg-bg/95 p-4 shrink-0">
       <Link href="/dashboard" className="flex items-center gap-2.5 px-3 py-4 mb-6 no-underline">
-        <img src="/stratix_shield.svg" alt="Stratix" className="w-7 h-7" />
+        <img src="/stratix_shield.svg" alt="Stratix" width={28} height={28} className="w-7 h-7" />
         <span className="font-sans text-lg font-bold text-text-primary">
           Stratix <span className="text-accent">Intelligence</span>
         </span>

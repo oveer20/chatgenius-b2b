@@ -96,14 +96,14 @@ export default function HowItWorks() {
   const svgIcons = STEPS_SVG[lang as keyof typeof STEPS_SVG];
 
   return (
-    <section id="como-funciona" className="px-[clamp(1.5rem,5vw,4rem)] py-[clamp(4rem,10vw,8rem)] max-w-[1200px] mx-auto relative">
+    <section id="como-funciona" className="px-[clamp(1.5rem,5vw,4rem)] py-32 max-w-[1200px] mx-auto relative">
       <div className="absolute top-[20%] -right-[10%] w-[400px] h-[400px] bg-[radial-gradient(circle,rgba(212,175,55,0.04)_0%,transparent_70%)] blur-[40px] pointer-events-none" />
 
       <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-14">
         <span className="inline-block bg-accent-dim text-accent text-xs font-semibold px-4 py-1.5 rounded-full mb-4 tracking-wide">
           {t.how.label}
         </span>
-        <h2 className="font-serif text-[clamp(2rem,5vw,3.5rem)] leading-[1.1] tracking-tight mb-4 text-text-primary">
+        <h2 className="font-serif text-4xl md:text-5xl font-bold tracking-tighter mb-4 text-text-primary">
           {t.how.title}<br />
           <em className="text-accent italic">{t.how.titleEm}</em>
         </h2>

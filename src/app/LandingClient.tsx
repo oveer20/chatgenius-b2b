@@ -20,18 +20,12 @@ const HowItWorks = lazy(() => import("@/components/sections/HowItWorks"));
 const BeforeAfter = lazy(() => import("@/components/sections/BeforeAfter"));
 const ScreensShowcase = lazy(() => import("@/components/sections/ScreensShowcase"));
 const Pricing = lazy(() => import("@/components/sections/Pricing"));
-const PricingComparison = lazy(() => import("@/components/sections/PricingComparison"));
 const InteractiveDemo = lazy(() => import("@/components/sections/InteractiveDemo"));
 const ROICalculator = lazy(() => import("@/components/sections/ROICalculator"));
-const ContactForm = lazy(() => import("@/components/sections/ContactForm"));
 const FAQ = lazy(() => import("@/components/sections/FAQ"));
-const TrustIndicators = lazy(() => import("@/components/sections/TrustIndicators"));
-const TrustBadges = lazy(() => import("@/components/sections/TrustBadges"));
 const CTA = lazy(() => import("@/components/sections/CTA"));
 const Footer = lazy(() => import("@/components/sections/Footer"));
 const FloatingSocialProof = lazy(() => import("@/components/sections/FloatingSocialProof"));
-const WelcomePopup = lazy(() => import("@/components/WelcomePopup"));
-const ExitIntentPopup = lazy(() => import("@/components/ExitIntentPopup"));
 
 function SectionFallback() {
   return <div className="h-64 w-full" />;
@@ -67,25 +61,13 @@ export default function LandingClient() {
             <Pricing />
           </Suspense>
           <Suspense fallback={<SectionFallback />}>
-            <PricingComparison />
-          </Suspense>
-          <Suspense fallback={<SectionFallback />}>
             <InteractiveDemo />
           </Suspense>
           <Suspense fallback={<SectionFallback />}>
             <ROICalculator />
           </Suspense>
           <Suspense fallback={<SectionFallback />}>
-            <ContactForm />
-          </Suspense>
-          <Suspense fallback={<SectionFallback />}>
             <FAQ />
-          </Suspense>
-          <Suspense fallback={<SectionFallback />}>
-            <TrustIndicators />
-          </Suspense>
-          <Suspense fallback={<SectionFallback />}>
-            <TrustBadges />
           </Suspense>
           <Suspense fallback={<SectionFallback />}>
             <CTA />
@@ -96,12 +78,6 @@ export default function LandingClient() {
         </div>
         <Suspense fallback={null}>
           <FloatingSocialProof />
-        </Suspense>
-        <Suspense fallback={null}>
-          <WelcomePopup />
-        </Suspense>
-        <Suspense fallback={null}>
-          <ExitIntentPopup />
         </Suspense>
         <Toaster theme="dark" richColors position="top-center" />
       </main>

@@ -98,7 +98,7 @@ export default function InteractiveDemo() {
     : "Chat with our AI. No signup. No card. Just type.";
 
   return (
-    <section className="relative mx-auto max-w-[700px] px-[clamp(1.5rem,5vw,4rem)] py-[clamp(4rem,10vw,6rem)]">
+    <section className="relative mx-auto max-w-[700px] px-[clamp(1.5rem,5vw,4rem)] py-32">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_50%,rgba(212,175,55,0.06)_0%,transparent_60%)]" />
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -106,7 +106,7 @@ export default function InteractiveDemo() {
         viewport={{ once: true }}
         className="relative mb-8 text-center"
       >
-        <h2 className="font-serif text-[clamp(2rem,5vw,3rem)] text-text-primary mb-3">
+        <h2 className="font-serif text-4xl md:text-5xl font-bold tracking-tighter text-text-primary mb-3">
           {title}
         </h2>
         <p className="text-text-secondary text-base">{subtitle}</p>

@@ -41,7 +41,7 @@ export default function Integrations() {
   const label = lang === "es" ? "CONECTADO CON" : "CONNECTED WITH";
 
   return (
-    <section className="py-[clamp(2rem,5vw,4rem)] px-[clamp(1.5rem,5vw,4rem)] bg-white/1 border-t border-white/5 border-b border-white/5">
+    <section className="py-24 px-[clamp(1.5rem,5vw,4rem)] bg-white/1 border-t border-white/5 border-b border-white/5">
       <div className="text-center mb-8">
         <span className="font-mono text-[11px] tracking-[2px] text-text-muted uppercase">
 {label}

@@ -16,7 +16,7 @@ export default function ROICalculator() {
   const stratixCost = 79000;
 
   return (
-    <section id="calculadora" className="border-y border-accent/10 bg-gradient-to-b from-bg via-bg3 to-bg px-[clamp(1.5rem,5vw,4rem)] py-[clamp(4rem,10vw,8rem)]">
+    <section id="calculadora" className="border-y border-accent/10 bg-gradient-to-b from-bg via-bg3 to-bg px-[clamp(1.5rem,5vw,4rem)] py-32">
       <div className="mx-auto max-w-[1000px] text-center">
         <motion.span
           initial={{ opacity: 0, y: 20 }}
@@ -24,14 +24,14 @@ export default function ROICalculator() {
           viewport={{ once: true }}
           className="mb-5 inline-block rounded-full bg-[rgba(255,95,86,0.15)] px-4 py-1.5 font-sans text-[13px] font-semibold tracking-[0.05em] text-[#ff5f56]"
         >
-          CALCULADORA DE PERDIDAS
+          {t.roi.badge}
         </motion.span>
 
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mb-4 font-serif text-[clamp(2rem,5vw,3.5rem)] text-text-primary"
+          className="mb-4 font-serif text-4xl md:text-5xl font-bold tracking-tighter text-text-primary"
         >
           {t.roi.titlePart1} <span className="italic text-[#ff5f56]">{t.roi.titlePart2}</span> hoy?
         </motion.h2>

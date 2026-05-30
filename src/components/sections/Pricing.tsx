@@ -57,13 +57,13 @@ export default function Pricing() {
   };
 
   return (
-    <section id="planes" className="px-[clamp(1.5rem,5vw,4rem)] py-[clamp(4rem,10vw,8rem)] max-w-[1200px] mx-auto">
+    <section id="planes" className="px-[clamp(1.5rem,5vw,4rem)] py-32 max-w-[1200px] mx-auto">
       <div className="text-center mb-12">
         <span className="inline-block bg-accent-dim text-accent text-xs font-semibold px-4 py-1.5 rounded-full mb-5 font-sans tracking-wider">
           {t.pricing.label || "INVERSION INTELIGENTE"}
         </span>
         
-        <h2 className="font-serif text-[clamp(2rem,5vw,3.5rem)] leading-[1.1] tracking-tight mb-4 text-text-primary">
+        <h2 className="font-serif text-4xl md:text-5xl font-bold tracking-tighter mb-4 text-text-primary">
           {t.pricing.title} <em className="text-accent italic">{t.pricing.titleEm}</em>
         </h2>
         
@@ -76,7 +76,7 @@ export default function Pricing() {
             aria-checked={isAnnual}
             className={"w-14 h-7 rounded-full relative border-0 cursor-pointer transition-colors duration-300 " + (isAnnual ? 'bg-accent' : 'bg-white/10')}
           >
-            <div className={"absolute top-[3px] w-[22px] h-[22px] rounded-full bg-black transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] " + (isAnnual ? 'left-[31px]' : 'left-[3px]')} />
+            <div className={"absolute top-[3px] w-[22px] h-[22px] rounded-full bg-bg transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] " + (isAnnual ? 'left-[31px]' : 'left-[3px]')} />
           </button>
           <span className={"text-sm font-sans transition-colors duration-300 " + (isAnnual ? 'text-white font-bold' : 'text-text-secondary font-medium')}>
             {t.pricing.annual || "Anual"} <span className="text-accent text-xs">{t.pricing.saveBadge || "(Ahorra 20%)"}</span>
@@ -99,10 +99,10 @@ export default function Pricing() {
               viewport={{ once: true }}
               onMouseEnter={() => setHoveredPlan(plan.tier)}
               onMouseLeave={() => setHoveredPlan(null)}
-              whileHover={{ y: isHighlighted ? 0 : -8 }}
+              whileHover={{ y: isHighlighted ? -4 : -8 }}
               className={`relative rounded-2xl flex flex-col h-full transition-all duration-300 ${
                 isHighlighted
-                  ? 'p-10 bg-gradient-to-b from-accent/15 to-[#0d1017] border-2 border-accent shadow-[0_20px_60px_rgba(212,175,55,0.15)] scale-[1.05] z-10'
+                  ? 'p-10 bg-gradient-to-b from-accent/15 to-[#0d1017] border-2 border-accent shadow-[0_20px_60px_rgba(212,175,55,0.15)] scale-[1.03] z-10'
                   : 'p-8 bg-white/[0.02] border border-white/8 shadow-sm shadow-black/20'
               } ${isHovered && !isHighlighted ? 'bg-white/[0.06] border-accent/30 shadow-[0_10px_30px_rgba(0,0,0,0.3)]' : ''}`}
             >

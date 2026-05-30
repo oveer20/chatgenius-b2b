@@ -38,7 +38,7 @@ export default function SettingsPage() {
   return (
     <div className="max-w-[800px]">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="mb-2 font-serif text-[clamp(1.8rem,4vw,2.5rem)]">Ajustes</h1>
+        <h1 className="mb-2 font-serif text-4xl md:text-5xl font-bold tracking-tighter">Ajustes</h1>
         <p className="mb-10 text-text-secondary">Gestiona tu perfil, plan y preferencias de cuenta.</p>
       </motion.div>
 
@@ -48,7 +48,7 @@ export default function SettingsPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.05 }}
-          className="rounded-2xl border border-white/10 bg-bg/60 p-8"
+          className="rounded-xl border border-white/10 bg-bg/60 p-8"
         >
           <div className="mb-6 flex items-center gap-3">
             <FiUser className="text-accent" size={20} />
@@ -73,7 +73,7 @@ export default function SettingsPage() {
             <button
               onClick={handleUpdateProfile}
               disabled={loading}
-              className="self-start rounded-xl bg-accent px-6 py-3 text-sm font-bold text-[#030a05] transition-all duration-200 hover:opacity-90 disabled:opacity-50"
+              className="self-start rounded-xl bg-accent px-6 py-3 text-sm font-bold text-[#030a05] transition-all duration-200 hover:opacity-90 hover:scale-105 disabled:opacity-50"
             >
               {loading ? "Guardando..." : "Guardar cambios"}
             </button>
@@ -85,7 +85,7 @@ export default function SettingsPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="rounded-2xl border border-accent/20 bg-accent-dim/30 p-8"
+          className="rounded-xl border border-accent/20 bg-accent-dim/30 p-8"
         >
           <div className="mb-6 flex items-center gap-3">
             <FiCreditCard className="text-accent" size={20} />
@@ -98,7 +98,7 @@ export default function SettingsPage() {
             </div>
             <Link
               href="/#planes"
-              className="rounded-xl bg-accent px-6 py-3 text-sm font-bold text-[#030a05] no-underline transition-all duration-200 hover:opacity-90"
+              className="rounded-xl bg-accent px-6 py-3 text-sm font-bold text-[#030a05] no-underline transition-all duration-200 hover:opacity-90 hover:scale-105"
             >
               Ver planes
             </Link>
@@ -110,7 +110,7 @@ export default function SettingsPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
-          className="rounded-2xl border border-white/10 bg-bg/60 p-8"
+          className="rounded-xl border border-white/10 bg-bg/60 p-8"
         >
           <div className="mb-6 flex items-center gap-3">
             <FiShield className="text-accent" size={20} />
@@ -120,7 +120,7 @@ export default function SettingsPage() {
             href="https://wa.me/573159269287"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block rounded-xl border border-white/20 px-6 py-3 text-sm font-medium text-text-primary no-underline transition-all duration-200 hover:bg-white/5"
+            className="inline-block rounded-xl border border-white/20 px-6 py-3 text-sm font-medium text-text-primary no-underline transition-all duration-200 hover:bg-white/5 hover:scale-105"
           >
             Solicitar cambio de contraseña
           </a>

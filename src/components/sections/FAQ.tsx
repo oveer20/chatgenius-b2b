@@ -57,7 +57,7 @@ export default function FAQ() {
   const faqs = FAQS[lang as keyof typeof FAQS] || FAQS.es;
 
   return (
-    <section className="mx-auto max-w-[800px] px-[clamp(1.5rem,5vw,4rem)] py-[clamp(4rem,10vw,8rem)]">
+    <section className="mx-auto max-w-[800px] px-[clamp(1.5rem,5vw,4rem)] py-32">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -67,7 +67,7 @@ export default function FAQ() {
         <span className="mb-4 inline-block rounded-full bg-accent/15 px-4 py-[6px] text-[13px] font-semibold tracking-[0.5px] text-accent">
           {t.faq.badge}
         </span>
-        <h2 className="font-serif text-[clamp(2rem,5vw,3rem)] text-text-primary">
+        <h2 className="font-serif text-4xl md:text-5xl font-bold tracking-tighter text-text-primary">
           {t.faq.titlePart1} <span className="text-accent">{t.faq.titlePart2}</span>
         </h2>
       </motion.div>
@@ -76,7 +76,7 @@ export default function FAQ() {
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="rounded-xl border border-white/7 bg-bg/60 px-6 backdrop-blur-xl"
+        className="rounded-xl border border-white/10 bg-bg/60 px-6 backdrop-blur-xl"
       >
         {faqs.map((faq: {q: string; a: string}, i: number) => (
           <FAQItem key={i} faq={faq} index={i} />

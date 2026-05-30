@@ -52,7 +52,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
       </div>
       <div className="flex flex-1 flex-col">
         <Header user={user} onMenuToggle={() => setSidebarOpen(!sidebarOpen)} />
-        <main className="mx-auto w-full max-w-[1400px] flex-1 px-[clamp(1.5rem,3vw,3rem)] py-8">
+        <main className="mx-auto w-full max-w-[1400px] flex-1 px-[clamp(1.5rem,5vw,4rem)] py-16">
           {children}
         </main>
       </div>

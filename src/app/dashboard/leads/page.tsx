@@ -2,6 +2,7 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { FiDownload, FiSearch, FiArrowLeft, FiActivity, FiUsers, FiZap, FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import { SkeletonTableRow, SkeletonKPI } from "@/components/ui/SkeletonLoader";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
@@ -72,40 +73,59 @@ function LeadsDashboardContent() {
   };
 
   return (
-    <div className="min-h-screen bg-bg text-text-primary p-8">
-      <div className="max-w-5xl mx-auto">
-        <div className="flex justify-between items-center mb-12 flex-wrap gap-4">
-          <div>
-            <Link href="/dashboard" className="text-accent no-underline flex items-center gap-2 text-xs font-bold mb-4">
-              <FiArrowLeft /> REGRESAR AL DASHBOARD
-            </Link>
-            <h1 className="text-4xl font-black tracking-tight">
-              Intelligence <span className="text-accent">Lead Board</span>
-            </h1>
-          </div>
-          <button onClick={() => handleExport(null)} disabled={isExporting || leads.length === 0}
-            className="px-7 py-3.5 bg-accent text-black border-none rounded-md font-black cursor-pointer flex items-center gap-2.5 transition-all duration-200 disabled:opacity-50">
-            <FiDownload /> {isExporting ? "EXPORTANDO..." : "EXPORTAR CSV"}
-          </button>
+    <div>
+      <div className="flex justify-between items-center mb-12 flex-wrap gap-4">
+        <div>
+          <Link href="/dashboard" className="text-accent no-underline flex items-center gap-2 text-xs font-bold mb-4">
+            <FiArrowLeft /> Regresar al Dashboard
+          </Link>
+          <h1 className="font-serif text-4xl md:text-5xl font-bold tracking-tighter">
+            Intelligence <span className="text-accent">Lead Board</span>
+          </h1>
         </div>
+        <button onClick={() => handleExport(null)} disabled={isExporting || leads.length === 0}
+          className="px-6 py-3 bg-accent text-black border-none rounded-xl font-bold cursor-pointer flex items-center gap-2.5 transition-all duration-200 hover:scale-105 disabled:opacity-50">
+          <FiDownload /> {isExporting ? "Exportando..." : "Exportar CSV"}
+        </button>
+      </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          {[
-            { label: 'PROSPECTOS TOTALES', value: leads.length, icon: <FiUsers />, colorClass: 'text-blue-500' },
-            { label: 'LEADS HOT', value: hotLeadsCount, icon: <FiZap />, colorClass: 'text-accent' },
-            { label: 'TASA DE CONVERSIÓN', value: `${intentionRate}%`, icon: <FiActivity />, colorClass: 'text-green-500' }
-          ].map((stat, i) => (
-            <div key={i} className="p-8 bg-white/[0.02] rounded-2xl border border-white/5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+          {isLoading ? (
+            <SkeletonKPI />
+          ) : (
+            <div key="prospectos" className="rounded-xl border border-white/10 bg-bg/60 p-6">
               <div className="flex justify-between items-center mb-4">
-                <span className="text-xs font-black opacity-30 tracking-widest">{stat.label}</span>
-                <span className={stat.colorClass}>{stat.icon}</span>
+                <span className="text-xs font-semibold text-text-muted uppercase tracking-wider">Prospectos Totales</span>
+                <FiUsers className="text-blue-500" />
               </div>
-              <div className="text-4xl font-black">{stat.value}</div>
+              <div className="font-serif text-3xl font-bold tracking-tighter text-text-primary">{leads.length}</div>
             </div>
-          ))}
+          )}
+          {isLoading ? (
+            <SkeletonKPI />
+          ) : (
+            <div key="hot" className="rounded-xl border border-white/10 bg-bg/60 p-6">
+              <div className="flex justify-between items-center mb-4">
+                <span className="text-xs font-semibold text-text-muted uppercase tracking-wider">Leads Hot</span>
+                <FiZap className="text-accent" />
+              </div>
+              <div className="font-serif text-3xl font-bold tracking-tighter text-text-primary">{hotLeadsCount}</div>
+            </div>
+          )}
+          {isLoading ? (
+            <SkeletonKPI />
+          ) : (
+            <div key="tasa" className="rounded-xl border border-white/10 bg-bg/60 p-6">
+              <div className="flex justify-between items-center mb-4">
+                <span className="text-xs font-semibold text-text-muted uppercase tracking-wider">Tasa de Conversión</span>
+                <FiActivity className="text-green-500" />
+              </div>
+              <div className="font-serif text-3xl font-bold tracking-tighter text-text-primary">{intentionRate}%</div>
+            </div>
+          )}
         </div>
 
-        <div className="bg-bg2/80 p-6 rounded-3xl border border-accent/15 backdrop-blur-xl">
+        <div className="bg-bg/60 p-6 rounded-xl border border-white/10 backdrop-blur-xl">
           <div className="relative mb-8">
             <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 opacity-40" />
             <input placeholder="Buscar por nombre, empresa o correo..."
@@ -116,7 +136,7 @@ function LeadsDashboardContent() {
           <div className="overflow-x-auto">
             <table className="w-full border-collapse text-left">
               <thead>
-                <tr className="border-b border-white/5 text-xs font-black opacity-40 text-accent">
+                <tr className="border-b border-white/5 text-xs font-semibold text-text-muted">
                   <th className="p-4">CONTACTO</th>
                   <th className="p-4">BOT</th>
                   <th className="p-4">INTENCIÓN</th>
@@ -126,7 +146,7 @@ function LeadsDashboardContent() {
               </thead>
               <tbody>
                 {isLoading ? (
-                  <tr><td colSpan={5} className="text-center p-16 opacity-50">Analizando base de datos...</td></tr>
+                  <SkeletonTableRow cols={5} />
                 ) : paginatedLeads.length === 0 ? (
                   <tr><td colSpan={5} className="text-center p-16 opacity-50">No se encontraron prospectos. Ve al dashboard para cargar leads de ejemplo.</td></tr>
                 ) : paginatedLeads.map((lead, i) => {
@@ -196,9 +216,8 @@ function LeadsDashboardContent() {
           )}
         </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
 
 export default function LeadsDashboard() {
   return (

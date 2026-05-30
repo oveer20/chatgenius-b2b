@@ -74,7 +74,7 @@ const translations: Record<string, any> = {
       badge: "🤖 IA + AUTOMATIZACIÓN",
       titleLine1: "Tu agente de ventas",
       titleLine2: "que nunca duerme",
-      subtitle: "Automatiza tu atención 24/7. Responde instantly. Cierra deals mientras descansas.",
+      subtitle: "Automatiza tu atención 24/7. Responde al instante. Cierra ventas mientras descansas.",
       cta1: "Comenzar Gratis",
       cta2: "Ver Demo en Vivo",
     },
@@ -131,7 +131,7 @@ const translations: Record<string, any> = {
     how: {
       label: "PROCESO SIMPLE",
       title: "Cómo funciona en",
-      titleEm: "3 pasos",
+      titleEm: "4 pasos",
       subtitle: "Desde la configuración hasta resultados en menos de 15 minutos.",
     },
     testimonials: {
@@ -259,7 +259,7 @@ const translations: Record<string, any> = {
     how: {
       label: "SIMPLE PROCESS",
       title: "How it works in",
-      titleEm: "3 steps",
+      titleEm: "4 steps",
       subtitle: "From setup to results in less than 15 minutes.",
     },
     testimonials: {

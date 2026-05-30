@@ -103,91 +103,86 @@ export default function NewBotPage() {
   };
 
   return (
-    <div className="bg-bg min-h-screen text-white py-16 px-[5%] font-sans">
-      <div className="mx-auto max-w-[700px]">
+    <div className="max-w-[700px]">
+      <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-12">
+        <Link href="/dashboard" className="text-accent no-underline flex items-center gap-2 text-xs font-semibold mb-4">
+          <FiArrowLeft /> Volver al Dashboard
+        </Link>
+        <h1 className="font-serif text-4xl md:text-5xl font-bold tracking-tighter mt-6">
+          Crear <span className="text-accent">Agente IA</span>
+        </h1>
+        <p className="text-text-secondary mt-2">Configura tu agente para atención automática.</p>
+      </motion.div>
 
-        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-12">
-          <Link href="/dashboard" className="text-accent no-underline flex items-center gap-2 text-[0.85rem] font-black tracking-[1px]">
-            <FiArrowLeft /> VOLVER AL DASHBOARD
-          </Link>
-          <h1 className="text-[2.8rem] font-black mt-6 font-sans tracking-[-1px]">
-            Crear <span className="text-accent">Agente IA</span>
-          </h1>
-          <p className="opacity-50 text-[1.1rem] mt-2">Configura tu agente para atención automática.</p>
-        </motion.div>
+      <motion.form
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+        onSubmit={handleSubmit}
+        className="rounded-xl border border-white/10 bg-bg/60 p-8 backdrop-blur-xl"
+      >
+        <div className="mb-8">
+          <label className="block text-xs font-semibold text-text-muted mb-2 uppercase tracking-wider">Nombre del Agente</label>
+          <div className="relative">
+            <FiCpu className="absolute left-4 top-1/2 -translate-y-1/2 text-accent" />
+            <input
+              required name="name" value={formData.name} onChange={handleChange}
+              placeholder="Ej: Asesor Inmobiliario"
+              className="w-full px-4 py-3 pl-12 rounded-xl border border-white/10 bg-white/5 text-text-primary text-base outline-none focus:border-accent/30 transition-all duration-200"
+            />
+          </div>
+        </div>
 
-        <motion.form
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          onSubmit={handleSubmit}
-          className="bg-white/[0.03] p-12 rounded-3xl border border-accent/10"
+        <div className="mb-8">
+          <label className="block text-xs font-semibold text-text-muted mb-2 uppercase tracking-wider">Descripción</label>
+          <div className="relative">
+            <FiActivity className="absolute left-4 top-1/2 -translate-y-1/2 text-accent" />
+            <input
+              required name="description" value={formData.description} onChange={handleChange}
+              placeholder="Ej: Asesor de ventas inmobiliarias"
+              className="w-full px-4 py-3 pl-12 rounded-xl border border-white/10 bg-white/5 text-text-primary text-base outline-none focus:border-accent/30 transition-all duration-200"
+            />
+          </div>
+        </div>
+
+        <div className="mb-12">
+          <label className="block text-xs font-semibold text-text-muted mb-4 uppercase tracking-wider">Modelo IA</label>
+          <div className="grid grid-cols-2 gap-4">
+            {[
+              { id: 'gemini', label: 'Gemini 2.0 Flash', tag: 'Principal', color: '#4285F4' },
+              { id: 'gpt', label: 'GPT-3.5 Turbo', tag: 'Backup', color: '#10A37F' },
+              { id: 'groq', label: 'Llama 3.1 8B - Groq', tag: 'Gratis', color: '#FF6B35' },
+              { id: 'mistral', label: 'Mistral Small', tag: 'Gratis', color: '#9F7AEA' }
+            ].map(model => (
+              <div
+                key={model.id}
+                onClick={() => setFormData({ ...formData, model: model.id })}
+                className={`p-4 rounded-xl cursor-pointer transition-all duration-200 ${
+                  formData.model === model.id
+                    ? 'border-2 border-accent bg-accent-dim'
+                    : 'border border-white/10 bg-white/5'
+                }`}
+              >
+                <div className="text-xs font-semibold text-white px-2 py-0.5 rounded inline-block mb-2" style={{ background: model.color }}>{model.tag}</div>
+                <div className="font-semibold text-sm text-text-primary">{model.label}</div>
+              </div>
+            ))}
+          </div>
+          <p className="text-xs text-text-muted mt-4">
+            Todos incluyen failover automático — si falla uno, otro responde
+          </p>
+        </div>
+
+        <button
+          type="submit" disabled={loading || !formData.name}
+          className={`w-full py-3 rounded-xl border-none flex items-center justify-center gap-3 text-sm font-bold text-black transition-all duration-200 hover:scale-[1.02] ${
+            loading ? 'bg-accent/20 cursor-not-allowed' : 'bg-accent cursor-pointer'
+          }`}
         >
-
-          <div className="mb-8">
-            <label className="block text-xs font-black opacity-40 mb-3 tracking-[1px]">NOMBRE DEL AGENTE</label>
-            <div className="relative">
-              <FiCpu className="absolute left-4 top-1/2 -translate-y-1/2 text-accent" />
-              <input
-                required name="name" value={formData.name} onChange={handleChange}
-                placeholder="Ej: Asesor Inmobiliario"
-                className="w-full p-4 pl-12 rounded-[15px] border border-white/10 bg-black/30 text-white text-base font-semibold outline-none box-border"
-              />
-            </div>
-          </div>
-
-          <div className="mb-8">
-            <label className="block text-xs font-black opacity-40 mb-3 tracking-[1px]">DESCRIPCIÓN</label>
-            <div className="relative">
-              <FiActivity className="absolute left-4 top-1/2 -translate-y-1/2 text-accent" />
-              <input
-                required name="description" value={formData.description} onChange={handleChange}
-                placeholder="Ej: Asesor de ventas inmobiliarias"
-                className="w-full p-4 pl-12 rounded-[15px] border border-white/10 bg-black/30 text-white text-base outline-none box-border"
-              />
-            </div>
-          </div>
-
-          <div className="mb-12">
-            <label className="block text-xs font-black opacity-40 mb-4 tracking-[1px]">MODELO IA</label>
-            <div className="grid grid-cols-2 gap-4">
-              {[
-                { id: 'gemini', label: 'Gemini 2.0 Flash', tag: 'PRINCIPAL', color: '#4285F4' },
-                { id: 'gpt', label: 'GPT-3.5 Turbo', tag: 'BACKUP', color: '#10A37F' },
-                { id: 'groq', label: 'Llama 3.1 8B - Groq', tag: 'GRATIS', color: '#FF6B35' },
-                { id: 'mistral', label: 'Mistral Small', tag: 'GRATIS', color: '#9F7AEA' }
-              ].map(model => (
-                <div
-                  key={model.id}
-                  onClick={() => setFormData({ ...formData, model: model.id })}
-                  className={`p-5 rounded-[18px] cursor-pointer transition-all duration-200 ${
-                    formData.model === model.id
-                      ? 'border-2 border-accent bg-accent-dim'
-                      : 'border border-white/5 bg-white/[0.03]'
-                  }`}
-                >
-                  <div className="text-[0.6rem] font-black text-white px-2 py-0.5 rounded-xs inline-block mb-2" style={{ background: model.color }}>{model.tag}</div>
-                  <div className="font-extrabold text-[0.9rem]">{model.label}</div>
-                </div>
-              ))}
-            </div>
-            <p className="text-[0.7rem] opacity-50 mt-4">
-              Todos incluyen failover automático - si falla uno, otro responde
-            </p>
-          </div>
-
-          <button
-            type="submit" disabled={loading || !formData.name}
-            className={`w-full p-5 rounded-[18px] border-none flex items-center justify-center gap-3 text-[1.1rem] font-black text-black ${
-              loading ? 'bg-accent/20 cursor-not-allowed' : 'bg-accent cursor-pointer'
-            }`}
-          >
-            {loading ? <FiZap /> : <FiPlus />}
-            {loading ? 'CREANDO...' : 'CREAR AGENTE'}
-          </button>
-
-        </motion.form>
-      </div>
+          {loading ? <FiZap className="animate-pulse" /> : <FiPlus />}
+          {loading ? 'Creando...' : 'Crear Agente'}
+        </button>
+      </motion.form>
     </div>
   );
 }

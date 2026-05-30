@@ -77,6 +77,7 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="preload" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500;600&family=DM+Sans:wght@400;500;600;700&display=swap" as="style" />
         <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500;600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
         <link rel="manifest" href="/manifest.json" />
         {/* Google tag (gtag.js) */}
@@ -94,47 +95,10 @@ export default function RootLayout({
           __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-T8VQKWXX');`,
         }} />
         
-        {/* Schema.org - SoftwareApplication */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "SoftwareApplication",
-              "name": "Stratix Intelligence",
-              "applicationCategory": "BusinessApplication",
-              "operatingSystem": "Cloud, Web, WhatsApp, Instagram",
-              "url": "https://stratix-intelligence-ia.vercel.app",
-              "description": "Agente de IA para automatización de ventas 24/7 en WhatsApp, Instagram y Web",
-              "offers": {
-                "@type": "Offer",
-                "price": "49.00",
-                "priceCurrency": "USD",
-                "availability": "https://schema.org/InStock"
-              },
-              "aggregateRating": {
-                "@type": "AggregateRating",
-                "ratingValue": "4.9",
-                "ratingCount": "1871",
-                "bestRating": "5",
-                "worstRating": "4"
-              },
-              "creator": {
-                "@type": "Organization",
-                "name": "Stratix Intelligence",
-                "url": "https://stratix-intelligence-ia.vercel.app",
-                "location": {
-                  "@type": "Place",
-                  "address": {
-                    "@type": "PostalAddress",
-                    "addressLocality": "Bogotá",
-                    "addressCountry": "CO"
-                  }
-                }
-              }
-            }),
-          }}
-        />
+        {/* Google Tag Manager noscript */}
+        <noscript dangerouslySetInnerHTML={{
+          __html: `<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T8VQKWXX" height="0" width="0" style="display:none;visibility:hidden"></iframe>`,
+        }} />
 
         {/* Schema.org - Organization */}
         <script
@@ -219,6 +183,113 @@ export default function RootLayout({
         <CookieConsent />
         <CalendlyButton />
         </ThemeProvider>
+
+        {/* Schema.org - SoftwareApplication */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "SoftwareApplication",
+              "name": "Stratix Intelligence",
+              "applicationCategory": "BusinessApplication",
+              "operatingSystem": "Cloud, Web, WhatsApp, Instagram",
+              "url": "https://stratix-intelligence-ia.vercel.app",
+              "description": "Agente de IA para automatización de ventas 24/7 en WhatsApp, Instagram y Web",
+              "offers": {
+                "@type": "Offer",
+                "price": "49.00",
+                "priceCurrency": "USD",
+                "availability": "https://schema.org/InStock"
+              },
+              "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": "4.9",
+                "ratingCount": "1871",
+                "bestRating": "5",
+                "worstRating": "4"
+              },
+              "creator": {
+                "@type": "Organization",
+                "name": "Stratix Intelligence",
+                "url": "https://stratix-intelligence-ia.vercel.app",
+                "location": {
+                  "@type": "PostalAddress",
+                  "addressLocality": "Bogotá",
+                  "addressCountry": "CO"
+                }
+              }
+            }),
+          }}
+        />
+
+        {/* Schema.org - Organization */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "Stratix Intelligence",
+              "url": "https://stratix-intelligence-ia.vercel.app",
+              "logo": "https://stratix-intelligence-ia.vercel.app/stratix_shield.svg",
+              "description": "Agente de IA para automatización de ventas 24/7",
+              "address": {
+                "@type": "PostalAddress",
+                "addressLocality": "Bogotá",
+                "addressRegion": "Cundinamarca",
+                "addressCountry": "CO"
+              },
+              "contactPoint": {
+                "@type": "ContactPoint",
+                "telephone": "+573159269287",
+                "contactType": "sales",
+                "availableLanguage": ["Spanish", "English"]
+              },
+              "sameAs": [
+                "https://wa.me/573159269287"
+              ]
+            }),
+          }}
+        />
+
+        {/* Schema.org - FAQPage */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@mainEntity": [
+                { "@type": "Question", "name": "¿Cuánto tiempo tarda en configurarse Stratix?", "acceptedAnswer": { "@type": "Answer", "text": "En 15 minutos tienes tu primer agente configurado. No necesitas experiencia técnica." }},
+                { "@type": "Question", "name": "¿Stratix se integra con mi CRM?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. Conectamos con HubSpot, Salesforce, Zoho, Pipedrive y cualquier sistema con API." }},
+                { "@type": "Question", "name": "¿Hay garantía?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. 7 días gratis y garantía de devolución del 100% en 30 días." }},
+                { "@type": "Question", "name": "¿Stratix funciona con WhatsApp?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. Se integra directamente con WhatsApp Business API, respondiendo automáticamente en segundos, 24/7." }},
+                { "@type": "Question", "name": "¿Cuánto cuesta?", "acceptedAnswer": { "@type": "Answer", "text": "Desde $49 USD/mes. Sin contratos largos. Empieza gratis y cancela cuando quieras." }},
+                { "@type": "Question", "name": "¿Necesito conocimientos técnicos?", "acceptedAnswer": { "@type": "Answer", "text": "No. Configurar Stratix toma 15 minutos. Solo subes tu información." }},
+                { "@type": "Question", "name": "¿Qué pasa si el cliente quiere hablar con un humano?", "acceptedAnswer": { "@type": "Answer", "text": "El bot detecta la intención y transfiere automáticamente a tu equipo cuando es necesario." }},
+                { "@type": "Question", "name": "¿Puedo cancelar en cualquier momento?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. Sin contratos largos ni penalizaciones. Cancela desde tu dashboard cuando quieras." }},
+                { "@type": "Question", "name": "¿Cuántos agentes puedo tener?", "acceptedAnswer": { "@type": "Answer", "text": "Desde 1 agente en el plan Starter hasta ilimitados en el plan Enterprise." }}
+              ]
+            }),
+          }}
+        />
+
+        {/* Schema.org - VideoObject */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "VideoObject",
+              "name": "Stratix Intelligence Demo",
+              "description": "Mira cómo Stratix automatiza ventas en WhatsApp, Instagram y Web 24/7",
+              "uploadDate": "2026-05-08",
+              "duration": "PT1M",
+              "embedUrl": "https://stratix-intelligence-ia.vercel.app",
+              "thumbnailUrl": "https://stratix-intelligence-ia.vercel.app/stratix_shield.svg",
+            }),
+          }}
+        />
       </body>
     </html>
   );

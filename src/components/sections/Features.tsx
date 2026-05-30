@@ -2,7 +2,7 @@
 
 import { useLang } from "@/components/LangContext";
 import { motion } from "framer-motion";
-import { useState, useRef } from "react";
+import { useState } from "react";
 
 const FEATURES = [
   { icon: "01", titleKey: "memory", descKey: "memoryDesc" },
@@ -37,35 +37,21 @@ const TAGS = { es: ["WhatsApp", "Instagram", "Web", "Slack"], en: ["WhatsApp", "
 function FeatureCard({ feature, index }: { feature: typeof FEATURES[0]; index: number }) {
   const { lang } = useLang();
   const [hovered, setHovered] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const t = TRANSLATIONS[lang as keyof typeof TRANSLATIONS];
   const tags = TAGS[lang as keyof typeof TAGS];
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!ref.current) return;
-    const rect = ref.current.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width - 0.5) * 6;
-    const y = ((e.clientY - rect.top) / rect.height - 0.5) * -6;
-    setTilt({ x, y });
-  };
-
   return (
     <motion.div 
-      ref={ref}
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
       transition={{ delay: index * 0.1 }}
       onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => { setHovered(false); setTilt({ x: 0, y: 0 }); }}
-      onMouseMove={handleMouseMove}
-      animate={hovered ? { rotateY: tilt.x, rotateX: tilt.y } : {}}
-      style={{ transformStyle: 'preserve-3d' }}
+      onMouseLeave={() => setHovered(false)}
       className={`p-7 min-w-[280px] flex-1 relative overflow-hidden border transition-[background,backdrop-filter] duration-[0.4s] ease-in-out ${
         hovered
-          ? 'bg-bg/80 backdrop-blur-xl border-accent/40 shadow-[0_25px_50px_rgba(0,0,0,0.5),0_0_40px_rgba(212,175,55,0.1)]'
-          : 'bg-bg/60 backdrop-blur-lg border-white/7 shadow-[0_10px_40px_rgba(0,0,0,0.3)]'
+          ? 'bg-bg/80 backdrop-blur-xl border-accent/30 shadow-[0_25px_50px_rgba(0,0,0,0.5),0_0_40px_rgba(212,175,55,0.1)]'
+          : 'bg-bg/60 backdrop-blur-lg border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.3)]'
       }`}
     >
       {hovered && (
@@ -152,21 +138,20 @@ export default function Features() {
   return (
     <section 
       id="productos" 
-      className="px-[clamp(1.5rem,5vw,4rem)] py-[clamp(4rem,10vw,8rem)] max-w-[1200px] mx-auto"
+      className="px-[clamp(1.5rem,5vw,4rem)] py-32 max-w-[1200px] mx-auto"
     >
-      <div className="flex items-center gap-3 mb-4">
-        <span className="w-6 h-px bg-accent" />
-        <span className="font-mono text-xs tracking-[0.12em] text-accent uppercase">{t.features.label}</span>
+      <div className="text-center mb-4">
+        <span className="inline-block font-mono text-xs tracking-[0.12em] text-accent uppercase bg-accent-dim px-4 py-1.5 rounded-full">{t.features.label}</span>
       </div>
       
-      <h2 className="font-serif text-[clamp(2rem,5vw,3.5rem)] leading-[1.1] tracking-[-0.02em] mb-4 text-text-primary">
+      <h2 className="font-serif text-4xl md:text-5xl font-bold tracking-tighter mb-4 text-text-primary text-center">
         {t.features.title}<br />
         <em className="text-accent not-italic">{t.features.titleEm}</em>
       </h2>
       
-      <p className="text-base text-text-secondary mb-12">{t.features.subtitle}</p>
+      <p className="text-base text-text-secondary mb-12 text-center">{t.features.subtitle}</p>
 
-      <motion.div className="flex flex-wrap rounded-[16px] overflow-hidden border border-white/7">
+      <motion.div className="flex flex-wrap rounded-[16px] overflow-hidden border border-white/10">
         {FEATURES.map((f, i) => (
           <FeatureCard key={f.icon} feature={f} index={i} />
         ))}

@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { useLang } from "@/components/LangContext";
-import AIPlayground from "./AIPlayground";
 
 function TypingIndicator() {
   return (
@@ -58,94 +57,79 @@ export default function Hero() {
   const fadeUp = (delay = 0) => ({ initial: { opacity: 0, y: 30 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.7, ease: "easeOut" as const, delay } });
 
   return (
-    <section style={{ position: 'relative', minHeight: '100dvh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', width: '100%', padding: '120px 5vw 80px', overflow: 'hidden', background: 'radial-gradient(ellipse 100% 60% at 50% 0%, rgba(212,175,55,0.04) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 80% 100%, rgba(59,130,246,0.03) 0%, transparent 50%), var(--color-bg)' }}>
+    <section
+      id="hero"
+      className="relative min-h-screen flex flex-col items-center justify-center text-center w-full px-[clamp(1.5rem,5vw,4rem)] py-[clamp(5rem,8vh,7rem)] overflow-hidden"
+      style={{ background: 'radial-gradient(ellipse 100% 50% at 50% 0%, rgba(212,175,55,0.04) 0%, transparent 60%), var(--color-bg)' }}
+    >
       <motion.div
-        animate={{ scale: [1, 1.03, 1], rotate: [0, 1, -1, 0] }}
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-        style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 60% 40% at 50% 20%,rgba(212,175,55,0.12) 0%,transparent 70%)', pointerEvents: 'none' }}
-      />
-      <motion.div
-        animate={{ x: [0, 40, 0], y: [0, -30, 0] }}
-        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-        style={{ position: 'absolute', top: '15%', left: '10%', width: '300px', height: '300px', background: 'radial-gradient(circle,rgba(212,175,55,0.08) 0%,transparent 70%)', filter: 'blur(60px)', pointerEvents: 'none' }}
-      />
-      <motion.div
-        animate={{ x: [0, -30, 0], y: [0, 20, 0] }}
-        transition={{ duration: 9, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-        style={{ position: 'absolute', top: '40%', right: '5%', width: '250px', height: '250px', background: 'radial-gradient(circle,rgba(59,130,246,0.06) 0%,transparent 70%)', filter: 'blur(50px)', pointerEvents: 'none' }}
-      />
-      <motion.div
-        animate={{ x: [0, 20, 0], y: [0, -15, 0] }}
-        transition={{ duration: 11, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-        style={{ position: 'absolute', bottom: '10%', left: '20%', width: '200px', height: '200px', background: 'radial-gradient(circle,rgba(16,185,129,0.05) 0%,transparent 70%)', filter: 'blur(40px)', pointerEvents: 'none' }}
+        animate={{ opacity: [0.4, 0.7, 0.4] }}
+        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+        className="pointer-events-none absolute inset-0"
+        style={{ background: 'radial-gradient(ellipse 60% 40% at 50% 15%,rgba(212,175,55,0.08) 0%,transparent 70%)' }}
       />
 
-      <motion.div {...fadeUp()} style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
-        <motion.div {...fadeUp()} style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', background: 'rgba(212,175,55,0.08)', border: '1px solid rgba(212,175,55,0.2)', color: '#D4AF37', fontSize: '12px', fontWeight: 600, backdropFilter: 'blur(8px)', marginBottom: '24px' }}>
-          <motion.span
-            animate={{ boxShadow: ['0 0 4px #25D366', '0 0 12px #25D366', '0 0 4px #25D366'] }}
-            transition={{ duration: 2, repeat: Infinity }}
-            style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#25D366', display: 'inline-block' }}
-          />
-          <span>{lang === "es" ? "Agente activo ahora" : "Agent active now"}</span>
-        </motion.div>
-
-        <motion.div {...fadeUp()} style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', border: '1px solid rgba(212,175,55,0.25)', background: 'rgba(212,175,55,0.08)', color: '#D4AF37', fontFamily: "'DM Mono', monospace", fontSize: '12px', fontWeight: 600, padding: '6px 16px', borderRadius: '9999px', letterSpacing: '0.05em', textTransform: 'uppercase', marginBottom: '24px' }}>
+      <motion.div {...fadeUp()} className="relative z-2 flex flex-col items-center w-full max-w-[1200px]">
+        <motion.div {...fadeUp()} className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent-dim border border-accent/30 text-accent text-xs font-semibold font-mono tracking-wider uppercase backdrop-blur-sm mb-6">
           {t.hero.badge}
         </motion.div>
 
-        <motion.h1 {...fadeUp()} style={{ fontFamily: "'DM Serif Display', Georgia, serif", fontSize: 'clamp(3rem,8vw,7rem)', lineHeight: 1.05, letterSpacing: '-0.03em', marginBottom: '32px', color: '#f0f2f8', maxWidth: '1200px' }}>
-          {t.hero.titleLine1}<br /><em style={{ color: '#D4AF37', fontStyle: 'normal' }}>{t.hero.titleLine2}</em>
+        <motion.h1 {...fadeUp()} className="font-serif text-[clamp(2.8rem,8vw,6rem)] leading-[1.05] tracking-[-0.03em] mb-6 text-text-primary max-w-[1000px]">
+          {t.hero.titleLine1}<br /><em className="text-accent not-italic">{t.hero.titleLine2}</em>
         </motion.h1>
 
-        <motion.p {...fadeUp()} style={{ fontSize: '1.125rem', color: '#8892a4', maxWidth: '560px', lineHeight: 1.6, marginBottom: '48px' }}>
+        <motion.p {...fadeUp()} className="text-base md:text-lg text-text-secondary max-w-[560px] leading-[1.6] mb-10">
           {t.hero.subtitle}
         </motion.p>
 
-        <motion.div {...fadeUp()} style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap', justifyContent: 'center', marginBottom: '80px' }}>
+        <motion.div {...fadeUp()} className="flex items-center gap-4 flex-wrap justify-center mb-16">
           <motion.a
             href="/login"
-            whileHover={{ scale: 1.04, boxShadow: '0 6px 30px rgba(212,175,55,0.4)' }}
+            whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.97 }}
-            style={{ background: '#D4AF37', color: '#030a05', fontSize: '15px', fontWeight: 600, padding: '14px 32px', borderRadius: '12px', textDecoration: 'none', display: 'inline-block', boxShadow: '0 4px 20px rgba(212,175,55,0.3)' }}
+            className="inline-block bg-accent text-[#030a05] text-[15px] font-bold px-8 py-3.5 rounded-xl no-underline shadow-[0_4px_20px_rgba(212,175,55,0.3)] hover:shadow-[0_6px_30px_rgba(212,175,55,0.4)] transition-shadow duration-300"
           >
             {t.hero.cta1}
           </motion.a>
           <motion.a
             href="/widget"
-            whileHover={{ scale: 1.04, background: 'rgba(255,255,255,0.08)', borderColor: 'rgba(255,255,255,0.25)' }}
+            whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.97 }}
-            style={{ padding: '13px 28px', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '12px', fontWeight: 500, textDecoration: 'none', color: '#f0f2f8', display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(255,255,255,0.03)', fontSize: '15px' }}
+            className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl border border-white/15 bg-white/3 text-text-primary text-[15px] font-medium no-underline hover:bg-white/8 hover:border-white/25 transition-colors duration-300"
           >
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.2"/><path d="M6.5 5.5L10.5 8L6.5 10.5V5.5Z" fill="currentColor"/></svg>
             {t.hero.cta2}
           </motion.a>
-          <AIPlayground />
         </motion.div>
 
-        <motion.div initial={{ opacity: 0, y: 40, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: 0.9, ease: "easeOut", delay: 0.6 }} style={{ position: 'relative', width: '100%', maxWidth: '700px' }}>
-          <div style={{ position: 'absolute', inset: '-40px', background: 'radial-gradient(ellipse 60% 40% at 50% 80%,rgba(212,175,55,0.12) 0%,transparent 70%)', filter: 'blur(20px)', pointerEvents: 'none' }} />
+        <motion.div
+          initial={{ opacity: 0, y: 40, scale: 0.97 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.9, ease: "easeOut", delay: 0.6 }}
+          className="relative w-full max-w-[700px]"
+        >
+          <div className="pointer-events-none absolute inset-[-40px] blur-xl" style={{ background: 'radial-gradient(ellipse 60% 40% at 50% 80%,rgba(212,175,55,0.12) 0%,transparent 70%)' }} />
 
           <motion.div
             whileHover={{ boxShadow: '0 40px 120px rgba(0,0,0,0.7), 0 0 60px rgba(212,175,55,0.15)' }}
-            style={{ background: 'rgba(17,21,32,0.7)', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '20px', overflow: 'hidden', boxShadow: '0 40px 120px rgba(0,0,0,0.7), 0 0 40px rgba(212,175,55,0.08)' }}
+            className="bg-[rgba(17,21,32,0.7)] backdrop-blur-2xl border border-white/10 rounded-2xl overflow-hidden shadow-[0_40px_120px_rgba(0,0,0,0.7),0_0_40px_rgba(212,175,55,0.08)]"
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '14px 18px', borderBottom: '1px solid rgba(255,255,255,0.07)', background: 'rgba(255,255,255,0.02)' }}>
-              <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#ff5f57' }} />
-              <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#febc2e' }} />
-              <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#28c840' }} />
-              <span style={{ marginLeft: '12px', fontFamily: "'DM Mono', monospace", fontSize: '11px', color: '#4a5568', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', padding: '4px 12px', borderRadius: '6px' }}>{DEMO_TAB}</span>
+            <div className="flex items-center gap-2 px-[18px] py-3.5 border-b border-white/7 bg-white/[0.02]">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
+              <span className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
+              <span className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
+              <span className="ml-3 font-mono text-[11px] text-text-muted bg-white/3 border border-white/7 px-3 py-1 rounded-[6px]">{DEMO_TAB}</span>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', padding: '24px', minHeight: '260px' }}>
+            <div className="flex flex-col gap-4 p-6 min-h-[260px]">
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 1.2, duration: 0.5 }}
-                style={{ display: 'flex', flexDirection: 'row-reverse', alignItems: 'flex-start', gap: '12px' }}
+                className="flex flex-row-reverse items-start gap-3"
               >
-                <div style={{ width: '32px', height: '32px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 600, fontFamily: "'DM Mono', monospace", background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.07)', color: '#8892a4' }}>{lang === "es" ? "TÚ" : "YOU"}</div>
-                <div style={{ maxWidth: '75%', padding: '12px 16px', borderRadius: '16px 16px 4px 16px', fontSize: '14px', lineHeight: 1.5, background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.07)', color: '#f0f2f8', fontFamily: "'DM Sans', system-ui, sans-serif" }}>
+                <div className="w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-bold font-mono bg-white/10 border border-white/7 text-text-secondary shrink-0">{lang === "es" ? "TÚ" : "YOU"}</div>
+                <div className="max-w-[75%] px-4 py-3 rounded-[16px_16px_4px_16px] text-sm leading-[1.5] bg-white/6 border border-white/7 text-text-primary font-sans">
                   {DEMO_USER}
                 </div>
               </motion.div>
@@ -154,21 +138,21 @@ export default function Hero() {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 1.5, duration: 0.5 }}
-                style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}
+                className="flex items-start gap-3"
               >
-                <div style={{ width: '32px', height: '32px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 600, fontFamily: "'DM Mono', monospace", background: 'linear-gradient(135deg, #D4AF37, #B8860B)', color: '#000', boxShadow: '0 2px 8px rgba(212,175,55,0.3)' }}>AI</div>
-                <div style={{ maxWidth: '75%', padding: '12px 16px', borderRadius: '16px 16px 16px 4px', fontSize: '14px', lineHeight: 1.5, background: 'rgba(212,175,55,0.08)', border: '1px solid rgba(212,175,55,0.15)', color: '#f0f2f8', fontFamily: "'DM Sans', system-ui, sans-serif", minHeight: '40px' }}>
+                <div className="w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-bold font-mono bg-gradient-to-br from-accent to-[#B8860B] text-black shadow-[0_2px_8px_rgba(212,175,55,0.3)] shrink-0">AI</div>
+                <div className="max-w-[75%] px-4 py-3 rounded-[16px_16px_16px_4px] text-sm leading-[1.5] bg-accent/8 border border-accent/15 text-text-primary font-sans min-h-[40px]">
                   {typing ? <TypingIndicator /> : aiText}
                 </div>
               </motion.div>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 16px', borderTop: '1px solid rgba(255,255,255,0.07)', background: 'rgba(255,255,255,0.02)' }}>
-              <span style={{ flex: 1, fontSize: '14px', color: '#4a5568', fontFamily: "'DM Sans', system-ui, sans-serif" }}>{lang === "es" ? "Escribe tu mensaje..." : "Type your message..."}</span>
+            <div className="flex items-center gap-3 px-4 py-3 border-t border-white/7 bg-white/[0.02]">
+              <span className="flex-1 text-sm text-text-muted font-sans">{lang === "es" ? "Escribe tu mensaje..." : "Type your message..."}</span>
               <motion.div
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
-                style={{ width: '32px', height: '32px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#D4AF37', boxShadow: '0 2px 10px rgba(212,175,55,0.3)' }}
+                className="w-8 h-8 rounded-lg flex items-center justify-center bg-accent shadow-[0_2px_10px_rgba(212,175,55,0.3)]"
               >
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M8 2l5 5-5 5" stroke="#000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
               </motion.div>

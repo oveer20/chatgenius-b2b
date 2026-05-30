@@ -66,18 +66,18 @@ export default function ScreensShowcase() {
   const next = () => setActive(a => (a + 1) % screens.length);
   const prev = () => setActive(a => (a - 1 + screens.length) % screens.length);
 
-  const title = lang === "es" ? "Tu escritorio de ventas,potenciado con IA" : "Your sales desk, powered by AI";
+  const title = lang === "es" ? "Tu escritorio de ventas, potenciado con IA" : "Your sales desk, powered by AI";
   const subtitle = lang === "es" ? "Todo lo que ves aquí es tu dashboard real de Stratix" : "Everything you see here is your real Stratix dashboard";
 
   return (
-    <section className="px-[clamp(1.5rem,5vw,4rem)] py-[clamp(4rem,10vw,6rem)] max-w-[1000px] mx-auto">
+    <section className="px-[clamp(1.5rem,5vw,4rem)] py-32 max-w-[1000px] mx-auto">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         className="text-center mb-12"
       >
-        <h2 className="font-serif text-[clamp(2rem,5vw,3rem)] text-text-primary mb-3">
+        <h2 className="font-serif text-4xl md:text-5xl font-bold tracking-tighter text-text-primary mb-3">
           {title.split(',')[0]},<br />
           <em className="text-accent italic">{title.split(',')[1]}</em>
         </h2>

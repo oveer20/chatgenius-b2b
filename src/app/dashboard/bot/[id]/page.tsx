@@ -262,65 +262,63 @@ export default function BotEditor() {
 
   return (
     <div className="bg-bg h-screen flex flex-col text-white font-sans">
-      {/* Status Bar Elite (V50.0) */}
-      <div className="bg-black/40 px-10 py-[0.6rem] flex gap-10 border-b border-accent/10 text-[0.65rem] tracking-[1px]">
-        <div className="text-accent font-black flex items-center gap-1.5"><FiZap /> NÚCLEO STRATIX ACTIVADO</div>
-        <div className="opacity-50">OPAL LOGIC: <span className="text-emerald-500 font-extrabold">ESTABLE</span></div>
-        <div className="opacity-50">LATENCIA NEURAL: <span className="text-emerald-500 font-extrabold">18ms</span></div>
-        <div className="ml-auto opacity-40">V50.0 GOLDEN RELEASE</div>
+      {/* Status Bar */}
+      <div className="bg-white/3 border-b border-white/5 px-8 py-2 flex items-center gap-6 text-xs text-text-muted">
+        <span className="flex items-center gap-1.5 text-accent font-semibold"><FiZap /> Núcleo Activo</span>
+        <span>Opal Logic: <span className="text-emerald-500 font-semibold">Estable</span></span>
+        <span className="ml-auto">Latencia: <span className="text-emerald-500 font-semibold">18ms</span></span>
       </div>
 
-      {/* Header del Editor Elite */}
-      <header className="p-6 px-10 flex justify-between items-center bg-bg/80 backdrop-blur-xl border-b border-white/5">
-              <div className="flex items-center gap-6">
-          <button onClick={() => router.push("/dashboard")} className="bg-white/[0.03] border border-white/10 text-white p-[10px] rounded-md cursor-pointer transition-all duration-200 hover:bg-white/5">
+      {/* Header */}
+      <header className="px-8 py-4 flex justify-between items-center bg-bg/80 backdrop-blur-xl border-b border-white/5">
+        <div className="flex items-center gap-4">
+          <button onClick={() => router.push("/dashboard")} className="bg-white/5 border border-white/10 text-text-primary p-2 rounded-lg cursor-pointer transition-all duration-200 hover:bg-white/10">
             <FiArrowLeft size={18} />
           </button>
           <div>
-            <h2 className="font-serif text-2xl m-0">{botData.name}</h2>
-            <div className="flex items-center gap-2.5 mt-1">
-              <span className="text-[0.65rem] text-accent font-black bg-accent/10 px-2 py-0.5 rounded-xs tracking-[1px]">ID: {id}</span>
+            <h2 className="font-serif text-2xl">{botData.name}</h2>
+            <div className="flex items-center gap-2 mt-0.5">
+              <span className="text-xs text-accent font-semibold bg-accent-dim px-2 py-0.5 rounded">ID: {id?.toString().slice(0, 8)}</span>
               <button
-                  onClick={handleToggleStatus}
-                  disabled={isTogglingStatus || botStatus === 'loading'}
-                  className={`flex items-center gap-1.5 text-[0.65rem] font-extrabold tracking-[1px] px-2 py-0.5 rounded-xs border-none cursor-pointer transition-all duration-200 ${
-                    botStatus === 'active'
-                      ? 'bg-emerald-500/15 text-emerald-500'
-                      : 'bg-red-500/15 text-red-500'
-                  }`}
-                >
-                  <span className="w-1.5 h-1.5 rounded-full bg-current inline-block" />
-                  {botStatus === 'loading' ? '...' : botStatus === 'active' ? 'ACTIVO' : 'INACTIVO'}
-                  {isTogglingStatus ? '...' : ''}
-                </button>
-              <span className="text-[0.65rem] opacity-40 font-bold">Protocolo de Inteligencia Activo</span>
+                onClick={handleToggleStatus}
+                disabled={isTogglingStatus || botStatus === 'loading'}
+                className={`flex items-center gap-1.5 text-xs font-semibold px-2 py-0.5 rounded border-none cursor-pointer transition-all duration-200 ${
+                  botStatus === 'active'
+                    ? 'bg-emerald-500/10 text-emerald-500'
+                    : 'bg-red-500/10 text-red-500'
+                }`}
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-current inline-block" />
+                {botStatus === 'loading' ? '...' : botStatus === 'active' ? 'Activo' : 'Inactivo'}
+                {isTogglingStatus ? '...' : ''}
+              </button>
             </div>
           </div>
         </div>
         <button
           onClick={handleSave}
-          className="py-3 px-7 bg-accent text-black rounded-[14px] font-bold text-[0.9rem] flex items-center gap-2.5 border-none cursor-pointer transition-all duration-200 hover:shadow-[0_0_20px_rgba(212,175,55,0.3)]"
+          className="py-2.5 px-5 bg-accent text-black rounded-xl font-bold text-sm flex items-center gap-2 border-none cursor-pointer transition-all duration-200 hover:scale-105"
         >
           {isSaving ? <FiRefreshCw className="animate-spin" /> : <FiSave />}
-          {isSaving ? "Sincronizando..." : "Sincronizar Arquitectura"}
+          {isSaving ? "Guardando..." : "Guardar"}
         </button>
       </header>
 
-      {/* Selector de Pestañas Elite (V50.0) */}
-      <div className="bg-bg/50 flex gap-14 px-14 border-b border-white/5 overflow-x-auto">
+      {/* Tab Selector */}
+      <div className="bg-bg/50 flex gap-8 px-8 border-b border-white/5 overflow-x-auto">
         {[
-          { id: 'identidad', label: 'IDENTIDAD', icon: <FiStar /> },
-          { id: 'cerebro', label: 'MODULARIDAD AI', icon: <FiCpu /> },
-          { id: 'entrenamiento', label: 'BASE DE CONOCIMIENTO', icon: <FiDatabase /> },
-          { id: 'despliegue', label: 'CANALES & CÓDIGO', icon: <FiCode /> }
+          { id: 'identidad', label: 'Identidad', icon: <FiStar /> },
+          { id: 'cerebro', label: 'Cerebro IA', icon: <FiCpu /> },
+          { id: 'entrenamiento', label: 'Conocimiento', icon: <FiDatabase /> },
+          { id: 'despliegue', label: 'Canales', icon: <FiCode /> }
         ].map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id as any)}
-            className={`py-6 bg-none border-none font-black text-[0.7rem] cursor-pointer tracking-[2px] flex items-center gap-2.5 transition-all duration-200 border-b-2 ${
+            className={`py-4 bg-none border-none text-xs font-semibold cursor-pointer flex items-center gap-2 transition-all duration-200 border-b-2 ${
               activeTab === tab.id
-                ? 'text-accent border-b-accent opacity-100'
-                : 'text-white/30 border-b-transparent opacity-60'
+                ? 'text-accent border-b-accent'
+                : 'text-text-muted border-b-transparent hover:text-text-primary'
             }`}
           >
             {tab.icon} {tab.label}
@@ -338,33 +336,33 @@ export default function BotEditor() {
             {/* PESTAÑA 1: IDENTIDAD ESTRATÉGICA */}
             {activeTab === 'identidad' && (
               <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
-                <h3 className="font-serif text-3xl mb-10">Perfil de la Entidad</h3>
-                <div className="bg-black/20 border border-white/5 rounded-xl p-12 flex flex-col gap-10">
-                  <div className="grid grid-cols-2 gap-10">
+                <h3 className="font-serif text-3xl mb-10">Perfil del Agente</h3>
+                <div className="bg-bg/60 border border-white/10 backdrop-blur-xl rounded-xl p-8 flex flex-col gap-8">
+                  <div className="grid grid-cols-2 gap-8">
                     <div>
-                      <label className="block text-[0.7rem] font-black opacity-40 mb-4 tracking-[1.5px]">IDENTIFICADOR DEL AGENTE</label>
+                      <label className="block text-xs font-semibold text-text-muted mb-2 uppercase tracking-wider">Nombre del Agente</label>
                       <input
                         value={botData.name} onChange={e => setBotData({...botData, name: e.target.value})}
-                        className="w-full p-[18px] bg-black/40 border border-white/5 rounded-[15px] text-white text-[1.1rem] font-semibold outline-none"
+                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white text-base font-semibold outline-none focus:border-accent/30 transition-all duration-200"
                       />
                     </div>
                     <div>
-                      <label className="block text-[0.7rem] font-black opacity-40 mb-4 tracking-[1.5px]">ROL OPERATIVO</label>
+                      <label className="block text-xs font-semibold text-text-muted mb-2 uppercase tracking-wider">Descripción</label>
                       <input
                         value={botData.description} onChange={e => setBotData({...botData, description: e.target.value})}
-                        placeholder="Ej: Arquitecto de Ventas Elite"
-                        className="w-full p-[18px] bg-black/40 border border-white/5 rounded-[15px] text-white text-base outline-none"
+                        placeholder="Ej: Asesor de ventas"
+                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white text-base outline-none focus:border-accent/30 transition-all duration-200"
                       />
                     </div>
                   </div>
                   <div>
-                    <label className="block text-[0.7rem] font-black opacity-40 mb-4 tracking-[1.5px]">CENTRO DE ALERTAS (EMAIL)</label>
+                    <label className="block text-xs font-semibold text-text-muted mb-2 uppercase tracking-wider">Email para Alertas</label>
                     <input
                       type="email" value={botData.emailAlertsTo} onChange={e => setBotData({...botData, emailAlertsTo: e.target.value})}
                       placeholder="alertas@tudominio.ai"
-                      className="w-full p-[18px] bg-black/40 border border-white/5 rounded-[15px] text-white text-base outline-none"
+                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white text-base outline-none focus:border-accent/30 transition-all duration-200"
                     />
-                    <p className="mt-4 text-xs opacity-40">Stratix enviará una Alerta Elite cada vez que se detecte un lead HOT.</p>
+                    <p className="mt-2 text-xs text-text-muted">Stratix enviará una alerta cuando se detecte un lead HOT.</p>
                   </div>
                 </div>
 
@@ -373,10 +371,10 @@ export default function BotEditor() {
                   <div className="mt-16">
                     <div className="flex justify-between items-center mb-10">
                       <h3 className="font-serif text-2xl">Análisis de Conversión</h3>
-                      <button onClick={handleExportCSV} className="bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 rounded-sm px-4 py-2 text-[0.8rem] cursor-pointer font-extrabold">EXPORTAR CSV</button>
+                      <button onClick={handleExportCSV} className="bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 rounded-lg px-4 py-2 text-xs font-semibold cursor-pointer transition-all duration-200 hover:scale-105">Exportar CSV</button>
                     </div>
                     <div className="grid grid-cols-2 gap-8 mb-8">
-                        <div className="bg-black/20 border border-white/5 rounded-xl p-8 h-[250px]">
+                        <div className="bg-bg/60 border border-white/10 backdrop-blur-xl rounded-xl p-6 h-[250px]">
                            <ResponsiveContainer width="100%" height="100%">
                               <PieChart>
                                 <Pie data={[
@@ -390,7 +388,7 @@ export default function BotEditor() {
                               </PieChart>
                            </ResponsiveContainer>
                         </div>
-                        <div className="bg-black/20 border border-white/5 rounded-xl p-6 overflow-y-auto max-h-[250px]">
+                        <div className="bg-bg/60 border border-white/10 backdrop-blur-xl rounded-xl p-6 overflow-y-auto max-h-[250px]">
                             <table className="w-full text-[0.8rem] border-collapse">
                                <thead><tr className="opacity-40"><th>NOMBRE</th><th>SCORE</th></tr></thead>
                                <tbody>
@@ -412,33 +410,33 @@ export default function BotEditor() {
             {/* PESTAÑA 2: MODULARIDAD AI (CEREBRO) */}
             {activeTab === 'cerebro' && (
               <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
-                <h3 className="font-serif text-3xl mb-10">Arquitectura Cognitiva</h3>
-                <div className="bg-black/20 border border-white/5 rounded-xl p-12 flex flex-col gap-12">
+                <h3 className="font-serif text-3xl mb-10">Arquitectura del Agente</h3>
+                <div className="bg-bg/60 border border-white/10 backdrop-blur-xl rounded-xl p-8 flex flex-col gap-8">
                   <div>
-                    <label className="block text-[0.7rem] font-black opacity-40 mb-[1.2rem] tracking-[1.5px]">NÚCLEO DE PERSONALIDAD (SYSTEM PROMPT)</label>
+                    <label className="block text-xs font-semibold text-text-muted mb-2 uppercase tracking-wider">System Prompt (Personalidad)</label>
                     <textarea
                       value={botData.systemPrompt} onChange={e => setBotData({...botData, systemPrompt: e.target.value})}
-                      className="w-full min-h-[300px] p-[25px] bg-black/50 border border-accent/10 rounded-xl text-white leading-[1.8] text-[1.05rem] outline-none"
+                      className="w-full min-h-[300px] p-5 bg-white/5 border border-white/10 rounded-xl text-white leading-relaxed text-base outline-none focus:border-accent/30 transition-all duration-200"
                     />
                   </div>
-                  <div className="grid grid-cols-[1.2fr_0.8fr] gap-12">
+                  <div className="grid grid-cols-[1.2fr_0.8fr] gap-8">
                     <div>
-                      <label className="block text-[0.7rem] font-black opacity-40 mb-[1.2rem] tracking-[1.5px]">MOTOR DE INTELIGENCIA</label>
+                      <label className="block text-xs font-semibold text-text-muted mb-2 uppercase tracking-wider">Motor de IA</label>
                       <select
                         value={botData.model} onChange={e => setBotData({...botData, model: e.target.value})}
-                        className="w-full p-4 bg-black/40 border border-white/10 rounded-md text-accent font-black"
+                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-accent font-semibold outline-none focus:border-accent/30 transition-all duration-200"
                       >
                         <option value="gemini">Gemini 2.0 Flash (Principal)</option>
                         <option value="gpt">GPT-3.5 Turbo (Backup)</option>
                         <option value="groq">Llama 3.1 8B - Groq (GRATIS)</option>
                         <option value="mistral">Mistral Small (GRATIS)</option>
                       </select>
-                      <p className="text-[0.7rem] opacity-50 mt-2">
-                        Si falla uno, automáticamente responde otro
+                      <p className="text-xs text-text-muted mt-2">
+                        Si falla uno, otro responde automáticamente
                       </p>
                     </div>
                     <div>
-                      <label className="block text-[0.7rem] font-black opacity-40 mb-6 tracking-[1.5px]">TEMPERATURA</label>
+                      <label className="block text-xs font-semibold text-text-muted mb-3 uppercase tracking-wider">Temperatura</label>
                       <input
                         type="range" min="0" max="1" step="0.1" value={botData.temperature}
                         onChange={e => setBotData({...botData, temperature: parseFloat(e.target.value)})}
@@ -454,42 +452,43 @@ export default function BotEditor() {
             {activeTab === 'entrenamiento' && (
               <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
                 <div className="flex justify-between items-center mb-12">
-                  <h3 className="font-serif text-3xl">Memoria Profunda (RAG)</h3>
-                  <button onClick={handleSyncKnowledge} className="py-3 px-6 bg-accent text-black rounded-md font-bold border-none shadow-[0_0_20px_rgba(212,175,55,0.2)]">
-                    {isSyncing ? "PROCESANDO..." : "SINCRONIZAR NÚCLEO"}
+                  <h3 className="font-serif text-3xl">Base de Conocimiento</h3>
+                  <button onClick={handleSyncKnowledge} className="py-2.5 px-5 bg-accent text-black rounded-xl font-bold text-sm border-none transition-all duration-200 hover:scale-105">
+                    {isSyncing ? "Procesando..." : "Sincronizar"}
                   </button>
                 </div>
 
-                <div className="bg-black/20 border border-white/5 rounded-xl p-10 mb-12 bg-accent/[0.03]">
-                  <div className="flex items-center gap-2.5 mb-6">
-                    <FiActivity color="#D4AF37" />
-                    <span className="text-xs font-black tracking-[1px]">NIVELES DE CONSCIENCIA NEURAL</span>
+                <div className="bg-bg/60 border border-white/10 backdrop-blur-xl rounded-xl p-6 mb-8">
+                  <div className="flex items-center gap-2 mb-4">
+                    <FiActivity className="text-accent" />
+                    <span className="text-xs font-semibold text-text-muted uppercase tracking-wider">Progreso del Conocimiento</span>
                   </div>
-                  <div className="h-2 bg-white/5 rounded-[10px] overflow-hidden">
-                    <div className={`h-full bg-accent ${knowledgeBase ? 'w-full' : 'w-[15%]'}`} />
+                  <div className="h-2 bg-white/5 rounded-full overflow-hidden">
+                    <div className={`h-full bg-accent transition-all duration-500 ${knowledgeBase ? 'w-full' : 'w-[15%]'}`} />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-10 mb-12">
-                  <div className="bg-black/20 border border-white/5 rounded-xl p-8">
-                    <label className="block text-[0.7rem] font-black opacity-40 mb-4">URL DE ABSORCIÓN</label>
-                    <div className="flex gap-2.5">
-                      <input value={crawlerUrl} onChange={e => setCrawlerUrl(e.target.value)} className="flex-1 p-3 bg-black/30 border border-white/5 rounded-sm text-white" />
-                      <button onClick={handleCrawlUrl} disabled={isCrawling} className="bg-accent border-none rounded-sm px-[15px] disabled:opacity-50">{isCrawling ? "..." : <FiGlobe />}</button>
+                <div className="grid grid-cols-2 gap-6 mb-8">
+                  <div className="bg-bg/60 border border-white/10 backdrop-blur-xl rounded-xl p-6">
+                    <label className="block text-xs font-semibold text-text-muted mb-3 uppercase tracking-wider">URL para Escanear</label>
+                    <div className="flex gap-2">
+                      <input value={crawlerUrl} onChange={e => setCrawlerUrl(e.target.value)} placeholder="https://ejemplo.com" className="flex-1 px-3 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white text-sm outline-none focus:border-accent/30 transition-all duration-200" />
+                      <button onClick={handleCrawlUrl} disabled={isCrawling} className="bg-accent border-none rounded-lg px-4 text-sm font-semibold text-black disabled:opacity-50 transition-all duration-200 hover:scale-105">{isCrawling ? "..." : <FiGlobe />}</button>
                     </div>
                   </div>
-                  <div className="bg-black/20 border border-white/5 rounded-xl p-8 flex items-center justify-center">
-                     <label className="cursor-pointer text-accent font-black disabled:opacity-50">
-  {isUploading ? "SUBIENDO..." : <><FiPlus /> SUBIR PDF CORPORATIVO</>}
-  <input type="file" onChange={handleFileUpload} className="hidden" disabled={isUploading} />
-</label>
+                  <div className="bg-bg/60 border border-white/10 backdrop-blur-xl rounded-xl p-6 flex items-center justify-center">
+                    <label className="cursor-pointer text-accent font-semibold text-sm disabled:opacity-50 transition-all duration-200 hover:scale-105">
+                      {isUploading ? "Subiendo..." : <><FiPlus className="inline mr-1" /> Subir PDF</>}
+                      <input type="file" onChange={handleFileUpload} className="hidden" disabled={isUploading} />
+                    </label>
                   </div>
                 </div>
 
-                <div className="bg-black/20 border border-white/5 rounded-xl p-8">
+                <div className="bg-bg/60 border border-white/10 backdrop-blur-xl rounded-xl p-6">
                   <textarea
                     value={knowledgeBase} onChange={e => setKnowledgeBase(e.target.value)}
-                    className="w-full min-h-[300px] bg-transparent border-none text-white outline-none text-base leading-[1.8]"
+                    className="w-full min-h-[300px] bg-transparent border-none text-white outline-none text-base leading-relaxed resize-none"
+                    placeholder="Escribe o pega aquí el conocimiento de tu agente..."
                   />
                 </div>
               </motion.div>
@@ -498,28 +497,28 @@ export default function BotEditor() {
             {/* PESTAÑA 4: DESPLIEGUE */}
             {activeTab === 'despliegue' && (
               <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
-                <h3 className="font-serif text-3xl mb-12">Protocolos de Salida</h3>
-                <div className="grid grid-cols-2 gap-12">
-                  <div className="bg-black/20 border border-white/5 rounded-xl p-12" style={{ border: '1px solid rgba(37,211,102,0.2)' }}>
-                    <FiMessageCircle size={30} color="#25D366" className="mb-6" />
-                    <h4 className="font-black">WHATSAPP API</h4>
-                    <div className="mt-8">
+                <h3 className="font-serif text-3xl mb-8">Canales de Despliegue</h3>
+                <div className="grid grid-cols-2 gap-6">
+                  <div className="bg-bg/60 border border-emerald-500/20 backdrop-blur-xl rounded-xl p-6">
+                    <FiMessageCircle size={24} className="text-[#25D366] mb-4" />
+                    <h4 className="font-semibold text-sm uppercase tracking-wider">WhatsApp API</h4>
+                    <div className="mt-6">
                       <div>
-                      <label className="text-[0.65rem] opacity-40">WHATSAPP TOKEN</label>
-                      <div className="flex items-center gap-2 mt-[5px]">
-                        <input type={showToken ? 'text' : 'password'} value={botData.whatsappToken} onChange={e => setBotData({...botData, whatsappToken: e.target.value})} className="flex-1 p-3 bg-black/30 border-none rounded-sm text-white" />
-                        <button onClick={() => setShowToken(!showToken)} className="bg-white/5 border-none rounded-sm p-[10px] cursor-pointer text-accent">
+                      <label className="text-xs text-text-muted mb-1.5 block">WhatsApp Token</label>
+                      <div className="flex items-center gap-2">
+                        <input type={showToken ? 'text' : 'password'} value={botData.whatsappToken} onChange={e => setBotData({...botData, whatsappToken: e.target.value})} className="flex-1 px-3 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white text-sm outline-none focus:border-accent/30 transition-all duration-200" />
+                        <button onClick={() => setShowToken(!showToken)} className="bg-white/5 border border-white/10 rounded-lg p-2.5 cursor-pointer text-text-muted hover:text-accent transition-all duration-200">
                           {showToken ? <FiShield size={14} /> : <FiInfo size={14} />}
                         </button>
                       </div>
-                      <p className="text-[0.65rem] opacity-30 mt-1">{showToken ? 'Ocultar' : 'Mostrar'} token</p>
+                      <p className="text-xs text-text-muted mt-1">{showToken ? 'Ocultar' : 'Mostrar'} token</p>
                     </div>
                     </div>
                   </div>
-                  <div className="bg-black/20 rounded-xl p-12 border border-accent/20">
-                    <FiLayout size={30} color="#D4AF37" className="mb-6" />
-                    <h4 className="font-black">WIDGET WEB</h4>
-                    <code className="block bg-black p-4 rounded-sm mt-8 text-xs text-accent">
+                  <div className="bg-bg/60 border border-accent/20 backdrop-blur-xl rounded-xl p-6">
+                    <FiLayout size={24} className="text-accent mb-4" />
+                    <h4 className="font-semibold text-sm uppercase tracking-wider">Widget Web</h4>
+                    <code className="block bg-white/5 p-4 rounded-lg mt-6 text-xs text-accent">
                       {`<script src="/widget.js" data-bot-id="${id}"></script>`}
                     </code>
                   </div>
@@ -530,21 +529,20 @@ export default function BotEditor() {
         </div>
 
         {/* Playground */}
-        <div className="bg-[#03070E] flex flex-col border-l border-white/5">
-           <div className="p-6 bg-bg/80 border-b border-white/5 flex justify-between">
-              <span className="text-xs font-black text-accent tracking-[2px]">NEURAL PLAYGROUND</span>
-              <FiShield size={16} className="opacity-30" />
+        <div className="bg-bg flex flex-col border-l border-white/5">
+          <div className="px-6 py-4 bg-bg/80 border-b border-white/5 flex justify-between items-center">
+            <span className="text-xs font-semibold text-accent">Playground</span>
            </div>
-           <div ref={scrollRef} className="flex-1 p-8 overflow-y-auto flex flex-col gap-6">
-              {chatMessages.map((msg, i) => (
-                <div key={i} className={`${msg.role === "user" ? "self-end bg-accent text-black" : "self-start bg-white/5 text-white"} p-4 px-6 rounded-[15px]`}>{msg.content}</div>
-              ))}
-              {isTyping && <div className="text-[0.7rem] opacity-40">Stratix procesando...</div>}
-           </div>
-           <form onSubmit={handleSendMessage} className="p-8 border-t border-white/5 flex gap-[15px]">
-              <input value={inputMessage} onChange={e => setInputMessage(e.target.value)} placeholder="Inyectar mensaje..." className="flex-1 p-[15px] bg-white/[0.03] border-none rounded-md text-white" />
-              <button type="submit" className="bg-accent border-none rounded-md px-5"><FiSend color="#000" /></button>
-           </form>
+              <div ref={scrollRef} className="flex-1 p-6 overflow-y-auto flex flex-col gap-4">
+                  {chatMessages.map((msg, i) => (
+                    <div key={i} className={`${msg.role === "user" ? "self-end bg-accent text-black" : "self-start bg-white/5 text-white"} px-4 py-3 rounded-xl max-w-[85%] text-sm leading-relaxed`}>{msg.content}</div>
+                  ))}
+                  {isTyping && <div className="text-xs text-text-muted">Escribiendo...</div>}
+               </div>
+               <form onSubmit={handleSendMessage} className="p-4 border-t border-white/5 flex gap-2">
+                  <input value={inputMessage} onChange={e => setInputMessage(e.target.value)} placeholder="Escribe un mensaje..." className="flex-1 px-4 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white text-sm outline-none focus:border-accent/30 transition-all duration-200" />
+                  <button type="submit" className="bg-accent border-none rounded-lg px-4 transition-all duration-200 hover:scale-105"><FiSend className="text-black" /></button>
+               </form>
         </div>
       </div>
     </div>

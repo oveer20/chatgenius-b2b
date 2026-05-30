@@ -58,7 +58,7 @@ export default function Stats() {
 
   return (
     <section>
-      <div className="py-[clamp(3rem,8vw,6rem)] px-[clamp(1.5rem,5vw,4rem)] bg-[linear-gradient(180deg,rgba(212,175,55,0.04)_0%,transparent_100%)] border-t border-[rgba(212,175,55,0.12)] border-b border-white/4">
+      <div className="py-32 px-[clamp(1.5rem,5vw,4rem)] bg-[linear-gradient(180deg,rgba(212,175,55,0.04)_0%,transparent_100%)] border-t border-[rgba(212,175,55,0.12)] border-b border-white/4">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-[clamp(2rem,4vw,3rem)]">
           <span className="font-mono text-[12px] tracking-[0.15em] text-accent uppercase">
             {lang === "es" ? "Impacto Real en Números" : "Real Impact in Numbers"}
@@ -90,13 +90,13 @@ export default function Stats() {
         </div>
       </div>
 
-      <div className="py-[clamp(2rem,5vw,3rem)] overflow-hidden relative">
+      <div className="py-12 overflow-hidden relative">
         <div className="absolute left-0 top-0 bottom-0 w-[200px] bg-gradient-to-r from-bg to-transparent z-[2]" />
         <div className="absolute right-0 top-0 bottom-0 w-[200px] bg-gradient-to-l from-bg to-transparent z-[2]" />
 
         <div className="flex gap-[clamp(2.5rem,5vw,4rem)] w-fit animate-[scroll_30s_linear_infinite]">
           {duplicated.map((name, i) => (
-            <div key={i} className="text-[clamp(14px,1.8vw,17px)] font-medium text-[#2d3748] whitespace-nowrap tracking-[0.5px]">
+            <div key={i} className="text-[clamp(14px,1.8vw,17px)] font-medium text-text-muted whitespace-nowrap tracking-[0.5px]">
               {name}
             </div>
           ))}
@@ -104,12 +104,12 @@ export default function Stats() {
         <style>{`@keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-33.333%); } }`}</style>
       </div>
 
-      <div className="py-[clamp(3rem,8vw,6rem)] px-[clamp(1.5rem,5vw,4rem)] max-w-[1200px] mx-auto">
+      <div className="py-32 px-[clamp(1.5rem,5vw,4rem)] max-w-[1200px] mx-auto">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-[clamp(2rem,4vw,3rem)]">
           <span className="font-mono text-[12px] tracking-[0.15em] text-accent uppercase">
             {lang === "es" ? "Testimonios de Clientes" : "Client Testimonials"}
           </span>
-          <h2 className="font-serif text-[clamp(1.8rem,4vw,2.5rem)] text-text-primary mt-3">
+          <h2 className="font-serif text-4xl md:text-5xl font-bold tracking-tighter text-text-primary mt-3">
             {lang === "es" ? "Lo que dicen quienes ya crecen con IA" : "What those who already grow with AI say"}
           </h2>
         </motion.div>
