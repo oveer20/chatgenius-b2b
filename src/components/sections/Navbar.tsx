@@ -49,7 +49,7 @@ export default function Navbar() {
 
       <nav className={`fixed inset-x-0 top-0 z-[100] flex items-center justify-between px-[clamp(1rem,4vw,4rem)] h-[60px] transition-all duration-300 ${scrolled ? 'bg-bg/95 border-b border-accent/10 shadow-lg shadow-black/30' : 'bg-bg/85 border-b border-white/5'}`}>
         <Link href="/" className="flex items-center gap-2 no-underline">
-          <img src="/stratix_shield.svg" alt="Stratix" className="h-6 w-6" />
+          <img src="/stratix_shield.svg" alt="Stratix" width={24} height={24} className="h-6 w-6" />
           <span className="nav-text-desktop font-mono text-base font-medium text-text-primary">Stratix Intelligence</span>
         </Link>
 
