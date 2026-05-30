@@ -92,66 +92,91 @@ export default function Pricing() {
           const price = getPrice(plan);
           
           return (
-            <motion.div 
-              key={plan.tier}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              onMouseEnter={() => setHoveredPlan(plan.tier)}
-              onMouseLeave={() => setHoveredPlan(null)}
-              whileHover={{ y: isHighlighted ? -6 : -4 }}
-              className={`relative rounded-2xl flex flex-col h-full transition-all duration-500 ${
-                isHighlighted
-                  ? 'p-10 bg-gradient-to-b from-accent/20 via-accent/8 to-[#0d1017] border-2 border-accent shadow-[0_30px_80px_rgba(212,175,55,0.2),0_0_60px_rgba(212,175,55,0.05)] scale-[1.03] z-10'
-                  : 'p-8 bg-white/[0.03] border border-white/10 shadow-md shadow-black/30'
-              } ${isHovered && !isHighlighted ? 'bg-white/[0.07] border-accent/30 shadow-[0_20px_50px_rgba(0,0,0,0.4)]' : ''}`}
-            >
-              {isHighlighted && (
-                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-accent text-black text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-widest font-sans">
-                  {t.pricing.mostPopular || "Más Popular"}
-                </div>
-              )}
-              
-              <h3 className={"font-sans text-xl font-bold text-white mb-2 " + (isHighlighted ? 'mt-2' : 'mt-0')}>
-                {planData.name}
-              </h3>
-              <p className="text-text-secondary text-sm mb-6 font-sans leading-[1.5]">{planData.desc}</p>
-              
-              <div className="mb-1">
-                <div className="flex items-baseline gap-1 flex-wrap">
-                  <span className="font-serif text-[clamp(2.5rem,5vw,3.5rem)] font-bold text-white leading-[1.1]">
-                    ${isClient ? safeFormatPrice(price, isUSD) : '...'}
-                  </span>
-                </div>
-                <div className="flex items-baseline gap-2 mt-1">
-                  <span className="text-text-secondary text-sm font-sans">{getCurrencyLabel()}{t.pricing.perMonth || "/mes"}</span>
-                  {isAnnual && (
-                    <span className="text-[#27C93F] text-xs font-semibold font-sans">
-                      · {getFreeMonthsText()}
-                    </span>
-                  )}
-                </div>
-              </div>
-              
-              <div className="h-px bg-white/10 mt-4 mb-6" />
-              
-              <ul className="list-none p-0 m-0 flex flex-col gap-4 mb-8 flex-1">
-                {planData.features.map((f: string, i: number) => (
-                  <li key={i} className="flex gap-3 text-[#e2e8f0] text-sm font-sans leading-[1.4]">
-                    <span className="text-accent shrink-0">✓</span> {f}
-                  </li>
-                ))}
-              </ul>
-              
-              <motion.a
-                href="/login"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className={"w-full p-3.5 rounded-xl text-center no-underline text-sm font-bold block font-sans transition-all duration-300 " + (isHighlighted ? 'bg-accent text-black' : 'bg-transparent text-white border border-white/20')}
+              <motion.div 
+                key={plan.tier}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                onMouseEnter={() => setHoveredPlan(plan.tier)}
+                onMouseLeave={() => setHoveredPlan(null)}
+                whileHover={{ y: isHighlighted ? -6 : -4 }}
+                className={`relative rounded-2xl flex flex-col h-full transition-all duration-500 ${
+                  isHighlighted
+                    ? 'p-10 bg-gradient-to-b from-accent/20 via-accent/8 to-[#0d1017] border-2 border-accent shadow-[0_30px_80px_rgba(212,175,55,0.2),0_0_60px_rgba(212,175,55,0.05)] scale-[1.03] z-10'
+                    : 'p-8 bg-white/[0.03] border border-white/10 shadow-md shadow-black/30'
+                } ${isHovered && !isHighlighted ? 'bg-white/[0.07] border-accent/30 shadow-[0_20px_50px_rgba(0,0,0,0.4)]' : ''}`}
               >
-                {isHighlighted ? t.pricing.startFree : t.pricing.startBtn}
-              </motion.a>
-            </motion.div>
+                {isHighlighted && (
+                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-accent text-black text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-widest font-sans shadow-[0_0_20px_rgba(212,175,55,0.5)]">
+                    {t.pricing.mostPopular || "Más Popular"}
+                  </div>
+                )}
+                
+                {/* Price decorative background */}
+                {isHighlighted && (
+                  <div className="absolute top-20 right-0 w-32 h-32 bg-accent/5 rounded-full blur-[40px] pointer-events-none" />
+                )}
+                
+                <div className="relative">
+                  <h3 className={"font-sans text-xl font-bold text-white mb-2 " + (isHighlighted ? 'mt-2' : 'mt-0')}>
+                    {planData.name}
+                  </h3>
+                  <p className="text-text-secondary text-sm mb-6 font-sans leading-[1.5]">{planData.desc}</p>
+                  
+                  <motion.div 
+                    className="mb-1"
+                    key={`${isUSD}-${isAnnual}`}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <div className="flex items-baseline gap-1 flex-wrap">
+                      <span className="font-serif text-[clamp(2.5rem,5vw,3.5rem)] font-bold text-white leading-[1.1]">
+                        ${isClient ? safeFormatPrice(price, isUSD) : '...'}
+                      </span>
+                    </div>
+                    <div className="flex items-baseline gap-2 mt-1">
+                      <span className="text-text-secondary text-sm font-sans">{getCurrencyLabel()}{t.pricing.perMonth || "/mes"}</span>
+                      {isAnnual && (
+                        <span className="text-emerald-500 text-xs font-semibold font-sans">
+                          · {getFreeMonthsText()}
+                        </span>
+                      )}
+                    </div>
+                  </motion.div>
+                </div>
+                
+                <div className="h-px bg-gradient-to-r from-transparent via-accent/20 to-transparent mt-4 mb-6" />
+                
+                <ul className="list-none p-0 m-0 flex flex-col gap-4 mb-8 flex-1">
+                  {planData.features.map((f: string, i: number) => (
+                    <motion.li 
+                      key={i} 
+                      initial={{ opacity: 0, x: -10 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: i * 0.05 }}
+                      className="flex gap-3 text-text-secondary text-sm font-sans leading-[1.4] items-start"
+                    >
+                      <span className="w-5 h-5 rounded-full bg-accent/10 flex items-center justify-center shrink-0 mt-[1px]">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M20 6L9 17l-5-5"/>
+                        </svg>
+                      </span>
+                      {f}
+                    </motion.li>
+                  ))}
+                </ul>
+                
+                <motion.a
+                  href="/login"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className={"w-full p-3.5 rounded-xl text-center no-underline text-sm font-bold block font-sans transition-all duration-300 " + (isHighlighted ? 'bg-accent text-black shadow-[0_4px_20px_rgba(212,175,55,0.3)] hover:shadow-[0_8px_30px_rgba(212,175,55,0.5)]' : 'bg-transparent text-white border border-white/20 hover:border-accent/40 hover:bg-accent/5')}
+                >
+                  {isHighlighted ? t.pricing.startFree : t.pricing.startBtn}
+                </motion.a>
+              </motion.div>
           );
         })}
       </div>

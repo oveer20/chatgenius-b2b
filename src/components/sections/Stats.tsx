@@ -104,7 +104,7 @@ export default function Stats() {
         <style>{`@keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-33.333%); } }`}</style>
       </div>
 
-      <div className="py-32 px-[clamp(1.5rem,5vw,4rem)] max-w-[1200px] mx-auto">
+      <div className="py-32 px-[clamp(1.5rem,5vw,4rem)] max-w-[1200px] mx-auto relative">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-[clamp(2rem,4vw,3rem)]">
           <span className="font-mono text-[12px] tracking-[0.15em] text-accent uppercase">
             {lang === "es" ? "Testimonios de Clientes" : "Client Testimonials"}
@@ -114,11 +114,7 @@ export default function Stats() {
           </h2>
         </motion.div>
 
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-5">
-          {testimonials.map((t, i) => (
-            <TestimonialCard key={i} testimonial={t} index={i} />
-          ))}
-        </div>
+        <TestimonialCarousel testimonials={testimonials} />
       </div>
     </section>
   );
@@ -167,5 +163,52 @@ function TestimonialCard({ testimonial, index }: { testimonial: Testimonial; ind
         </div>
       </div>
     </motion.div>
+  );
+}
+
+function TestimonialCarousel({ testimonials }: { testimonials: Testimonial[] }) {
+  const [active, setActive] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  useEffect(() => {
+    if (!isPaused) {
+      timerRef.current = setInterval(() => {
+        setActive(prev => (prev + 1) % testimonials.length);
+      }, 5000);
+    }
+    return () => { if (timerRef.current) clearInterval(timerRef.current); };
+  }, [testimonials.length, isPaused]);
+
+  const goTo = (i: number) => {
+    setActive(i);
+    setIsPaused(true);
+    setTimeout(() => setIsPaused(false), 8000);
+  };
+
+  return (
+    <div className="relative" onMouseEnter={() => setIsPaused(true)} onMouseLeave={() => setIsPaused(false)}>
+      <div className="overflow-hidden">
+        <motion.div
+          key={active}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <TestimonialCard testimonial={testimonials[active]} index={0} />
+        </motion.div>
+      </div>
+      <div className="flex justify-center gap-2 mt-6">
+        {testimonials.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => goTo(i)}
+            className={`h-1.5 rounded-full border-0 cursor-pointer transition-all duration-500 ${
+              i === active ? 'w-8 bg-accent' : 'w-1.5 bg-white/10 hover:bg-white/20'
+            }`}
+          />
+        ))}
+      </div>
+    </div>
   );
 }

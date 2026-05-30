@@ -2,209 +2,233 @@
 
 import { motion } from "framer-motion";
 import { useLang } from "@/components/LangContext";
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 
-const CONTENT = {
+const PHONE_CONTENT = {
   es: {
-    badge: "SIN STRATIX VS CON STRATIX",
-    titlePart1: "Dos realidades, una",
-    titlePart2: "decisión",
-    withoutTitle: "Sin Automatización",
-    withTitle: "Con Stratix AI",
-    withoutItems: [
-      "Pierdes 40% de leads por no responder rápido",
-      "Tu equipo humano se agota y comete errores",
-      "Pagas salarios altos sin garantía de cobertura 24/7",
-      "Tus clientes esperan minutos u horas por respuesta",
-      "Tu competencia se queda con tus ventas nocturnas",
-    ],
-    withItems: [
-      "Respondes en menos de 2 segundos, siempre",
-      "Cierras citas y ventas mientras duermes",
-      "Un costo fijo mensual que equivale a 1% de un salario",
-      "Experiencia premium y consistente para cada cliente",
-      "Escalabilidad infinita sin contratar más personal",
-    ],
-    metrics: [
-      { value: "40%", label: "Más leads capturados" },
-      { value: "2s", label: "Tiempo de respuesta" },
-      { value: "24/7", label: "Disponibilidad total" },
-    ],
+    without: {
+      title: "Sin Stratix",
+      subtitle: "Atención manual · 20min respuesta",
+      messages: [
+        { side: "right", text: "Hola, ¿tienen disponible el apto 304?" },
+        { side: "left", text: "Sí, está disponible. ¿En qué más puedo ayudarte?", delay: 2, slow: true },
+        { side: "right", text: "¿Precio y metros?", delay: 0.5 },
+        { side: "left", text: "Un momento, consulto...", delay: 3, slow: true },
+        { side: "system", text: "⏱ Cliente abandonó después de 15 min de espera", delay: 1 },
+      ],
+      lost: true,
+    },
+    with: {
+      title: "Con Stratix",
+      subtitle: "IA instantánea · 1.8s respuesta",
+      messages: [
+        { side: "right", text: "Hola, ¿tienen disponible el apto 304?" },
+        { side: "left", text: "¡Hola! Sí, el apartamento 304, 75m², $380M, está disponible con entrega inmediata. ¿Te gustaría agendar una visita?", ai: true },
+        { side: "right", text: "Sí, mañana a las 11am", delay: 0.3 },
+        { side: "left", text: "✅ Perfecto, agenda confirmada para mañana 11am. Te enviaré un recordatorio. ¿Algo más?", ai: true },
+        { side: "right", text: "¡Gracias!", delay: 0.2 },
+        { side: "system", text: "🎯 Lead capturado · Cita agendada en 8 segundos", delay: 0.5 },
+      ],
+    },
   },
   en: {
-    badge: "WITHOUT STRATIX VS WITH STRATIX",
-    titlePart1: "Two realities, one",
-    titlePart2: "decision",
-    withoutTitle: "Without Automation",
-    withTitle: "With Stratix AI",
-    withoutItems: [
-      "You lose 40% of leads by not responding fast enough",
-      "Your human team gets exhausted and makes mistakes",
-      "You pay high salaries with no 24/7 coverage guarantee",
-      "Your customers wait minutes or hours for a response",
-      "Your competition takes your nighttime sales",
-    ],
-    withItems: [
-      "You respond in under 2 seconds, always",
-      "You close appointments and sales while you sleep",
-      "A fixed monthly cost equivalent to 1% of a salary",
-      "Premium and consistent experience for every customer",
-      "Infinite scalability without hiring more staff",
-    ],
-    metrics: [
-      { value: "40%", label: "More leads captured" },
-      { value: "2s", label: "Response time" },
-      { value: "24/7", label: "Total availability" },
-    ],
+    without: {
+      title: "Without Stratix",
+      subtitle: "Manual support · 20min response",
+      messages: [
+        { side: "right", text: "Hi, is unit 304 available?" },
+        { side: "left", text: "Yes, it's available. How can I help you?", delay: 2, slow: true },
+        { side: "right", text: "Price and sqft?", delay: 0.5 },
+        { side: "left", text: "One moment, let me check...", delay: 3, slow: true },
+        { side: "system", text: "⏱ Lead left after 15 min waiting", delay: 1 },
+      ],
+      lost: true,
+    },
+    with: {
+      title: "With Stratix",
+      subtitle: "Instant AI · 1.8s response",
+      messages: [
+        { side: "right", text: "Hi, is unit 304 available?" },
+        { side: "left", text: "Hi! Yes, unit 304, 75m², $380M, is available with immediate delivery. Would you like to schedule a visit?", ai: true },
+        { side: "right", text: "Yes, tomorrow at 11am", delay: 0.3 },
+        { side: "left", text: "✅ Perfect, confirmed for tomorrow 11am. I'll send a reminder. Anything else?", ai: true },
+        { side: "right", text: "Thanks!", delay: 0.2 },
+        { side: "system", text: "🎯 Lead captured · Appointment booked in 8 seconds", delay: 0.5 },
+      ],
+    },
   },
 };
 
-function AnimatedCounter({ target, suffix = "" }: { target: string; suffix?: string }) {
-  const [display, setDisplay] = useState("0");
-  const ref = useRef<HTMLDivElement>(null);
-  const hasAnimated = useRef(false);
+function PhoneMockup({ data, side }: { data: { title: string; subtitle: string; messages: any[]; lost?: boolean }; side: "left" | "right" }) {
+  const [visibleMessages, setVisibleMessages] = useState(0);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !hasAnimated.current) {
-          hasAnimated.current = true;
-          if (target.includes("/")) {
-            setDisplay(target);
-            return;
-          }
-          const num = parseInt(target);
-          if (isNaN(num)) { setDisplay(target); return; }
-          let start = 0;
-          const duration = 1500;
-          const startTime = performance.now();
-          const animate = (currentTime: number) => {
-            const elapsed = currentTime - startTime;
-            const progress = Math.min(elapsed / duration, 1);
-            const eased = 1 - Math.pow(1 - progress, 3);
-            start = Math.round(eased * num);
-            setDisplay(`${start}${suffix}`);
-            if (progress < 1) requestAnimationFrame(animate);
-          };
-          requestAnimationFrame(animate);
-        }
-      },
-      { threshold: 0.5 }
-    );
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, [target, suffix]);
+  const startAnimation = () => {
+    setVisibleMessages(0);
+    let i = 0;
+    const id = setInterval(() => {
+      i++;
+      setVisibleMessages(i);
+      if (i >= data.messages.length) clearInterval(id);
+    }, 1800);
+  };
 
-  return <div ref={ref} className="text-text-primary font-serif text-[clamp(2rem,4vw,3rem)] font-bold">{display}</div>;
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      onViewportEnter={startAnimation}
+      className="relative"
+    >
+      <div className="flex flex-col items-center">
+        <div className="relative w-[300px] bg-[#0d1017] rounded-[32px] border border-white/10 shadow-[0_30px_80px_rgba(0,0,0,0.6)] overflow-hidden">
+          <div className="h-7 bg-[#0d1017] flex items-center justify-center">
+            <div className="w-24 h-1.5 rounded-full bg-white/10" />
+          </div>
+          <div className="px-3 pb-2 pt-1 border-b border-white/5 bg-white/[0.02]">
+            <div className="flex items-center gap-2">
+              <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[8px] font-bold shrink-0 ${data.lost ? 'bg-red-500/20 text-red-400' : 'bg-accent/20 text-accent'}`}>
+                {data.lost ? '✕' : '✓'}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="text-[11px] font-semibold text-text-primary truncate">{data.title}</div>
+                <div className="text-[8px] text-text-muted">{data.subtitle}</div>
+              </div>
+              <div className="flex gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-white/15" />
+                <span className="w-1.5 h-1.5 rounded-full bg-white/15" />
+                <span className="w-1.5 h-1.5 rounded-full bg-white/15" />
+              </div>
+            </div>
+          </div>
+          <div className="p-3 min-h-[380px] flex flex-col gap-2">
+            {(data.messages as any[]).map((msg, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                animate={visibleMessages > i ? { opacity: 1, y: 0, scale: 1 } : {}}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+                className={`${msg.side === "system" ? "flex justify-center" : `flex ${msg.side === "right" ? "justify-end" : "justify-start"}`}`}
+              >
+                {msg.side === "system" ? (
+                  <div className="text-[9px] text-text-muted font-mono bg-white/[0.02] px-2.5 py-1.5 rounded-full border border-white/5 whitespace-nowrap">
+                    {msg.text}
+                  </div>
+                ) : (
+                  <div className={`max-w-[85%] px-3 py-2 text-[11px] leading-[1.4] ${
+                    msg.side === "right"
+                      ? "bg-accent/20 border border-accent/20 text-text-primary rounded-[14px_14px_4px_14px]"
+                      : msg.ai
+                        ? "bg-gradient-to-br from-accent/10 to-accent/5 border border-accent/10 text-text-primary rounded-[14px_14px_14px_4px]"
+                        : "bg-white/5 border border-white/5 text-text-primary rounded-[14px_14px_14px_4px]"
+                  }`}>
+                    {msg.slow && (
+                      <span className="block text-[8px] text-text-muted mb-1 font-mono">⏳ 20 min después...</span>
+                    )}
+                    {msg.text}
+                    {msg.ai && (
+                      <span className="block text-[8px] text-accent mt-1 font-mono">✦ IA</span>
+                    )}
+                  </div>
+                )}
+              </motion.div>
+            ))}
+            {visibleMessages <= data.messages.length && visibleMessages > 0 && visibleMessages < data.messages.length && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: [0, 1, 0] }}
+                transition={{ duration: 1.2, repeat: Infinity }}
+                className="flex justify-start"
+              >
+                <div className="flex gap-0.5 px-3 py-2 rounded-full bg-white/5">
+                  <span className="w-1 h-1 rounded-full bg-text-muted" />
+                  <span className="w-1 h-1 rounded-full bg-text-muted" />
+                  <span className="w-1 h-1 rounded-full bg-text-muted" />
+                </div>
+              </motion.div>
+            )}
+          </div>
+          <div className="px-3 py-2 border-t border-white/5 flex items-center gap-2">
+            <div className="flex-1 h-6 rounded-full bg-white/5 border border-white/5" />
+            <div className={`w-6 h-6 rounded-full flex items-center justify-center ${data.lost ? 'bg-red-500/20' : 'bg-accent'}`}>
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                <path d="M1 5h8M6 2l3 3-3 3" stroke={data.lost ? "#ef4444" : "#000"} strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
 }
 
 export default function BeforeAfter() {
   const { lang } = useLang();
-  const content = CONTENT[lang as keyof typeof CONTENT];
-  const [hoveredCard, setHoveredCard] = useState<string | null>(null);
+  const content = PHONE_CONTENT[lang as keyof typeof PHONE_CONTENT];
 
   return (
     <section className="px-[clamp(1.5rem,5vw,4rem)] py-32 max-w-[1100px] mx-auto relative">
-      <div className="absolute top-[30%] left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-[radial-gradient(circle,rgba(212,175,55,0.06)_0%,transparent_60%)] blur-[60px] pointer-events-none" />
+      <div className="absolute top-[30%] left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-[radial-gradient(circle,rgba(212,175,55,0.06)_0%,transparent_60%)] blur-[60px] pointer-events-none" />
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="text-center mb-12"
+        className="text-center mb-14"
       >
-        <span className="inline-block bg-[rgba(255,95,86,0.12)] text-[#ff5f56] text-[13px] font-semibold px-4 py-[6px] rounded-full mb-4 tracking-[0.5px]">
-          {content.badge}
+        <span className="inline-block bg-error/10 text-error text-[13px] font-semibold px-4 py-[6px] rounded-full mb-4 tracking-[0.5px] font-mono">
+          {lang === "es" ? "SIN STRATIX VS CON STRATIX" : "WITHOUT STRATIX VS WITH STRATIX"}
         </span>
         <h2 className="font-serif text-4xl md:text-5xl font-bold tracking-tighter text-text-primary">
-          {content.titlePart1} <em className="text-accent italic">{content.titlePart2}</em>
+          {lang === "es" ? "Dos realidades, una" : "Two realities, one"}{" "}
+          <em className="text-accent italic">{lang === "es" ? "decisión" : "decision"}</em>
         </h2>
       </motion.div>
 
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-6 mb-12">
-        <motion.div
-          initial={{ opacity: 0, x: -30 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          onMouseEnter={() => setHoveredCard('without')}
-          onMouseLeave={() => setHoveredCard(null)}
-          className={`rounded-2xl p-8 transition-all duration-500 border border-[rgba(239,68,68,0.2)] ${
-            hoveredCard === 'without'
-              ? 'bg-bg/80 backdrop-blur-xl -translate-y-1 shadow-[0_25px_50px_rgba(0,0,0,0.5),0_0_30px_rgba(239,68,68,0.1)]'
-              : 'bg-bg/60 backdrop-blur-lg shadow-[0_10px_30px_rgba(0,0,0,0.3)]'
-          }`}
-        >
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-full bg-[rgba(239,68,68,0.1)] border border-[rgba(239,68,68,0.3)] flex items-center justify-center text-[#ef4444] text-lg font-bold">
-              ✗
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start">
+        <div className="flex flex-col items-center">
+          <div className="mb-4 text-center">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-error/10 border border-error/20 text-error text-xs font-semibold font-mono">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+              {lang === "es" ? "Lead perdido" : "Lost lead"}
             </div>
-            <h3 className="text-[#ff5f56] text-[1.2rem] font-serif">{content.withoutTitle}</h3>
           </div>
-          <ul className="list-none p-0 m-0 flex flex-col gap-4">
-            {content.withoutItems.map((item: string, i: number) => (
-              <motion.li
-                key={i}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="flex gap-3 text-text-secondary text-sm leading-[1.6] items-start"
-              >
-                <span className="text-[#ef4444] shrink-0 text-base mt-[1px]">✕</span>
-                {item}
-              </motion.li>
-            ))}
-          </ul>
-        </motion.div>
+          <PhoneMockup data={content.without} side="left" />
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, x: 30 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          onMouseEnter={() => setHoveredCard('with')}
-          onMouseLeave={() => setHoveredCard(null)}
-          className={`rounded-2xl p-8 relative overflow-hidden transition-all duration-500 border border-accent/10 ${
-            hoveredCard === 'with'
-              ? 'bg-bg/80 backdrop-blur-xl -translate-y-1 shadow-[0_25px_50px_rgba(0,0,0,0.5),0_0_40px_rgba(212,175,55,0.12)]'
-              : 'bg-bg/60 backdrop-blur-lg shadow-[0_10px_30px_rgba(0,0,0,0.3)]'
-          }`}
-        >
-          <div className="absolute top-0 left-0 right-0 h-[3px] bg-[linear-gradient(90deg,#D4AF37,#10b981,#D4AF37)]" />
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-full bg-[linear-gradient(135deg,rgba(212,175,55,0.2),rgba(16,185,129,0.1))] border border-accent/10 flex items-center justify-center text-accent text-lg font-bold">
-              ✓
+        <div className="flex flex-col items-center">
+          <div className="mb-4 text-center">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 text-xs font-semibold font-mono">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+              {lang === "es" ? "Lead capturado" : "Lead captured"}
             </div>
-            <h3 className="text-accent text-[1.2rem] font-serif">{content.withTitle}</h3>
           </div>
-          <ul className="list-none p-0 m-0 flex flex-col gap-4">
-            {content.withItems.map((item: string, i: number) => (
-              <motion.li
-                key={i}
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="flex gap-3 text-text-primary text-sm leading-[1.6] items-start"
-              >
-                <span className="text-[#10b981] shrink-0 text-base mt-[1px]">✓</span>
-                {item}
-              </motion.li>
-            ))}
-          </ul>
-        </motion.div>
+          <PhoneMockup data={content.with} side="right" />
+        </div>
       </div>
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-6 bg-bg/60 backdrop-blur-xl border border-accent/10 rounded-2xl p-8 text-center shadow-[0_15px_40px_rgba(0,0,0,0.4)]"
+        className="mt-12 grid grid-cols-3 gap-6 max-w-[600px] mx-auto"
       >
-        {content.metrics.map((metric: { value: string; label: string }, i: number) => (
-          <div key={i}>
-            <AnimatedCounter target={metric.value} suffix={metric.value.includes('%') ? '' : ''} />
-            <p className="text-text-secondary text-[13px] mt-2 font-sans">{metric.label}</p>
-          </div>
+        {[
+          { val: "40%", label: lang === "es" ? "Más leads" : "More leads", icon: "↑" },
+          { val: "1.8s", label: lang === "es" ? "Respuesta" : "Response time", icon: "⚡" },
+          { val: "24/7", label: lang === "es" ? "Disponibilidad" : "Availability", icon: "◉" },
+        ].map((m, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: i * 0.1 }}
+            className="text-center p-4 rounded-xl bg-bg/60 backdrop-blur-lg border border-accent/10"
+          >
+            <div className="font-serif text-2xl font-bold text-accent">{m.val}</div>
+            <div className="text-[11px] text-text-secondary mt-1">{m.label}</div>
+          </motion.div>
         ))}
       </motion.div>
     </section>
