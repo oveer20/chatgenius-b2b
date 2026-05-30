@@ -33,20 +33,20 @@ const COMPANIES = {
 
 const TESTIMONIALS = {
   es: [
-    { text: "En 3 semanas recuperamos la inversión. El bot cierra citas mientras dormimos y nuestro equipo solo procesa ventas calificadas.", name: "Carlos Mendoza", role: "CEO", company: "AutoElite Bogotá", initials: "CM", avatar: "https://api.dicebear.com/9.x/initials/svg?seed=CM&backgroundColor=b8860b" },
-    { text: "Pasamos de perder 40% de leads a convertir el 68%. Stratix responde en 2 segundos lo que antes tardábamos 20 minutos.", name: "María González", role: "Directora Comercial", company: "Grupo InmoPremium", initials: "MG", avatar: "https://api.dicebear.com/9.x/initials/svg?seed=MG&backgroundColor=b8860b" },
-    { text: "Nuestros pacientes agendan solos a las 3am. Antes perdíamos 15 citas diarias por no responder fuera de horario.", name: "Dra. Laura Vega", role: "Directora", company: "Clínica Sanar", initials: "LV", avatar: "https://api.dicebear.com/9.x/initials/svg?seed=LV&backgroundColor=b8860b" },
-    { text: "El scoring automático filtra leads basura. Nuestro equipo ahora solo habla con prospects que ya están listos para comprar.", name: "Andrés Ruiz", role: "VP Ventas", company: "TechVentures", initials: "AR", avatar: "https://api.dicebear.com/9.x/initials/svg?seed=AR&backgroundColor=b8860b" },
-    { text: "Configuramos todo en 12 minutos. Sin código, sin técnicos. Subimos nuestros PDFs y el bot aprendió todo nuestro catálogo.", name: "Patricia Morales", role: "Gerente Marketing", company: "EduPro Academy", initials: "PM", avatar: "https://api.dicebear.com/9.x/initials/svg?seed=PM&backgroundColor=b8860b" },
-    { text: "ROI del 340% en el primer trimestre. Best investment we've made. Ya lo expandimos a 3 países más.", name: "Roberto Sánchez", role: "COO", company: "LogiTrans Colombia", initials: "RS", avatar: "https://api.dicebear.com/9.x/initials/svg?seed=RS&backgroundColor=b8860b" },
+    { text: "En 3 semanas recuperamos la inversión. El bot cierra citas mientras dormimos y nuestro equipo solo procesa ventas calificadas.", name: "Carlos Mendoza", role: "CEO", company: "AutoElite Bogotá", initials: "CM" },
+    { text: "Pasamos de perder 40% de leads a convertir el 68%. Stratix responde en 2 segundos lo que antes tardábamos 20 minutos.", name: "María González", role: "Directora Comercial", company: "Grupo InmoPremium", initials: "MG" },
+    { text: "Nuestros pacientes agendan solos a las 3am. Antes perdíamos 15 citas diarias por no responder fuera de horario.", name: "Dra. Laura Vega", role: "Directora", company: "Clínica Sanar", initials: "LV" },
+    { text: "El scoring automático filtra leads basura. Nuestro equipo ahora solo habla con prospects que ya están listos para comprar.", name: "Andrés Ruiz", role: "VP Ventas", company: "TechVentures", initials: "AR" },
+    { text: "Configuramos todo en 12 minutos. Sin código, sin técnicos. Subimos nuestros PDFs y el bot aprendió todo nuestro catálogo.", name: "Patricia Morales", role: "Gerente Marketing", company: "EduPro Academy", initials: "PM" },
+    { text: "ROI del 340% en el primer trimestre. Best investment we've made. Ya lo expandimos a 3 países más.", name: "Roberto Sánchez", role: "COO", company: "LogiTrans Colombia", initials: "RS" },
   ],
   en: [
-    { text: "We recovered our investment in 3 weeks. The bot books appointments while we sleep and our team only processes qualified sales.", name: "Carlos Mendoza", role: "CEO", company: "AutoElite Bogotá", initials: "CM", avatar: "https://api.dicebear.com/9.x/initials/svg?seed=CM&backgroundColor=b8860b" },
-    { text: "We went from losing 40% of leads to converting 68%. Stratix responds in 2 seconds what used to take us 20 minutes.", name: "María González", role: "Commercial Director", company: "InmoPremium Group", initials: "MG", avatar: "https://api.dicebear.com/9.x/initials/svg?seed=MG&backgroundColor=b8860b" },
-    { text: "Our patients book by themselves at 3am. We used to lose 15 appointments daily from not responding after hours.", name: "Dr. Laura Vega", role: "Director", company: "Sanar Clinic", initials: "LV", avatar: "https://api.dicebear.com/9.x/initials/svg?seed=LV&backgroundColor=b8860b" },
-    { text: "Automatic scoring filters out junk leads. Our team now only talks to prospects who are already ready to buy.", name: "Andrés Ruiz", role: "VP Sales", company: "TechVentures", initials: "AR", avatar: "https://api.dicebear.com/9.x/initials/svg?seed=AR&backgroundColor=b8860b" },
-    { text: "We set everything up in 12 minutes. No code, no technicians. We uploaded our PDFs and the bot learned our entire catalog.", name: "Patricia Morales", role: "Marketing Manager", company: "EduPro Academy", initials: "PM", avatar: "https://api.dicebear.com/9.x/initials/svg?seed=PM&backgroundColor=b8860b" },
-    { text: "340% ROI in the first quarter. Best investment we've made. We already expanded it to 3 more countries.", name: "Roberto Sánchez", role: "COO", company: "LogiTrans Colombia", initials: "RS", avatar: "https://api.dicebear.com/9.x/initials/svg?seed=RS&backgroundColor=b8860b" },
+    { text: "We recovered our investment in 3 weeks. The bot books appointments while we sleep and our team only processes qualified sales.", name: "Carlos Mendoza", role: "CEO", company: "AutoElite Bogotá", initials: "CM" },
+    { text: "We went from losing 40% of leads to converting 68%. Stratix responds in 2 seconds what used to take us 20 minutes.", name: "María González", role: "Commercial Director", company: "InmoPremium Group", initials: "MG" },
+    { text: "Our patients book by themselves at 3am. We used to lose 15 appointments daily from not responding after hours.", name: "Dr. Laura Vega", role: "Director", company: "Sanar Clinic", initials: "LV" },
+    { text: "Automatic scoring filters out junk leads. Our team now only talks to prospects who are already ready to buy.", name: "Andrés Ruiz", role: "VP Sales", company: "TechVentures", initials: "AR" },
+    { text: "We set everything up in 12 minutes. No code, no technicians. We uploaded our PDFs and the bot learned our entire catalog.", name: "Patricia Morales", role: "Marketing Manager", company: "EduPro Academy", initials: "PM" },
+    { text: "340% ROI in the first quarter. Best investment we've made. We already expanded it to 3 more countries.", name: "Roberto Sánchez", role: "COO", company: "LogiTrans Colombia", initials: "RS" },
   ],
 };
 
@@ -125,12 +125,11 @@ export default function Stats() {
 }
 
 interface Testimonial {
-  text: string; name: string; role: string; company: string; initials: string; avatar: string;
+  text: string; name: string; role: string; company: string; initials: string;
 }
 
 function TestimonialCard({ testimonial, index }: { testimonial: Testimonial; index: number }) {
   const [hovered, setHovered] = useState(false);
-  const [avatarError, setAvatarError] = useState(false);
 
   return (
     <motion.div
@@ -159,13 +158,9 @@ function TestimonialCard({ testimonial, index }: { testimonial: Testimonial; ind
       </p>
 
       <div className="flex items-center gap-3">
-        {avatarError ? (
-          <div className="w-10 h-10 rounded-full bg-accent2/20 flex items-center justify-center text-sm font-bold text-accent shrink-0">
-            {testimonial.initials}
-          </div>
-        ) : (
-          <img src={testimonial.avatar} alt={testimonial.initials} width={40} height={40} onError={() => setAvatarError(true)} className="w-10 h-10 rounded-full bg-accent/10 shrink-0" />
-        )}
+        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-accent to-[#B8860B] flex items-center justify-center text-xs font-bold text-black shrink-0 shadow-[0_2px_8px_rgba(0,0,0,0.3)]">
+          {testimonial.initials}
+        </div>
         <div>
           <div className="text-sm font-semibold text-text-primary">{testimonial.name}</div>
           <div className="text-xs text-text-muted">{testimonial.role} &middot; {testimonial.company}</div>

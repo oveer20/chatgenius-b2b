@@ -27,8 +27,15 @@ const CTA = lazy(() => import("@/components/sections/CTA"));
 const Footer = lazy(() => import("@/components/sections/Footer"));
 const FloatingSocialProof = lazy(() => import("@/components/sections/FloatingSocialProof"));
 
-function SectionFallback() {
-  return <div className="h-64 w-full" />;
+function SectionFallback({ height = "h-[500px]" }: { height?: string }) {
+  return (
+    <div className={`${height} w-full flex items-center justify-center`}>
+      <div className="flex flex-col items-center gap-3">
+        <div className="w-8 h-8 rounded-full border-[2px] border-accent/20 border-t-accent animate-spin" />
+        <div className="font-mono text-[11px] text-text-muted tracking-wider">CARGANDO</div>
+      </div>
+    </div>
+  );
 }
 
 export default function LandingClient() {
@@ -52,39 +59,39 @@ export default function LandingClient() {
           <hr className="section-divider" />
           <Features />
           <hr className="section-divider" />
-          <Suspense fallback={<SectionFallback />}>
+          <Suspense fallback={<SectionFallback height="h-[600px]" />}>
             <HowItWorks />
           </Suspense>
           <hr className="section-divider" />
-          <Suspense fallback={<SectionFallback />}>
+          <Suspense fallback={<SectionFallback height="h-[600px]" />}>
             <BeforeAfter />
           </Suspense>
           <hr className="section-divider" />
-          <Suspense fallback={<SectionFallback />}>
+          <Suspense fallback={<SectionFallback height="h-[550px]" />}>
             <ScreensShowcase />
           </Suspense>
           <hr className="section-divider" />
-          <Suspense fallback={<SectionFallback />}>
+          <Suspense fallback={<SectionFallback height="h-[700px]" />}>
             <Pricing />
           </Suspense>
           <hr className="section-divider" />
-          <Suspense fallback={<SectionFallback />}>
+          <Suspense fallback={<SectionFallback height="h-[600px]" />}>
             <InteractiveDemo />
           </Suspense>
           <hr className="section-divider" />
-          <Suspense fallback={<SectionFallback />}>
+          <Suspense fallback={<SectionFallback height="h-[550px]" />}>
             <ROICalculator />
           </Suspense>
           <hr className="section-divider" />
-          <Suspense fallback={<SectionFallback />}>
+          <Suspense fallback={<SectionFallback height="h-[450px]" />}>
             <FAQ />
           </Suspense>
           <hr className="section-divider" />
-          <Suspense fallback={<SectionFallback />}>
+          <Suspense fallback={<SectionFallback height="h-[550px]" />}>
             <CTA />
           </Suspense>
           <hr className="section-divider" />
-          <Suspense fallback={<SectionFallback />}>
+          <Suspense fallback={<SectionFallback height="h-[450px]" />}>
             <Footer />
           </Suspense>
         </div>
