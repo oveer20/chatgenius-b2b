@@ -140,10 +140,10 @@ function TestimonialCard({ testimonial, index }: { testimonial: Testimonial; ind
       transition={{ delay: index * 0.08 }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className={`rounded-lg p-[clamp(1.5rem,3vw,2rem)] transition-all duration-300 border ${
+      className={`rounded-xl p-[clamp(1.5rem,3vw,2rem)] transition-all duration-300 border ${
         hovered
-          ? 'bg-white/4 border-accent/30 shadow-[0_20px_40px_rgba(0,0,0,0.3),0_0_60px_rgba(212,175,55,0.05)] -translate-y-1'
-          : 'bg-white/2 border-white/6 shadow-none'
+          ? 'bg-bg/80 backdrop-blur-xl border-accent/30 shadow-[0_25px_50px_rgba(0,0,0,0.5),0_0_40px_rgba(212,175,55,0.08)] -translate-y-1'
+          : 'bg-bg/60 backdrop-blur-lg border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.3)]'
       }`}
     >
       <div className="flex gap-1 mb-4">
@@ -154,7 +154,7 @@ function TestimonialCard({ testimonial, index }: { testimonial: Testimonial; ind
         ))}
       </div>
 
-      <p className="text-[15px] text-[#c8ced8] leading-[1.7] mb-5 italic">
+      <p className="text-[15px] text-text-secondary leading-[1.7] mb-5 italic">
         &ldquo;{testimonial.text}&rdquo;
       </p>
 

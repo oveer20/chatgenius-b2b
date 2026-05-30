@@ -24,8 +24,8 @@ export default function CTA() {
           style={{
             transition: 'all 0.4s ease',
             boxShadow: hovered === "box"
-              ? '0 25px 80px rgba(0,0,0,0.6), 0 0 40px rgba(212,175,55,0.1)'
-              : '0 16px 50px rgba(0,0,0,0.4)',
+              ? '0 30px 80px rgba(0,0,0,0.6), 0 0 50px rgba(212,175,55,0.12)'
+              : '0 20px 60px rgba(0,0,0,0.4)',
           }}
         >
           <motion.div

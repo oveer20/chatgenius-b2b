@@ -94,11 +94,11 @@ export default function ScreensShowcase() {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -30 }}
             transition={{ duration: 0.35 }}
-            className={`bg-bg2 backdrop-blur-xl rounded-[20px] p-[clamp(2rem,5vw,3rem)] ${
-              active === 0 ? 'border-[#D4AF3733] shadow-[0_40px_80px_rgba(0,0,0,0.5),0_0_40px_#D4AF3715]' :
-              active === 1 ? 'border-[#10b98133] shadow-[0_40px_80px_rgba(0,0,0,0.5),0_0_40px_#10b98115]' :
-              active === 2 ? 'border-[#3B82F633] shadow-[0_40px_80px_rgba(0,0,0,0.5),0_0_40px_#3B82F615]' :
-              'border-[#25D36633] shadow-[0_40px_80px_rgba(0,0,0,0.5),0_0_40px_#25D36615]'
+            className={`bg-bg/60 backdrop-blur-xl rounded-2xl p-[clamp(2rem,5vw,3rem)] shadow-[0_40px_80px_rgba(0,0,0,0.5)] ${
+              active === 0 ? 'border border-[#D4AF37]/20 shadow-[0_40px_80px_rgba(0,0,0,0.5),0_0_40px_#D4AF3715]' :
+              active === 1 ? 'border border-[#10b981]/20 shadow-[0_40px_80px_rgba(0,0,0,0.5),0_0_40px_#10b98115]' :
+              active === 2 ? 'border border-[#3B82F6]/20 shadow-[0_40px_80px_rgba(0,0,0,0.5),0_0_40px_#3B82F615]' :
+              'border border-[#25D366]/20 shadow-[0_40px_80px_rgba(0,0,0,0.5),0_0_40px_#25D36615]'
             }`}
           >
             <div className="flex items-center gap-3 mb-8">
@@ -144,7 +144,7 @@ export default function ScreensShowcase() {
                   { label: lang === "es" ? "Tiempo avg" : "Avg time", val: "1.8s", color: "#3B82F6" },
                   { label: lang === "es" ? "Conversión" : "Conversion", val: "68%", color: "#D4AF37" },
                 ].map((m, i) => (
-                  <div key={i} className="p-4 bg-black/30 rounded-xl border border-white/5 text-center">
+                  <div key={i} className="p-4 bg-bg/70 backdrop-blur-lg rounded-xl border border-white/10 text-center">
                     <div className={`font-serif text-2xl font-bold ${
                       m.color === '#D4AF37' ? 'text-accent' :
                       m.color === '#10b981' ? 'text-[#10b981]' :

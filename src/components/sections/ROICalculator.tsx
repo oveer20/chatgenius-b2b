@@ -46,7 +46,7 @@ export default function ROICalculator() {
         </motion.p>
 
         <div className="mb-[50px] grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-6 text-left">
-          <div className="rounded-2xl border border-white/5 bg-white/[0.03] p-6">
+          <div className="rounded-2xl border border-white/10 bg-bg/60 backdrop-blur-lg p-6 shadow-[0_10px_30px_rgba(0,0,0,0.3)]">
             <label className="mb-3 block font-sans text-sm font-medium text-text-secondary">
               {t.roi.leadsLabel}
             </label>
@@ -60,7 +60,7 @@ export default function ROICalculator() {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-white/5 bg-white/[0.03] p-6">
+          <div className="rounded-2xl border border-white/10 bg-bg/60 backdrop-blur-lg p-6 shadow-[0_10px_30px_rgba(0,0,0,0.3)]">
             <label className="mb-3 block font-sans text-sm font-medium text-text-secondary">
               {t.roi.valueLabel}
             </label>
@@ -74,7 +74,7 @@ export default function ROICalculator() {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-white/5 bg-white/[0.03] p-6">
+          <div className="rounded-2xl border border-white/10 bg-bg/60 backdrop-blur-lg p-6 shadow-[0_10px_30px_rgba(0,0,0,0.3)]">
             <label className="mb-3 block font-sans text-sm font-medium text-text-secondary">
               {t.roi.timeLabel} ({t.roi.timeSuffix})
             </label>
@@ -89,7 +89,7 @@ export default function ROICalculator() {
           </div>
         </div>
 
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-8 rounded-3xl border-2 border-accent/20 bg-gradient-to-br from-accent/5 to-[rgba(13,16,23,0.8)] p-[clamp(2rem,5vw,3rem)] text-center">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-8 rounded-3xl border border-accent/20 bg-gradient-to-br from-accent/5 to-[rgba(13,16,23,0.8)] p-[clamp(2rem,5vw,3rem)] text-center shadow-[0_25px_60px_rgba(0,0,0,0.5),0_0_40px_rgba(212,175,55,0.06)]">
           <div>
             <div className="mb-2 font-sans text-sm font-semibold uppercase tracking-[1px] text-[#ff5f56]">{t.roi.missedLeadsLabel}</div>
             <div className="font-serif text-[clamp(2rem,4vw,3.5rem)] font-extrabold leading-[1.1] text-white">

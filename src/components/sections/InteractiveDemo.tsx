@@ -162,8 +162,8 @@ export default function InteractiveDemo() {
                   )}
                   <div className={`max-w-[75%] rounded-[14px] px-3.5 py-2.5 text-sm leading-relaxed ${
                     msg.role === "user"
-                      ? "bg-accent text-black"
-                      : "border border-accent/10 bg-white/5 text-text-primary"
+                      ? "bg-accent text-black shadow-[0_4px_15px_rgba(212,175,55,0.3)]"
+                      : "border border-accent/10 bg-bg/80 backdrop-blur-lg text-text-primary"
                   }`}>
                     {msg.text}
                   </div>

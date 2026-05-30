@@ -128,10 +128,10 @@ export default function BeforeAfter() {
           viewport={{ once: true }}
           onMouseEnter={() => setHoveredCard('without')}
           onMouseLeave={() => setHoveredCard(null)}
-          className={`rounded-[20px] p-8 transition-all duration-300 border border-[rgba(239,68,68,0.2)] ${
+          className={`rounded-2xl p-8 transition-all duration-500 border border-[rgba(239,68,68,0.2)] ${
             hoveredCard === 'without'
-              ? 'bg-[rgba(239,68,68,0.04)] -translate-y-1 shadow-[0_20px_40px_rgba(239,68,68,0.1)]'
-              : 'bg-white/5'
+              ? 'bg-bg/80 backdrop-blur-xl -translate-y-1 shadow-[0_25px_50px_rgba(0,0,0,0.5),0_0_30px_rgba(239,68,68,0.1)]'
+              : 'bg-bg/60 backdrop-blur-lg shadow-[0_10px_30px_rgba(0,0,0,0.3)]'
           }`}
         >
           <div className="flex items-center gap-3 mb-6">
@@ -163,10 +163,10 @@ export default function BeforeAfter() {
           viewport={{ once: true }}
           onMouseEnter={() => setHoveredCard('with')}
           onMouseLeave={() => setHoveredCard(null)}
-          className={`rounded-[20px] p-8 relative overflow-hidden transition-all duration-300 border border-accent/10 ${
+          className={`rounded-2xl p-8 relative overflow-hidden transition-all duration-500 border border-accent/10 ${
             hoveredCard === 'with'
-              ? 'bg-accent-dim -translate-y-1 shadow-[0_20px_40px_rgba(212,175,55,0.1)]'
-              : 'bg-bg2'
+              ? 'bg-bg/80 backdrop-blur-xl -translate-y-1 shadow-[0_25px_50px_rgba(0,0,0,0.5),0_0_40px_rgba(212,175,55,0.12)]'
+              : 'bg-bg/60 backdrop-blur-lg shadow-[0_10px_30px_rgba(0,0,0,0.3)]'
           }`}
         >
           <div className="absolute top-0 left-0 right-0 h-[3px] bg-[linear-gradient(90deg,#D4AF37,#10b981,#D4AF37)]" />
@@ -198,7 +198,7 @@ export default function BeforeAfter() {
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-6 bg-accent-dim border border-accent/10 rounded-2xl p-8 text-center"
+        className="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-6 bg-bg/60 backdrop-blur-xl border border-accent/10 rounded-2xl p-8 text-center shadow-[0_15px_40px_rgba(0,0,0,0.4)]"
       >
         {content.metrics.map((metric: { value: string; label: string }, i: number) => (
           <div key={i}>

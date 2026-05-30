@@ -76,7 +76,7 @@ export default function FAQ() {
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="rounded-xl border border-white/10 bg-bg/60 px-6 backdrop-blur-xl"
+        className="rounded-xl border border-white/10 bg-bg/60 px-6 backdrop-blur-xl shadow-[0_15px_40px_rgba(0,0,0,0.3)]"
       >
         {faqs.map((faq: {q: string; a: string}, i: number) => (
           <FAQItem key={i} faq={faq} index={i} />

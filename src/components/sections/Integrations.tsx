@@ -41,7 +41,7 @@ export default function Integrations() {
   const label = lang === "es" ? "CONECTADO CON" : "CONNECTED WITH";
 
   return (
-    <section className="py-24 px-[clamp(1.5rem,5vw,4rem)] bg-white/1 border-t border-white/5 border-b border-white/5">
+    <section className="py-24 px-[clamp(1.5rem,5vw,4rem)] border-t border-white/5 border-b border-white/5">
       <div className="text-center mb-8">
         <span className="font-mono text-[11px] tracking-[2px] text-text-muted uppercase">
 {label}
@@ -55,8 +55,8 @@ export default function Integrations() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: i * 0.05 }}
-            whileHover={{ scale: 1.1 }}
-            className="flex items-center gap-2 px-4 py-[10px] rounded-[10px] bg-white/3 border border-white/6 transition-all duration-300"
+            whileHover={{ scale: 1.1, y: -2 }}
+            className="flex items-center gap-2 px-4 py-[10px] rounded-xl bg-bg/60 backdrop-blur-lg border border-white/10 shadow-[0_5px_15px_rgba(0,0,0,0.2)] transition-all duration-300"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill={item.color}>
               <path d={item.logo} />
