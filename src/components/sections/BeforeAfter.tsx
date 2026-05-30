@@ -59,7 +59,7 @@ const PHONE_CONTENT = {
   },
 };
 
-function PhoneMockup({ data, side }: { data: { title: string; subtitle: string; messages: any[]; lost?: boolean }; side: "left" | "right" }) {
+function PhoneMockup({ data }: { data: { title: string; subtitle: string; messages: any[]; lost?: boolean } }) {
   const [visibleMessages, setVisibleMessages] = useState(0);
 
   const startAnimation = () => {
@@ -193,7 +193,7 @@ export default function BeforeAfter() {
               {lang === "es" ? "Lead perdido" : "Lost lead"}
             </div>
           </div>
-          <PhoneMockup data={content.without} side="left" />
+          <PhoneMockup data={content.without} />
         </div>
 
         <div className="flex flex-col items-center">
@@ -203,7 +203,7 @@ export default function BeforeAfter() {
               {lang === "es" ? "Lead capturado" : "Lead captured"}
             </div>
           </div>
-          <PhoneMockup data={content.with} side="right" />
+          <PhoneMockup data={content.with} />
         </div>
       </div>
 

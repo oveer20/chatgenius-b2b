@@ -110,6 +110,28 @@ body::before {
   opacity: 0.3;
 }
 
+[data-theme="light"] [class*="border-white/"] {
+  border-color: rgba(0,0,0,0.08) !important;
+}
+
+[data-theme="light"] .section-divider {
+  background: linear-gradient(90deg, transparent, rgba(212,175,55,0.3), transparent);
+}
+
+[data-theme="light"] .bg-bg\/60,
+[data-theme="light"] .bg-bg\/70,
+[data-theme="light"] .bg-bg\/80 {
+  background: rgba(255,255,255,0.7) !important;
+}
+
+[data-theme="light"] [class*="bg-white/"]:not([class*="bg-white]/"]) {
+  background: rgba(0,0,0,0.03) !important;
+}
+
+[data-theme="light"] .text-text-muted {
+  color: #999 !important;
+}
+
 h1, h2, h3, h4 {
   color: #f0f2f8;
 }

@@ -28,10 +28,10 @@ export const metadata: Metadata = {
     canonical: 'https://stratix-intelligence-ia.vercel.app',
   },
   verification: {
-    google: 'uSkS-Tt36J-Dy_boeR36cOMHaGYd3vD-yCfY79B84Is',
+    google: "DOHydJHF1BGVxNxqJqjqMvA0DgqA9flHaoStmssXy7M",
   },
   icons: {
-    icon: "/stratix_shield.svg",
+    icon: '/icon.svg',
     apple: [{ url: "/stratix_shield.svg", sizes: "180x180", type: "image/svg+xml" }],
   },
   openGraph: {
