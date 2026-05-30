@@ -57,7 +57,7 @@ function AuthContent() {
         transition={{ duration: 0.6 }}
       >
         <Link href="/" className={styles.logo}>
-          <img src="/stratix_shield.svg" alt="Stratix" className="h-7" />
+          <img src="/stratix_shield.svg" alt="Stratix" width={28} height={28} className="h-7" />
           <span className="font-mono">Stratix <span className="text-accent">Intelligence</span></span>
         </Link>
 

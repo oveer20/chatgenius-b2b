@@ -99,7 +99,7 @@ function AnimatedCounter({ target, suffix = "" }: { target: string; suffix?: str
 }
 
 export default function BeforeAfter() {
-  const { t, lang } = useLang();
+  const { lang } = useLang();
   const content = CONTENT[lang as keyof typeof CONTENT];
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
 

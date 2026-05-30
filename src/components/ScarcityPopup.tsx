@@ -13,7 +13,6 @@ export default function ScarcityPopup() {
   const [offers, setOffers] = useState(OFFERS_LEFT);
 
   useEffect(() => {
-    const hasSeen = localStorage.getItem("stratix_scarcity_seen");
     const lastSeen = localStorage.getItem("stratix_scarcity_time");
     const now = Date.now();
     

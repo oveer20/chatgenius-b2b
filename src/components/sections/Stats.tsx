@@ -164,7 +164,7 @@ function TestimonialCard({ testimonial, index }: { testimonial: Testimonial; ind
             {testimonial.initials}
           </div>
         ) : (
-          <img src={testimonial.avatar} alt={testimonial.initials} onError={() => setAvatarError(true)} className="w-10 h-10 rounded-full bg-accent/10 shrink-0" />
+          <img src={testimonial.avatar} alt={testimonial.initials} width={40} height={40} onError={() => setAvatarError(true)} className="w-10 h-10 rounded-full bg-accent/10 shrink-0" />
         )}
         <div>
           <div className="text-sm font-semibold text-text-primary">{testimonial.name}</div>

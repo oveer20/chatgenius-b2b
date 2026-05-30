@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { FiSend, FiMessageSquare, FiShield, FiZap, FiCpu } from "react-icons/fi";
+import { FiSend, FiCpu, FiZap, FiMessageSquare } from "react-icons/fi";
 import { toast, Toaster } from "sonner";
 import { motion } from "framer-motion";
 
@@ -43,14 +43,10 @@ CIERRE: Si el cliente muestra interés, ofrece agendar una demo gratuita de 30 m
 };
 
 export default function WidgetPage() {
-  const [isOpen, setIsOpen] = useState(true);
-  const [step, setStep] = useState<"lead-capture" | "chat">("chat");
-  const [sessionId] = useState(() => "demo-" + Date.now());
   const [botConfig, setBotConfig] = useState<any>(DEMO_BOT);
   const [messages, setMessages] = useState<any[]>([]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
-  const [leadData, setLeadData] = useState({ name: "", email: "", phone: "" });
   const [loadingBot, setLoadingBot] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -70,7 +66,7 @@ export default function WidgetPage() {
             return;
           }
         }
-      } catch (e) {
+      } catch {
         // Using demo bot
       }
       setBotConfig(DEMO_BOT);
@@ -87,26 +83,12 @@ export default function WidgetPage() {
     scrollRef.current?.scrollTo(0, scrollRef.current.scrollHeight);
   }, [messages, isTyping]);
 
-  const handleLeadSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!leadData.name) {
-      toast.error("Ingresa tu nombre");
-      return;
-    }
-    setStep("chat");
-    setMessages(prev => [...prev, {
-      role: "assistant",
-      content: `¡Mucho gusto ${leadData.name}! ¿Qué tipo de propiedad estás buscando?`
-    }]);
-  };
-
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim() || !botConfig) return;
 
     const userMsg = { role: "user", content: input };
     setMessages(prev => [...prev, userMsg]);
-    const userInput = input;
     setInput("");
     setIsTyping(true);
 
@@ -128,7 +110,7 @@ export default function WidgetPage() {
       } else {
         throw new Error("Sin respuesta");
       }
-    } catch (err) {
+    } catch {
       const fallbacks = [
         "Hola! Soy Asesor Stratix. Dime, que tipo de negocio tienes y te cuento como podemos ayudarte.",
         "Te puedo ayudar con automatizacion de ventas. Cual es tu mayor desafio con clientes actualmente?",
@@ -152,7 +134,7 @@ export default function WidgetPage() {
     <div className="bg-bg min-h-screen text-white font-sans">
       <header className="px-[5%] py-4 flex justify-between items-center border-b border-white/5">
         <div className="flex items-center gap-2.5">
-          <img src="/stratix_shield.svg" alt="Stratix" className="w-7" />
+          <img src="/stratix_shield.svg" alt="Stratix" width={28} height={28} className="w-7" />
           <span className="font-extrabold">Stratix AI</span>
           <span className="text-xs bg-accent/20 text-accent px-2 py-0.5 rounded">GEMINI 2.0</span>
         </div>
