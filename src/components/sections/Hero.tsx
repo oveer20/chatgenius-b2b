@@ -24,6 +24,20 @@ export default function Hero() {
   const [aiText, setAiText] = useState("");
   const [typing, setTyping] = useState(true);
   const indexRef = useRef(0);
+  const mockupRef = useRef<HTMLDivElement>(null);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [isMouseOnScreen, setIsMouseOnScreen] = useState(false);
+
+  useEffect(() => {
+    const handleMouse = (e: MouseEvent) => {
+      setMousePos({ x: (e.clientX / window.innerWidth - 0.5) * 2, y: (e.clientY / window.innerHeight - 0.5) * 2 });
+      setIsMouseOnScreen(true);
+    };
+    const handleLeave = () => setIsMouseOnScreen(false);
+    window.addEventListener("mousemove", handleMouse, { passive: true });
+    window.addEventListener("mouseleave", handleLeave);
+    return () => { window.removeEventListener("mousemove", handleMouse); window.removeEventListener("mouseleave", handleLeave); };
+  }, []);
 
   const DEMO_TEXT = lang === "es"
     ? "¡Perfecto! Tenemos apartamento de $520M en Chapinero, 85m², 3 habitaciones. ¿Te agendo una visita mañana?"
@@ -68,8 +82,20 @@ export default function Hero() {
         className="pointer-events-none absolute inset-0"
         style={{ background: 'radial-gradient(ellipse 70% 50% at 50% 15%,rgba(212,175,55,0.08) 0%,transparent 70%)' }}
       />
-      <div className="absolute top-[10%] -left-[10%] w-[400px] h-[400px] rounded-full bg-accent/3 blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[20%] -right-[10%] w-[350px] h-[350px] rounded-full bg-accent/2 blur-[100px] pointer-events-none" />
+      <div
+        className="absolute top-[10%] -left-[10%] w-[400px] h-[400px] rounded-full bg-accent/3 blur-[120px] pointer-events-none"
+        style={{
+          transform: isMouseOnScreen ? `translate(${-mousePos.x * 15}px, ${-mousePos.y * 15}px)` : 'translate(0,0)',
+          transition: 'transform 0.3s ease-out',
+        }}
+      />
+      <div
+        className="absolute bottom-[20%] -right-[10%] w-[350px] h-[350px] rounded-full bg-accent/2 blur-[100px] pointer-events-none"
+        style={{
+          transform: isMouseOnScreen ? `translate(${mousePos.x * 20}px, ${mousePos.y * 10}px)` : 'translate(0,0)',
+          transition: 'transform 0.3s ease-out',
+        }}
+      />
 
       <div className="relative z-2 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 w-full max-w-[1300px] items-center">
         <motion.div {...fadeUp()} className="flex flex-col items-center lg:items-start text-center lg:text-left">
@@ -124,8 +150,15 @@ export default function Hero() {
           <div className="pointer-events-none absolute inset-[-40px] blur-xl" style={{ background: 'radial-gradient(ellipse 60% 40% at 50% 80%,rgba(212,175,55,0.12) 0%,transparent 70%)' }} />
 
           <motion.div
+            ref={mockupRef}
             whileHover={{ boxShadow: '0 40px 120px rgba(0,0,0,0.7), 0 0 60px rgba(212,175,55,0.15)' }}
             className="bg-[rgba(17,21,32,0.7)] backdrop-blur-2xl border border-white/10 rounded-2xl overflow-hidden shadow-[0_40px_120px_rgba(0,0,0,0.7),0_0_40px_rgba(212,175,55,0.08)]"
+            style={{
+              transform: isMouseOnScreen
+                ? `perspective(1000px) rotateY(${mousePos.x * 2}deg) rotateX(${-mousePos.y * 2}deg)`
+                : 'perspective(1000px) rotateY(0deg) rotateX(0deg)',
+              transition: 'transform 0.15s ease-out',
+            }}
           >
             <div className="flex items-center gap-2 px-[18px] py-3.5 border-b border-white/7 bg-white/[0.02]">
               <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
