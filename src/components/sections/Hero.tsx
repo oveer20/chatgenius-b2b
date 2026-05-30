@@ -59,7 +59,7 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex flex-col items-center justify-center text-center w-full px-[clamp(1.5rem,5vw,4rem)] py-[clamp(5rem,8vh,7rem)] overflow-hidden"
+      className="relative min-h-screen flex items-center w-full px-[clamp(1.5rem,5vw,4rem)] py-[clamp(5rem,8vh,7rem)] overflow-hidden"
       style={{ background: 'radial-gradient(ellipse 100% 50% at 50% 0%, rgba(212,175,55,0.06) 0%, transparent 60%), radial-gradient(ellipse 80% 30% at 50% 100%, rgba(212,175,55,0.03) 0%, transparent 50%), var(--color-bg)' }}
     >
       <motion.div
@@ -68,47 +68,58 @@ export default function Hero() {
         className="pointer-events-none absolute inset-0"
         style={{ background: 'radial-gradient(ellipse 70% 50% at 50% 15%,rgba(212,175,55,0.08) 0%,transparent 70%)' }}
       />
-      <div className="absolute top-[10%] -left-[10%] w-[300px] h-[300px] rounded-full bg-accent/3 blur-[100px] pointer-events-none" />
-      <div className="absolute bottom-[20%] -right-[10%] w-[250px] h-[250px] rounded-full bg-accent/2 blur-[80px] pointer-events-none" />
+      <div className="absolute top-[10%] -left-[10%] w-[400px] h-[400px] rounded-full bg-accent/3 blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-[20%] -right-[10%] w-[350px] h-[350px] rounded-full bg-accent/2 blur-[100px] pointer-events-none" />
 
-      <motion.div {...fadeUp()} className="relative z-2 flex flex-col items-center w-full max-w-[1200px]">
-        <motion.div {...fadeUp()} className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent-dim border border-accent/30 text-accent text-xs font-semibold font-mono tracking-wider uppercase backdrop-blur-sm mb-6">
-          {t.hero.badge}
-        </motion.div>
+      <div className="relative z-2 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 w-full max-w-[1300px] items-center">
+        <motion.div {...fadeUp()} className="flex flex-col items-center lg:items-start text-center lg:text-left">
+          <motion.div {...fadeUp(0.1)} className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent-dim border border-accent/30 text-accent text-xs font-semibold font-mono tracking-wider uppercase backdrop-blur-sm mb-6">
+            {t.hero.badge}
+          </motion.div>
 
-        <motion.h1 {...fadeUp()} className="font-serif text-[clamp(2.8rem,8vw,6rem)] leading-[1.05] tracking-[-0.03em] mb-6 text-text-primary max-w-[1000px]">
-          {t.hero.titleLine1}<br /><em className="text-accent not-italic">{t.hero.titleLine2}</em>
-        </motion.h1>
+          <motion.h1 {...fadeUp(0.15)} className="font-serif text-[clamp(2.8rem,6vw,5rem)] leading-[1.05] tracking-[-0.03em] mb-6 text-text-primary">
+            {t.hero.titleLine1}<br /><em className="text-accent not-italic">{t.hero.titleLine2}</em>
+          </motion.h1>
 
-        <motion.p {...fadeUp()} className="text-base md:text-lg text-text-secondary max-w-[560px] leading-[1.6] mb-10">
-          {t.hero.subtitle}
-        </motion.p>
+          <motion.p {...fadeUp(0.2)} className="text-base md:text-lg text-text-secondary max-w-[480px] leading-[1.6] mb-10">
+            {t.hero.subtitle}
+          </motion.p>
 
-        <motion.div {...fadeUp()} className="flex items-center gap-4 flex-wrap justify-center mb-16">
-          <motion.a
-            href="/login"
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.97 }}
-            className="inline-block bg-accent text-[#030a05] text-[15px] font-bold px-8 py-3.5 rounded-xl no-underline shadow-[0_4px_20px_rgba(212,175,55,0.3)] hover:shadow-[0_6px_30px_rgba(212,175,55,0.4)] transition-shadow duration-300"
-          >
-            {t.hero.cta1}
-          </motion.a>
-          <motion.a
-            href="/widget"
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.97 }}
-            className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl border border-white/15 bg-white/3 text-text-primary text-[15px] font-medium no-underline hover:bg-white/8 hover:border-white/25 transition-colors duration-300"
-          >
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.2"/><path d="M6.5 5.5L10.5 8L6.5 10.5V5.5Z" fill="currentColor"/></svg>
-            {t.hero.cta2}
-          </motion.a>
+          <motion.div {...fadeUp(0.25)} className="flex items-center gap-4 flex-wrap justify-center lg:justify-start mb-10">
+            <motion.a
+              href="/login"
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.97 }}
+              className="inline-block bg-accent text-[#030a05] text-[15px] font-bold px-8 py-3.5 rounded-xl no-underline shadow-[0_4px_20px_rgba(212,175,55,0.3)] hover:shadow-[0_6px_30px_rgba(212,175,55,0.4)] transition-shadow duration-300"
+            >
+              {t.hero.cta1}
+            </motion.a>
+            <motion.a
+              href="/widget"
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.97 }}
+              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl border border-white/15 bg-white/3 text-text-primary text-[15px] font-medium no-underline hover:bg-white/8 hover:border-white/25 transition-colors duration-300"
+            >
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.2"/><path d="M6.5 5.5L10.5 8L6.5 10.5V5.5Z" fill="currentColor"/></svg>
+              {t.hero.cta2}
+            </motion.a>
+          </motion.div>
+
+          <motion.div {...fadeUp(0.3)} className="flex items-center gap-6 text-sm text-text-muted">
+            <div className="flex -space-x-2">
+              {["CM","MG","AR","LV"].map((initials, i) => (
+                <div key={i} className="w-8 h-8 rounded-full bg-gradient-to-br from-accent to-[#B8860B] flex items-center justify-center text-[9px] font-bold text-black border-2 border-bg shadow-[0_2px_8px_rgba(0,0,0,0.3)]">{initials}</div>
+              ))}
+            </div>
+            <span className="font-sans">{lang === "es" ? "Únete a +1,800 empresas" : "Join +1,800 companies"}</span>
+          </motion.div>
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, y: 40, scale: 0.97 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.9, ease: "easeOut", delay: 0.6 }}
-          className="relative w-full max-w-[700px]"
+          initial={{ opacity: 0, x: 40, scale: 0.97 }}
+          animate={{ opacity: 1, x: 0, scale: 1 }}
+          transition={{ duration: 0.9, ease: "easeOut", delay: 0.4 }}
+          className="relative w-full"
         >
           <div className="pointer-events-none absolute inset-[-40px] blur-xl" style={{ background: 'radial-gradient(ellipse 60% 40% at 50% 80%,rgba(212,175,55,0.12) 0%,transparent 70%)' }} />
 
@@ -161,7 +172,7 @@ export default function Hero() {
             </div>
           </motion.div>
         </motion.div>
-      </motion.div>
+      </div>
     </section>
   );
 }

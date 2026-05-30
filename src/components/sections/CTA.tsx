@@ -43,8 +43,13 @@ export default function CTA() {
             viewport={{ once: true }}
             className="relative mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-4 py-2 text-[13px] font-medium text-emerald-500"
           >
-            <span className="h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_6px_#10b981]" />
-            {lang === "es" ? "+500 empresas ya automatizaron" : "+500 companies already automated"}
+            <motion.span
+              animate={{ opacity: [1, 0.4, 1] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className="h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_6px_#10b981]"
+            />
+            <span className="font-semibold">+1,847</span>
+            {lang === "es" ? "empresas ya automatizaron" : "companies already automated"}
           </motion.div>
 
           <motion.h2 className="relative mb-4 font-serif text-4xl md:text-5xl font-bold tracking-tighter text-text-primary">
@@ -56,11 +61,11 @@ export default function CTA() {
             {t.cta.subtitle}
           </motion.p>
 
-          <motion.div className="relative mb-10 flex flex-wrap items-center justify-center gap-4">
+          <motion.div className="relative mb-8 flex flex-wrap items-center justify-center gap-4">
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
               <Link
                 href="/login"
-                className="inline-block rounded-xl bg-gradient-to-br from-accent to-[#E5C555] px-9 py-4 text-[15px] font-bold text-[#030a05] no-underline shadow-[0_4px_20px_rgba(212,175,55,0.4)] transition-all duration-300 hover:shadow-[0_8px_30px_rgba(212,175,55,0.5)]"
+                className="inline-block rounded-xl bg-gradient-to-br from-accent to-[#E5C555] px-9 py-4 text-[15px] font-bold text-[#030a05] no-underline shadow-[0_4px_20px_rgba(212,175,55,0.4)] transition-all duration-300 hover:shadow-[0_8px_30px_rgba(212,175,55,0.5)] animate-[glowPulse_3s_ease-in-out_infinite]"
               >
                 {t.cta.cta1}
               </Link>
@@ -77,12 +82,19 @@ export default function CTA() {
             </motion.a>
           </motion.div>
 
-          <motion.div className="relative flex flex-wrap items-center justify-center gap-6 font-mono text-[12px] text-text-muted">
-            <span>{t.cta.meta1}</span>
-            <span>•</span>
-            <span>{t.cta.meta2}</span>
-            <span>•</span>
-            <span>{t.cta.meta3}</span>
+          <motion.div className="relative mb-6 flex flex-wrap items-center justify-center gap-8 font-mono text-[12px] text-text-muted">
+            <span className="flex items-center gap-2">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              {t.cta.meta1}
+            </span>
+            <span className="flex items-center gap-2">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" strokeWidth="2"><path d="M20 6L9 17l-5-5"/></svg>
+              {lang === "es" ? "Sin tarjeta" : "No card needed"}
+            </span>
+            <span className="flex items-center gap-2">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" strokeWidth="2"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              {t.cta.meta3}
+            </span>
           </motion.div>
 
           <motion.div

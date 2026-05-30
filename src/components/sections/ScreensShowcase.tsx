@@ -4,180 +4,223 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLang } from "@/components/LangContext";
 
-const SCREENS = {
-  es: [
-    {
-      title: "Dashboard de métricas",
-      desc: "Ve en tiempo real cuántos leads llegan, su calificación y conversiones.",
-      color: "#D4AF37",
-    },
-    {
-      title: "Configuración del bot",
-      desc: "Personaliza el tono, conocimiento y comportamiento en minutos.",
-      color: "#10b981",
-    },
-    {
-      title: "Leads calificados automáticamente",
-      desc: "El bot打分 cada lead y solo pasa los HOT a tu equipo.",
-      color: "#3B82F6",
-    },
-    {
-      title: "WhatsApp real en acción",
-      desc: "Respuestas automáticas en segundos, 24/7, en WhatsApp.",
-      color: "#25D366",
-    },
-  ],
-  en: [
-    {
-      title: "Metrics dashboard",
-      desc: "See in real-time how many leads arrive, their scoring and conversions.",
-      color: "#D4AF37",
-    },
-    {
-      title: "Bot configuration",
-      desc: "Customize tone, knowledge and behavior in minutes.",
-      color: "#10b981",
-    },
-    {
-      title: "Automatically scored leads",
-      desc: "The bot scores every lead and only passes HOT ones to your team.",
-      color: "#3B82F6",
-    },
-    {
-      title: "Real WhatsApp in action",
-      desc: "Automatic responses in seconds, 24/7, on WhatsApp.",
-      color: "#25D366",
-    },
-  ],
-};
-
-const SCREEN_ICONS = [
-  "📊",
-  "⚙️",
-  "🎯",
-  "💬",
+const VIEWS = [
+  {
+    id: "dashboard",
+    gradient: "from-accent/20 via-accent/5 to-transparent",
+    accent: "#D4AF37",
+    label: "Dashboard",
+  },
+  {
+    id: "chat",
+    gradient: "from-[#10b981]/20 via-[#10b981]/5 to-transparent",
+    accent: "#10b981",
+    label: "Chat IA",
+  },
+  {
+    id: "leads",
+    gradient: "from-[#3B82F6]/20 via-[#3B82F6]/5 to-transparent",
+    accent: "#3B82F6",
+    label: "Leads",
+  },
+  {
+    id: "analytics",
+    gradient: "from-[#D4AF37]/20 via-[#D4AF37]/5 to-transparent",
+    accent: "#D4AF37",
+    label: "Analytics",
+  },
 ];
 
 export default function ScreensShowcase() {
   const { lang } = useLang();
-  const screens = SCREENS[lang as 'es' | 'en'];
   const [active, setActive] = useState(0);
 
-  const next = () => setActive(a => (a + 1) % screens.length);
-  const prev = () => setActive(a => (a - 1 + screens.length) % screens.length);
+  const next = () => setActive(a => (a + 1) % VIEWS.length);
+  const prev = () => setActive(a => (a - 1 + VIEWS.length) % VIEWS.length);
 
-  const title = lang === "es" ? "Tu escritorio de ventas, potenciado con IA" : "Your sales desk, powered by AI";
-  const subtitle = lang === "es" ? "Todo lo que ves aquí es tu dashboard real de Stratix" : "Everything you see here is your real Stratix dashboard";
+  const t = {
+    title: lang === "es" ? "Tu centro de control IA" : "Your AI command center",
+    titleEm: lang === "es" ? "en tiempo real" : "in real time",
+    subtitle: lang === "es" ? "Métrica viva. Cada lead, cada conversación, cada venta en un solo lugar." : "Live metrics. Every lead, conversation, and sale in one place.",
+  };
 
   return (
-    <section className="px-[clamp(1.5rem,5vw,4rem)] py-32 max-w-[1000px] mx-auto">
+    <section className="px-[clamp(1.5rem,5vw,4rem)] py-32 max-w-[1200px] mx-auto">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="text-center mb-12"
+        className="mb-12 max-w-[600px]"
       >
         <h2 className="font-serif text-4xl md:text-5xl font-bold tracking-tighter text-text-primary mb-3">
-          {title.split(',')[0]},<br />
-          <em className="text-accent italic">{title.split(',')[1]}</em>
+          {t.title}<br />
+          <em className="text-accent italic">{t.titleEm}</em>
         </h2>
-        <p className="text-text-secondary text-base">{subtitle}</p>
+        <p className="text-text-secondary text-base leading-relaxed">{t.subtitle}</p>
       </motion.div>
 
-      <div className="relative">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_100%,rgba(212,175,55,0.08)_0%,transparent_60%)] pointer-events-none" />
-
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={active}
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -30 }}
-            transition={{ duration: 0.35 }}
-            className={`bg-bg/60 backdrop-blur-xl rounded-2xl p-[clamp(2rem,5vw,3rem)] shadow-[0_40px_80px_rgba(0,0,0,0.5)] ${
-              active === 0 ? 'border border-[#D4AF37]/20 shadow-[0_40px_80px_rgba(0,0,0,0.5),0_0_40px_#D4AF3715]' :
-              active === 1 ? 'border border-[#10b981]/20 shadow-[0_40px_80px_rgba(0,0,0,0.5),0_0_40px_#10b98115]' :
-              active === 2 ? 'border border-[#3B82F6]/20 shadow-[0_40px_80px_rgba(0,0,0,0.5),0_0_40px_#3B82F615]' :
-              'border border-[#25D366]/20 shadow-[0_40px_80px_rgba(0,0,0,0.5),0_0_40px_#25D36615]'
-            }`}
-          >
-            <div className="flex items-center gap-3 mb-8">
-              <div className="flex gap-1.5">
-                <div className="w-[10px] h-[10px] rounded-full bg-[#ff5f57]" />
-                <div className="w-[10px] h-[10px] rounded-full bg-[#febc2e]" />
-                <div className="w-[10px] h-[10px] rounded-full bg-[#28c840]" />
+      <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-8">
+        <div className="flex lg:flex-col gap-2">
+          {VIEWS.map((view, i) => (
+            <motion.button
+              key={view.id}
+              onClick={() => setActive(i)}
+              whileHover={{ x: 4 }}
+              whileTap={{ scale: 0.98 }}
+              className={`text-left px-5 py-4 rounded-xl border transition-all duration-300 cursor-pointer ${
+                i === active
+                  ? 'bg-bg/80 backdrop-blur-xl border-accent/30 shadow-[0_10px_30px_rgba(0,0,0,0.3)]'
+                  : 'bg-transparent border-transparent text-text-secondary hover:text-text-primary'
+              }`}
+            >
+              <div className={`font-mono text-xs mb-1 ${i === active ? 'text-accent' : 'text-text-muted'}`}>
+                {String(i + 1).padStart(2, '0')}
               </div>
-              <span className={`font-mono text-[11px] tracking-[1px] ${
-                active === 0 ? 'text-[#D4AF37]' :
-                active === 1 ? 'text-[#10b981]' :
-                active === 2 ? 'text-[#3B82F6]' :
-                'text-[#25D366]'
-              }`}>
-                STRATIX DASHBOARD
-              </span>
-            </div>
+              <div className={`font-semibold text-sm ${i === active ? 'text-text-primary' : ''}`}>
+                {view.label}
+              </div>
+            </motion.button>
+          ))}
+        </div>
 
-            <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-6">
-              <div className="flex items-center gap-4">
-                <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-[28px] shrink-0 ${
-                  active === 0 ? 'bg-[#D4AF3720] border-[#D4AF3740]' :
-                  active === 1 ? 'bg-[#10b98120] border-[#10b98140]' :
-                  active === 2 ? 'bg-[#3B82F620] border-[#3B82F640]' :
-                  'bg-[#25D36620] border-[#25D36640]'
-                }`}>
-                  {SCREEN_ICONS[active]}
+        <div className="relative min-h-[400px]">
+          <div className={`absolute inset-0 bg-gradient-to-br ${VIEWS[active].gradient} rounded-3xl opacity-60 pointer-events-none`} />
+
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={active}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.3 }}
+              className="relative bg-bg/60 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-[0_40px_80px_rgba(0,0,0,0.5)] overflow-hidden"
+            >
+              <div className="flex items-center gap-2.5 mb-8 pb-5 border-b border-white/5">
+                <div className="flex gap-1.5">
+                  <div className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
                 </div>
-                <div>
-                  <h3 className="font-serif text-[1.3rem] text-text-primary mb-2">
-                    {screens[active].title}
-                  </h3>
-                  <p className="text-text-secondary text-sm leading-[1.6]">
-                    {screens[active].desc}
-                  </p>
+                <span className="font-mono text-[10px] tracking-[1px] text-text-muted ml-2">STRATIX OS · {VIEWS[active].label.toUpperCase()}</span>
+                <div className="ml-auto flex items-center gap-1.5">
+                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_6px_#10b981]" />
+                  <span className="font-mono text-[9px] text-emerald-500">LIVE</span>
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
-                {[
-                  { label: lang === "es" ? "Leads hoy" : "Leads today", val: "47", color: "#D4AF37" },
-                  { label: lang === "es" ? "HOT" : "HOT", val: "12", color: "#10b981" },
-                  { label: lang === "es" ? "Tiempo avg" : "Avg time", val: "1.8s", color: "#3B82F6" },
-                  { label: lang === "es" ? "Conversión" : "Conversion", val: "68%", color: "#D4AF37" },
-                ].map((m, i) => (
-                  <div key={i} className="p-4 bg-bg/70 backdrop-blur-lg rounded-xl border border-white/10 text-center">
-                    <div className={`font-serif text-2xl font-bold ${
-                      m.color === '#D4AF37' ? 'text-accent' :
-                      m.color === '#10b981' ? 'text-[#10b981]' :
-                      'text-[#3B82F6]'
-                    }`}>{m.val}</div>
-                    <div className="text-[11px] text-text-muted mt-1">{m.label}</div>
+              {active === 0 && (
+                <div className="grid grid-cols-2 gap-4">
+                  {[
+                    { val: "1,847", label: lang === "es" ? "Empresas" : "Companies", change: "+12%", up: true },
+                    { val: "2.4M", label: lang === "es" ? "Leads" : "Leads", change: "+8%", up: true },
+                    { val: "98.7%", label: lang === "es" ? "Uptime" : "Uptime", change: "+0.2%", up: true },
+                    { val: "$47K", label: lang === "es" ? "MRR" : "MRR", change: "+23%", up: true },
+                  ].map((stat, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.1 }}
+                      className="p-5 rounded-xl bg-white/[0.03] border border-white/5"
+                    >
+                      <div className="font-serif text-3xl font-bold text-text-primary mb-1">{stat.val}</div>
+                      <div className="text-xs text-text-muted">{stat.label}</div>
+                      <div className={`text-xs mt-1 ${stat.up ? 'text-emerald-500' : 'text-red-400'}`}>{stat.change}</div>
+                    </motion.div>
+                  ))}
+                </div>
+              )}
+
+              {active === 1 && (
+                <div className="flex flex-col gap-4">
+                  {[
+                    { role: "user", text: lang === "es" ? "¿Tienen disponible el apartamento del catálogo?" : "Is the apartment from the catalog available?" },
+                    { role: "bot", text: lang === "es" ? "¡Sí! El apto 304, 75m², $380M, está disponible. ¿Te gustaría agendar una visita hoy?" : "Yes! Apt 304, 75m², $380M is available. Would you like to schedule a visit today?" },
+                    { role: "user", text: lang === "es" ? "Sí, mañana a las 10am" : "Yes, tomorrow at 10am" },
+                    { role: "bot", text: lang === "es" ? "✅ ¡Agendado! Recibirás un recordatorio por WhatsApp. ¿Algo más?" : "✅ Booked! You'll get a WhatsApp reminder. Anything else?" },
+                  ].map((msg, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, x: msg.role === "user" ? 20 : -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.15 }}
+                      className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
+                    >
+                      <div className={`max-w-[70%] px-4 py-3 rounded-2xl text-sm leading-relaxed ${
+                        msg.role === "user"
+                          ? "bg-accent/15 border border-accent/20 text-text-primary"
+                          : "bg-white/5 border border-white/5 text-text-primary"
+                      }`}>
+                        {msg.text}
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              )}
+
+              {active === 2 && (
+                <div className="overflow-hidden">
+                  <div className="grid grid-cols-[1fr_80px_80px_80px] gap-3 text-xs font-mono text-text-muted uppercase tracking-wider mb-3 px-3">
+                    <span>{lang === "es" ? "Contacto" : "Contact"}</span>
+                    <span className="text-center">{lang === "es" ? "Score" : "Score"}</span>
+                    <span className="text-center">{lang === "es" ? "Estado" : "Status"}</span>
+                    <span className="text-center">{lang === "es" ? "Acción" : "Action"}</span>
                   </div>
-                ))}
-              </div>
-            </div>
-          </motion.div>
-        </AnimatePresence>
+                  {([
+                    { name: "Carlos M.", score: "92", status: "HOT", color: "text-emerald-500" },
+                    { name: "Ana R.", score: "78", status: "WARM", color: "text-accent" },
+                    { name: "Luis P.", score: "34", status: "COLD", color: "text-text-muted" },
+                    { name: "Sofía G.", score: "88", status: "HOT", color: "text-emerald-500" },
+                  ] as const).map((lead, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.08 }}
+                      className="grid grid-cols-[1fr_80px_80px_80px] gap-3 items-center px-3 py-3 rounded-lg hover:bg-white/[0.03] transition-colors"
+                    >
+                      <span className="text-sm text-text-primary font-medium">{lead.name}</span>
+                      <span className="text-sm text-center font-mono text-text-primary">{lead.score}%</span>
+                      <span className={`text-xs text-center font-semibold ${lead.color}`}>{lead.status}</span>
+                      <span className="text-xs text-center text-accent cursor-pointer hover:underline">{lang === "es" ? "Contactar" : "Contact"}</span>
+                    </motion.div>
+                  ))}
+                </div>
+              )}
 
-        <div className="flex justify-center gap-4 mt-8 items-center">
-          <button onClick={prev} className="w-10 h-10 rounded-full bg-white/5 border border-white/10 text-text-secondary cursor-pointer flex items-center justify-center">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 18l-6-6 6-6"/></svg>
-          </button>
-
-          <div className="flex gap-2">
-            {screens.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setActive(i)}
-                className={`h-2 rounded-sm border-0 cursor-pointer transition-all duration-300 ${
-                  i === active ? 'w-6 bg-accent' : 'w-2 bg-white/10'
-                }`}
-              />
-            ))}
-          </div>
-
-          <button onClick={next} className="w-10 h-10 rounded-full bg-white/5 border border-white/10 text-text-secondary cursor-pointer flex items-center justify-center">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18l6-6-6-6"/></svg>
-          </button>
+              {active === 3 && (
+                <div className="flex flex-col gap-6">
+                  <div className="h-[120px] flex items-end gap-3">
+                    {[45, 62, 38, 75, 52, 88, 70, 95, 60, 82, 48, 68].map((h, i) => (
+                      <motion.div
+                        key={i}
+                        initial={{ height: 0 }}
+                        animate={{ height: `${h}%` }}
+                        transition={{ delay: i * 0.05, duration: 0.5 }}
+                        className="flex-1 rounded-t-lg bg-gradient-to-t from-accent/40 to-accent/10 relative group cursor-pointer"
+                      >
+                        <div className="absolute -top-7 left-1/2 -translate-x-1/2 text-[10px] text-text-muted opacity-0 group-hover:opacity-100 transition-opacity font-mono">{h}</div>
+                      </motion.div>
+                    ))}
+                  </div>
+                  <div className="grid grid-cols-3 gap-4">
+                    <div className="p-4 rounded-xl bg-white/[0.03] border border-white/5 text-center">
+                      <div className="font-serif text-2xl font-bold text-accent">47.8%</div>
+                      <div className="text-xs text-text-muted mt-1">{lang === "es" ? "Tasa conversión" : "Conversion rate"}</div>
+                    </div>
+                    <div className="p-4 rounded-xl bg-white/[0.03] border border-white/5 text-center">
+                      <div className="font-serif text-2xl font-bold text-emerald-500">1.8s</div>
+                      <div className="text-xs text-text-muted mt-1">{lang === "es" ? "Respuesta promedio" : "Avg response"}</div>
+                    </div>
+                    <div className="p-4 rounded-xl bg-white/[0.03] border border-white/5 text-center">
+                      <div className="font-serif text-2xl font-bold text-[#3B82F6]">92%</div>
+                      <div className="text-xs text-text-muted mt-1">{lang === "es" ? "Satisfacción" : "Satisfaction"}</div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </motion.div>
+          </AnimatePresence>
         </div>
       </div>
     </section>

@@ -59,7 +59,7 @@ function StepCard({ step, svgPath, svgLabel, index, isLast }: { step: { num: str
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => { setIsHovered(false); setTilt({ x: 0, y: 0 }); }}
       animate={isHovered ? { rotateY: tilt.x, rotateX: tilt.y } : {}}
-      className={"p-8 relative rounded-2xl transition-colors duration-300 [transform-style:preserve-3d] " + (isHovered ? 'bg-white/5' : 'bg-white/[0.02]') + (!isLast ? ' border-r border-white/5' : '')}
+      className={"p-8 relative rounded-2xl transition-all duration-500 [transform-style:preserve-3d] " + (isHovered ? 'bg-bg/80 backdrop-blur-xl shadow-[0_20px_60px_rgba(0,0,0,0.5),0_0_40px_rgba(212,175,55,0.08)] border border-accent/20' : 'bg-white/[0.02] border border-transparent')}
     >
       <div className={"w-14 h-14 rounded-full flex items-center justify-center mb-5 transition-all duration-300 bg-[linear-gradient(135deg,rgba(212,175,55,0.15),rgba(212,175,55,0.05))] border border-accent/30 " + (isHovered ? 'scale-110 shadow-[0_0_20px_rgba(212,175,55,0.2)]' : 'scale-100')}>
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -110,7 +110,7 @@ export default function HowItWorks() {
         <p className="text-base text-text-secondary">{t.how.subtitle}</p>
       </motion.div>
 
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-0 rounded-2xl overflow-hidden border border-white/5 bg-[rgba(13,16,23,0.5)] backdrop-blur-xl">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-0 rounded-2xl overflow-hidden border border-white/10 bg-bg/60 backdrop-blur-xl shadow-[0_20px_60px_rgba(0,0,0,0.4)]">
         {steps.map((step, i) => (
           <StepCard key={step.num} step={step} svgPath={svgIcons[i].path} svgLabel={svgIcons[i].label} index={i} isLast={i === steps.length - 1} />
         ))}

@@ -41,31 +41,32 @@ export default function Integrations() {
   const label = lang === "es" ? "CONECTADO CON" : "CONNECTED WITH";
 
   return (
-    <section className="py-24 px-[clamp(1.5rem,5vw,4rem)] border-t border-white/5 border-b border-white/5">
-      <div className="text-center mb-8">
-        <span className="font-mono text-[11px] tracking-[2px] text-text-muted uppercase">
-{label}
-        </span>
-      </div>
-      <div className="flex justify-center items-center gap-[clamp(1.5rem,4vw,3rem)] flex-wrap">
-        {INTEGRATIONS.map((item, i) => (
-          <motion.div
-            key={item.name}
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: i * 0.05 }}
-            whileHover={{ scale: 1.1, y: -2 }}
-            className="flex items-center gap-2 px-4 py-[10px] rounded-xl bg-bg/60 backdrop-blur-lg border border-white/10 shadow-[0_5px_15px_rgba(0,0,0,0.2)] transition-all duration-300"
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill={item.color}>
-              <path d={item.logo} />
-            </svg>
-            <span className="text-[13px] font-semibold text-text-secondary whitespace-nowrap">
-              {item.name}
-            </span>
-          </motion.div>
-        ))}
+    <section className="py-24 px-[clamp(1.5rem,5vw,4rem)] border-t border-white/5 border-b border-white/5 relative overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_50%,rgba(212,175,55,0.03)_0%,transparent_60%)] pointer-events-none" />
+      <div className="relative">
+        <div className="text-center mb-10">
+          <span className="font-mono text-[11px] tracking-[2px] text-text-muted uppercase">{label}</span>
+        </div>
+        <div className="flex justify-center items-center gap-[clamp(1.5rem,4vw,3rem)] flex-wrap">
+          {INTEGRATIONS.map((item, i) => (
+            <motion.div
+              key={item.name}
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.05 }}
+              whileHover={{ scale: 1.05, y: -3 }}
+              className="flex items-center gap-3 px-5 py-3 rounded-xl bg-bg/60 backdrop-blur-lg border border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.2)] transition-all duration-300 hover:border-accent/30 hover:shadow-[0_15px_40px_rgba(0,0,0,0.4),0_0_30px_rgba(212,175,55,0.08)]"
+            >
+              <svg width="22" height="22" viewBox="0 0 24 24" fill={item.color}>
+                <path d={item.logo} />
+              </svg>
+              <span className="text-[14px] font-semibold text-text-secondary whitespace-nowrap group-hover:text-text-primary">
+                {item.name}
+              </span>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </section>
   );
