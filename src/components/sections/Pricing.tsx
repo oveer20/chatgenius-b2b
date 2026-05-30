@@ -99,12 +99,12 @@ export default function Pricing() {
               viewport={{ once: true }}
               onMouseEnter={() => setHoveredPlan(plan.tier)}
               onMouseLeave={() => setHoveredPlan(null)}
-              whileHover={{ y: isHighlighted ? -4 : -8 }}
-              className={`relative rounded-2xl flex flex-col h-full transition-all duration-300 ${
+              whileHover={{ y: isHighlighted ? -6 : -4 }}
+              className={`relative rounded-2xl flex flex-col h-full transition-all duration-500 ${
                 isHighlighted
-                  ? 'p-10 bg-gradient-to-b from-accent/15 to-[#0d1017] border-2 border-accent shadow-[0_20px_60px_rgba(212,175,55,0.15)] scale-[1.03] z-10'
-                  : 'p-8 bg-white/[0.02] border border-white/8 shadow-sm shadow-black/20'
-              } ${isHovered && !isHighlighted ? 'bg-white/[0.06] border-accent/30 shadow-[0_10px_30px_rgba(0,0,0,0.3)]' : ''}`}
+                  ? 'p-10 bg-gradient-to-b from-accent/20 via-accent/8 to-[#0d1017] border-2 border-accent shadow-[0_30px_80px_rgba(212,175,55,0.2),0_0_60px_rgba(212,175,55,0.05)] scale-[1.03] z-10'
+                  : 'p-8 bg-white/[0.03] border border-white/10 shadow-md shadow-black/30'
+              } ${isHovered && !isHighlighted ? 'bg-white/[0.07] border-accent/30 shadow-[0_20px_50px_rgba(0,0,0,0.4)]' : ''}`}
             >
               {isHighlighted && (
                 <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-accent text-black text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-widest font-sans">

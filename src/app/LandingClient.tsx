@@ -45,33 +45,45 @@ export default function LandingClient() {
           <Navbar />
           <GuaranteeBanner />
           <Hero />
+          <hr className="section-divider" />
           <Stats />
+          <hr className="section-divider" />
           <Integrations />
+          <hr className="section-divider" />
           <Features />
+          <hr className="section-divider" />
           <Suspense fallback={<SectionFallback />}>
             <HowItWorks />
           </Suspense>
+          <hr className="section-divider" />
           <Suspense fallback={<SectionFallback />}>
             <BeforeAfter />
           </Suspense>
+          <hr className="section-divider" />
           <Suspense fallback={<SectionFallback />}>
             <ScreensShowcase />
           </Suspense>
+          <hr className="section-divider" />
           <Suspense fallback={<SectionFallback />}>
             <Pricing />
           </Suspense>
+          <hr className="section-divider" />
           <Suspense fallback={<SectionFallback />}>
             <InteractiveDemo />
           </Suspense>
+          <hr className="section-divider" />
           <Suspense fallback={<SectionFallback />}>
             <ROICalculator />
           </Suspense>
+          <hr className="section-divider" />
           <Suspense fallback={<SectionFallback />}>
             <FAQ />
           </Suspense>
+          <hr className="section-divider" />
           <Suspense fallback={<SectionFallback />}>
             <CTA />
           </Suspense>
+          <hr className="section-divider" />
           <Suspense fallback={<SectionFallback />}>
             <Footer />
           </Suspense>

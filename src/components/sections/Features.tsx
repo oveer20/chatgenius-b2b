@@ -48,10 +48,10 @@ function FeatureCard({ feature, index }: { feature: typeof FEATURES[0]; index: n
       transition={{ delay: index * 0.1 }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className={`p-7 min-w-[280px] flex-1 relative overflow-hidden border transition-[background,backdrop-filter] duration-[0.4s] ease-in-out ${
+      className={`p-7 min-w-[280px] flex-1 relative overflow-hidden border transition-all duration-500 ease-out ${
         hovered
-          ? 'bg-bg/80 backdrop-blur-xl border-accent/30 shadow-[0_25px_50px_rgba(0,0,0,0.5),0_0_40px_rgba(212,175,55,0.1)]'
-          : 'bg-bg/60 backdrop-blur-lg border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.3)]'
+          ? 'bg-bg/80 backdrop-blur-xl border-accent/30 shadow-[0_30px_60px_rgba(0,0,0,0.6),0_0_50px_rgba(212,175,55,0.12)] -translate-y-1'
+          : 'bg-bg/60 backdrop-blur-lg border-white/10 shadow-[0_15px_45px_rgba(0,0,0,0.3)]'
       }`}
     >
       {hovered && (

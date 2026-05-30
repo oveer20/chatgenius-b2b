@@ -60,14 +60,16 @@ export default function Hero() {
     <section
       id="hero"
       className="relative min-h-screen flex flex-col items-center justify-center text-center w-full px-[clamp(1.5rem,5vw,4rem)] py-[clamp(5rem,8vh,7rem)] overflow-hidden"
-      style={{ background: 'radial-gradient(ellipse 100% 50% at 50% 0%, rgba(212,175,55,0.04) 0%, transparent 60%), var(--color-bg)' }}
+      style={{ background: 'radial-gradient(ellipse 100% 50% at 50% 0%, rgba(212,175,55,0.06) 0%, transparent 60%), radial-gradient(ellipse 80% 30% at 50% 100%, rgba(212,175,55,0.03) 0%, transparent 50%), var(--color-bg)' }}
     >
       <motion.div
-        animate={{ opacity: [0.4, 0.7, 0.4] }}
+        animate={{ opacity: [0.3, 0.6, 0.3] }}
         transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
         className="pointer-events-none absolute inset-0"
-        style={{ background: 'radial-gradient(ellipse 60% 40% at 50% 15%,rgba(212,175,55,0.08) 0%,transparent 70%)' }}
+        style={{ background: 'radial-gradient(ellipse 70% 50% at 50% 15%,rgba(212,175,55,0.08) 0%,transparent 70%)' }}
       />
+      <div className="absolute top-[10%] -left-[10%] w-[300px] h-[300px] rounded-full bg-accent/3 blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-[20%] -right-[10%] w-[250px] h-[250px] rounded-full bg-accent/2 blur-[80px] pointer-events-none" />
 
       <motion.div {...fadeUp()} className="relative z-2 flex flex-col items-center w-full max-w-[1200px]">
         <motion.div {...fadeUp()} className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent-dim border border-accent/30 text-accent text-xs font-semibold font-mono tracking-wider uppercase backdrop-blur-sm mb-6">
