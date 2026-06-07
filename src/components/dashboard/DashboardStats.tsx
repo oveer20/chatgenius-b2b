@@ -30,7 +30,7 @@ export default function DashboardStats({ stats }: { stats: Stats }) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: stat.delay }}
-            className="rounded-xl border border-white/10 bg-bg/60 p-6"
+            className="rounded-xl border border-white/10 bg-bg/60 backdrop-blur-xl p-6"
           >
             <div className="mb-2 flex items-center gap-2">
               <stat.icon className={stat.color} />
@@ -46,7 +46,7 @@ export default function DashboardStats({ stats }: { stats: Stats }) {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="mb-8 rounded-xl border border-white/10 bg-bg/60 p-6"
+          className="mb-8 rounded-xl border border-white/10 bg-bg/60 backdrop-blur-xl p-6"
         >
           <div className="mb-4 flex items-center justify-between">
             <span className="text-xs uppercase tracking-widest text-text-secondary">Distribución de Leads</span>

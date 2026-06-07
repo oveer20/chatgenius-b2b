@@ -46,7 +46,7 @@ export default function ROICalculator() {
         </motion.p>
 
         <div className="mb-[50px] grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-6 text-left">
-          <div className="rounded-2xl border border-white/10 bg-bg/60 backdrop-blur-lg p-6 shadow-[0_10px_30px_rgba(0,0,0,0.3)]">
+          <div className="rounded-2xl border border-white/10 bg-bg/60 backdrop-blur-xl p-6 shadow-[0_10px_30px_rgba(0,0,0,0.3)]">
             <label className="mb-3 block font-sans text-sm font-medium text-text-secondary">
               {t.roi.leadsLabel}
             </label>
@@ -60,7 +60,7 @@ export default function ROICalculator() {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-white/10 bg-bg/60 backdrop-blur-lg p-6 shadow-[0_10px_30px_rgba(0,0,0,0.3)]">
+          <div className="rounded-2xl border border-white/10 bg-bg/60 backdrop-blur-xl p-6 shadow-[0_10px_30px_rgba(0,0,0,0.3)]">
             <label className="mb-3 block font-sans text-sm font-medium text-text-secondary">
               {t.roi.valueLabel}
             </label>
@@ -74,7 +74,7 @@ export default function ROICalculator() {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-white/10 bg-bg/60 backdrop-blur-lg p-6 shadow-[0_10px_30px_rgba(0,0,0,0.3)]">
+          <div className="rounded-2xl border border-white/10 bg-bg/60 backdrop-blur-xl p-6 shadow-[0_10px_30px_rgba(0,0,0,0.3)]">
             <label className="mb-3 block font-sans text-sm font-medium text-text-secondary">
               {t.roi.timeLabel} ({t.roi.timeSuffix})
             </label>

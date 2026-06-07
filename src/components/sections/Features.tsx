@@ -154,7 +154,7 @@ function FeatureCard({ feat, index }: { feat: typeof FEATURES[0]; index: number 
       <div className={`p-8 h-full rounded-2xl border transition-all duration-500 ${
         hovered
           ? 'bg-bg/80 backdrop-blur-xl border-accent/30 shadow-[0_30px_60px_rgba(0,0,0,0.6),0_0_60px_rgba(212,175,55,0.1)] -translate-y-1 scale-[1.01]'
-          : 'bg-bg/60 backdrop-blur-lg border-white/10 shadow-[0_15px_45px_rgba(0,0,0,0.3)]'
+          : 'bg-bg/60 backdrop-blur-xl border-white/10 shadow-[0_15px_45px_rgba(0,0,0,0.3)]'
       }`}>
         {hovered && (
           <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${feat.gradient} opacity-60 pointer-events-none`} />

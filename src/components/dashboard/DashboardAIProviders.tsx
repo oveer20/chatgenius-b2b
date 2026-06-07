@@ -15,7 +15,7 @@ export default function DashboardAIProviders() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.3 }}
-      className="rounded-xl border border-white/10 bg-bg/60 p-8"
+      className="rounded-xl border border-white/10 bg-bg/60 backdrop-blur-xl p-8"
     >
       <h3 className="mb-6 font-serif text-[1.3rem] text-accent">Motores de IA Disponibles</h3>
       <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4">

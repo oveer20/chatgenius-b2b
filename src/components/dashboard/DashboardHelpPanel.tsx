@@ -8,7 +8,7 @@ export default function DashboardHelpPanel() {
     <motion.div
       initial={{ opacity: 0, height: 0 }}
       animate={{ opacity: 1, height: 'auto' }}
-      className="mb-12 rounded-xl border border-accent bg-bg/60 p-8"
+      className="mb-12 rounded-xl border border-accent bg-bg/60 backdrop-blur-xl p-8"
     >
       <h3 className="mb-6 font-serif text-2xl text-accent">¿Qué es Stratix Intelligence?</h3>
       <div className="grid gap-6 text-text-secondary">

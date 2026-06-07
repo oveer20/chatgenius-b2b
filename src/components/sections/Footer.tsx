@@ -19,7 +19,7 @@ export default function Footer() {
   return (
     <footer className="relative z-[2] border-t border-white/10 bg-gradient-to-b from-bg/50 to-bg">
       <div className="max-w-[1200px] mx-auto px-[clamp(1.5rem,5vw,4rem)] pt-[clamp(3rem,8vw,5rem)] pb-0">
-        <div className="grid grid-cols-[minmax(250px,2fr)_repeat(3,1fr)] gap-[clamp(2rem,5vw,4rem)]">
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(250px,2fr)_repeat(3,1fr)] gap-[clamp(2rem,5vw,4rem)]">
           <div>
             <div className="flex items-center gap-[10px] mb-4">
               <div className="w-9 h-9 bg-gradient-to-br from-accent to-accent2 rounded-lg flex items-center justify-center text-lg font-bold text-black">

@@ -1,6 +1,7 @@
 "use client";
 
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
+import { BarChart3 } from 'lucide-react';
 import { Lead } from './types';
 
 interface BotStatsProps {
@@ -9,7 +10,17 @@ interface BotStatsProps {
 }
 
 export default function BotStats({ leads, onExportCSV }: BotStatsProps) {
-  if (leads.length === 0) return null;
+  if (!leads || leads.length === 0) {
+    return (
+      <div className="rounded-xl border border-white/10 bg-bg/60 p-6 backdrop-blur-xl">
+        <div className="flex flex-col items-center justify-center py-8 text-center">
+          <BarChart3 className="mb-3 h-8 w-8 text-text-muted" />
+          <p className="text-sm text-text-secondary">No hay datos de conversión aún</p>
+          <p className="mt-1 text-xs text-text-muted">Los leads aparecerán aquí cuando tu agente comience a recibir mensajes.</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="mt-16">

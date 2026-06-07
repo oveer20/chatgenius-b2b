@@ -81,7 +81,7 @@ function PhoneMockup({ data }: { data: { title: string; subtitle: string; messag
       className="relative"
     >
       <div className="flex flex-col items-center">
-        <div className="relative w-[300px] bg-[#0d1017] rounded-[32px] border border-white/10 shadow-[0_30px_80px_rgba(0,0,0,0.6)] overflow-hidden">
+        <div className="relative w-full max-w-[300px] bg-[#0d1017] rounded-[32px] border border-white/10 shadow-[0_30px_80px_rgba(0,0,0,0.6)] overflow-hidden">
           <div className="h-7 bg-[#0d1017] flex items-center justify-center">
             <div className="w-24 h-1.5 rounded-full bg-white/10" />
           </div>
@@ -224,7 +224,7 @@ export default function BeforeAfter() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: i * 0.1 }}
-            className="text-center p-4 rounded-xl bg-bg/60 backdrop-blur-lg border border-accent/10"
+            className="text-center p-4 rounded-xl bg-bg/60 backdrop-blur-xl border border-accent/10"
           >
             <div className="font-serif text-2xl font-bold text-accent">{m.val}</div>
             <div className="text-[11px] text-text-secondary mt-1">{m.label}</div>

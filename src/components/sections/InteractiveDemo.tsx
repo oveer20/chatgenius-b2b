@@ -141,7 +141,7 @@ export default function InteractiveDemo() {
                   {s("IA real · Respuestas en segundos", "Real AI · Responses in seconds")}
                 </p>
               </div>
-              <button onClick={startDemo} className="cursor-pointer rounded-xl bg-accent px-8 py-3 text-sm font-bold text-black shadow-accent-glow-strong">
+              <button onClick={startDemo} className="cursor-pointer rounded-xl bg-accent px-8 py-3 text-sm font-bold text-black shadow-accent-glow-strong hover:scale-105 transition-all duration-200">
                 {s("Iniciar chat", "Start chat")}
               </button>
             </div>
@@ -188,7 +188,7 @@ export default function InteractiveDemo() {
               disabled={isTyping}
               className="flex-1 rounded-xl border border-white/5 bg-black/30 px-3.5 py-2.5 text-sm text-text-primary outline-none"
             />
-            <button type="submit" aria-label={s("Enviar mensaje", "Send message")} disabled={!input.trim() || isTyping} className={`rounded-xl bg-accent px-4 py-2.5 font-bold text-black border-none ${input.trim() ? "cursor-pointer opacity-100" : "cursor-default opacity-50"}`}>
+            <button type="submit" aria-label={s("Enviar mensaje", "Send message")} disabled={!input.trim() || isTyping} className={`rounded-xl bg-accent px-4 py-2.5 font-bold text-black border-none transition-all duration-200 ${input.trim() ? "cursor-pointer opacity-100 hover:opacity-80" : "cursor-default opacity-50"}`}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                 <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
               </svg>

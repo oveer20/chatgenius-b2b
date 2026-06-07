@@ -138,7 +138,7 @@ function TestimonialCard({ testimonial, index }: { testimonial: Testimonial; ind
       className={`rounded-xl p-[clamp(1.5rem,3vw,2rem)] transition-all duration-300 border ${
         hovered
           ? 'bg-bg/80 backdrop-blur-xl border-accent/30 shadow-[0_25px_50px_rgba(0,0,0,0.5),0_0_40px_rgba(212,175,55,0.08)] -translate-y-1'
-          : 'bg-bg/60 backdrop-blur-lg border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.3)]'
+          : 'bg-bg/60 backdrop-blur-xl border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.3)]'
       }`}
     >
       <div className="flex gap-1 mb-4">
