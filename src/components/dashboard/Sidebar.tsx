@@ -2,14 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FiGrid, FiBox, FiUsers, FiSend, FiSettings } from "react-icons/fi";
+import { Settings, Grid, Box, Users, Send } from "lucide-react";
 
 const navItems = [
-  { icon: FiGrid, label: "Dashboard", href: "/dashboard" },
-  { icon: FiBox, label: "Agentes IA", href: "/dashboard/bot/new" },
-  { icon: FiUsers, label: "Leads", href: "/dashboard/leads" },
-  { icon: FiSend, label: "Outreach", href: "/dashboard/outreach" },
-  { icon: FiSettings, label: "Ajustes", href: "/dashboard/settings" },
+  { icon: Grid, label: "Dashboard", href: "/dashboard" },
+  { icon: Box, label: "Agentes IA", href: "/dashboard/bot/new" },
+  { icon: Users, label: "Leads", href: "/dashboard/leads" },
+  { icon: Send, label: "Outreach", href: "/dashboard/outreach" },
+  { icon: Settings, label: "Ajustes", href: "/dashboard/settings" },
 ];
 
 export default function Sidebar() {

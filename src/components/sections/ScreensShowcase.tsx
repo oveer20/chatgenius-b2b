@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useLang } from "@/components/LangContext";
+import { useStrings } from "@/lib/useStrings";
 
 const VIEWS = [
   {
@@ -32,13 +32,13 @@ const VIEWS = [
 ];
 
 export default function ScreensShowcase() {
-  const { lang } = useLang();
+  const { s } = useStrings();
   const [active, setActive] = useState(0);
 
   const t = {
-    title: lang === "es" ? "Tu centro de control IA" : "Your AI command center",
-    titleEm: lang === "es" ? "en tiempo real" : "in real time",
-    subtitle: lang === "es" ? "Métrica viva. Cada lead, cada conversación, cada venta en un solo lugar." : "Live metrics. Every lead, conversation, and sale in one place.",
+    title: s("Tu centro de control IA", "Your AI command center"),
+    titleEm: s("en tiempo real", "in real time"),
+    subtitle: s("Métrica viva. Cada lead, cada conversación, cada venta en un solo lugar.", "Live metrics. Every lead, conversation, and sale in one place."),
   };
 
   return (
@@ -108,10 +108,10 @@ export default function ScreensShowcase() {
               {active === 0 && (
                 <div className="grid grid-cols-2 gap-4">
                   {[
-                    { val: "1,847", label: lang === "es" ? "Empresas" : "Companies", change: "+12%", up: true },
-                    { val: "2.4M", label: lang === "es" ? "Leads" : "Leads", change: "+8%", up: true },
-                    { val: "98.7%", label: lang === "es" ? "Uptime" : "Uptime", change: "+0.2%", up: true },
-                    { val: "$47K", label: lang === "es" ? "MRR" : "MRR", change: "+23%", up: true },
+                    { val: "1,847", label: s("Empresas", "Companies"), change: "+12%", up: true },
+                    { val: "2.4M", label: "Leads", change: "+8%", up: true },
+                    { val: "98.7%", label: "Uptime", change: "+0.2%", up: true },
+                    { val: "$47K", label: "MRR", change: "+23%", up: true },
                   ].map((stat, i) => (
                     <motion.div
                       key={i}
@@ -131,10 +131,10 @@ export default function ScreensShowcase() {
               {active === 1 && (
                 <div className="flex flex-col gap-4">
                   {[
-                    { role: "user", text: lang === "es" ? "¿Tienen disponible el apartamento del catálogo?" : "Is the apartment from the catalog available?" },
-                    { role: "bot", text: lang === "es" ? "¡Sí! El apto 304, 75m², $380M, está disponible. ¿Te gustaría agendar una visita hoy?" : "Yes! Apt 304, 75m², $380M is available. Would you like to schedule a visit today?" },
-                    { role: "user", text: lang === "es" ? "Sí, mañana a las 10am" : "Yes, tomorrow at 10am" },
-                    { role: "bot", text: lang === "es" ? "✅ ¡Agendado! Recibirás un recordatorio por WhatsApp. ¿Algo más?" : "✅ Booked! You'll get a WhatsApp reminder. Anything else?" },
+                    { role: "user", text: s("¿Tienen disponible el apartamento del catálogo?", "Is the apartment from the catalog available?") },
+                    { role: "bot", text: s("¡Sí! El apto 304, 75m², $380M, está disponible. ¿Te gustaría agendar una visita hoy?", "Yes! Apt 304, 75m², $380M is available. Would you like to schedule a visit today?") },
+                    { role: "user", text: s("Sí, mañana a las 10am", "Yes, tomorrow at 10am") },
+                    { role: "bot", text: s("✅ ¡Agendado! Recibirás un recordatorio por WhatsApp. ¿Algo más?", "✅ Booked! You'll get a WhatsApp reminder. Anything else?") },
                   ].map((msg, i) => (
                     <motion.div
                       key={i}
@@ -158,10 +158,10 @@ export default function ScreensShowcase() {
               {active === 2 && (
                 <div className="overflow-hidden">
                   <div className="grid grid-cols-[1fr_80px_80px_80px] gap-3 text-xs font-mono text-text-muted uppercase tracking-wider mb-3 px-3">
-                    <span>{lang === "es" ? "Contacto" : "Contact"}</span>
-                    <span className="text-center">{lang === "es" ? "Score" : "Score"}</span>
-                    <span className="text-center">{lang === "es" ? "Estado" : "Status"}</span>
-                    <span className="text-center">{lang === "es" ? "Acción" : "Action"}</span>
+                    <span>{s("Contacto", "Contact")}</span>
+                    <span className="text-center">Score</span>
+                    <span className="text-center">{s("Estado", "Status")}</span>
+                    <span className="text-center">{s("Acción", "Action")}</span>
                   </div>
                   {([
                     { name: "Carlos M.", score: "92", status: "HOT", color: "text-emerald-500" },
@@ -179,7 +179,7 @@ export default function ScreensShowcase() {
                       <span className="text-sm text-text-primary font-medium">{lead.name}</span>
                       <span className="text-sm text-center font-mono text-text-primary">{lead.score}%</span>
                       <span className={`text-xs text-center font-semibold ${lead.color}`}>{lead.status}</span>
-                      <span className="text-xs text-center text-accent cursor-pointer hover:underline">{lang === "es" ? "Contactar" : "Contact"}</span>
+                      <span className="text-xs text-center text-accent cursor-pointer hover:underline">{s("Contactar", "Contact")}</span>
                     </motion.div>
                   ))}
                 </div>
@@ -203,15 +203,15 @@ export default function ScreensShowcase() {
                   <div className="grid grid-cols-3 gap-4">
                     <div className="p-4 rounded-xl bg-white/[0.03] border border-white/5 text-center">
                       <div className="font-serif text-2xl font-bold text-accent">47.8%</div>
-                      <div className="text-xs text-text-muted mt-1">{lang === "es" ? "Tasa conversión" : "Conversion rate"}</div>
+                      <div className="text-xs text-text-muted mt-1">{s("Tasa conversión", "Conversion rate")}</div>
                     </div>
                     <div className="p-4 rounded-xl bg-white/[0.03] border border-white/5 text-center">
                       <div className="font-serif text-2xl font-bold text-emerald-500">1.8s</div>
-                      <div className="text-xs text-text-muted mt-1">{lang === "es" ? "Respuesta promedio" : "Avg response"}</div>
+                      <div className="text-xs text-text-muted mt-1">{s("Respuesta promedio", "Avg response")}</div>
                     </div>
                     <div className="p-4 rounded-xl bg-white/[0.03] border border-white/5 text-center">
                       <div className="font-serif text-2xl font-bold text-[#3B82F6]">92%</div>
-                      <div className="text-xs text-text-muted mt-1">{lang === "es" ? "Satisfacción" : "Satisfaction"}</div>
+                      <div className="text-xs text-text-muted mt-1">{s("Satisfacción", "Satisfaction")}</div>
                     </div>
                   </div>
                 </div>

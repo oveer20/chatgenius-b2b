@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
-import Sidebar from "./components/Sidebar";
-import Header from "./components/Header";
+import Sidebar from "@/components/dashboard/Sidebar";
+import Header from "@/components/dashboard/Header";
 import { Toaster } from "sonner";
 
 export function DashboardShell({ children }: { children: React.ReactNode }) {

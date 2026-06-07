@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { FiClock, FiArrowRight } from "react-icons/fi";
+import { Clock, ArrowRight } from "lucide-react";
 
 interface Lead {
   id: string;
@@ -23,11 +23,11 @@ export default function DashboardRecentLeads({ leads }: { leads: Lead[] }) {
     >
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <FiClock className="text-text-muted" />
+          <Clock className="text-text-muted" />
           <span className="text-xs font-semibold uppercase tracking-widest text-text-secondary">Leads Recientes</span>
         </div>
         <Link href="/dashboard/leads" className="flex items-center gap-1 text-xs font-bold text-accent no-underline">
-          Ver todos <FiArrowRight />
+          Ver todos <ArrowRight />
         </Link>
       </div>
       <div className="overflow-x-auto">

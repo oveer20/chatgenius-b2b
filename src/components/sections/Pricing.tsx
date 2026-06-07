@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useLang } from "@/components/LangContext";
+import { useStrings } from "@/lib/useStrings";
 import { useState, useEffect } from "react";
 import { PRICING_PLANS } from "@/lib/constants";
 
@@ -16,6 +17,7 @@ function safeFormatPrice(value: number | undefined, isUSD: boolean): string {
 
 export default function Pricing() {
   const { t, lang, showUSD } = useLang();
+  const { s } = useStrings();
   const [hoveredPlan, setHoveredPlan] = useState<string | null>(null);
   const [isAnnual, setIsAnnual] = useState(false);
   const [isClient, setIsClient] = useState(false);
@@ -52,9 +54,7 @@ export default function Pricing() {
     return 'COP';
   };
 
-  const getFreeMonthsText = () => {
-    return lang === 'en' ? '2 months free' : '2 meses gratis';
-  };
+  const getFreeMonthsText = () => s('2 meses gratis', '2 months free');
 
   return (
     <section id="planes" className="px-[clamp(1.5rem,5vw,4rem)] py-32 max-w-[1200px] mx-auto">

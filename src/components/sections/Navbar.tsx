@@ -4,10 +4,12 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLang } from "@/components/LangContext";
+import { useStrings } from "@/lib/useStrings";
 import { useTheme } from "@/components/ThemeContext";
 
 export default function Navbar() {
   const { lang, setLang, showUSD, setShowUSD } = useLang();
+  const { s } = useStrings();
   const { theme, toggleTheme } = useTheme();
   const [hovered, setHovered] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
@@ -34,7 +36,7 @@ export default function Navbar() {
     { key: "planes", es: "Planes", en: "Pricing", href: "#planes" },
   ];
 
-  const getLabel = (item: typeof navItems[0]) => lang === "es" ? item.es : item.en;
+  const getLabel = (item: typeof navItems[0]) => s(item.es, item.en);
 
   return (
     <>
@@ -76,7 +78,7 @@ export default function Navbar() {
           <button
             onClick={() => setLang(lang === "es" ? "en" : "es")}
             className="px-2 py-1 rounded-[5px] bg-white/5 text-text-secondary border-none text-[11px] cursor-pointer font-semibold font-mono transition-all duration-200 hover:bg-white/10 hover:text-accent"
-          >{lang === "es" ? "EN" : "ES"}</button>
+          >{s("EN", "ES")}</button>
 
           <div className="nav-currency-desktop flex items-center gap-0.5 p-0.5 bg-white/5 rounded-[6px]">
             <button
@@ -91,7 +93,7 @@ export default function Navbar() {
 
           <button
             onClick={toggleTheme}
-            aria-label={lang === "es" ? "Cambiar tema" : "Toggle theme"}
+            aria-label={s("Cambiar tema", "Toggle theme")}
             className="flex items-center justify-center w-8 h-8 rounded-[6px] bg-white/5 border-none cursor-pointer transition-all duration-200 text-text-secondary hover:bg-white/10 hover:text-accent"
           >
             {theme === "dark" ? (
@@ -107,7 +109,7 @@ export default function Navbar() {
 
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label={lang === "es" ? "Abrir menú" : "Open menu"}
+            aria-label={s("Abrir menú", "Open menu")}
             className="nav-hamburger hidden items-center justify-center w-9 h-9 rounded-[8px] bg-white/5 border-none cursor-pointer transition-all duration-200 text-text-primary"
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -130,7 +132,7 @@ export default function Navbar() {
             href="/login"
             className="bg-accent text-bg text-xs font-semibold px-3 py-1.5 rounded-[8px] no-underline font-sans transition-all duration-200 shadow-[0_2px_10px_rgba(212,175,55,0.3)] hover:shadow-[0_4px_20px_rgba(212,175,55,0.5)]"
           >
-            {lang === "es" ? "Entrar" : "Sign in"}
+            {s("Entrar", "Sign in")}
           </Link>
         </div>
       </nav>
@@ -161,7 +163,7 @@ export default function Navbar() {
             <div className="mt-auto flex gap-3 pt-4">
               <Link href="/login" onClick={() => setMobileOpen(false)}
                 className="flex-1 bg-accent text-black no-underline font-bold text-sm py-3.5 rounded-xl text-center">
-                {lang === "es" ? "Entrar" : "Sign in"}
+                {s("Entrar", "Sign in")}
               </Link>
             </div>
           </motion.div>

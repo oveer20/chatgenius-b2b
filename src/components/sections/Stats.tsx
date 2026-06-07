@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import { useLang } from "@/components/LangContext";
+import { useStrings } from "@/lib/useStrings";
 
 function Counter({ end, suffix = "", prefix = "", duration = 2 }: { end: number; suffix?: string; prefix?: string; duration?: number }) {
   const [count, setCount] = useState(0);
@@ -51,7 +51,7 @@ const TESTIMONIALS = {
 };
 
 export default function Stats() {
-  const { lang } = useLang();
+  const { s, lang } = useStrings();
   const companies = COMPANIES[lang as keyof typeof COMPANIES];
   const testimonials = TESTIMONIALS[lang as keyof typeof TESTIMONIALS];
   const duplicated = [...companies, ...companies, ...companies];
@@ -61,16 +61,16 @@ export default function Stats() {
       <div className="py-32 px-[clamp(1.5rem,5vw,4rem)] bg-[linear-gradient(180deg,rgba(212,175,55,0.04)_0%,transparent_100%)] border-t border-accent/12 border-b border-white/4">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-[clamp(2rem,4vw,3rem)]">
           <span className="font-mono text-[12px] tracking-[0.15em] text-accent uppercase">
-            {lang === "es" ? "Impacto Real en Números" : "Real Impact in Numbers"}
+            {s("Impacto Real en Números", "Real Impact in Numbers")}
           </span>
         </motion.div>
 
         <div className="max-w-[1100px] mx-auto grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-[clamp(1rem,3vw,2rem)]">
           {[
-            { value: <Counter end={1847} suffix="+" />, label: lang === "es" ? "Empresas activas" : "Active companies", sub: lang === "es" ? "y creciendo" : "and growing" },
-            { value: <><Counter end={2} suffix=".4" />M+</>, label: lang === "es" ? "Leads atendidos" : "Leads handled", sub: lang === "es" ? "este mes" : "this month" },
-            { value: "98.7%", label: lang === "es" ? "Satisfacción" : "Satisfaction", sub: lang === "es" ? "promedio clientes" : "client average" },
-            { value: <><Counter end={3} suffix="x" /> ROI</>, label: lang === "es" ? "Retorno promedio" : "Average return", sub: lang === "es" ? "en 90 días" : "in 90 days" },
+            { value: <Counter end={1847} suffix="+" />, label: s("Empresas activas", "Active companies"), sub: s("y creciendo", "and growing") },
+            { value: <><Counter end={2} suffix=".4" />M+</>, label: s("Leads atendidos", "Leads handled"), sub: s("este mes", "this month") },
+            { value: "98.7%", label: s("Satisfacción", "Satisfaction"), sub: s("promedio clientes", "client average") },
+            { value: <><Counter end={3} suffix="x" /> ROI</>, label: s("Retorno promedio", "Average return"), sub: s("en 90 días", "in 90 days") },
           ].map((stat, i) => (
             <motion.div
               key={i}
@@ -107,10 +107,10 @@ export default function Stats() {
       <div className="py-32 px-[clamp(1.5rem,5vw,4rem)] max-w-[1200px] mx-auto relative">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-[clamp(2rem,4vw,3rem)]">
           <span className="font-mono text-[12px] tracking-[0.15em] text-accent uppercase">
-            {lang === "es" ? "Testimonios de Clientes" : "Client Testimonials"}
+            {s("Testimonios de Clientes", "Client Testimonials")}
           </span>
           <h2 className="font-serif text-4xl md:text-5xl font-bold tracking-tighter text-text-primary mt-3">
-            {lang === "es" ? "Lo que dicen quienes ya crecen con IA" : "What those who already grow with AI say"}
+            {s("Lo que dicen quienes ya crecen con IA", "What those who already grow with AI say")}
           </h2>
         </motion.div>
 
@@ -167,7 +167,7 @@ function TestimonialCard({ testimonial, index }: { testimonial: Testimonial; ind
 }
 
 function TestimonialCarousel({ testimonials }: { testimonials: Testimonial[] }) {
-  const { lang } = useLang();
+  const { s } = useStrings();
   const [active, setActive] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -204,7 +204,7 @@ function TestimonialCarousel({ testimonials }: { testimonials: Testimonial[] }) 
           <button
             key={i}
             onClick={() => goTo(i)}
-            aria-label={lang === "es" ? `Ir al testimonio ${i + 1}` : `Go to testimonial ${i + 1}`}
+            aria-label={s(`Ir al testimonio ${i + 1}`, `Go to testimonial ${i + 1}`)}
             className={`h-1.5 rounded-full border-0 cursor-pointer transition-all duration-500 ${
               i === active ? 'w-8 bg-accent' : 'w-1.5 bg-white/10 hover:bg-white/20'
             }`}

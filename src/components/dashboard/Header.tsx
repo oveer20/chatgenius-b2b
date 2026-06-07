@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
-import { FiLogOut, FiMenu } from "react-icons/fi";
+import { LogOut, Menu } from "lucide-react";
 
 interface HeaderProps {
   user: { email?: string; user_metadata?: Record<string, string> } | null;
@@ -27,7 +27,7 @@ export default function Header({ user, onMenuToggle }: HeaderProps) {
           onClick={onMenuToggle}
           className="flex md:hidden items-center justify-center w-9 h-9 rounded-lg bg-white/5 border-none cursor-pointer text-text-primary"
         >
-          <FiMenu size={18} />
+          <Menu size={18} />
         </button>
         <span className="text-xs text-text-secondary hidden sm:block">
           {user?.email}
@@ -39,7 +39,7 @@ export default function Header({ user, onMenuToggle }: HeaderProps) {
           onClick={handleLogout}
           className="flex items-center gap-2 px-4 py-2 rounded-lg bg-transparent border border-white/10 text-text-secondary text-sm cursor-pointer transition-all duration-200 hover:bg-white/5 hover:text-text-primary"
         >
-          <FiLogOut size={14} />
+          <LogOut size={14} />
           <span className="hidden sm:inline">Cerrar sesión</span>
         </button>
       </div>

@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useLang } from "@/components/LangContext";
+import { useStrings } from "@/lib/useStrings";
 
 const OFFERS_LEFT = 7;
 
 export default function ScarcityPopup() {
-  const { lang } = useLang();
+  const { s } = useStrings();
   const [isOpen, setIsOpen] = useState(false);
   const [countdown, setCountdown] = useState({ hours: 0, minutes: 0, seconds: 0 });
   const [offers, setOffers] = useState(OFFERS_LEFT);
@@ -73,12 +73,10 @@ export default function ScarcityPopup() {
 
             <div>
               <div className="text-[#ef4444] text-xs font-semibold mb-1 uppercase tracking-[0.5px]">
-                ⚡ {lang === "es" ? "Oferta limitada" : "Limited offer"}
+                ⚡ {s("Oferta limitada", "Limited offer")}
               </div>
               <div className="text-text-primary text-sm font-semibold mb-2">
-                {lang === "es" 
-                  ? `Solo quedan ${offers} cupos gratis` 
-                  : `Only ${offers} free spots left`}
+                {s(`Solo quedan ${offers} cupos gratis`, `Only ${offers} free spots left`)}
               </div>
               <div className="flex gap-2 items-center">
                 <div className="flex gap-1 text-[11px] text-text-muted">
@@ -102,7 +100,7 @@ export default function ScarcityPopup() {
             href="/login"
             className="block text-center mt-4 p-[10px] rounded-xl bg-gradient-to-br from-accent to-accent2 text-[#030a05] text-[13px] font-semibold no-underline"
           >
-            {lang === "es" ? "¡Reservar mi lugar!" : "Reserve my spot!"}
+            {s("¡Reservar mi lugar!", "Reserve my spot!")}
           </a>
         </motion.div>
       )}

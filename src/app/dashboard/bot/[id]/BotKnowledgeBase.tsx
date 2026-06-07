@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { FiActivity, FiGlobe, FiPlus } from "react-icons/fi";
+import { Globe, Plus, Activity } from "lucide-react";
 
 interface BotKnowledgeBaseProps {
   knowledgeBase: string;
@@ -32,7 +32,7 @@ export default function BotKnowledgeBase({
 
       <div className="bg-bg/60 border border-white/10 backdrop-blur-xl rounded-xl p-6 mb-8">
         <div className="flex items-center gap-2 mb-4">
-          <FiActivity className="text-accent" />
+          <Activity className="text-accent" />
           <span className="text-xs font-semibold text-text-muted uppercase tracking-wider">Progreso del Conocimiento</span>
         </div>
         <div className="h-2 bg-white/5 rounded-full overflow-hidden">
@@ -46,13 +46,13 @@ export default function BotKnowledgeBase({
           <div className="flex gap-2">
             <input value={crawlerUrl} onChange={e => setCrawlerUrl(e.target.value)} placeholder="https://ejemplo.com" className="flex-1 px-3 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white text-sm outline-none focus:border-accent/30 transition-all duration-200" />
             <button onClick={handleCrawlUrl} disabled={isCrawling} className="bg-accent border-none rounded-lg px-4 text-sm font-semibold text-black disabled:opacity-50 transition-all duration-200 hover:scale-105">
-              {isCrawling ? "..." : <FiGlobe />}
+              {isCrawling ? "..." : <Globe />}
             </button>
           </div>
         </div>
         <div className="bg-bg/60 border border-white/10 backdrop-blur-xl rounded-xl p-6 flex items-center justify-center">
           <label className="cursor-pointer text-accent font-semibold text-sm disabled:opacity-50 transition-all duration-200 hover:scale-105">
-            {isUploading ? "Subiendo..." : <><FiPlus className="inline mr-1" /> Subir PDF</>}
+            {isUploading ? "Subiendo..." : <><Plus className="inline mr-1" /> Subir PDF</>}
             <input type="file" onChange={handleFileUpload} className="hidden" disabled={isUploading} />
           </label>
         </div>

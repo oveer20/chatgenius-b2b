@@ -1,11 +1,13 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { FiArrowLeft } from "react-icons/fi";
+import { ArrowLeft } from "lucide-react";
 import Image from "next/image";
 
 export default function NotFound() {
+  useEffect(() => { document.title = "404 | Stratix Intelligence"; }, []);
   return (
     <div className="bg-bg min-h-screen flex flex-col items-center justify-center text-text-primary font-sans p-8 text-center">
       <motion.div
@@ -26,7 +28,7 @@ export default function NotFound() {
         </p>
 
         <Link href="/" className="inline-flex items-center gap-3 px-8 py-4 bg-accent text-black rounded-xl no-underline font-black shadow-[0_10px_30px_rgba(212,175,55,0.2)] transition-all duration-300">
-          <FiArrowLeft /> Regresar a la Base
+          <ArrowLeft /> Regresar a la Base
         </Link>
       </motion.div>
 

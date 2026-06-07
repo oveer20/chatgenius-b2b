@@ -28,42 +28,47 @@ const SAMPLE_LEADS = [
 const SAMPLE_BOT_ID = "00000000-0000-0000-0000-000000000001";
 
 export async function GET() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const { data: bots } = await supabase
+      .from("bots")
+      .select("id, name")
+      .eq("user_id", user.id)
+      .limit(1);
+
+    const botId = bots && bots.length > 0 ? bots[0].id : SAMPLE_BOT_ID;
+
+    const { data: existing } = await supabaseAdmin
+      .from("leads")
+      .select("id, name, bot_id")
+      .eq("bot_id", botId)
+      .limit(1);
+
+    if (existing && existing.length > 0) {
+      return NextResponse.json({ seeded: false, reason: "Already has leads", botId });
+    }
+
+    const inserts = SAMPLE_LEADS.map((lead, _i) => ({
+      ...lead,
+      bot_id: botId,
+      created_at: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000).toISOString(),
+      updated_at: new Date().toISOString(),
+    }));
+
+    const { error } = await supabaseAdmin.from("leads").insert(inserts);
+
+    if (error) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+
+    return NextResponse.json({ seeded: true, count: inserts.length, botId });
+  } catch (error) {
+    console.error("Seed API error:", error);
+    return NextResponse.json({ error: "Error interno del servidor" }, { status: 500 });
   }
-
-  const { data: bots } = await supabase
-    .from("bots")
-    .select("id, name")
-    .eq("user_id", user.id)
-    .limit(1);
-
-  const botId = bots && bots.length > 0 ? bots[0].id : SAMPLE_BOT_ID;
-
-  const { data: existing } = await supabaseAdmin
-    .from("leads")
-    .select("id, name, bot_id")
-    .eq("bot_id", botId)
-    .limit(1);
-
-  if (existing && existing.length > 0) {
-    return NextResponse.json({ seeded: false, reason: "Already has leads", botId });
-  }
-
-  const inserts = SAMPLE_LEADS.map((lead, _i) => ({
-    ...lead,
-    bot_id: botId,
-    created_at: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000).toISOString(),
-    updated_at: new Date().toISOString(),
-  }));
-
-  const { error } = await supabaseAdmin.from("leads").insert(inserts);
-
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
-  }
-
-  return NextResponse.json({ seeded: true, count: inserts.length, botId });
 }

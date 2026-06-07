@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { FiPlus } from "react-icons/fi";
+import { Plus } from "lucide-react";
 import OnboardingStepper from "@/components/dashboard/OnboardingStepper";
 
 interface Bot {
@@ -30,7 +30,7 @@ export default function DashboardAgentList({ bots, isLoading }: { bots: Bot[]; i
           href="/dashboard/bot/new"
           className="flex items-center gap-2 rounded-xl bg-accent px-6 py-3 text-sm font-bold text-bg no-underline transition-all duration-200 hover:scale-105"
         >
-          <FiPlus /> Crear agente
+          <Plus /> Crear agente
         </Link>
       </div>
 

@@ -1,4 +1,4 @@
-import { DashboardShell } from "./DashboardShell";
+import { DashboardShell } from "@/components/dashboard/DashboardShell";
 
 export const metadata = {
   title: "Dashboard | Stratix Intelligence",

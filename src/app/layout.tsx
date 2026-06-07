@@ -68,6 +68,12 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#070910",
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -128,7 +134,7 @@ export default function RootLayout({
                 "ratingValue": "4.9",
                 "ratingCount": "1871",
                 "bestRating": "5",
-                "worstRating": "4"
+                "worstRating": "1"
               },
               "creator": {
                 "@type": "Organization",
@@ -180,7 +186,8 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
-              "@mainEntity": [
+              "@type": "FAQPage",
+              "mainEntity": [
                 { "@type": "Question", "name": "¿Cuánto tiempo tarda en configurarse Stratix?", "acceptedAnswer": { "@type": "Answer", "text": "En 15 minutos tienes tu primer agente configurado. No necesitas experiencia técnica." }},
                 { "@type": "Question", "name": "¿Stratix se integra con mi CRM?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. Conectamos con HubSpot, Salesforce, Zoho, Pipedrive y cualquier sistema con API." }},
                 { "@type": "Question", "name": "¿Hay garantía?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. 7 días gratis y garantía de devolución del 100% en 30 días." }},
@@ -206,7 +213,6 @@ export default function RootLayout({
               "description": "Mira cómo Stratix automatiza ventas en WhatsApp, Instagram y Web 24/7",
               "uploadDate": "2026-05-08",
               "duration": "PT1M",
-              "embedUrl": "https://stratix-intelligence-ia.vercel.app",
               "thumbnailUrl": "https://stratix-intelligence-ia.vercel.app/stratix_shield.svg",
             }),
           }}

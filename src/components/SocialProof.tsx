@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useLang } from "@/components/LangContext";
+import { useStrings } from "@/lib/useStrings";
 
 const testimonials = [
   { name: "Carlos", city: "Bogotá", country: "Colombia", plan: "Professional", avatar: "👨‍💼" },
@@ -109,7 +109,7 @@ const plansEn: Record<string, string> = {
 };
 
 function Notification() {
-  const { lang } = useLang();
+  const { s, lang } = useStrings();
   const [visible, setVisible] = useState(false);
   const [notification, setNotification] = useState<typeof testimonials[0] & { time: string } | null>(null);
   const shownIndices = useRef<Set<number>>(new Set());
@@ -141,7 +141,7 @@ function Notification() {
   }, []);
 
   const getPlanName = (plan: string) => {
-    return lang === "es" ? plansEs[plan] || plan : plansEn[plan] || plan;
+    return s(plansEs[plan] || plan, plansEn[plan] || plan);
   };
 
   const getCountryFlag = (country: string) => {
@@ -179,7 +179,7 @@ function Notification() {
               {notification.city}, {notification.country}
             </div>
             <div className="text-xs text-accent mt-0.5">
-              {lang === "es" ? "Se unió a" : "Joined"} {getPlanName(notification.plan)}
+              {s("Se unió a", "Joined")} {getPlanName(notification.plan)}
             </div>
             <div className="text-xs text-text-muted mt-0.5">
               {notification.time}

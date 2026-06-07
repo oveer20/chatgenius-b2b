@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { FiCpu, FiUser, FiZap, FiBarChart2 } from "react-icons/fi";
+import { Cpu, User, Zap, BarChart3 } from "lucide-react";
 
 interface Stats {
   total: number;
@@ -15,10 +15,10 @@ interface Stats {
 
 export default function DashboardStats({ stats }: { stats: Stats }) {
   const cards = [
-    { icon: FiCpu, label: "Agentes", value: stats.activeBots, color: "text-accent", delay: 0.1 },
-    { icon: FiUser, label: "Total Leads", value: stats.total, color: "text-success", delay: 0.15 },
-    { icon: FiZap, label: "HOT Leads", value: stats.hot, color: "text-accent", delay: 0.2 },
-    { icon: FiBarChart2, label: "Conversión", value: `${stats.conversionRate}%`, color: "text-success", delay: 0.25 },
+    { icon: Cpu, label: "Agentes", value: stats.activeBots, color: "text-accent", delay: 0.1 },
+    { icon: User, label: "Total Leads", value: stats.total, color: "text-success", delay: 0.15 },
+    { icon: Zap, label: "HOT Leads", value: stats.hot, color: "text-accent", delay: 0.2 },
+    { icon: BarChart3, label: "Conversión", value: `${stats.conversionRate}%`, color: "text-success", delay: 0.25 },
   ];
 
   return (

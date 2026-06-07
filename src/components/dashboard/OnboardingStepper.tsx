@@ -1,21 +1,21 @@
 "use client";
 
 import Link from "next/link";
-import { FiPlus, FiZap, FiMessageCircle, FiBarChart2 } from "react-icons/fi";
+import { Plus, Zap, BarChart3, MessageCircle } from "lucide-react";
 
 const STEPS = [
   {
-    icon: FiPlus,
+    icon: Plus,
     label: "Crea tu agente",
     desc: "Elige nombre, descripción y motor de IA en segundos.",
   },
   {
-    icon: FiZap,
+    icon: Zap,
     label: "Entrénalo",
     desc: "Añade conocimiento: pega texto, sube PDF o escanea tu web.",
   },
   {
-    icon: FiMessageCircle,
+    icon: MessageCircle,
     label: "Actívalo",
     desc: "Conéctalo a WhatsApp o Widget web y empieza a capturar leads.",
   },
@@ -26,7 +26,7 @@ export default function OnboardingStepper() {
     <div className="col-span-full rounded-xl border border-accent/20 bg-gradient-to-br from-bg/80 to-accent-dim/40 p-10 backdrop-blur-xl">
       <div className="flex flex-col items-center text-center mb-10">
         <div className="w-14 h-14 rounded-xl bg-accent/20 flex items-center justify-center mb-5 border border-accent/20">
-          <FiBarChart2 className="text-accent" size={24} />
+          <BarChart3 className="text-accent" size={24} />
         </div>
         <h2 className="font-serif text-3xl font-bold tracking-tighter text-text-primary mb-2">
           Tu primer agente IA en 3 clics
@@ -57,7 +57,7 @@ export default function OnboardingStepper() {
           href="/dashboard/bot/new"
           className="inline-flex items-center gap-2 rounded-xl bg-accent px-8 py-3.5 font-bold text-sm text-[#030a05] no-underline transition-all duration-200 hover:scale-105"
         >
-          <FiPlus size={18} />
+          <Plus size={18} />
           Crear mi primer agente
         </Link>
       </div>

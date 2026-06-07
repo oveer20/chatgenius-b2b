@@ -3,10 +3,12 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useLang } from "@/components/LangContext";
+import { useStrings } from "@/lib/useStrings";
 import { useState } from "react";
 
 export default function CTA() {
   const { lang, t } = useLang();
+  const { s } = useStrings();
   const [hovered, setHovered] = useState<string | null>(null);
 
   return (
@@ -49,7 +51,7 @@ export default function CTA() {
               className="h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_6px_#10b981]"
             />
             <span className="font-semibold">+1,847</span>
-            {lang === "es" ? "empresas ya automatizaron" : "companies already automated"}
+            {s("empresas ya automatizaron", "companies already automated")}
           </motion.div>
 
           <motion.h2 className="relative mb-4 font-serif text-4xl md:text-5xl font-bold tracking-tighter text-text-primary">
@@ -78,7 +80,7 @@ export default function CTA() {
               whileTap={{ scale: 0.98 }}
               className="inline-block rounded-xl border-2 border-accent bg-accent/10 px-9 py-4 text-[15px] font-bold text-accent no-underline transition-all duration-300 hover:bg-accent hover:text-black"
             >
-              {lang === "es" ? "Agendar Demo →" : "Book a Demo →"}
+              {s("Agendar Demo →", "Book a Demo →")}
             </motion.a>
           </motion.div>
 
@@ -89,7 +91,7 @@ export default function CTA() {
             </span>
             <span className="flex items-center gap-2">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" strokeWidth="2"><path d="M20 6L9 17l-5-5"/></svg>
-              {lang === "es" ? "Sin tarjeta" : "No card needed"}
+              {s("Sin tarjeta", "No card needed")}
             </span>
             <span className="flex items-center gap-2">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" strokeWidth="2"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
@@ -103,7 +105,7 @@ export default function CTA() {
             viewport={{ once: true }}
             className="relative mt-8 flex items-center justify-center gap-4 border-t border-white/7 pt-6"
           >
-            <span className="font-sans text-[13px] text-text-secondary">{lang === "es" ? "Fundado por" : "Founded by"}</span>
+            <span className="font-sans text-[13px] text-text-secondary">{s("Fundado por", "Founded by")}</span>
             <motion.a
               href="https://www.linkedin.com/in/jose-gaviriap/"
               target="_blank"
@@ -115,7 +117,7 @@ export default function CTA() {
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-[#0A66C2] to-[#004182] font-sans text-[12px] font-bold text-white">JG</div>
               <div className="text-left">
                 <div className="font-sans text-[14px] font-semibold text-text-primary">Jose Gaviria</div>
-                <div className="font-sans text-[11px] text-text-secondary">{lang === "es" ? "Founder & CEO" : "Founder & CEO"}</div>
+                <div className="font-sans text-[11px] text-text-secondary">Founder & CEO</div>
               </div>
             </motion.a>
           </motion.div>

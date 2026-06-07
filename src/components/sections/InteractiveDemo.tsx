@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
-import { useLang } from "@/components/LangContext";
+import { useStrings } from "@/lib/useStrings";
 
 interface Msg {
   role: "user" | "bot";
@@ -31,7 +31,7 @@ REGLAS:
 `;
 
 export default function InteractiveDemo() {
-  const { lang } = useLang();
+  const { s, lang } = useStrings();
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -65,14 +65,12 @@ export default function InteractiveDemo() {
         }),
       });
       const data = await response.json();
-      const reply = data.message?.content || data.message?.text || (lang === "es"
-        ? "Gracias por tu mensaje. Para darte la mejor información, ¿me puedes contar más sobre tu negocio?"
-        : "Thanks for your message. To give you the best information, can you tell me more about your business?");
+      const reply = data.message?.content || data.message?.text || s(
+        "Gracias por tu mensaje. Para darte la mejor información, ¿me puedes contar más sobre tu negocio?",
+        "Thanks for your message. To give you the best information, can you tell me more about your business?");
       setMessages(prev => [...prev, { role: "bot", text: reply }]);
     } catch {
-      const fallback = lang === "es"
-        ? "Gracias por tu mensaje. ¿Te gustaría agendar una demo personalizada?"
-        : "Thanks for your message. Would you like to schedule a personalized demo?";
+      const fallback = s("Gracias por tu mensaje. ¿Te gustaría agendar una demo personalizada?", "Thanks for your message. Would you like to schedule a personalized demo?");
       setMessages(prev => [...prev, { role: "bot", text: fallback }]);
     } finally {
       setIsTyping(false);
@@ -86,16 +84,12 @@ export default function InteractiveDemo() {
   };
 
   const startDemo = () => {
-    const intro = lang === "es"
-      ? "¡Hola! 👋 Soy tu asesor virtual de Stratix. Cuéntame, ¿en qué tipo de negocio estás?"
-      : "Hi! 👋 I'm your Stratix virtual advisor. Tell me, what type of business are you in?";
+    const intro = s("¡Hola! 👋 Soy tu asesor virtual de Stratix. Cuéntame, ¿en qué tipo de negocio estás?", "Hi! 👋 I'm your Stratix virtual advisor. Tell me, what type of business are you in?");
     setMessages([{ role: "bot", text: intro }]);
   };
 
-  const title = lang === "es" ? "Prueba el demo en vivo" : "Try the live demo";
-  const subtitle = lang === "es"
-    ? "Conversa con nuestra IA. Sin registro. Sin tarjeta. Solo escribe."
-    : "Chat with our AI. No signup. No card. Just type.";
+  const title = s("Prueba el demo en vivo", "Try the live demo");
+  const subtitle = s("Conversa con nuestra IA. Sin registro. Sin tarjeta. Solo escribe.", "Chat with our AI. No signup. No card. Just type.");
 
   return (
     <section className="relative mx-auto max-w-[700px] px-[clamp(1.5rem,5vw,4rem)] py-32">
@@ -141,14 +135,14 @@ export default function InteractiveDemo() {
               </div>
               <div className="text-center">
                 <h3 className="mb-1.5 font-serif text-[1.3rem] text-text-primary">
-                  {lang === "es" ? "Asistente IA Demo" : "AI Assistant Demo"}
+                  {s("Asistente IA Demo", "AI Assistant Demo")}
                 </h3>
                 <p className="text-[13px] text-text-secondary">
-                  {lang === "es" ? "IA real · Respuestas en segundos" : "Real AI · Responses in seconds"}
+                  {s("IA real · Respuestas en segundos", "Real AI · Responses in seconds")}
                 </p>
               </div>
               <button onClick={startDemo} className="cursor-pointer rounded-xl bg-accent px-8 py-3 text-sm font-bold text-black shadow-accent-glow-strong">
-                {lang === "es" ? "Iniciar chat" : "Start chat"}
+                {s("Iniciar chat", "Start chat")}
               </button>
             </div>
           ) : (
@@ -190,11 +184,11 @@ export default function InteractiveDemo() {
             <input
               value={input}
               onChange={e => setInput(e.target.value)}
-              placeholder={lang === "es" ? "Escribe tu mensaje..." : "Type your message..."}
+              placeholder={s("Escribe tu mensaje...", "Type your message...")}
               disabled={isTyping}
               className="flex-1 rounded-xl border border-white/5 bg-black/30 px-3.5 py-2.5 text-sm text-text-primary outline-none"
             />
-            <button type="submit" aria-label={lang === "es" ? "Enviar mensaje" : "Send message"} disabled={!input.trim() || isTyping} className={`rounded-xl bg-accent px-4 py-2.5 font-bold text-black border-none ${input.trim() ? "cursor-pointer opacity-100" : "cursor-default opacity-50"}`}>
+            <button type="submit" aria-label={s("Enviar mensaje", "Send message")} disabled={!input.trim() || isTyping} className={`rounded-xl bg-accent px-4 py-2.5 font-bold text-black border-none ${input.trim() ? "cursor-pointer opacity-100" : "cursor-default opacity-50"}`}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                 <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
               </svg>
@@ -206,8 +200,8 @@ export default function InteractiveDemo() {
       {!isStarted && (
         <div className="mt-6 text-center">
           <a href="/login" className="text-sm text-text-secondary no-underline">
-            {lang === "es" ? "¿Listo para el dashboard completo? " : "Ready for the full dashboard? "}
-            <span className="font-semibold text-accent">{lang === "es" ? "Crea tu cuenta gratis →" : "Create free account →"}</span>
+            {s("¿Listo para el dashboard completo? ", "Ready for the full dashboard? ")}
+            <span className="font-semibold text-accent">{s("Crea tu cuenta gratis →", "Create free account →")}</span>
           </a>
         </div>
       )}

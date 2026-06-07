@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
         const fromNumber = message.from; 
         const userName = value.contacts?.[0]?.profile?.name || "Cliente WP";
         const messageText = message.text?.body;
-        const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID || "1048955904974001";
+        const phoneNumberId = process.env.WHATSAPP_PHONE_ID || "1048955904974001";
 
         if (!messageText || !phoneNumberId) return NextResponse.json({ status: "ignored_no_content" });
 

@@ -106,7 +106,7 @@ export default function BotEditor() {
       if (err) throw err;
       toast.success("Agente guardado correctamente");
     } catch (err) {
-      toast.error("Error al guardar: " + (err as Error).message);
+      toast.error("Error al guardar el agente. Intenta de nuevo.");
     } finally {
       setIsSaving(false);
     }
@@ -128,7 +128,7 @@ export default function BotEditor() {
         throw new Error(data.error);
       }
     } catch (err) {
-      toast.error("Error de sincronización: " + (err as Error).message);
+      toast.error("Error de sincronización. Intenta de nuevo.");
     } finally {
       setIsSyncing(false);
     }
@@ -150,7 +150,7 @@ export default function BotEditor() {
         throw new Error(data.error);
       }
     } catch (err) {
-      toast.error("Error al procesar: " + (err as Error).message);
+      toast.error("Error al procesar el documento. Intenta de nuevo.");
     } finally {
       setIsUploading(false);
     }
@@ -179,7 +179,7 @@ export default function BotEditor() {
         throw new Error(data.error);
       }
     } catch (err) {
-      toast.error("Error al escanear: " + (err as Error).message);
+      toast.error("Error al escanear la URL. Intenta de nuevo.");
     } finally {
       setIsCrawling(false);
     }
@@ -213,7 +213,7 @@ export default function BotEditor() {
       if (error) throw error;
       setBotStatus(newStatus ? 'active' : 'inactive');
     } catch (err) {
-      toast.error("Error: " + (err as Error).message);
+      toast.error("Error al cambiar el estado. Intenta de nuevo.");
     } finally {
       setIsTogglingStatus(false);
     }

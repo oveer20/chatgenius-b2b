@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useLang } from "@/components/LangContext";
+import { useStrings } from "@/lib/useStrings";
 
 const INTEGRATIONS = [
   {
@@ -37,8 +37,8 @@ const INTEGRATIONS = [
 ];
 
 export default function Integrations() {
-  const { lang } = useLang();
-  const label = lang === "es" ? "CONECTADO CON" : "CONNECTED WITH";
+  const { s } = useStrings();
+  const label = s("CONECTADO CON", "CONNECTED WITH");
 
   return (
     <section className="py-24 px-[clamp(1.5rem,5vw,4rem)] border-t border-white/5 border-b border-white/5 relative overflow-hidden">

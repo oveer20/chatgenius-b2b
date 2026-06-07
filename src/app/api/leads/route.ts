@@ -8,44 +8,45 @@ import { createClient } from "@/utils/supabase/server";
  */
 
 export async function GET(req: NextRequest) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
 
-  if (!user) {
-    return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+    if (!user) {
+      return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+    }
+
+    const { searchParams } = new URL(req.url);
+    const botIdFilter = searchParams.get("botId");
+    const scoreFilter = searchParams.get("score");
+    const intentFilter = searchParams.get("intent");
+
+    const { data: userBots } = await supabase.from("bots").select("id").eq("user_id", user.id);
+    const botIds = userBots?.map(b => b.id) || [];
+
+    let query = supabase
+      .from("leads")
+      .select("*, bots(name)")
+      .in("bot_id", botIds);
+
+    if (botIdFilter && botIds.includes(botIdFilter)) {
+      query = query.eq("bot_id", botIdFilter);
+    }
+    if (scoreFilter) {
+      query = query.eq("score", scoreFilter);
+    }
+    if (intentFilter) {
+      query = query.eq("intent", intentFilter);
+    }
+
+    const { data, error } = await query.order("created_at", { ascending: false });
+
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json(data);
+  } catch (error) {
+    console.error("Leads API error:", error);
+    return NextResponse.json({ error: "Error interno del servidor" }, { status: 500 });
   }
-
-  // 1. Parámetros de Filtrado (V40.0)
-  const { searchParams } = new URL(req.url);
-  const botIdFilter = searchParams.get("botId");
-  const scoreFilter = searchParams.get("score");
-  const intentFilter = searchParams.get("intent");
-
-  // 2. Seguridad: Obtener los IDs de los bots del usuario
-  const { data: userBots } = await supabase.from("bots").select("id").eq("user_id", user.id);
-  const botIds = userBots?.map(b => b.id) || [];
-
-  // Iniciar Query Base
-  let query = supabase
-    .from("leads")
-    .select("*, bots(name)")
-    .in("bot_id", botIds);
-
-  // Aplicar Filtros Dinámicos
-  if (botIdFilter && botIds.includes(botIdFilter)) {
-    query = query.eq("bot_id", botIdFilter);
-  }
-  if (scoreFilter) {
-    query = query.eq("score", scoreFilter);
-  }
-  if (intentFilter) {
-    query = query.eq("intent", intentFilter);
-  }
-
-  const { data, error } = await query.order("created_at", { ascending: false });
-
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json(data);
 }
 
 export async function POST(req: Request) {

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { useLang } from "@/components/LangContext";
+import { useStrings } from "@/lib/useStrings";
 
 function TypingIndicator() {
   return (
@@ -21,6 +22,7 @@ function TypingIndicator() {
 
 export default function Hero() {
   const { t, lang } = useLang();
+  const { s } = useStrings();
   const [aiText, setAiText] = useState("");
   const [typing, setTyping] = useState(true);
   const indexRef = useRef(0);
@@ -39,9 +41,7 @@ export default function Hero() {
     return () => { window.removeEventListener("mousemove", handleMouse); window.removeEventListener("mouseleave", handleLeave); };
   }, []);
 
-  const DEMO_TEXT = lang === "es"
-    ? "¡Perfecto! Tenemos apartamento de $520M en Chapinero, 85m², 3 habitaciones. ¿Te agendo una visita mañana?"
-    : "Perfect! We have an apartment for $520M in Chapinero, 85m², 3 bedrooms. Can I schedule a visit tomorrow?";
+  const DEMO_TEXT = s("¡Perfecto! Tenemos apartamento de $520M en Chapinero, 85m², 3 habitaciones. ¿Te agendo una visita mañana?", "Perfect! We have an apartment for $520M in Chapinero, 85m², 3 bedrooms. Can I schedule a visit tomorrow?");
 
   useEffect(() => {
     indexRef.current = 0;
@@ -65,8 +65,8 @@ export default function Hero() {
     };
   }, [lang]);
 
-  const DEMO_USER = lang === "es" ? "Hola, busco apartamento en Bogotá $500-550M" : "Hi, I'm looking for an apartment in Bogotá $500-550M";
-  const DEMO_TAB = lang === "es" ? "Stratix Intelligence · Agente Demo" : "Stratix Intelligence · Demo Agent";
+  const DEMO_USER = s("Hola, busco apartamento en Bogotá $500-550M", "Hi, I'm looking for an apartment in Bogotá $500-550M");
+  const DEMO_TAB = s("Stratix Intelligence · Agente Demo", "Stratix Intelligence · Demo Agent");
 
   const fadeUp = (delay = 0) => ({ initial: { opacity: 0, y: 30 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.7, ease: "easeOut" as const, delay } });
 
@@ -137,7 +137,7 @@ export default function Hero() {
                 <div key={i} className="w-8 h-8 rounded-full bg-gradient-to-br from-accent to-accent2 flex items-center justify-center text-[9px] font-bold text-black border-2 border-bg shadow-[0_2px_8px_rgba(0,0,0,0.3)]">{initials}</div>
               ))}
             </div>
-            <span className="font-sans">{lang === "es" ? "Únete a +1,800 empresas" : "Join +1,800 companies"}</span>
+            <span className="font-sans">{s("Únete a +1,800 empresas", "Join +1,800 companies")}</span>
           </motion.div>
         </motion.div>
 
@@ -174,7 +174,7 @@ export default function Hero() {
                 transition={{ delay: 1.2, duration: 0.5 }}
                 className="flex flex-row-reverse items-start gap-3"
               >
-                <div className="w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-bold font-mono bg-white/10 border border-white/7 text-text-secondary shrink-0">{lang === "es" ? "TÚ" : "YOU"}</div>
+                <div className="w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-bold font-mono bg-white/10 border border-white/7 text-text-secondary shrink-0">{s("TÚ", "YOU")}</div>
                 <div className="max-w-[75%] px-4 py-3 rounded-[16px_16px_4px_16px] text-sm leading-[1.5] bg-white/6 border border-white/7 text-text-primary font-sans">
                   {DEMO_USER}
                 </div>
@@ -194,7 +194,7 @@ export default function Hero() {
             </div>
 
             <div className="flex items-center gap-3 px-4 py-3 border-t border-white/7 bg-white/[0.02]">
-              <span className="flex-1 text-sm text-text-muted font-sans">{lang === "es" ? "Escribe tu mensaje..." : "Type your message..."}</span>
+              <span className="flex-1 text-sm text-text-muted font-sans">{s("Escribe tu mensaje...", "Type your message...")}</span>
               <motion.div
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}

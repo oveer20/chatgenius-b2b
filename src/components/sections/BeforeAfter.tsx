@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useLang } from "@/components/LangContext";
+import { useStrings } from "@/lib/useStrings";
 import { useState } from "react";
 
 const PHONE_CONTENT = {
@@ -163,7 +163,7 @@ function PhoneMockup({ data }: { data: { title: string; subtitle: string; messag
 }
 
 export default function BeforeAfter() {
-  const { lang } = useLang();
+  const { s, lang } = useStrings();
   const content = PHONE_CONTENT[lang as keyof typeof PHONE_CONTENT];
 
   return (
@@ -177,11 +177,11 @@ export default function BeforeAfter() {
         className="text-center mb-14"
       >
         <span className="inline-block bg-error/10 text-error text-[13px] font-semibold px-4 py-[6px] rounded-full mb-4 tracking-[0.5px] font-mono">
-          {lang === "es" ? "SIN STRATIX VS CON STRATIX" : "WITHOUT STRATIX VS WITH STRATIX"}
+          {s("SIN STRATIX VS CON STRATIX", "WITHOUT STRATIX VS WITH STRATIX")}
         </span>
         <h2 className="font-serif text-4xl md:text-5xl font-bold tracking-tighter text-text-primary">
-          {lang === "es" ? "Dos realidades, una" : "Two realities, one"}{" "}
-          <em className="text-accent italic">{lang === "es" ? "decisión" : "decision"}</em>
+          {s("Dos realidades, una", "Two realities, one")}{" "}
+          <em className="text-accent italic">{s("decisión", "decision")}</em>
         </h2>
       </motion.div>
 
@@ -190,7 +190,7 @@ export default function BeforeAfter() {
           <div className="mb-4 text-center">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-error/10 border border-error/20 text-error text-xs font-semibold font-mono">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
-              {lang === "es" ? "Lead perdido" : "Lost lead"}
+              {s("Lead perdido", "Lost lead")}
             </div>
           </div>
           <PhoneMockup data={content.without} />
@@ -200,7 +200,7 @@ export default function BeforeAfter() {
           <div className="mb-4 text-center">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 text-xs font-semibold font-mono">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2.5"><path d="M20 6L9 17l-5-5"/></svg>
-              {lang === "es" ? "Lead capturado" : "Lead captured"}
+              {s("Lead capturado", "Lead captured")}
             </div>
           </div>
           <PhoneMockup data={content.with} />
@@ -214,9 +214,9 @@ export default function BeforeAfter() {
         className="mt-12 grid grid-cols-3 gap-6 max-w-[600px] mx-auto"
       >
         {[
-          { val: "40%", label: lang === "es" ? "Más leads" : "More leads", icon: "↑" },
-          { val: "1.8s", label: lang === "es" ? "Respuesta" : "Response time", icon: "⚡" },
-          { val: "24/7", label: lang === "es" ? "Disponibilidad" : "Availability", icon: "◉" },
+          { val: "40%", label: s("Más leads", "More leads"), icon: "↑" },
+          { val: "1.8s", label: s("Respuesta", "Response time"), icon: "⚡" },
+          { val: "24/7", label: s("Disponibilidad", "Availability"), icon: "◉" },
         ].map((m, i) => (
           <motion.div
             key={i}

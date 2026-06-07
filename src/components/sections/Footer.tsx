@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { useLang } from "@/components/LangContext";
+import { useStrings } from "@/lib/useStrings";
 import { FaInstagram, FaWhatsapp, FaFacebook, FaEnvelope, FaLinkedin } from "react-icons/fa";
 
 const SOCIAL_LINKS = [
@@ -14,7 +14,7 @@ const SOCIAL_LINKS = [
 ];
 
 export default function Footer() {
-  const { lang } = useLang();
+  const { s } = useStrings();
 
   return (
     <footer className="relative z-[2] border-t border-white/10 bg-gradient-to-b from-bg/50 to-bg">
@@ -28,7 +28,7 @@ export default function Footer() {
               <span className="font-mono text-[1.1rem] font-semibold text-text-primary">Stratix</span>
             </div>
             <p className="text-sm text-text-muted leading-[1.7] mb-6 max-w-[300px]">
-              {lang === "es" ? "Automatiza tu atención y ventas con agentes IA. Responde 24/7 y cierra más negocios mientras descansas." : "Automate your support and sales with AI agents. Respond 24/7 and close more deals while you sleep."}
+               {s("Automatiza tu atención y ventas con agentes IA. Responde 24/7 y cierra más negocios mientras descansas.", "Automate your support and sales with AI agents. Respond 24/7 and close more deals while you sleep.")}
             </p>
             <div className="flex gap-[10px]">
               {SOCIAL_LINKS.map((social, i) => (
@@ -49,22 +49,22 @@ export default function Footer() {
 
           <div>
             <h4 className="font-mono text-[11px] tracking-[0.12em] text-accent mb-5">
-              {lang === "es" ? "PRODUCTO" : "PRODUCT"}
+              {s("PRODUCTO", "PRODUCT")}
             </h4>
             <ul className="list-none p-0 m-0 flex flex-col gap-3">
               <li>
                 <Link href="#features" className="text-sm text-text-muted no-underline transition-colors duration-[0.2s] hover:text-text-primary">
-                  {lang === "es" ? "Características" : "Features"}
+                  {s("Características", "Features")}
                 </Link>
               </li>
               <li>
                 <Link href="#pricing" className="text-sm text-text-muted no-underline transition-colors duration-[0.2s] hover:text-text-primary">
-                  {lang === "es" ? "Precios" : "Pricing"}
+                  {s("Precios", "Pricing")}
                 </Link>
               </li>
               <li>
                 <Link href="#how" className="text-sm text-text-muted no-underline transition-colors duration-[0.2s] hover:text-text-primary">
-                  {lang === "es" ? "Cómo funciona" : "How it works"}
+                  {s("Cómo funciona", "How it works")}
                 </Link>
               </li>
               <li>
@@ -82,12 +82,12 @@ export default function Footer() {
             <ul className="list-none p-0 m-0 flex flex-col gap-3">
               <li>
                 <Link href="/legal/privacy" className="text-sm text-text-muted no-underline transition-colors duration-[0.2s] hover:text-text-primary">
-                  {lang === "es" ? "Privacidad" : "Privacy"}
+                  {s("Privacidad", "Privacy")}
                 </Link>
               </li>
               <li>
                 <Link href="/legal/terms" className="text-sm text-text-muted no-underline transition-colors duration-[0.2s] hover:text-text-primary">
-                  {lang === "es" ? "Términos" : "Terms"}
+                  {s("Términos", "Terms")}
                 </Link>
               </li>
             </ul>
@@ -121,10 +121,10 @@ export default function Footer() {
           className="mt-[clamp(3rem,5vw,4rem)] py-6 border-t border-white/5 flex justify-between items-center flex-wrap gap-3"
         >
           <p className="text-[13px] text-text-muted font-mono">
-            &copy; {new Date().getFullYear()} Stratix Intelligence. {lang === "es" ? "Todos los derechos reservados." : "All rights reserved."}
+            &copy; {new Date().getFullYear()} Stratix Intelligence. {s("Todos los derechos reservados.", "All rights reserved.")}
           </p>
           <p className="text-[13px] text-text-muted font-mono">
-            {lang === "es" ? "Hecho con" : "Made with"} <span className="text-accent">&#9829;</span> {lang === "es" ? "en Colombia" : "in Colombia"}
+            {s("Hecho con", "Made with")} <span className="text-accent">&#9829;</span> {s("en Colombia", "in Colombia")}
           </p>
         </motion.div>
       </div>

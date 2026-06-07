@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { FiSend } from "react-icons/fi";
+import { Send } from "lucide-react";
 import { ChatMessage } from "./types";
 
 interface BotConversationsProps {
@@ -46,7 +46,7 @@ export default function BotConversations({ chatMessages, isTyping, onSendMessage
           className="flex-1 px-4 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white text-sm outline-none focus:border-accent/30 transition-all duration-200"
         />
         <button type="submit" className="bg-accent border-none rounded-lg px-4 transition-all duration-200 hover:scale-105">
-          <FiSend className="text-black" />
+          <Send className="text-black" />
         </button>
       </form>
     </div>
