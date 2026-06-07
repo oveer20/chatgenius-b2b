@@ -12,28 +12,28 @@ const FEATURES = [
   },
   {
     id: "speed",
-    gradient: "from-success/20 via-success/5 to-transparent",
-    accent: "#10b981",
+    gradient: "from-accent/20 via-accent/5 to-transparent",
+    accent: "#D4AF37",
   },
   {
     id: "channels",
-    gradient: "from-info/20 via-info/5 to-transparent",
-    accent: "#3B82F6",
+    gradient: "from-accent/20 via-accent/5 to-transparent",
+    accent: "#D4AF37",
   },
   {
     id: "analytics",
-    gradient: "from-[#8B5CF6]/20 via-[#8B5CF6]/5 to-transparent",
-    accent: "#8B5CF6",
+    gradient: "from-accent/20 via-accent/5 to-transparent",
+    accent: "#D4AF37",
   },
   {
     id: "security",
-    gradient: "from-[#F59E0B]/20 via-[#F59E0B]/5 to-transparent",
-    accent: "#F59E0B",
+    gradient: "from-accent/20 via-accent/5 to-transparent",
+    accent: "#D4AF37",
   },
   {
     id: "language",
-    gradient: "from-[#EC4899]/20 via-[#EC4899]/5 to-transparent",
-    accent: "#EC4899",
+    gradient: "from-accent/20 via-accent/5 to-transparent",
+    accent: "#D4AF37",
   },
 ];
 
@@ -73,8 +73,8 @@ function MemorySVG() {
 function SpeedSVG() {
   return (
     <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-      <path d="M24 4L28 16H40L30 24L34 36L24 28L14 36L18 24L8 16H20L24 4Z" fill="#10b981" opacity="0.25" stroke="#10b981" strokeWidth="1.2"/>
-      <path d="M24 14L26 19H31L27 22L29 27L24 24L19 27L21 22L17 19H22L24 14Z" fill="#10b981" opacity="0.5"/>
+      <path d="M24 4L28 16H40L30 24L34 36L24 28L14 36L18 24L8 16H20L24 4Z" fill="#D4AF37" opacity="0.25" stroke="#D4AF37" strokeWidth="1.2"/>
+      <path d="M24 14L26 19H31L27 22L29 27L24 24L19 27L21 22L17 19H22L24 14Z" fill="#D4AF37" opacity="0.5"/>
     </svg>
   );
 }
@@ -82,11 +82,11 @@ function SpeedSVG() {
 function ChannelsSVG() {
   return (
     <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-      <circle cx="14" cy="16" r="6" stroke="#3B82F6" strokeWidth="1.5" opacity="0.5"/>
-      <circle cx="34" cy="16" r="6" stroke="#3B82F6" strokeWidth="1.5" opacity="0.5"/>
-      <circle cx="24" cy="36" r="6" stroke="#3B82F6" strokeWidth="1.5"/>
-      <line x1="20" y1="32" x2="16" y2="21" stroke="#3B82F6" strokeWidth="1.2" opacity="0.4"/>
-      <line x1="28" y1="32" x2="32" y2="21" stroke="#3B82F6" strokeWidth="1.2" opacity="0.4"/>
+      <circle cx="14" cy="16" r="6" stroke="#D4AF37" strokeWidth="1.5" opacity="0.5"/>
+      <circle cx="34" cy="16" r="6" stroke="#D4AF37" strokeWidth="1.5" opacity="0.5"/>
+      <circle cx="24" cy="36" r="6" stroke="#D4AF37" strokeWidth="1.5"/>
+      <line x1="20" y1="32" x2="16" y2="21" stroke="#D4AF37" strokeWidth="1.2" opacity="0.4"/>
+      <line x1="28" y1="32" x2="32" y2="21" stroke="#D4AF37" strokeWidth="1.2" opacity="0.4"/>
     </svg>
   );
 }
@@ -94,10 +94,10 @@ function ChannelsSVG() {
 function AnalyticsSVG() {
   return (
     <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-      <rect x="6" y="32" width="8" height="10" rx="1" fill="#8B5CF6" opacity="0.3"/>
-      <rect x="18" y="22" width="8" height="20" rx="1" fill="#8B5CF6" opacity="0.5"/>
-      <rect x="30" y="14" width="8" height="28" rx="1" fill="#8B5CF6"/>
-      <line x1="6" y1="38" x2="42" y2="38" stroke="#8B5CF6" strokeWidth="1" opacity="0.3"/>
+      <rect x="6" y="32" width="8" height="10" rx="1" fill="#D4AF37" opacity="0.3"/>
+      <rect x="18" y="22" width="8" height="20" rx="1" fill="#D4AF37" opacity="0.5"/>
+      <rect x="30" y="14" width="8" height="28" rx="1" fill="#D4AF37"/>
+      <line x1="6" y1="38" x2="42" y2="38" stroke="#D4AF37" strokeWidth="1" opacity="0.3"/>
       <path d="M6 34L18 28L30 22L38 16" stroke="#D4AF37" strokeWidth="1.2" strokeDasharray="2 2" opacity="0.5"/>
     </svg>
   );
@@ -106,9 +106,9 @@ function AnalyticsSVG() {
 function SecuritySVG() {
   return (
     <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-      <path d="M24 6L8 14V26C8 36 24 44 24 44C24 44 40 36 40 26V14L24 6Z" stroke="#F59E0B" strokeWidth="1.5" opacity="0.3" fill="#F59E0B" fillOpacity="0.05"/>
-      <path d="M24 6L8 14V26C8 34.2 18 40.6 24 43" stroke="#F59E0B" strokeWidth="1.5"/>
-      <path d="M18 24L22 28L30 20" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M24 6L8 14V26C8 36 24 44 24 44C24 44 40 36 40 26V14L24 6Z" stroke="#D4AF37" strokeWidth="1.5" opacity="0.3" fill="#D4AF37" fillOpacity="0.05"/>
+      <path d="M24 6L8 14V26C8 34.2 18 40.6 24 43" stroke="#D4AF37" strokeWidth="1.5"/>
+      <path d="M18 24L22 28L30 20" stroke="#D4AF37" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
   );
 }
@@ -116,12 +116,12 @@ function SecuritySVG() {
 function LanguageSVG() {
   return (
     <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-      <circle cx="24" cy="24" r="18" stroke="#EC4899" strokeWidth="1.2" opacity="0.3"/>
-      <ellipse cx="24" cy="24" rx="8" ry="18" stroke="#EC4899" strokeWidth="1"/>
-      <line x1="10" y1="24" x2="38" y2="24" stroke="#EC4899" strokeWidth="1" opacity="0.4"/>
-      <path d="M20 14C18 18 18 30 20 34" stroke="#EC4899" strokeWidth="1.2" opacity="0.5"/>
-      <path d="M28 14C30 18 30 30 28 34" stroke="#EC4899" strokeWidth="1.2" opacity="0.5"/>
-      <circle cx="24" cy="24" r="3" fill="#EC4899" opacity="0.4"/>
+      <circle cx="24" cy="24" r="18" stroke="#D4AF37" strokeWidth="1.2" opacity="0.3"/>
+      <ellipse cx="24" cy="24" rx="8" ry="18" stroke="#D4AF37" strokeWidth="1"/>
+      <line x1="10" y1="24" x2="38" y2="24" stroke="#D4AF37" strokeWidth="1" opacity="0.4"/>
+      <path d="M20 14C18 18 18 30 20 34" stroke="#D4AF37" strokeWidth="1.2" opacity="0.5"/>
+      <path d="M28 14C30 18 30 30 28 34" stroke="#D4AF37" strokeWidth="1.2" opacity="0.5"/>
+      <circle cx="24" cy="24" r="3" fill="#D4AF37" opacity="0.4"/>
     </svg>
   );
 }

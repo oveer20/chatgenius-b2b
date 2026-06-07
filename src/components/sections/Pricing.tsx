@@ -102,7 +102,7 @@ export default function Pricing() {
                 whileHover={{ y: isHighlighted ? -6 : -4 }}
                 className={`relative rounded-2xl flex flex-col h-full transition-all duration-500 ${
                   isHighlighted
-                    ? 'p-10 bg-gradient-to-b from-accent/20 via-accent/8 to-bg2 border-2 border-accent shadow-[0_30px_80px_rgba(212,175,55,0.2),0_0_60px_rgba(212,175,55,0.05)] scale-[1.03] z-10'
+                    ? 'p-10 bg-gradient-to-b from-accent/20 via-accent/8 to-bg2 border-2 border-accent shadow-[0_30px_80px_rgba(212,175,55,0.2),0_0_60px_rgba(212,175,55,0.05)] -translate-y-2 z-10'
                     : 'p-8 bg-white/[0.03] border border-white/10 shadow-md shadow-black/30'
                 } ${isHovered && !isHighlighted ? 'bg-white/[0.07] border-accent/30 shadow-[0_20px_50px_rgba(0,0,0,0.4)]' : ''}`}
               >

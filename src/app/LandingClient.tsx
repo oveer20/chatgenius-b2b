@@ -56,11 +56,9 @@ export default function LandingClient() {
           <Hero />
           <hr className="section-divider" />
           <Stats />
-          <hr className="section-divider" />
           <Integrations />
           <hr className="section-divider" />
           <Features />
-          <hr className="section-divider" />
           <Suspense fallback={<SectionFallback height="h-[600px]" />}>
             <HowItWorks />
           </Suspense>
@@ -68,7 +66,6 @@ export default function LandingClient() {
           <Suspense fallback={<SectionFallback height="h-[600px]" />}>
             <BeforeAfter />
           </Suspense>
-          <hr className="section-divider" />
           <Suspense fallback={<SectionFallback height="h-[550px]" />}>
             <ScreensShowcase />
           </Suspense>
@@ -76,15 +73,12 @@ export default function LandingClient() {
           <Suspense fallback={<SectionFallback height="h-[700px]" />}>
             <Pricing />
           </Suspense>
-          <hr className="section-divider" />
           <Suspense fallback={<SectionFallback height="h-[600px]" />}>
             <InteractiveDemo />
           </Suspense>
-          <hr className="section-divider" />
           <Suspense fallback={<SectionFallback height="h-[550px]" />}>
             <ROICalculator />
           </Suspense>
-          <hr className="section-divider" />
           <Suspense fallback={<SectionFallback height="h-[450px]" />}>
             <FAQ />
           </Suspense>
@@ -92,7 +86,6 @@ export default function LandingClient() {
           <Suspense fallback={<SectionFallback height="h-[550px]" />}>
             <CTA />
           </Suspense>
-          <hr className="section-divider" />
           <Suspense fallback={<SectionFallback height="h-[450px]" />}>
             <Footer />
           </Suspense>

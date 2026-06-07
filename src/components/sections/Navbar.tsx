@@ -5,12 +5,10 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLang } from "@/components/LangContext";
 import { useStrings } from "@/lib/useStrings";
-import { useTheme } from "@/components/ThemeContext";
 
 export default function Navbar() {
-  const { lang, setLang, showUSD, setShowUSD } = useLang();
+  const { lang, setLang } = useLang();
   const { s } = useStrings();
-  const { theme, toggleTheme } = useTheme();
   const [hovered, setHovered] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -40,77 +38,48 @@ export default function Navbar() {
 
   return (
     <>
-      <style>{`
-        @media (max-width: 768px) {
-          .nav-links-desktop { display: none !important; }
-          .nav-currency-desktop { display: none !important; }
-          .nav-text-desktop { display: none !important; }
-          .nav-hamburger { display: flex !important; }
-        }
-      `}</style>
-
       <nav className={`fixed inset-x-0 top-0 z-[100] flex items-center justify-between px-[clamp(1rem,4vw,4rem)] h-[60px] transition-all duration-300 ${scrolled ? 'bg-bg/95 border-b border-accent/10 shadow-lg shadow-black/30' : 'bg-bg/85 border-b border-white/5'}`}>
         <Link href="/" className="flex items-center gap-2 no-underline">
           <div className={`relative transition-all duration-500 ${scrolled ? 'drop-shadow-[0_0_8px_rgba(212,175,55,0.5)]' : ''}`}>
             <img src="/stratix_shield.svg" alt="Stratix" width={24} height={24} className="h-6 w-6" />
           </div>
-          <span className="nav-text-desktop font-mono text-base font-medium text-text-primary">Stratix Intelligence</span>
+          <span className="hidden md:inline font-mono text-base font-medium text-text-primary">Stratix Intelligence</span>
         </Link>
 
-        <div className="flex items-center gap-1.5">
-          <div className="nav-links-desktop flex items-center gap-5">
-            {navItems.map(item => (
-              <a
-                key={item.key}
-                href={item.href}
-                onMouseEnter={() => setHovered(item.key)}
-                onMouseLeave={() => setHovered(null)}
-                className={`relative no-underline text-sm transition-colors duration-200 ${hovered === item.key ? 'text-accent' : 'text-text-secondary'}`}
-              >
-                {getLabel(item)}
-                {hovered === item.key && (
-                  <span className="absolute -bottom-1 inset-x-0 h-px bg-accent" />
-                )}
-              </a>
-            ))}
-          </div>
+        <div className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-5">
+          {navItems.map(item => (
+            <a
+              key={item.key}
+              href={item.href}
+              onMouseEnter={() => setHovered(item.key)}
+              onMouseLeave={() => setHovered(null)}
+              className={`relative no-underline text-sm transition-colors duration-200 ${hovered === item.key ? 'text-accent' : 'text-text-secondary'}`}
+            >
+              {getLabel(item)}
+              {hovered === item.key && (
+                <span className="absolute -bottom-1 inset-x-0 h-px bg-accent" />
+              )}
+            </a>
+          ))}
+        </div>
 
+        <div className="flex items-center gap-1.5">
           <button
             onClick={() => setLang(lang === "es" ? "en" : "es")}
             className="px-2 py-1 rounded-[5px] bg-white/5 text-text-secondary border-none text-[11px] cursor-pointer font-semibold font-mono transition-all duration-200 hover:bg-white/10 hover:text-accent"
           >{s("EN", "ES")}</button>
 
-          <div className="nav-currency-desktop flex items-center gap-0.5 p-0.5 bg-white/5 rounded-[6px]">
-            <button
-              onClick={() => setShowUSD(false)}
-              className={`px-[7px] py-1 rounded-[5px] border-none text-[11px] cursor-pointer font-semibold font-mono transition-all duration-200 ${!showUSD ? 'bg-accent text-black' : 'bg-transparent text-text-secondary'}`}
-            >COP</button>
-            <button
-              onClick={() => setShowUSD(true)}
-              className={`px-[7px] py-1 rounded-[5px] border-none text-[11px] cursor-pointer font-semibold font-mono transition-all duration-200 ${showUSD ? 'bg-accent text-black' : 'bg-transparent text-text-secondary'}`}
-            >USD</button>
-          </div>
-
-          <button
-            onClick={toggleTheme}
-            aria-label={s("Cambiar tema", "Toggle theme")}
-            className="flex items-center justify-center w-8 h-8 rounded-[6px] bg-white/5 border-none cursor-pointer transition-all duration-200 text-text-secondary hover:bg-white/10 hover:text-accent"
+          <Link
+            href="/login"
+            className="bg-accent text-bg text-xs font-semibold px-3 py-1.5 rounded-[8px] no-underline font-sans transition-all duration-200 shadow-[0_2px_10px_rgba(212,175,55,0.3)] hover:shadow-[0_4px_20px_rgba(212,175,55,0.5)]"
           >
-            {theme === "dark" ? (
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-              </svg>
-            ) : (
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-              </svg>
-            )}
-          </button>
+            {s("Entrar", "Sign in")}
+          </Link>
 
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label={s("Abrir menú", "Open menu")}
-            className="nav-hamburger hidden items-center justify-center w-9 h-9 rounded-[8px] bg-white/5 border-none cursor-pointer transition-all duration-200 text-text-primary"
+            className="flex md:hidden items-center justify-center w-9 h-9 rounded-[8px] bg-white/5 border-none cursor-pointer transition-all duration-200 text-text-primary"
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               {mobileOpen ? (
@@ -127,13 +96,6 @@ export default function Navbar() {
               )}
             </svg>
           </button>
-
-          <Link
-            href="/login"
-            className="bg-accent text-bg text-xs font-semibold px-3 py-1.5 rounded-[8px] no-underline font-sans transition-all duration-200 shadow-[0_2px_10px_rgba(212,175,55,0.3)] hover:shadow-[0_4px_20px_rgba(212,175,55,0.5)]"
-          >
-            {s("Entrar", "Sign in")}
-          </Link>
         </div>
       </nav>
 
