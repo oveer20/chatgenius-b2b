@@ -50,7 +50,7 @@ export default function LandingClient() {
         <MetaPixel />
         <AnimatedBackground />
         <ScrollProgress />
-        <div className="relative z-10">
+        <div className="relative z-10 mx-auto max-w-7xl px-4 lg:px-6">
           <Navbar />
           <GuaranteeBanner />
           <Hero />
