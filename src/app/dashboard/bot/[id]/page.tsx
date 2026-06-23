@@ -105,7 +105,7 @@ export default function BotEditor() {
 
       if (err) throw err;
       toast.success("Agente guardado correctamente");
-    } catch (err) {
+    } catch {
       toast.error("Error al guardar el agente. Intenta de nuevo.");
     } finally {
       setIsSaving(false);
@@ -127,7 +127,7 @@ export default function BotEditor() {
       } else {
         throw new Error(data.error);
       }
-    } catch (err) {
+    } catch {
       toast.error("Error de sincronización. Intenta de nuevo.");
     } finally {
       setIsSyncing(false);
@@ -149,7 +149,7 @@ export default function BotEditor() {
       } else {
         throw new Error(data.error);
       }
-    } catch (err) {
+    } catch {
       toast.error("Error al procesar el documento. Intenta de nuevo.");
     } finally {
       setIsUploading(false);
@@ -178,7 +178,7 @@ export default function BotEditor() {
       } else {
         throw new Error(data.error);
       }
-    } catch (err) {
+    } catch {
       toast.error("Error al escanear la URL. Intenta de nuevo.");
     } finally {
       setIsCrawling(false);
@@ -212,7 +212,7 @@ export default function BotEditor() {
       const { error } = await supabase.from("bots").update({ is_active: newStatus }).eq("id", id);
       if (error) throw error;
       setBotStatus(newStatus ? 'active' : 'inactive');
-    } catch (err) {
+    } catch {
       toast.error("Error al cambiar el estado. Intenta de nuevo.");
     } finally {
       setIsTogglingStatus(false);

@@ -7,7 +7,7 @@ import { useStrings } from "@/lib/useStrings";
 import { useState } from "react";
 
 export default function CTA() {
-  const { lang, t } = useLang();
+  const { t } = useLang();
   const { s } = useStrings();
   const [hovered, setHovered] = useState<string | null>(null);
 

@@ -10,7 +10,6 @@ import { FiMoon, FiSun } from "react-icons/fi";
 export default function Navbar() {
   const { lang, setLang } = useLang();
   const { s } = useStrings();
-  const [hovered, setHovered] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -39,7 +38,7 @@ export default function Navbar() {
 
   return (
     <>
-       <nav className={`fixed inset-x-0 top-0 z-[100] flex items-center justify-between px-[clamp(1rem,4vw,4rem)] h-[16px] transition-all duration-300 bg-bg/80 backdrop-blur-xl border-b border-white/10 ${scrolled ? 'bg-bg/90' : ''}`}>
+       <nav className={`fixed inset-x-0 top-0 z-[100] flex items-center justify-between px-[clamp(1rem,4vw,4rem)] h-[60px] transition-all duration-300 bg-bg/80 backdrop-blur-xl border-b border-white/10 ${scrolled ? 'bg-bg/90' : ''}`}>
          <Link href="/" className="flex items-center gap-2 no-underline">
            <div className={`relative transition-all duration-500 ${scrolled ? 'drop-shadow-[0_0_8px_rgba(212,175,55,0.5)]' : ''}`}>
              <img src="/stratix_shield.svg" alt="Stratix" width={24} height={24} className="h-6 w-6" />
@@ -52,7 +51,7 @@ export default function Navbar() {
              <Link
                key={item.key}
                href={item.href}
-               className={`text-sm font-medium transition-colors duration-200 ${hovered === item.key ? 'text-accent' : 'text-text-secondary'} hover:text-accent`}
+               className="text-sm font-medium text-text-secondary transition-colors duration-200 hover:text-accent"
              >
                {getLabel(item)}
              </Link>
@@ -67,9 +66,18 @@ export default function Navbar() {
            >
              {lang === "es" ? <FiMoon /> : <FiSun />}
            </button>
-           <Link href="/dashboard" className="btn-primary btn-sm">
+           <Link href="/dashboard" className="hidden sm:inline-flex btn-primary btn-sm">
              {s("Crear agente", "Create Agent")}
            </Link>
+           <button
+             onClick={() => setMobileOpen(true)}
+             className="md:hidden icon-btn"
+             aria-label="Menu"
+           >
+             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+               <path d="M3 12h18M3 6h18M3 18h18"/>
+             </svg>
+           </button>
          </div>
        </nav>
 

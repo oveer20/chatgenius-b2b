@@ -64,7 +64,7 @@ export async function POST(request: NextRequest) {
     `;
 
     const { getResilientChatResponse } = await import("@/lib/ai-orchestrator");
-    const { text, provider } = await getResilientChatResponse(messages, fullSystemPrompt, model || "gemini");
+    const { text, provider } = await getResilientChatResponse(messages, fullSystemPrompt);
 
     let intent = "Information"; let score = "Cold"; let cleanText = text;
     const metaMatch = text.match(/\[\[META:([\s\S]*?)\]\]/);

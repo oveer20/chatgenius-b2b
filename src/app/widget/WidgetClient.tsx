@@ -48,7 +48,7 @@ export default function WidgetPage() {
   const [messages, setMessages] = useState<{ role: string; content: string }[]>([]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
-  const [loadingBot, setLoadingBot] = useState(true);
+  const [, setLoadingBot] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

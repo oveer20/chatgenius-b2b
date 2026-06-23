@@ -95,7 +95,7 @@ export default function NewBotPage() {
         router.push(`/dashboard/bot/${newBot.id}`);
       }, 1200);
 
-    } catch (err) {
+    } catch {
       toast.error("Error al crear el agente. Intenta de nuevo.");
     } finally {
       setLoading(false);

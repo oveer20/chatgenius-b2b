@@ -63,5 +63,6 @@ export async function getGroqResponse(messages: any[], systemPrompt: string) {
 }
 
 export async function getEmbeddings(_text: string) {
+  void _text;
   return new Array(768).fill(0);
 }

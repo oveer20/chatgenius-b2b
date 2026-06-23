@@ -173,7 +173,7 @@ export async function POST(request: NextRequest) {
 
         // E. Generación IA & Extracción de Metadatos (V50.5: AI Orchestrator Unificado)
         const { getResilientChatResponse } = await import("@/lib/ai-orchestrator");
-        const { text: rawAiResponse } = await getResilientChatResponse(chatHistory, fullSystemPrompt, bot.model || "gemini");
+        const { text: rawAiResponse } = await getResilientChatResponse(chatHistory, fullSystemPrompt);
 
         let intent = "Information";
         let score = "Cold";

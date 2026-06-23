@@ -109,7 +109,7 @@ const plansEn: Record<string, string> = {
 };
 
 function Notification() {
-  const { s, lang } = useStrings();
+  const { s } = useStrings();
   const [visible, setVisible] = useState(false);
   const [notification, setNotification] = useState<typeof testimonials[0] & { time: string } | null>(null);
   const shownIndices = useRef<Set<number>>(new Set());

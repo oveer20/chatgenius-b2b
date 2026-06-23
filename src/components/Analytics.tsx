@@ -44,7 +44,7 @@ export default function Analytics() {
       }
     };
 
-    const handleSchedule = (_e: CustomEvent) => {
+    const handleSchedule = () => {
       if (typeof window.gtag !== "undefined") {
         window.gtag("event", "schedule_demo", {
           event_category: "conversion",

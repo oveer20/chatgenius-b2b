@@ -28,7 +28,7 @@ export default function SettingsPage() {
       const { error } = await supabase.auth.updateUser({ data: { full_name: name } });
       if (error) throw error;
       toast.success("Perfil actualizado");
-    } catch (err) {
+    } catch {
       toast.error("Error al actualizar. Intenta de nuevo.");
     } finally {
       setLoading(false);

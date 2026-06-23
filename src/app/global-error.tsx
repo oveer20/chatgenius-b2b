@@ -1,7 +1,7 @@
 "use client";
 
 import * as Sentry from "@sentry/nextjs";
-import NextError from "next/error";
+import Link from "next/link";
 
 export default function GlobalError({ error }: { error: Error & { digest?: string } }) {
   Sentry.captureException(error);
@@ -14,12 +14,12 @@ export default function GlobalError({ error }: { error: Error & { digest?: strin
           </div>
           <h1 className="mb-2 font-serif text-3xl text-text-primary">Error crítico</h1>
           <p className="mb-6 text-sm text-text-secondary">Ocurrió un error inesperado. Nuestro equipo ha sido notificado.</p>
-          <a
+          <Link
             href="/"
             className="inline-block rounded-xl bg-accent px-6 py-3 text-sm font-bold text-bg no-underline transition-all hover:scale-105"
           >
             Volver al inicio
-          </a>
+          </Link>
         </div>
       </body>
     </html>

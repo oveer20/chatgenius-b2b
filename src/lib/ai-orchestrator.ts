@@ -4,7 +4,7 @@ import { getGroqResponse } from "./groq";
  * STRATIX AI ORCHESTRATOR - Groq Only
  * Using Groq (free) as primary model
  */
-export async function getResilientChatResponse(messages: any[], systemPrompt: string, preferredModel: string = "groq") {
+export async function getResilientChatResponse(messages: any[], systemPrompt: string) {
   try {
     const text = await getGroqResponse(messages, systemPrompt);
     return { text, provider: "groq" };

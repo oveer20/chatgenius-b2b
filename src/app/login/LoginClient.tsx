@@ -41,7 +41,7 @@ function AuthContent() {
         toast.success("¡Bienvenido de vuelta!");
         router.push(redirect);
       }
-    } catch (err) {
+    } catch {
       toast.error("Error al iniciar sesión. Verifica tus credenciales.");
     } finally {
       setLoading(false);
