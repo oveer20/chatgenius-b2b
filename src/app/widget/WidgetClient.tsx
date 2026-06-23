@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { Send, Cpu, Zap } from "lucide-react";
 import { FiMessageSquare } from "react-icons/fi";
 import { Toaster } from "sonner";
+import Image from "next/image";
 import { motion } from "framer-motion";
 
 const DEMO_BOT = {
@@ -135,7 +136,7 @@ export default function WidgetPage() {
     <div className="bg-bg min-h-screen text-white font-sans">
       <header className="px-[5%] py-4 flex justify-between items-center border-b border-white/5">
         <div className="flex items-center gap-2.5">
-          <img src="/stratix_shield.svg" alt="Stratix" width={28} height={28} className="w-7" />
+          <Image src="/stratix_shield.svg" alt="Stratix" width={28} height={28} className="w-7" />
           <span className="font-extrabold">Stratix AI</span>
           <span className="text-xs bg-accent/20 text-accent px-2 py-0.5 rounded">GEMINI 2.0</span>
         </div>
