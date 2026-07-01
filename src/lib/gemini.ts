@@ -13,8 +13,13 @@ async function wait(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-export async function getGeminiResponse(messages: any[], systemPrompt: string) {
-  let lastError: any;
+interface GeminiMessage {
+  role: string;
+  content: string;
+}
+
+export async function getGeminiResponse(messages: GeminiMessage[], systemPrompt: string) {
+  let lastError: Error | null = null;
   let genAI;
   try {
     genAI = getGenAI();
@@ -36,7 +41,7 @@ export async function getGeminiResponse(messages: any[], systemPrompt: string) {
         ]
       });
 
-      const history = messages.slice(0, -1).map((m: any) => ({
+      const history = messages.slice(0, -1).map((m: GeminiMessage) => ({
         role: m.role === "assistant" ? "model" : "user",
         parts: [{ text: m.content }],
       }));
@@ -59,11 +64,13 @@ export async function getGeminiResponse(messages: any[], systemPrompt: string) {
       }
 
       return text;
-    } catch (error: any) {
-      lastError = error;
-      console.error(`/// FALLO EN GEMINI (Intento ${i + 1}) ///`, error.message);
+    } catch (error: unknown) {
+      lastError = error as Error | null;;
+      const msg = error instanceof Error ? error.message : "Unknown error";
+      console.error(`/// FALLO EN GEMINI (Intento ${i + 1}) ///`, msg);
       
-      if (error.message?.includes("429") || error.message?.includes("500") || error.message?.includes("quota")) {
+      const errMsg = error instanceof Error ? error.message : "";
+      if (errMsg.includes("429") || errMsg.includes("500") || errMsg.includes("quota")) {
         await wait(INITIAL_DELAY * Math.pow(2, i));
         continue;
       }
@@ -80,7 +87,7 @@ export async function getEmbeddings(text: string) {
     const model = genAI.getGenerativeModel({ model: "text-embedding-004" });
     const result = model.embedContent(text);
     return (await result).embedding.values;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("/// ERROR GENERANDO EMBEDDINGS ///", error);
     throw error;
   }

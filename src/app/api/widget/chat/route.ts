@@ -79,7 +79,7 @@ export async function POST(request: NextRequest) {
       });
 
       if (!matchError && chunks) {
-        semanticContext = chunks.map((c: any) => c.content).join("\n\n");
+        semanticContext = chunks.map((c: { content: string }) => c.content).join("\n\n");
         // RAG chunks retrieved
       }
     } catch (err) {
@@ -151,8 +151,7 @@ export async function POST(request: NextRequest) {
         const result = await getGeminiResponse(messages, fullSystemPrompt);
         responseText = typeof result === 'string' ? result : JSON.stringify(result);
       }
-    } catch (engineError: any) {
-      console.error(`/// ERROR MOTOR ${engineType} ///`, engineError);
+    } catch {
       return NextResponse.json({
         message: {
           role: "assistant",
@@ -242,8 +241,7 @@ export async function POST(request: NextRequest) {
       analysis: { intent, score }
     });
 
-  } catch (error: any) {
-    console.error("/// CRITICAL WIDGET API ERROR ///", error);
+  } catch {
     return NextResponse.json({ error: "Interrupción en el flujo de datos estratégicos." }, { status: 500 });
   }
 }

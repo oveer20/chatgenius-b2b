@@ -79,11 +79,9 @@ export async function POST(request: NextRequest) {
       leadId: lead.id 
     }, { status: 200 });
 
-  } catch (error: any) {
-    console.error("/// LEAD API CRITICAL ERROR ///", error);
+  } catch {
     return NextResponse.json({ 
-      error: "Error interno procesando el lead", 
-      details: error.message 
+      error: "Error interno procesando el lead"
     }, { status: 500 });
   }
 }

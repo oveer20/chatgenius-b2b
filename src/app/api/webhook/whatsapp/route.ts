@@ -101,7 +101,7 @@ export async function POST(request: NextRequest) {
 
         // B. Persistencia de Historial (Memoria de Misión)
         let chatId: string | null = null;
-        let chatHistory: any[] = [];
+        let chatHistory: Array<{role: string, content: string}> = [];
         
         const { data: existingChat } = await supabaseAdmin
           .from("chats")
@@ -144,7 +144,7 @@ export async function POST(request: NextRequest) {
             p_bot_id: bot.id
           });
 
-          if (chunks) knowledgeContext = chunks.map((c: any) => c.content).join("\n\n");
+          if (chunks) knowledgeContext = chunks.map((c: { content: string }) => c.content).join("\n\n");
         } catch (err) {
           console.error("/// FALLO MOTOR RAG (WhatsApp) ///", err);
         }
@@ -277,8 +277,9 @@ export async function POST(request: NextRequest) {
       }
     }
     return NextResponse.json({ status: "ignored" });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("/// WHATSAPP WEBHOOK CRITICAL ERROR ///", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Unknown error";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

@@ -60,10 +60,11 @@ export async function POST(request: Request) {
       message: 'Cuenta creada exitosamente'
     });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Auth error:', error);
+    const message = error instanceof Error ? error.message : 'Error interno del servidor';
     return NextResponse.json(
-      { error: error.message || 'Error interno del servidor' },
+      { error: message },
       { status: 500 }
     );
   }

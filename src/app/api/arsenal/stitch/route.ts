@@ -45,8 +45,9 @@ export async function POST(req: Request) {
         accessibilityNote: "Revisión manual recomendada."
       });
     }
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("Stitch API Error:", err);
-    return NextResponse.json({ error: "Failed to analyze UI", message: err.message }, { status: 500 });
+    const message = err instanceof Error ? err.message : "Unknown error";
+    return NextResponse.json({ error: "Failed to analyze UI", message }, { status: 500 });
   }
 }

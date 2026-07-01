@@ -72,7 +72,7 @@ export async function GET() {
       },
     });
 
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("/// FALLO EN EXPORTACIÓN DE DATOS ///", err);
     return NextResponse.json({ error: "Error interno generando el reporte." }, { status: 500 });
   }

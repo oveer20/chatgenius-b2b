@@ -27,8 +27,9 @@ export async function POST(
     if (!result.success) throw new Error("Fallo en la sincronización del núcleo vectorial.");
 
     return NextResponse.json({ success: true, message: "Inteligencia consolidada con éxito.", chunks: result.chunks, timestamp: new Date().toISOString() });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("/// FALLO CRÍTICO EN PIPELINE RAG ///", error);
-    return NextResponse.json({ error: "Error en el motor de sincronización.", details: error.message }, { status: 500 });
+    const details = error instanceof Error ? error.message : "Unknown error";
+    return NextResponse.json({ error: "Error en el motor de sincronización.", details }, { status: 500 });
   }
 }

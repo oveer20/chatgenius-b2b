@@ -92,10 +92,11 @@ export async function POST(request: NextRequest) {
     // Retornamos 200 siempre para que Mercado Pago deje de reintentar
     return NextResponse.json({ received: true, status: 200 });
 
-  } catch (error: any) {
-    console.error("/// WEBHOOK CRITICAL ERROR ///", error.message);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Unknown error";
+    console.error("/// WEBHOOK CRITICAL ERROR ///", message);
     // Aunque falle el procesamiento interno, retornamos 200 para evitar spam de reintentos
     // pero logeamos el error para depuración manual.
-    return NextResponse.json({ error: "Webhook manual review required", details: error.message }, { status: 200 });
+    return NextResponse.json({ error: "Webhook manual review required", details: message }, { status: 200 });
   }
 }

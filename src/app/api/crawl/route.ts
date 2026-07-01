@@ -32,8 +32,9 @@ export async function POST(request: NextRequest) {
     syncBotKnowledge(botId, cleanText, url, "web_crawl").catch(e => console.error("ASYNC_RAG_FAIL", e));
 
     return NextResponse.json({ success: true, status: "processing", message: "Sincronización neural iniciada." });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("/// CRAWL API ERROR ///", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Unknown error";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

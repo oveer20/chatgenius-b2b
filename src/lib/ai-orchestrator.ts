@@ -4,12 +4,18 @@ import { getGroqResponse } from "./groq";
  * STRATIX AI ORCHESTRATOR - Groq Only
  * Using Groq (free) as primary model
  */
-export async function getResilientChatResponse(messages: any[], systemPrompt: string) {
+interface ChatMessage {
+  role: string;
+  content: string;
+}
+
+export async function getResilientChatResponse(messages: ChatMessage[], systemPrompt: string) {
   try {
     const text = await getGroqResponse(messages, systemPrompt);
     return { text, provider: "groq" };
-  } catch (error: any) {
-    console.error("/// ERROR ORQUESTADOR ///", error.message, error.stack);
-    throw new Error("IA no disponible: " + error.message);
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : "Unknown error";
+    console.error("/// ERROR ORQUESTADOR ///", msg);
+    throw new Error("IA no disponible: " + msg);
   }
 }

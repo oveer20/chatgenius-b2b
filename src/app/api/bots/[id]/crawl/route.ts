@@ -31,8 +31,9 @@ export async function POST(
       });
       if (!fetchResponse.ok) throw new Error(`HTTP Error: ${fetchResponse.status}`);
       html = await fetchResponse.text();
-    } catch (e: any) {
-      return NextResponse.json({ success: false, error: `No se pudo acceder a la página: ${e.message}` }, { status: 400 });
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : "Unknown error";
+      return NextResponse.json({ success: false, error: `No se pudo acceder a la página: ${message}` }, { status: 400 });
     }
 
     const $ = cheerio.load(html);
@@ -79,7 +80,7 @@ export async function POST(
     } else {
       return NextResponse.json({ success: false, error: "No se pudo extraer conocimiento válido del dominio." }, { status: 500 });
     }
-  } catch (error: any) {
+  } catch (error) {
     console.error("/// CRITICAL CRAWLER ERROR ///", error);
     return NextResponse.json({ success: false, error: "Error fatal interno." }, { status: 500 });
   }

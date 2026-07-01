@@ -7,10 +7,15 @@ async function wait(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-export async function getGroqResponse(messages: any[], systemPrompt: string) {
-  let lastError: any;
+interface ChatMessage {
+  role: string;
+  content: string;
+}
+
+export async function getGroqResponse(messages: ChatMessage[], systemPrompt: string) {
+  let lastError: Error | null = null;
   
-  const chatMessages = messages.map((m: any) => ({
+  const chatMessages = messages.map((m: ChatMessage) => ({
     role: m.role === "assistant" ? "assistant" : "user",
     content: m.content
   }));
@@ -47,11 +52,13 @@ export async function getGroqResponse(messages: any[], systemPrompt: string) {
       }
 
       return text;
-    } catch (error: any) {
-      lastError = error;
-      console.error(`/// FALLO EN GROQ (Intento ${i + 1}) ///`, error.message);
+    } catch (error: unknown) {
+      lastError = error as Error | null;;
+      const msg = error instanceof Error ? error.message : "Unknown error";
+      console.error(`/// FALLO EN GROQ (Intento ${i + 1}) ///`, msg);
       
-      if (error.message?.includes("429") || error.message?.includes("500")) {
+      const errMsg = error instanceof Error ? error.message : "";
+      if (errMsg.includes("429") || errMsg.includes("500")) {
         await wait(1000 * Math.pow(2, i));
         continue;
       }

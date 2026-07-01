@@ -75,11 +75,12 @@ export async function POST(request: NextRequest) {
       init_point: result.init_point 
     });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("/// MERCADO PAGO ERROR ///", error);
+    const details = error instanceof Error ? error.message : "Unknown error";
     return NextResponse.json({ 
       error: "Error procesando el pago con Mercado Pago", 
-      details: error.message 
+      details
     }, { status: 500 });
   }
 }

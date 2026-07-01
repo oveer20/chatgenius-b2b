@@ -13,8 +13,9 @@ export async function POST(request: NextRequest) {
       message: "Demo: Compra simulada exitosamente"
     });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Checkout error:", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Unknown error";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

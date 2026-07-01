@@ -31,8 +31,9 @@ export async function POST(
     try {
       const { text } = await extractText(buffer);
       fullText = Array.isArray(text) ? text.join("\n") : text;
-    } catch (pdfError: any) {
-      return NextResponse.json({ error: "Error al procesar el PDF: " + pdfError.message }, { status: 500 });
+    } catch (pdfError: unknown) {
+      const message = pdfError instanceof Error ? pdfError.message : "Unknown error";
+      return NextResponse.json({ error: "Error al procesar el PDF: " + message }, { status: 500 });
     }
 
     if (!fullText.trim()) return NextResponse.json({ error: "El PDF no contiene texto extraíble." }, { status: 400 });
@@ -43,9 +44,10 @@ export async function POST(
     await supabaseAdmin.from("bots").update({ indexing: false }).eq("id", botId);
 
     return NextResponse.json({ success: true, chunks: syncResult.chunks, filename: file.name, textSegment: fullText.substring(0, 800) + "..." });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("/// UPLOAD ERROR ///", error);
     try { await supabaseAdmin.from("bots").update({ indexing: false }).eq("id", botId); } catch {}
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Unknown error";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

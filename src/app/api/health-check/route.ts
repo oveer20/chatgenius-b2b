@@ -2,11 +2,17 @@ import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
 export async function GET() {
-  const status: any = {
-    status: "ok",
-    timestamp: new Date().toISOString(),
-    services: {}
-  };
+  interface HealthStatus {
+  status: string;
+  timestamp: string;
+  services: Record<string, string>;
+}
+
+const status: HealthStatus = {
+  status: "ok",
+  timestamp: new Date().toISOString(),
+  services: {}
+};
 
   try {
     // Check Supabase

@@ -33,7 +33,8 @@ export async function GET(request: NextRequest) {
     };
 
     return NextResponse.json(publicBot);
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message || "Error interno" }, { status: 500 });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Error interno";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

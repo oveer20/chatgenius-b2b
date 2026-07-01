@@ -1,19 +1,19 @@
-import admin from "firebase-admin";
+import { cert, initializeApp, getApps } from "firebase-admin/app";
+import { getMessaging } from "firebase-admin/messaging";
 
 /**
  * STRATIX INTELLIGENCE — ALERT PULSE (V41.0)
  * Orquestación de notificaciones Push para eventos Élite (Hot Leads).
  */
 
-if (!admin.apps.length) {
+if (!getApps().length) {
   try {
     const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT || "{}");
     
     if (serviceAccount.project_id) {
-      admin.initializeApp({
-        credential: admin.credential.cert(serviceAccount),
+      initializeApp({
+        credential: cert(serviceAccount),
       });
-      // Firebase Admin SDK initialized
     } else {
       console.warn("/// FIREBASE SDK: No FIREBASE_SERVICE_ACCOUNT detected. ///");
     }
@@ -22,12 +22,12 @@ if (!admin.apps.length) {
   }
 }
 
-export const messaging = admin.apps.length ? admin.messaging() : null;
+export const messaging = getApps().length ? getMessaging() : null;
 
 /**
  * Envía una notificación push a un dispositivo específico vía FCM (V42.0).
  */
-export async function sendPushNotification(token: string, title: string, body: string, data: any = {}) {
+export async function sendPushNotification(token: string, title: string, body: string, data: Record<string, string> = {}) {
   if (!messaging) return null;
 
   const message = {
@@ -76,5 +76,3 @@ export async function sendHotLeadAlert(name: string, company: string, score: str
     return null;
   }
 }
-
-export default admin;

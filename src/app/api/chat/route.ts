@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
         const { data: chunks, error: matchError } = await supabaseAdmin.rpc("match_document_chunks", {
           query_embedding: queryEmbedding, match_threshold: 0.5, match_count: 5, p_bot_id: botId
         });
-        if (!matchError && chunks && chunks.length > 0) semanticContext = chunks.map((c: any) => c.content).join("\n\n");
+        if (!matchError && chunks && chunks.length > 0) semanticContext = chunks.map((c: { content: string }) => c.content).join("\n\n");
       } catch { /* RAG es opcional */ }
     }
 
@@ -79,8 +79,9 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json({ message: { role: "assistant", content: cleanText }, analysis: { intent, score, provider, timestamp: new Date().toISOString() } });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("/// CHAT ERROR ///", error);
-    return NextResponse.json({ error: "Error en el servicio", details: error?.message || String(error), message: { role: "assistant", content: "Hubo un problema. Por favor intenta más tarde." } });
+    const details = error instanceof Error ? error.message : String(error);
+    return NextResponse.json({ error: "Error en el servicio", details, message: { role: "assistant", content: "Hubo un problema. Por favor intenta más tarde." } });
   }
 }

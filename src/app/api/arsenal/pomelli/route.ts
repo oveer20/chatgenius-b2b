@@ -45,8 +45,9 @@ export async function POST(req: Request) {
     let text = jsonMatch ? jsonMatch[0] : resultText;
 
     return NextResponse.json(JSON.parse(text));
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("Pomelli API Error:", err);
-    return NextResponse.json({ error: "Failed to analyze DNA", message: err.message }, { status: 500 });
+    const message = err instanceof Error ? err.message : "Unknown error";
+    return NextResponse.json({ error: "Failed to analyze DNA", message }, { status: 500 });
   }
 }
