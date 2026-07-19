@@ -158,12 +158,41 @@ export async function POST(request: NextRequest) {
         responseText = typeof result === 'string' ? result : JSON.stringify(result);
       } catch (groqErr) {
         console.error("/// GROQ TAMBIÉN FALLÓ ///", groqErr);
-        return NextResponse.json({
-          message: {
-            role: "assistant",
-            content: "⚠️ INTERRUPCIÓN TÉCNICA: El núcleo de IA no respondió. Por favor intente en unos segundos."
+        try {
+          const response = await fetch("https://api.openai.com/v1/chat/completions", {
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              model: "gpt-4o-mini",
+              messages: [
+                { role: "system", content: fullSystemPrompt },
+                ...messages.map((m: { role: string; content: string }) => ({
+                  role: m.role === "assistant" ? "assistant" : "user",
+                  content: m.content
+                }))
+              ],
+              temperature: 0.7,
+              max_tokens: 1000
+            })
+          });
+          if (response.ok) {
+            const data = await response.json();
+            responseText = data.choices?.[0]?.message?.content || "";
+          } else {
+            throw new Error(`OpenAI error: ${response.status}`);
           }
-        });
+        } catch (openAIErr) {
+          console.error("/// OPENAI TAMBIÉN FALLÓ ///", openAIErr);
+          return NextResponse.json({
+            message: {
+              role: "assistant",
+              content: "⚠️ INTERRUPCIÓN TÉCNICA: El núcleo de IA no respondió. Por favor intente en unos segundos."
+            }
+          });
+        }
       }
     }
 
