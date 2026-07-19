@@ -33,6 +33,9 @@ const status: HealthStatus = {
     // Check Gemini API Key exists
     status.services.gemini = process.env.GOOGLE_GEMINI_API_KEY ? "ok" : "missing";
 
+    // Check Groq API Key exists
+    status.services.groq = process.env.GROQ_API_KEY ? "ok" : "missing";
+
     // Check WhatsApp
     status.services.whatsapp = process.env.WHATSAPP_ACCESS_TOKEN ? "ok" : "missing";
 

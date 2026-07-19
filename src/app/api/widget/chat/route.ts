@@ -156,7 +156,8 @@ export async function POST(request: NextRequest) {
         const { getGroqResponse } = await import("@/lib/groq");
         const result = await getGroqResponse(messages, fullSystemPrompt);
         responseText = typeof result === 'string' ? result : JSON.stringify(result);
-      } catch {
+      } catch (groqErr) {
+        console.error("/// GROQ TAMBIÉN FALLÓ ///", groqErr);
         return NextResponse.json({
           message: {
             role: "assistant",
