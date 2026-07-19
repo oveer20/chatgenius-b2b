@@ -1,7 +1,7 @@
 import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from "@google/generative-ai";
 
 function getGenAI() {
-  const key = process.env.GOOGLE_GEMINI_API_KEY;
+  const key = (process.env.GOOGLE_GEMINI_API_KEY || "").replace(/^"|"$/g, "");
   if (!key) throw new Error("GOOGLE_GEMINI_API_KEY not configured");
   return new GoogleGenerativeAI(key);
 }
