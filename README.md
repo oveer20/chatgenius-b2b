@@ -1,4 +1,4 @@
-# Stratix AI — Architectural Strategic Intelligence 🛡️✨
+# Stratix Intelligence — IA Estratégica B2B 🛡️✨
 
 **Stratix AI** is a premium B2B SaaS platform designed to automate high-ticket sales and customer interaction through elite artificial intelligence. Built for scale, it integrates seamlessly with WhatsApp, Instagram, and Web widgets using the proprietary **Opal Logic** decision engine.
 
