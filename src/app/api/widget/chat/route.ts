@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
+export const maxDuration = 30;
+
 export async function POST(request: NextRequest) {
   // Eliminamos definición local para usar el singleton de élite
 

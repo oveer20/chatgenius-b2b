@@ -1,7 +1,7 @@
 const GROQ_API_KEY = (process.env.GROQ_API_KEY || "").replace(/^"|"$/g, "");
 const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
 
-const MAX_RETRIES = 3;
+const MAX_RETRIES = 1;
 
 async function wait(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));

@@ -6,8 +6,8 @@ function getGenAI() {
   return new GoogleGenerativeAI(key);
 }
 
-const MAX_RETRIES = 3;
-const INITIAL_DELAY = 1000;
+const MAX_RETRIES = 1;
+const INITIAL_DELAY = 500;
 
 async function wait(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
