@@ -9,7 +9,7 @@
     
     if (!botId) return;
 
-    const APP_URL = window.location.origin.includes('localhost') ? 'http://localhost:3000' : 'https://stratixintelligence.com';
+    const APP_URL = window.location.origin.includes('localhost') ? 'http://localhost:3000' : 'https://stratix-intelligence-ia.vercel.app';
 
     // 1. Crear el Host del Shadow DOM
     const host = document.createElement('div');

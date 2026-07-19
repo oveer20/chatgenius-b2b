@@ -53,15 +53,13 @@ export default function InteractiveDemo() {
     setIsTyping(true);
 
     try {
-      const response = await fetch("/api/chat", {
+      const response = await fetch("/api/widget/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           messages: [...history, { role: "user", content: text }],
           systemPrompt: SYSTEM_PROMPT,
           knowledgeBase: KNOWLEDGE,
-          model: "gemini",
-          botId: "demo",
         }),
       });
       const data = await response.json();

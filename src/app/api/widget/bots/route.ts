@@ -4,7 +4,7 @@ import { createClient } from "@/utils/supabase/server";
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const botId = searchParams.get("id");
+    const botId = searchParams.get("id") || searchParams.get("bot-id");
 
     const supabase = await createClient();
     

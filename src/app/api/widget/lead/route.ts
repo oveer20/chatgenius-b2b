@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
       .from("leads")
       .insert([
         { 
-          bot_id: botId === "demo" ? null : botId, // "demo" como fallback para la landing
+          bot_id: botId === "demo" ? null : botId,
           name, 
           email, 
           phone, 
@@ -36,10 +36,7 @@ export async function POST(request: NextRequest) {
           session_id: sessionId || "landing_direct",
           intent: "Sales Inquiry (Demo Form)",
           score: "Hot",
-          metadata: { 
-            source: "Landing Page Demo Form",
-            captured_at: new Date().toISOString()
-          }
+          source: "Landing Page Demo Form"
         }
       ])
       .select()

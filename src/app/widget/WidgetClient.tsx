@@ -51,11 +51,17 @@ export default function WidgetPage() {
   const [isTyping, setIsTyping] = useState(false);
   const [, setLoadingBot] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [botId, setBotId] = useState<string | null>(null);
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("bot-id") || params.get("id");
+    if (id) setBotId(id);
+
     async function loadBot() {
       try {
-        const res = await fetch("/api/widget/bots");
+        const url = id ? `/api/widget/bots?id=${id}` : "/api/widget/bots";
+        const res = await fetch(url);
         if (res.ok) {
           const bot = await res.json();
           if (bot && bot.id) {
@@ -95,14 +101,12 @@ export default function WidgetPage() {
     setIsTyping(true);
 
     try {
-      const res = await fetch("/api/chat", {
+      const res = await fetch("/api/widget/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           messages: [...messages, userMsg],
-          systemPrompt: botConfig.system_prompt,
-          knowledgeBase: "",
-          model: "gemini-2.0-flash"
+          botId: botId || botConfig.id
         })
       });
       const data = await res.json();
