@@ -30,13 +30,16 @@ export async function POST(request: NextRequest) {
         { 
           bot_id: botId === "demo" ? null : botId,
           name, 
-          email, 
-          phone, 
-          company,
+          email,
+          whatsapp: phone,
           session_id: sessionId || "landing_direct",
-          intent: "Sales Inquiry (Demo Form)",
-          score: "Hot",
-          source: "Landing Page Demo Form"
+          metadata: { 
+            company: company || null,
+            phone: phone || null,
+            intent: "Sales Inquiry (Demo Form)",
+            score: "Hot",
+            source: "Landing Page Demo Form"
+          }
         }
       ])
       .select()

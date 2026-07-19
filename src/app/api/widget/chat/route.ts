@@ -15,22 +15,23 @@ export async function POST(request: NextRequest) {
 
     // --- PERSISTENCIA ESTRATÉGICA (Sesiones de Inteligencia) ---
     let chatId: string | null = null;
+    const resolvedBotId = botId && botId !== "demo" ? botId : null;
     if (sessionId) {
       const { data: existingChat } = await supabaseAdmin
         .from("chats")
         .select("id")
         .eq("session_id", sessionId)
-        .eq("bot_id", botId)
-        .single();
+        .is("bot_id", resolvedBotId)
+        .maybeSingle();
 
       if (existingChat) {
         chatId = existingChat.id;
       } else {
         const { data: newChat } = await supabaseAdmin
           .from("chats")
-          .insert([{ session_id: sessionId, bot_id: botId }])
+          .insert([{ session_id: sessionId, bot_id: resolvedBotId }])
           .select()
-          .single();
+          .maybeSingle();
         if (newChat) chatId = newChat.id;
       }
 
@@ -149,13 +150,20 @@ export async function POST(request: NextRequest) {
       const { getGeminiResponse } = await import("@/lib/gemini");
       const result = await getGeminiResponse(messages, fullSystemPrompt);
       responseText = typeof result === 'string' ? result : JSON.stringify(result);
-    } catch {
-      return NextResponse.json({
-        message: {
-          role: "assistant",
-          content: "⚠️ INTERRUPCIÓN TÉCNICA: El núcleo de IA no respondió. Por favor intente en unos segundos."
-        }
-      });
+    } catch (geminiErr) {
+      console.error("/// GEMINI FALLO, FALLBACK A GROQ ///", geminiErr);
+      try {
+        const { getGroqResponse } = await import("@/lib/groq");
+        const result = await getGroqResponse(messages, fullSystemPrompt);
+        responseText = typeof result === 'string' ? result : JSON.stringify(result);
+      } catch {
+        return NextResponse.json({
+          message: {
+            role: "assistant",
+            content: "⚠️ INTERRUPCIÓN TÉCNICA: El núcleo de IA no respondió. Por favor intente en unos segundos."
+          }
+        });
+      }
     }
 
     const text = responseText;
@@ -190,12 +198,24 @@ export async function POST(request: NextRequest) {
       }]);
 
       if (sessionId) {
-        const { data: lead } = await supabaseAdmin
+        const { data: currentLead } = await supabaseAdmin
           .from("leads")
-          .update({ intent, score, updated_at: new Date().toISOString() })
+          .select("id, name, email, whatsapp, metadata")
           .eq("session_id", sessionId)
-          .select()
-          .single();
+          .maybeSingle();
+
+        const lead = currentLead;
+        if (lead) {
+          const updatedMetadata = {
+            ...(typeof lead.metadata === 'object' && lead.metadata !== null ? lead.metadata as Record<string, unknown> : {}),
+            intent,
+            score,
+          };
+          await supabaseAdmin
+            .from("leads")
+            .update({ metadata: updatedMetadata })
+            .eq("id", lead.id);
+        }
 
         // 6.5 Alerta de Lead Caliente (ELITE ALERT TRIAD: Email + Push V25.0)
         if (score === 'Hot') {
@@ -207,7 +227,7 @@ export async function POST(request: NextRequest) {
                   subject: `🔥 WEB LEAD CALIENTE: ${lead?.name || 'Usuario'}`,
                   botName: botName,
                   leadName: lead?.name || 'Prospecto Web',
-                  leadContact: lead?.email || lead?.phone || sessionId,
+                   leadContact: lead?.email || lead?.whatsapp || sessionId,
                   intent: intent,
                   summary: cleanText.substring(0, 300)
                });
