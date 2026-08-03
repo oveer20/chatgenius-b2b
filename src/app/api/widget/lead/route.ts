@@ -58,6 +58,7 @@ export async function POST(request: NextRequest) {
     // 4. Multi-Channel Alerting System (Email & Firebase Pulse V41.0)
     try {
       const adminEmail = process.env.ADMIN_EMAIL || "joseovergaviria@gmail.com";
+      const alertRecipients = adminEmail.split(",").map((e: string) => e.trim()).filter(Boolean);
       
       // A. Alert Pulse (Push via Firebase)
       const { sendHotLeadAlert: sendFirebasePush } = await import("@/lib/firebase-admin");
@@ -65,7 +66,7 @@ export async function POST(request: NextRequest) {
 
       // B. Email Alert (Resend)
       await sendHotLeadAlert({
-        to: adminEmail,
+        to: alertRecipients,
         subject: `🎯 NUEVO LEAD CALIENTE: ${name} (${company || 'S/E'})`,
         botName: "Stratix Landing AI",
         leadName: `${name} [${company || 'Empresa no provista'}]`,

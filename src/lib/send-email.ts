@@ -28,7 +28,7 @@ export async function sendHotLeadAlert({
   try {
     const { data, error } = await resend.emails.send({
       from: getEmailFrom(),
-      to: [to],
+      to: Array.isArray(to) ? to : [to],
       subject: subject || `🔥 NUEVO LEAD HOT: ${leadName}`,
       html: `
         <div style="font-family: 'Outfit', sans-serif; background-color: #060B14; color: #F8F9FA; padding: 50px; border-radius: 30px; border: 1px solid rgba(212, 175, 55, 0.3); max-width: 600px; margin: 0 auto;">
