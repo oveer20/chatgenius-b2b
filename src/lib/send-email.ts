@@ -25,12 +25,16 @@ export async function sendHotLeadAlert({
     return { success: false, error: "Resend not configured" };
   }
 
-  try {
-    const { data, error } = await resend.emails.send({
-      from: getEmailFrom(),
-      to: Array.isArray(to) ? to : [to],
-      subject: subject || `🔥 NUEVO LEAD HOT: ${leadName}`,
-      html: `
+  const recipients = Array.isArray(to) ? to : [to];
+  const results: { success: boolean; error?: unknown }[] = [];
+
+  for (const recipient of recipients) {
+    try {
+      const { data, error } = await resend.emails.send({
+        from: getEmailFrom(),
+        to: [recipient],
+        subject: subject || `🔥 NUEVO LEAD HOT: ${leadName}`,
+        html: `
         <div style="font-family: 'Outfit', sans-serif; background-color: #060B14; color: #F8F9FA; padding: 50px; border-radius: 30px; border: 1px solid rgba(212, 175, 55, 0.3); max-width: 600px; margin: 0 auto;">
           <div style="text-align: center; margin-bottom: 30px;">
             <h1 style="color: #D4AF37; font-size: 28px; font-weight: 900; letter-spacing: -1px; margin-bottom: 10px;">STRATIX INTELLIGENCE</h1>
@@ -57,18 +61,21 @@ export async function sendHotLeadAlert({
           <p style="font-size: 11px; opacity: 0.3; text-align: center; margin-top: 60px; letter-spacing: 1px;">STRATIX AI — INFRAESTRUCTURA DE ALTO RENDIMIENTO</p>
         </div>
       `,
-    });
+      });
 
-    if (error) {
-      console.error('/// ERROR ENVIANDO EMAIL ///', error);
-      return { success: false, error };
+      if (error) {
+        console.error(`/// ERROR ENVIANDO EMAIL A ${recipient} ///`, error);
+        results.push({ success: false, error });
+      } else {
+        results.push({ success: true, data });
+      }
+    } catch (error) {
+      console.error(`/// EXCEPCIÓN EMAIL A ${recipient} ///`, error);
+      results.push({ success: false, error });
     }
-
-    return { success: true, data };
-  } catch (error) {
-    console.error('/// EXCEPCIÓN EMAIL ///', error);
-    return { success: false, error };
   }
+
+  return results.some((r) => r.success) ? { success: true, results } : { success: false, results };
 }
 
 export async function sendWelcomePremiumEmail(to: string, plan: string) {
