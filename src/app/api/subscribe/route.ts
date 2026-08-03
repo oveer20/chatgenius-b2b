@@ -34,12 +34,12 @@ export async function POST(request: NextRequest) {
 
     if (result.error) {
       console.error("/// CONVERTKIT ERROR ///", result.error);
-      return NextResponse.json({ error: result.error.message }, { status: 500 });
+      return NextResponse.json({ status: "convertkit_error", success: true });
     }
 
     return NextResponse.json({ success: true, data: result });
   } catch (err) {
     console.error("/// ERROR EN CONVERTKIT API ///", err);
-    return NextResponse.json({ error: "Error interno" }, { status: 500 });
+    return NextResponse.json({ status: "convertkit_error", success: true });
   }
 }
