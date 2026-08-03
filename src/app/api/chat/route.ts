@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
         const { getEmbeddings: getGroqEmbeddings } = await import("@/lib/groq");
         const queryEmbedding = await getGroqEmbeddings(lastUserMessage);
         const { data: chunks, error: matchError } = await supabaseAdmin.rpc("match_document_chunks", {
-          query_embedding: queryEmbedding, match_threshold: 0.5, match_count: 5, p_bot_id: botId
+          query_embedding: queryEmbedding, match_threshold: 0.35, match_count: 5, p_bot_id: botId
         });
         if (!matchError && chunks && chunks.length > 0) semanticContext = chunks.map((c: { content: string }) => c.content).join("\n\n");
       } catch { /* RAG es opcional */ }

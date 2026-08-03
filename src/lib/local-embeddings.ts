@@ -9,8 +9,15 @@ function hashToken(token: string): number {
   return hash >>> 0;
 }
 
+function normalizeText(text: string): string {
+  return text
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+}
+
 export function getLocalEmbedding(text: string, dim: number = EMBEDDING_DIM): number[] {
-  const tokens = (text.toLowerCase().match(/[a-záéíóúñü0-9]+/g) || []);
+  const tokens = (normalizeText(text).match(/[a-z0-9]+/g) || []);
   const vector = new Array(dim).fill(0);
 
   for (const token of tokens) {
