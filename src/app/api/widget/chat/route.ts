@@ -149,17 +149,17 @@ export async function POST(request: NextRequest) {
 
     let responseText = "";
     try {
-      const { getGeminiResponse } = await import("@/lib/gemini");
-      const result = await getGeminiResponse(messages, fullSystemPrompt);
+      const { getGroqResponse } = await import("@/lib/groq");
+      const result = await getGroqResponse(messages, fullSystemPrompt);
       responseText = typeof result === 'string' ? result : JSON.stringify(result);
-    } catch (geminiErr) {
-      console.error("/// GEMINI FALLO, FALLBACK A GROQ ///", geminiErr);
+    } catch (groqErr) {
+      console.error("/// GROQ FALLO, FALLBACK A GEMINI ///", groqErr);
       try {
-        const { getGroqResponse } = await import("@/lib/groq");
-        const result = await getGroqResponse(messages, fullSystemPrompt);
+        const { getGeminiResponse } = await import("@/lib/gemini");
+        const result = await getGeminiResponse(messages, fullSystemPrompt);
         responseText = typeof result === 'string' ? result : JSON.stringify(result);
-      } catch (groqErr) {
-        console.error("/// GROQ TAMBIÉN FALLÓ ///", groqErr);
+      } catch (geminiErr) {
+        console.error("/// GEMINI TAMBIÉN FALLÓ ///", geminiErr);
         try {
           const response = await fetch("https://api.openai.com/v1/chat/completions", {
             method: "POST",
