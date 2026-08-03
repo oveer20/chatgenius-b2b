@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getGeminiResponse } from "@/lib/gemini";
+import { getResilientAIResponse } from "@/lib/ai-orchestrator";
 
 export async function POST(req: Request) {
   try {
@@ -27,9 +27,9 @@ export async function POST(req: Request) {
       Solo devuelve el JSON, sin texto adicional.
     `;
 
-    const result = await getGeminiResponse([{ role: "user", content: prompt }], "Eres un asistente JSON.");
+    const result = await getResilientAIResponse([{ role: "user", content: prompt }], "Eres un asistente JSON.");
 
-    const resultText = typeof result === 'string' ? result : JSON.stringify(result);
+    const resultText = typeof result.text === 'string' ? result.text : JSON.stringify(result.text);
     const jsonMatch = resultText.match(/\{[\s\S]*\}/);
     let text = jsonMatch ? jsonMatch[0] : resultText;
 

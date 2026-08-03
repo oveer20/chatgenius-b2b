@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getGeminiResponse } from "@/lib/gemini";
+import { getResilientAIResponse } from "@/lib/ai-orchestrator";
 
 /**
  * STRATIX INTELLIGENCE — STRATEGIC OUTREACH ENGINE (V17.0)
@@ -86,8 +86,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Usamos Gemini para velocidad y autoridad en español
-    const result = await getGeminiResponse([{ role: "user", content: userPrompt }], systemPrompt);
-    const resultText = typeof result === 'string' ? result : JSON.stringify(result);
+    const result = await getResilientAIResponse([{ role: "user", content: userPrompt }], systemPrompt);
+    const resultText = typeof result.text === 'string' ? result.text : JSON.stringify(result.text);
 
     return NextResponse.json({ result: resultText.trim() });
   } catch (error) {

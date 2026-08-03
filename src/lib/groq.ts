@@ -69,7 +69,7 @@ export async function getGroqResponse(messages: ChatMessage[], systemPrompt: str
   throw new Error(`Fallo crítico: ${lastError?.message}`);
 }
 
-export async function getEmbeddings(_text: string) {
-  void _text;
-  return new Array(768).fill(0);
+export async function getEmbeddings(text: string) {
+  const { getLocalEmbedding } = await import("@/lib/local-embeddings");
+  return getLocalEmbedding(text);
 }

@@ -88,7 +88,8 @@ export async function getEmbeddings(text: string) {
     const result = model.embedContent(text);
     return (await result).embedding.values;
   } catch (error: unknown) {
-    console.error("/// ERROR GENERANDO EMBEDDINGS ///", error);
-    throw error;
+    console.error("/// ERROR GENERANDO EMBEDDINGS — usando fallback local ///", error);
+    const { getLocalEmbedding } = await import("@/lib/local-embeddings");
+    return getLocalEmbedding(text);
   }
 }
