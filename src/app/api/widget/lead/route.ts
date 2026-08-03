@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
 
     // 4. Multi-Channel Alerting System (Email & Firebase Pulse V41.0)
     try {
-      const adminEmail = process.env.ADMIN_EMAIL || "josega95@gmail.com";
+      const adminEmail = process.env.ADMIN_EMAIL || "joseovergaviria@gmail.com";
       
       // A. Alert Pulse (Push via Firebase)
       const { sendHotLeadAlert: sendFirebasePush } = await import("@/lib/firebase-admin");

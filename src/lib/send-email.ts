@@ -1,4 +1,4 @@
-import { getResend } from './resend';
+import { getResend, getEmailFrom } from './resend';
 
 interface EmailParams {
   to: string;
@@ -27,7 +27,7 @@ export async function sendHotLeadAlert({
 
   try {
     const { data, error } = await resend.emails.send({
-      from: 'Stratix Intelligence <onboarding@resend.dev>',
+      from: getEmailFrom(),
       to: [to],
       subject: subject || `🔥 NUEVO LEAD HOT: ${leadName}`,
       html: `
@@ -82,7 +82,7 @@ export async function sendWelcomePremiumEmail(to: string, plan: string) {
   
   try {
     const { data, error } = await resend.emails.send({
-      from: 'Stratix Intelligence <onboarding@resend.dev>',
+      from: getEmailFrom(),
       to: [to],
       subject: `🛡️ BIENVENIDO A LA ÉLITE: PLAN ${displayPlan} ACTIVADO`,
       html: `

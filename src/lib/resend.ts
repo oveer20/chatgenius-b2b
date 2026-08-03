@@ -6,6 +6,10 @@ export function getResend() {
   return new Resend(key);
 }
 
+export function getEmailFrom(): string {
+  return process.env.EMAIL_FROM || 'Stratix Intelligence <onboarding@resend.dev>';
+}
+
 /**
  * STRATIX ONBOARDING PULSE (V35.0)
  * Envío de correo de bienvenida premium tras activación de suscripción.
@@ -18,7 +22,7 @@ export async function sendWelcomeEmail(email: string, name: string, plan: string
   }
   try {
     const { data, error } = await resend.emails.send({
-      from: 'Stratix Intelligence <onboarding@resend.dev>',
+      from: getEmailFrom(),
       to: [email],
       subject: `¡Bienvenido al Élite de la IA, ${name}! 🛡️`,
       html: `
