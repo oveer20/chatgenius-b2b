@@ -1,7 +1,7 @@
 import { getResend, getEmailFrom } from './resend';
 
 interface EmailParams {
-  to: string;
+  to: string | string[];
   subject: string;
   botName: string;
   leadName: string;
