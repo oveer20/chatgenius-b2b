@@ -32,6 +32,11 @@ export async function POST(request: NextRequest) {
           name, 
           email,
           whatsapp: phone,
+          phone,
+          company: company || null,
+          intent: "Sales Inquiry (Demo Form)",
+          score: "Hot",
+          source: "Landing Page Demo Form",
           session_id: sessionId || "landing_direct",
           metadata: { 
             company: company || null,
