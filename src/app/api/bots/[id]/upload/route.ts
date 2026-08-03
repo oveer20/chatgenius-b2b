@@ -25,11 +25,11 @@ export async function POST(
     if (!file) return NextResponse.json({ error: "No se proporcionó ningún archivo" }, { status: 400 });
 
     const bufferRaw = await file.arrayBuffer();
-    const buffer = Buffer.from(bufferRaw);
+    const bytes = new Uint8Array(bufferRaw);
 
     let fullText = "";
     try {
-      const { text } = await extractText(buffer);
+      const { text } = await extractText(bytes);
       fullText = Array.isArray(text) ? text.join("\n") : text;
     } catch (pdfError: unknown) {
       const message = pdfError instanceof Error ? pdfError.message : "Unknown error";
