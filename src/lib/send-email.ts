@@ -26,7 +26,7 @@ export async function sendHotLeadAlert({
   }
 
   const recipients = Array.isArray(to) ? to : [to];
-  const results: { success: boolean; error?: unknown }[] = [];
+  const results: { success: boolean; error?: unknown; data?: unknown }[] = [];
 
   for (const recipient of recipients) {
     try {
