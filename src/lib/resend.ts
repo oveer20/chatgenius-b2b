@@ -18,7 +18,7 @@ export async function sendWelcomeEmail(email: string, name: string, plan: string
   }
   try {
     const { data, error } = await resend.emails.send({
-      from: 'Stratix Intelligence <onboarding@stratixintelligence.com>',
+      from: 'Stratix Intelligence <onboarding@resend.dev>',
       to: [email],
       subject: `¡Bienvenido al Élite de la IA, ${name}! 🛡️`,
       html: `
